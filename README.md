@@ -2,7 +2,7 @@
 
 ![figma](./figma(rev.1).png)
 
-![figma](./figma(rev.2).png)
+![figma](./figma(rev.2).PNG)
 
 금일 피그마를 팀원들과 공유하며 나온 이슈들에 대하여 정리합니다.  
 1. 회원가입시 초기 정보  
