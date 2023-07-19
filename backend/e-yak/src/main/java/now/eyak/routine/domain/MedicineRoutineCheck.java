@@ -22,10 +22,14 @@ public class MedicineRoutineCheck {
     private LocalDate date;
     @OneToOne
     private MedicineRoutine routine;
+
+    private Boolean took;  // 약 복용 확인
+
     @ManyToOne
     private Member member;
     @ManyToOne
     private Prescription prescription;
     @CreationTimestamp
     private Timestamp checkedAt;
+
 }
