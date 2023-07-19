@@ -78,7 +78,7 @@ when (x) {
     in 4..7 -> println("4부터 7사이")   // in [값1]..[값2] -> [동작], [값1] <= and <= [값2]
     !in 8..9 -> println("8부터 10 사이가 아님") // !in [값1]..[값2] -> [동작], >= [값1] or [값2] <=
     else -> {   // 나머지
-        print(x 는 1이나 2가 아님")
+        print("x 는 1이나 2가 아님")
     }
 }
 ```
@@ -113,5 +113,44 @@ for(i in 10 downTo 0 step 2){   // for([변수] in [시작값] downTo [끝값] s
 # 6. null 가능성  
 
 # 7. 컬렉션  
+개발에 유용한 자료구조를 의미하며 리스트나 맵 등이 포함됨  
+## 7.1 리스트  
+같은 자료형의 데이터들을 순서대로 가지고 있음
+```kotlin
+val foods: List<String> = listOf("라면", "갈비", "밥")   // val [리스트명]: List<[자료형]> = listOf([값1], [값2], ...) -> val foods = listOf("라면", "갈비", "밥")
+
+val mFoods: MutableListOf<String> = mutableListOf("라면", "갈비", "밥") // var [리스트명]: MutableListOf<[자료형]> = mutableListOf([값1], [값2], ...) -> var mFoods = mutableListOf("라면", "갈비", "밥")
+
+mFoods.add("초밥")    // 추가, [리스트명].add([값])
+mFoods.removeAt(0)   // 삭제, [리스트명].removeAt([인덱스])
+mFoods[1] = "부대찌개"   // 수정, [리스트명][[인덱스]] = [값]
+```
+## 7.2 맵  
+키와 값의 쌍으로 이루어진 키가 중복될 수 없는 자료구조  
+```kotlin
+val map: Map<String, Int> = mapOf("a" to 1, "b" to 2, "c" to 3) // val [맵명]: Map<[키 자료형], [값 자료형]> = mapOf([키1] to [값1], [키2] to [값2], ...) -> val map = mapOf("a" to 1, "b" to 2, "c" to 3)
+val citiesMap: MutableMap<String, String> = mutableMapOf("한국" to "서울", "일본" to "동경", "중국" to "북경")  // val [맵명]: MutableMap<[키 자료형], [값 자료형]> = mutableMapOf([키1] to [값1], [키2] to [값2], ...) -> val citiesMap = mutableMapOf("한국" to "서울", "일본" to "동경", "중국" to "북경")
+
+citiesMap["미국"] = "워싱턴"    // 추가, [맵명][[키]] = [값]
+citiesMap["한국"] = "서울특별시"    // 수정, [맵명][[키]] = [값]
+
+// 맵 전체의 키와 값을 탐색
+for((k, v) in map){ // for(([키 변수], [값 변수]) in [맵명]) {
+    println("$k $v")
+}
+```
+
+## 7.3 집합  
+중복되지 않는 요소들로 구성
+```kotlin
+val citySet: Set<String> = setOf("서울", "천안", "구리")    // val [집합명]: Set<[자료형]> = setOf([값1], [값2], [값3], ...) -> val citySet = setOf("서울", "천안", "구리")
+val mCitySet: MutableSet<String> = mutableSetOf("서울", "천안", "구리") // val [집합명]: MutableSet<[자료형]> = mutableSetOf([값1], [값2], [값3], ...) -> val mCitySet = mutableSetOf("서울", "천안", "구리")
+
+mCitySet.add("군포")    // 추가, [집합명].add([값])
+mCitySet.remove("천안") // 삭제, [집합명].remove([값])
+
+// 집합의 크기는 [집합명].size 로 구하고 값의 포함 여부는 [집합명].contains([값]) 으로 구함
+```
+
 
 # 8. 람다식  
