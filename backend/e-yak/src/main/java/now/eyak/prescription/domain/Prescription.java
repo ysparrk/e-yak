@@ -29,6 +29,7 @@ public class Prescription {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Integer iotLocation; // 약통 칸 번호
+    private Integer medicineDose; // 1회 투여 개수
     @OneToMany
     private List<MedicineRoutine> medicineRoutines = new ArrayList<>();
     @ManyToOne
