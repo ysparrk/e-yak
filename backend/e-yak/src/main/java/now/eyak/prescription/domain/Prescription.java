@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import now.eyak.member.domain.Member;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 @Entity
 @Getter
@@ -30,4 +33,6 @@ public class Prescription {
     private List<DailyRoutine> dailyRoutines = new ArrayList<>();
     @ManyToOne
     private Member member;
+    @CreationTimestamp
+    private Timestamp createdAt;
 }

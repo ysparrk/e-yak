@@ -1,10 +1,11 @@
-package now.eyak.dailycondition.domain;
+package now.eyak.survey.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import now.eyak.member.domain.Member;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
@@ -12,13 +13,15 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ChoiceResult {
+public class ContentTextResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String text;
     @ManyToOne
-    private ChoiceItem choiceItem;
+    private SurveyContent surveyContent;
     @ManyToOne
     private Member member;
+    @CreationTimestamp
     private Timestamp createdAt;
 }
