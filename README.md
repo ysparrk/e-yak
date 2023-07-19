@@ -44,9 +44,74 @@ fun greet(str: String): Unit {  // 함수, fun [함수명]([인수명]: [자료�
 }
 ```
 
-## 1.2 기본 자료형
+# 2. 기본 자료형  
+## 2.1 숫자형  
 |자료형|뜻|리터럴|
 |------|--------------|---|
 |Double|64비트 부동소수점||
+|Float|32비트 부동소수점|f|
+|Long|64비트 정수|L|
+|Int|32비트 정수||
+|Short|16비트 정수||
+|Byte|8비트 정수||
 
+## 2.2 문자형  
+|자료형|뜻|리터럴|
+|------|--------------|---|
+|String|문자열|"~~", """ ~~~~~ """|
+|Char|하나의 문자|'~~'|
 
+## 2.3 배열  
+```kotlin
+val numbers: Array<Int> = arrayOf(1, 2, 3)  // val [배열명]: Array<[자료형]> = arrayOf([값1], [값2], [값3]) -> val numbers = arrayOf(1, 2, 3)
+```
+# 3. 제어문  
+## 3.1 if  
+## 3.2 when  
+자동으로 break가 있음  
+```kotlin
+val a: Int = 1
+
+when (x) {
+    1 -> println("x == 1")  // [값] -> [동작]
+    2, 3 -> println("x == 2 or x == 3") // [값1], [값2] -> [동작], [값1] or [값2]
+    in 4..7 -> println("4부터 7사이")   // in [값1]..[값2] -> [동작], [값1] <= and <= [값2]
+    !in 8..9 -> println("8부터 10 사이가 아님") // !in [값1]..[값2] -> [동작], >= [값1] or [값2] <=
+    else -> {   // 나머지
+        print(x 는 1이나 2가 아님")
+    }
+}
+```
+
+## 3.3 for  
+```kotlin
+val numbers: Array<Int> = arrayOf(1, 2, 3, 4)
+
+for(num in numbers){    // for([요소] in [배열]) {
+    
+}
+
+for(i in 1..3){ // for([변수] [시작값]..[끝값]) {
+
+}
+
+for(i in 0..10 step 2){ // for([변수] in [시작값]..[끝값] step [증가 간격])
+
+}
+
+for(i in 10 downTo 0 step 2){   // for([변수] in [시작값] downTo [끝값] step [감소 간격])
+
+}
+```
+
+## 3.4 while  
+
+# 4. 클래스  
+
+# 5. 인터페이스
+
+# 6. null 가능성  
+
+# 7. 컬렉션  
+
+# 8. 람다식  
