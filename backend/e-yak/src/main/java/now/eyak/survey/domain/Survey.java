@@ -18,6 +18,4 @@ public class Survey {
     private Long id;
     @OneToMany(mappedBy = "survey")
     private List<SurveyContent> surveyContents;
-    @ManyToOne
-    private Member member;
 }

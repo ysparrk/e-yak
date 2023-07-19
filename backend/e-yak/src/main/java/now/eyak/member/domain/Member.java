@@ -33,6 +33,4 @@ public class Member {
 //    private String supplements; // 영양제등을 줄 글로
     @OneToMany(mappedBy = "member")
     private List<Prescription> prescriptions = new ArrayList<>();
-    @OneToMany(mappedBy = "member")
-    private List<Survey> surveys = new ArrayList<>();
 }
