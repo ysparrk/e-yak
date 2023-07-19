@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.member.domain.Member;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -11,7 +12,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 @Entity
 @Getter
@@ -30,7 +30,7 @@ public class Prescription {
     private LocalDateTime endDateTime;
     private Integer iotLocation; // 약통 칸 번호
     @OneToMany
-    private List<DailyRoutine> dailyRoutines = new ArrayList<>();
+    private List<MedicineRoutine> medicineRoutines = new ArrayList<>();
     @ManyToOne
     private Member member;
     @CreationTimestamp

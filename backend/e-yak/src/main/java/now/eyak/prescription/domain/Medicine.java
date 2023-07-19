@@ -1,4 +1,4 @@
-package now.eyak.medicine.domain;
+package now.eyak.prescription.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,11 +1,10 @@
-package now.eyak.medicine.domain;
+package now.eyak.routine.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import now.eyak.member.domain.Member;
-import now.eyak.prescription.domain.DailyRoutine;
 import now.eyak.prescription.domain.Prescription;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,13 +15,13 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MedicineCheck {
+public class MedicineRoutineCheck {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;
     @OneToOne
-    private DailyRoutine routine;
+    private MedicineRoutine routine;
     @ManyToOne
     private Member member;
     @ManyToOne

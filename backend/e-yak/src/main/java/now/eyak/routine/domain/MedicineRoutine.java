@@ -1,16 +1,16 @@
-package now.eyak.prescription.domain;
+package now.eyak.routine.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import now.eyak.prescription.enumeration.Routine;
+import now.eyak.routine.enumeration.Routine;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class DailyRoutine {
+public class MedicineRoutine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
