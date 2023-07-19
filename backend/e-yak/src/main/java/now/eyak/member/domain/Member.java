@@ -1,8 +1,8 @@
 package now.eyak.member.domain;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import now.eyak.dailycondition.domain.Survey;
+import now.eyak.member.domain.enumeration.SocialType;
+import now.eyak.survey.domain.Survey;
 import now.eyak.prescription.domain.Prescription;
 
 import java.time.LocalTime;
@@ -14,6 +14,10 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType; // Google, Naver, Kakao
+    private String oAuthId; // Google, Naver, Kakao에서 로그인시 전달되는 토큰
+    private String refreshToken;
     private String name;
     private String nickname;
 //    private String phoneNumber; // TODO: 수집 정보 결정
