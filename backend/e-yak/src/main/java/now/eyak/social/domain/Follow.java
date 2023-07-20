@@ -9,7 +9,6 @@ import now.eyak.social.Scope;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -29,7 +28,9 @@ public class Follow {
     private Member followee;
     private String customName;
     @Enumerated(EnumType.STRING)
-    private Scope scope;
+    private Scope followerScope;
+    @Enumerated(EnumType.STRING)
+    private Scope followeeScope;
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
