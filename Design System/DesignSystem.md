@@ -17,21 +17,47 @@
 
 ### 건강 관리 어플  
 **Helpy**  
-![Helpy 매인 화면](./Helpy_1.PNG){: width="20%" height="20%"}  
-![Helpy 달력 화면](./Helpy_2.PNG){: width="20%" height="20%"}  
+![Helpy 매인 화면](./Helpy_1.PNG){: width="20%" height="20%"}
+![Helpy 달력 화면](./Helpy_2.PNG){: width="20%" height="20%"}
 ![Helpy 약 등록 화면](./Helpy_3.PNG){: width="20%" height="20%"}    
 젊고 깨끗한 느낌이 듦  
 반듯반듯한 글씨  
 
 **CG 케어**  
-![CG 케어 매인 화면](./CGCare_1.png){: width="20%" height="20%"}  
+![CG 케어 매인 화면](./CGCare_1.png){: width="20%" height="20%"}
 ![CG 케어 건강 체크](./CGCare_2.png){: width="20%" height="20%"}    
 둥글 둥글한 글씨를 주로 사용하는 것 같으며 얇고 깨끗함  
 
 **루티너리**  
-![루티너리 메인 화면](./routinery_1.webp){: width="20%" height="20%"}  
+![루티너리 메인 화면](./routinery_1.webp){: width="20%" height="20%"}
 ![루티너리 알람 화면](./routinery_2.webp){: width="20%" height="20%"}    
 적은 양의 정보를 화면에 보여줌으로써 깔끔하게 보이도록 함  
 필요한 정보를 담백하게 보여줌  
+
+## 글꼴 후보  
+조사한 레퍼런스를 기반으로 폰트 후보를 선정  
+
+**MBC1961굴림**  
+![MBC1961굴림](./MBC1961GulimM.PNG)  
+[MBC1961굴림](https://noonnu.cc/font_page/1133)  
+
+**김정철고딕**
+![김정철고딕](./KimjungchulGothic-Bold.PNG)  
+[김정철고딕](https://noonnu.cc/font_page/1114)  
+
+**광양감동체**
+![광양감동체](./광양감동체.PNG)  
+[광양감동체](https://gwangyang.go.kr/menu.es?mid=a11303090200)  
+레퍼런스 표기에 주의 해야 한다  
+
+**코레일 둥근고딕**
+![코레일 둥근고딕](./KorailRoundGothicBold.PNG)  
+[코레일 둥근고딕](https://noonnu.cc/font_page/1072)
+
+**수트**
+![수트](./SUIT-Regular.PNG)  
+[수트](https://noonnu.cc/font_page/844)  
+폰트의 굵기가 다양한 것이 특징
+
 
 # 컴포넌트 형식  
