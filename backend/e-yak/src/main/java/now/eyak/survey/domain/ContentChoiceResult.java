@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import now.eyak.member.domain.Member;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,5 +23,8 @@ public class ContentChoiceResult {
     private ContentChoiceItem contentChoiceItem;
     @ManyToOne
     private Member member;
-    private Timestamp createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @UpdateTimestamp
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

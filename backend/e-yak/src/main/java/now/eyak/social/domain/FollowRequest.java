@@ -7,8 +7,10 @@ import lombok.Setter;
 import now.eyak.member.domain.Member;
 import now.eyak.social.Scope;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,5 +27,7 @@ public class FollowRequest {
     @Enumerated(EnumType.STRING)
     private Scope scope;
     @CreationTimestamp
-    private Timestamp requestedAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @UpdateTimestamp
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.member.domain.Member;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -35,5 +36,7 @@ public class Prescription {
     @ManyToOne
     private Member member;
     @CreationTimestamp
-    private Timestamp createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @UpdateTimestamp
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

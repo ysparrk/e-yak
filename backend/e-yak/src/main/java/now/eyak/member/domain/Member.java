@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import now.eyak.member.domain.enumeration.SocialType;
 import now.eyak.survey.domain.Survey;
 import now.eyak.prescription.domain.Prescription;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,12 @@ public class Member {
     private String refreshToken;
     private String name;
     private String nickname;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @UpdateTimestamp
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
 //    private String phoneNumber; // TODO: 수집 정보 결정
 //    private String baseAddress;
 //    private String detailAddress;
