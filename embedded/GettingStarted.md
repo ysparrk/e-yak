@@ -31,7 +31,7 @@ https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads
 [가이드](https://www.bneware.com/blogPost/esp32_arduino_bluetooth)
 
 SerialToSerialBT 예제 기반
-```
+```arduino
 #include "BluetoothSerial.h"
 
 const char *pin = "1234";
@@ -90,7 +90,7 @@ arduino bluetooth controller 어플로 통신 확인
 [가이드](https://blog.naver.com/chandong83/222032757410)
 
 BLE_uart 예제 기반
-```
+```arduino
 /*
     Video: https://www.youtube.com/watch?v=oCMOYS71NIU
     Based on Neil Kolban example for IDF: https://github.com/nkolban/esp32-snippets/blob/master/cpp_utils/tests/BLE%20Tests/SampleNotify.cpp
@@ -220,3 +220,104 @@ void loop() {
 }
 
 ```
+# 2. 센서 연결 테스트
+### 1. 온습도 센서
+스케치 > 라이브러리 포함 > 라이브러리 관리
+
+DHT sensor library by Adafruit 설치
+
+```arduino
+#include <DHT.h>
+#define DHTPIN 13
+
+DHT dht(DHTPIN, DHT11);
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  int humid = dht.readHumidity();
+  int temp = dht.readTemperature();
+
+  Serial.print("humid: ");
+  Serial.println(humid);
+  Serial.print("temp: ");
+  Serial.println(temp);
+
+  delay(1000);
+}
+```
+humid: 158<br>
+temp: 12<br>
+humid: 2147483647<br>
+temp: 214748364<br>
+
+-> 사용할 만한 결과 안나옴
+### 2. 진동모터
+```arduino
+#define VIBPIN 21
+
+void setup() {
+  pinMode(VIBPIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(VIBPIN, HIGH);
+  delay(2000);
+  digitalWrite(VIBPIN, LOW);
+  delay(2000);
+}
+```
+```arduino
+#define VIBPIN 21
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(VIBPIN, OUTPUT);
+}
+
+void loop() {
+  for (int i=0;i<=255;i++){
+    analogWrite(VIBPIN, i);
+    Serial.println(i);
+    delay(500);
+  }
+}
+```
+analogWrite 했을 때 약 100부터 느껴진다
+### 3. LED
+진동모터와 동일
+### 4. 버튼
+
+### 5. 홀 센서
+### 6. 부저
+```arduino
+#define BUZPIN 12
+
+int freq = 5000;
+int channel = 0;
+int resolution = 8;
+
+void setup() {
+  Serial.begin(115200);
+  ledcSetup(channel, freq, resolution);
+  ledcAttachPin(BUZPIN, channel);
+}
+
+void loop() {
+  ledcWriteNote(channel,NOTE_D, 4);
+  delay(200);
+  ledcWriteTone(channel, 0);
+  delay(2000);
+}
+```
+`uint32_t ledcWriteTone(uint8_t chan, uint32_t freq);`
+
+chan : select LEDC channel<br>
+freq : select frequency of pwm signal
+
+`uint32_t ledcWriteNote(uint8_t chan, note_t note, uint8_t octave);`
+
+note : select note to be set<br>
+octave : select octave for note
