@@ -17,20 +17,20 @@
 
 ### 건강 관리 어플  
 **Helpy**  
-![Helpy 매인 화면](./Helpy_1.PNG)  
-![Helpy 달력 화면](./Helpy_2.PNG)
-![Helpy 약 등록 화면](./Helpy_3.PNG)  
+![Helpy 매인 화면](./Helpy_1.PNG){: width="20%" height="20%"}  
+![Helpy 달력 화면](./Helpy_2.PNG){: width="20%" height="20%"}  
+![Helpy 약 등록 화면](./Helpy_3.PNG){: width="20%" height="20%"}    
 젊고 깨끗한 느낌이 듦  
 반듯반듯한 글씨  
 
-**CG 케어**
-![CG 케어 매인 화면](./CGCare_1.png)
-![CG 케어 건강 체크](./CGCare_2.png)  
+**CG 케어**  
+![CG 케어 매인 화면](./CGCare_1.png){: width="20%" height="20%"}  
+![CG 케어 건강 체크](./CGCare_2.png){: width="20%" height="20%"}    
 둥글 둥글한 글씨를 주로 사용하는 것 같으며 얇고 깨끗함  
 
-**루티너리**
-![루티너리 메인 화면](./routinery_1.webp)
-![루티너리 알람 화면](./routinery_2.webp)  
+**루티너리**  
+![루티너리 메인 화면](./routinery_1.webp){: width="20%" height="20%"}  
+![루티너리 알람 화면](./routinery_2.webp){: width="20%" height="20%"}    
 적은 양의 정보를 화면에 보여줌으로써 깔끔하게 보이도록 함  
 필요한 정보를 담백하게 보여줌  
 
