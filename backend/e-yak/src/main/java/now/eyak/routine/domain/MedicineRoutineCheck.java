@@ -23,10 +23,8 @@ public class MedicineRoutineCheck {
     private Long id;
     private LocalDate date;
     @OneToOne
-    private MedicineRoutine routine;
-
+    private MedicineRoutine medicineRoutine;
     private Boolean took;  // 약 복용 확인
-
     @ManyToOne
     private Member member;
     @ManyToOne
