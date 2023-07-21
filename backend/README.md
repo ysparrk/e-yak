@@ -20,3 +20,6 @@
 ## ERD
 Entity 작성 및 ERD 작성
 ![Alt text](src/eyakDiagram02.png)
+
+## API Document
+![Alt text](src/api_docs.png)
