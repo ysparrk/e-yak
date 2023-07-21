@@ -289,8 +289,36 @@ analogWrite 했을 때 약 100부터 느껴진다
 ### 3. LED
 진동모터와 동일
 ### 4. 버튼
+```arduino
+#define BTNPIN 17
 
+void setup() {
+  Serial.begin(115200);
+  pinMode(BTNPIN, INPUT_PULLUP);
+}
+
+void loop() {
+  int state = digitalRead(BTNPIN);
+  Serial.println(state);
+
+  delay(20);
+}
+```
+눌렸을 때 0 출력
 ### 5. 홀 센서
+내장 홀 센서
+```arduino
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  int measure = 0;
+  measure = hallRead();
+  Serial.println(measure);
+  delay(500);
+}
+```
 ### 6. 부저
 ```arduino
 #define BUZPIN 12
