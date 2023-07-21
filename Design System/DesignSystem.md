@@ -5,6 +5,13 @@
 
 <br>
 
+# 안드로이드 폰트 사이즈 가이드
+
+- [앱 디자인 시 체크해야 할 텍스트 규정](https://dpectrum.app/blog/104)
+<br>
+![폰트 사이즈](./font_size_guide.png)
+<br>
+
 # 아이콘
 
 - 시장 조사
