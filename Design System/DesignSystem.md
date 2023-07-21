@@ -44,26 +44,24 @@
 ## 글꼴 후보  
 조사한 레퍼런스를 기반으로 폰트 후보를 선정  
 
-**MBC1961굴림**  
+**[MBC1961굴림](https://noonnu.cc/font_page/1133)**  
 ![MBC1961굴림](./MBC1961GulimM.PNG)  
-[MBC1961굴림](https://noonnu.cc/font_page/1133)  
+ 
 
-**김정철고딕**  
+**[김정철고딕](https://noonnu.cc/font_page/1114)**  
 ![김정철고딕](./KimjungchulGothic-Bold.PNG)  
-[김정철고딕](https://noonnu.cc/font_page/1114)  
+ 
 
-**광양감동체**  
+**[광양감동체](https://gwangyang.go.kr/menu.es?mid=a11303090200)**  
 ![광양감동체](./광양감동체.PNG)  
-[광양감동체](https://gwangyang.go.kr/menu.es?mid=a11303090200)  
+
 레퍼런스 표기에 주의 해야 한다  
 
-**코레일 둥근고딕**  
+**[코레일 둥근고딕](https://noonnu.cc/font_page/1072)**  
 ![코레일 둥근고딕](./KorailRoundGothicBold.PNG)  
-[코레일 둥근고딕](https://noonnu.cc/font_page/1072)  
 
-**수트**  
-![수트](./SUIT-Regular.PNG)  
-[수트](https://noonnu.cc/font_page/844)  
+**[수트](https://noonnu.cc/font_page/844)**  
+![수트](./SUIT-Regular.PNG)    
 폰트의 굵기가 다양한 것이 특징
 
 
