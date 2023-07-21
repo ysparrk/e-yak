@@ -5,16 +5,21 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.myapplication.databinding.ActivityMainBinding
+import java.io.IOException
+import java.util.UUID
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -39,9 +44,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // check for permissions
-//        if(!hasPermissions(this, PERMISSIONS)) {
-//            requestPermissions(PERMISSIONS, REQUEST_ALL_PERMISSION)
-//        }
 
         // check if init bluetooth adapter is done
         if (bAdapter == null) {
@@ -70,20 +72,16 @@ class MainActivity : AppCompatActivity() {
 
         // search for devices
         binding.searchBtn.setOnClickListener {
+            val tmp: Boolean? = bAdapter?.startDiscovery()
+            if (tmp == false) {
+                Toast.makeText(this, "근처 기기를 찾을 수 없습니다", Toast.LENGTH_LONG).show()
+            }
             val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
             registerReceiver(receiver, filter)
         }
 
-    }
+        // connect to device
 
-    // permission check
-    private fun hasPermissions(context: Context?, permissions: Array<String>): Boolean {
-        for (p in permissions) {
-            if (context?.let { ActivityCompat.checkSelfPermission(it, p) } != PackageManager.PERMISSION_GRANTED) {
-                return false
-            }
-        }
-        return true
     }
 
     // onActivity Result override
@@ -99,18 +97,45 @@ class MainActivity : AppCompatActivity() {
 
     // device search broadcast receiver
     private val receiver = object: BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            binding.searchText.text = "hiii"
-            val action: String? = intent.action
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val action: String? = intent?.action
             when(action) {
                 BluetoothDevice.ACTION_FOUND -> {
-                    val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    val device = intent?.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                     val deviceName = device?.name
-                    //binding.searchText.append("${deviceName}")
-                    binding.searchText.text = deviceName
+                    val deviceAddr = device?.address
+                    if (deviceName != null) {
+                        binding.searchText.append("\n${deviceName} ${deviceAddr}")
+                    }
+                    if (deviceName == "ESP32-BT-TEST") { //"ESP32-BLE-TEST" "DESKTOP-BLHP263"
+                        binding.searchText.append("\n found!!")
+                        connectDevice(device)
+                    }
                 }
             }
         }
+    }
+
+    // device connect
+    var targetDevice: BluetoothDevice? = null
+    private fun connectDevice(targetDevice: BluetoothDevice?) {
+        Log.d("myapp","${targetDevice?.name}에 연결중...")
+        val thread = Thread {
+            val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+            var socket: BluetoothSocket? = targetDevice?.createRfcommSocketToServiceRecord(uuid)
+            Log.d("myapp", "${uuid} ${socket}")
+            try {
+                socket?.connect()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                try {
+                    socket?.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        thread.start()
     }
 
     // on destroy
