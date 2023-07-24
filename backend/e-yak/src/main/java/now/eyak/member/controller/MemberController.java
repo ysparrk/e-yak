@@ -25,14 +25,14 @@ public class MemberController {
         this.apiVersionHolder = apiVersionHolder;
     }
 
-    @PostMapping("/auth/signIn")
+    @PostMapping("/auth/signin")
     public ResponseEntity signIn(@RequestBody SignInDto signInDto) {
         SignInResponseDto signInResponseDto = memberService.signIn(signInDto);
 
         return ResponseEntity.ok(signInResponseDto);
     }
 
-    @PostMapping("/auth/signUp")
+    @PostMapping("/auth/signup")
     public ResponseEntity signUp(@RequestBody SignUpDto signUpDto) throws URISyntaxException {
         Member savedMember = memberService.signUp(signUpDto);
 
