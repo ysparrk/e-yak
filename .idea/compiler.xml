@@ -11,5 +11,10 @@
         <module name="e-yak.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="e-yak" target="17" />
+      <module name="e-yak.main" target="17" />
+      <module name="e-yak.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
