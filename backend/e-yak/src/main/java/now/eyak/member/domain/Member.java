@@ -1,29 +1,34 @@
 package now.eyak.member.domain;
 
 import jakarta.persistence.*;
-import now.eyak.member.domain.enumeration.SocialType;
-import now.eyak.survey.domain.Survey;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import now.eyak.member.domain.enumeration.Role;
 import now.eyak.prescription.domain.Prescription;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Enumerated(EnumType.STRING)
-    private SocialType socialType; // Google, Naver, Kakao
-    private String oAuthId; // Google, Naver, Kakao에서 로그인시 전달되는 토큰
+    private String providerName; // ex) google, naver, kakao
+    private String providerId; // "google_" + Google, Naver, Kakao에서 로그인시 전달되는 id
     private String refreshToken;
-    private String name;
     private String nickname;
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
 
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -43,4 +48,10 @@ public class Member {
 //    private String supplements; // 영양제등을 줄 글로
     @OneToMany(mappedBy = "member")
     private List<Prescription> prescriptions = new ArrayList<>();
+
+    @Builder
+    public Member(String providerName, String providerId) {
+        this.providerName = providerName;
+        this.providerId = providerId;
+    }
 }
