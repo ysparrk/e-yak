@@ -1,5 +1,6 @@
 package now.eyak.member.service;
 
+import lombok.extern.slf4j.Slf4j;
 import now.eyak.member.domain.Member;
 import now.eyak.member.domain.MemberProfile;
 import now.eyak.member.domain.OAuthAttributes;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -40,6 +42,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public SignInResponseDto signIn(SignInDto signInDto) throws InvalidAccessTokenException, UnsupportedProviderException {
+        log.debug("signIn()");
         // 요청 파라미터로 들어온 Access Token의 유효성 검사를 위해 Access Token으로 Authoriaztion Server에 사용자 정보를 요청한다.
         MemberProfile memberProfile = getMemberProfile(
                 signInDto.getProviderName(),
@@ -50,10 +53,14 @@ public class MemberServiceImpl implements MemberService {
         SignInResponseDto oAuthSignInResponseDto =
                 memberRepository
                         .findByProviderId(memberProfile.getProviderId())
-                        .map(member ->
-                            new SignInResponseDto(jwtTokenProvider.bulidAccessToken(member), jwtTokenProvider.buildRefreshToken(member), MemberDto.from(member))
+                        .map(member -> {
+                                    String refreshToken = jwtTokenProvider.buildRefreshToken(member);
+                                    member.setRefreshToken(refreshToken);
+                            return new SignInResponseDto(jwtTokenProvider.bulidAccessToken(member), refreshToken, MemberDto.from(member));
+                                }
                         )
-                        .orElseThrow(NoSuchMemberException::new);
+                        .orElseThrow(() -> new NoSuchMemberException("회원 가입을 먼저 진행하십시오."));
+
 
         return oAuthSignInResponseDto;
     }
@@ -65,6 +72,7 @@ public class MemberServiceImpl implements MemberService {
      * @param signUpDto Access Token 과 이용약관 동의 목록을 가진다.
      * @return OAuthSignUpResponseDto 성공을 나타내는 "success"를 가진다.
      */
+    @Transactional
     @Override
     public Member signUp(SignUpDto signUpDto) {
         MemberProfile memberProfile = getMemberProfile(
@@ -77,12 +85,10 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberProfile.toMember();
         member = signUpDto.setMemberFields(member);
-
+        member = memberRepository.save(member);
 
         String refreshToken = jwtTokenProvider.buildRefreshToken(member);
         member.setRefreshToken(refreshToken);
-
-        memberRepository.save(member);
 
         return member;
     }

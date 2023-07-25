@@ -1,12 +1,14 @@
 package now.eyak.member.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Setter;
 import now.eyak.member.domain.Member;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@Getter
 @Setter
 public class MemberDto {
     private Long id;

@@ -1,5 +1,7 @@
 package now.eyak.member.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import now.eyak.member.domain.Member;
 import now.eyak.member.dto.*;
 import now.eyak.member.service.MemberService;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
 public class MemberController {
@@ -20,13 +24,9 @@ public class MemberController {
     private final MemberService memberService;
     private final ApiVersionHolder apiVersionHolder;
 
-    public MemberController(MemberService memberService, ApiVersionHolder apiVersionHolder) {
-        this.memberService = memberService;
-        this.apiVersionHolder = apiVersionHolder;
-    }
-
     @PostMapping("/auth/signin")
     public ResponseEntity signIn(@RequestBody SignInDto signInDto) {
+        log.debug("signIn()");
         SignInResponseDto signInResponseDto = memberService.signIn(signInDto);
 
         return ResponseEntity.ok(signInResponseDto);
