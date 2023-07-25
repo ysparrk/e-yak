@@ -21,7 +21,6 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/tmoney_regular"
         android:text="내 손안에 작은 의사"
