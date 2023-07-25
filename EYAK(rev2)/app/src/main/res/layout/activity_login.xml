@@ -141,4 +141,12 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/tmpBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintStart_toEndOf="@+id/loginPageLogo"
+        app:layout_constraintTop_toTopOf="@+id/loginPageLogo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
