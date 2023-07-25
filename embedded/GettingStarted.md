@@ -220,6 +220,7 @@ void loop() {
 }
 
 ```
+nRF toolbox 어플(코드 공개되어 있음)과 통신 확인
 # 2. 센서 연결 테스트
 ### 1. 온습도 센서
 스케치 > 라이브러리 포함 > 라이브러리 관리
@@ -319,6 +320,24 @@ void loop() {
   delay(500);
 }
 ```
+WSH135
+```arduino
+#define HALLPIN 27
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(HALLPIN, INPUT);
+}
+
+void loop() {
+  int sense = 0;
+  sense = analogRead( HALLPIN );
+  Serial.println(sense);
+  delay(100);
+}
+```
+센서 돌출 된 부분을 앞면으로 봤을 때<br>
+왼쪽부터 3.3V GND 27번핀에 연결해서 테스트
 ### 6. 부저
 ```arduino
 #define BUZPIN 12
