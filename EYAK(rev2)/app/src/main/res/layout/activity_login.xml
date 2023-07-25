@@ -8,30 +8,30 @@
     tools:context=".LoginActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
+        android:id="@+id/loginPageLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/eyak_logo" />
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/tmoney_regular"
         android:gravity="center"
         android:text="내 손안에 작은 의사"
         android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintStart_toStartOf="@+id/loginPageLogo"
+        app:layout_constraintTop_toBottomOf="@+id/loginPageLogo" />
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/tmoney_bold"
@@ -41,17 +41,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="260dp"
+        android:id="@+id/loginLinearLayout"
+        android:layout_width="364dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8">
 
         <LinearLayout
+            android:id="@+id/googleLoginLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="#f23143"
@@ -109,7 +113,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="66dp"
             android:layout_marginTop="10dp"
             android:background="#fee600"
             android:orientation="horizontal">
