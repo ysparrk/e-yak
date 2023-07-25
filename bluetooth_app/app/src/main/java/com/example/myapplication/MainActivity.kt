@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
@@ -38,13 +39,14 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.BLUETOOTH,
         Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.BLUETOOTH_CONNECT,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
+//        Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.BLUETOOTH_SCAN,
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-        Manifest.permission.BLUETOOTH_ADVERTISE,
+//        Manifest.permission.BLUETOOTH_SCAN,
+//        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+//        Manifest.permission.BLUETOOTH_ADVERTISE,
     )
     // flags & data to be monitored
+    private var reqPermFlag: Boolean = false
     private var permFlag: Boolean? = null
     private val TAG = "myapp"   // log tag to be deleted afterwards.
     private val REQUEST_ALL_PERMISSION: Int = 10;
@@ -78,13 +80,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // check for permissions
-//        binding.pairedDeviceDelBtn.setOnClickListener {
-//            if (!checkPermissions(this, PERMISSION)) {
-//                ActivityCompat.requestPermissions(this, PERMISSION, REQUEST_ALL_PERMISSION)
-//            }
-//        }
-        permFlag = checkPermissions(this, PERMISSION)
-
+        //reqPermFlag = checkPermissions(this, PERMISSION)
+        //makePermissionReq()
 
         // check if init bluetooth adapter is done
         if (bAdapter == null) {
@@ -149,24 +146,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     //=== existing functions override / callbacks.
-    // onRequestPermissionsResult override.
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_ALL_PERMISSION -> {
-                for(gr in grantResults) {
-                    if (grantResults.isNotEmpty() && (gr == PackageManager.PERMISSION_GRANTED)) {
-                        Log.d(TAG, "grants: ${permissions} ${gr}")
-                        Toast.makeText(this, "${gr} 권한이 허용되었습니다!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        requestPermissions(permissions, REQUEST_ALL_PERMISSION)
-                        Toast.makeText(this, "${gr} 원활한 사용을 위해 앱 권한을 허용해 주십시오", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
-
     // onActivity Result override
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode) {
@@ -234,24 +213,38 @@ class MainActivity : AppCompatActivity() {
     //=== functions implementation
     // permission check - if false, request permissions.
     private fun checkPermissions(context: Context?, perms: Array<String>): Boolean {
+        var chkFlag = false
         for (p in perms) {
             if (ActivityCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
+                chkFlag = true
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, p)) {
                     AlertDialog.Builder(this).apply {
                         setTitle("권한 요청 이유")
-                        setMessage("약통 기기의 인식 및 앱의 통신에 필요합니다")
+                        setMessage("약통 기기의 인식 및 앱과의 통신에 필요합니다")
                         setPositiveButton("권한 요청") { _, _ ->
-                            requestPermissionLauncher.launch(p)
+                            chkFlag = true
                         }
-                        setNegativeButton("거부", null)
+                        setNegativeButton("거부") { _, _ ->
+                            chkFlag = false
+                        }
                     }.show()
-                } else {
-                    requestPermissionLauncher.launch(p)
                 }
-                return false
+                break
             }
         }
-        return true
+        return chkFlag
+    }
+    private fun makePermissionReq() {
+        if (reqPermFlag) {
+            for (p in PERMISSION) {
+                if (ActivityCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, p)) { requestPermissionLauncher.launch(p) }
+                    else { requestPermissionLauncher.launch(p) }
+                }
+            }
+        } else {
+            Toast.makeText(this, "권한 요청이 거부되었습니다", Toast.LENGTH_SHORT).show()
+        }
     }
     // permission granting launcher
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { permFlag ->
