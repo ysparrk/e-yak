@@ -2,6 +2,7 @@ package now.eyak.util.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import now.eyak.member.domain.Member;
 import now.eyak.member.exception.InvalidRefreshTokenException;
 import now.eyak.member.exception.NoSuchMemberException;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
     private final long ACCESS_TOKEN_EXPIRATION_TIME;
@@ -59,6 +61,10 @@ public class JwtTokenProvider {
 
 
     public Claims parseToken(String token) {
+        if (!validateToken(token)) {
+            throw new IllegalArgumentException("토큰이 유효하지 않습니다.");
+        }
+
         Claims claims = getJwtParser()
                 .parseClaimsJws(token)
                 .getBody();
@@ -67,6 +73,10 @@ public class JwtTokenProvider {
     }
 
     public Claims parseRefreshToken(String refreshToken) {
+        if (!validateToken(refreshToken)) {
+            throw new IllegalArgumentException("토큰이 유효하지 않습니다.");
+        }
+
         Claims claims = getJwtParser()
                 .parseClaimsJws(refreshToken)
                 .getBody();
@@ -92,6 +102,23 @@ public class JwtTokenProvider {
 
 //        return UsernamePasswordAuthenticationToken.aumthenticated(member, token, authorities);
         return new UsernamePasswordAuthenticationToken(member, token, authorities);
+    }
+
+    private boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("잘못된 JWT 서명입니다.");
+        } catch (ExpiredJwtException e) {
+            log.info("만료된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            log.info("지원되지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            log.info("JWT 토큰이 잘못되었습니다.");
+        }
+
+        return false;
     }
 
     private JwtParser getJwtParser() {

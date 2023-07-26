@@ -1,6 +1,8 @@
 package now.eyak.exceptionhandler;
 
 import now.eyak.member.exception.AlreadySignUpException;
+import now.eyak.member.exception.InvalidAccessTokenException;
+import now.eyak.member.exception.InvalidRefreshTokenException;
 import now.eyak.member.exception.NoSuchMemberException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity WebClientResponseExceptionHandler(WebClientResponseException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addPrefix(e.getMessage()));
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity IllegalArgumentExceptionHandler(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addPrefix(e.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity InvalidRefreshTokenExceptionHandler(InvalidRefreshTokenException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addPrefix(e.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAccessTokenException.class)
+    public ResponseEntity InvalidAccessTokenExceptionHandler(InvalidAccessTokenException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addPrefix(e.getMessage()));
+    }
+
 
     private String addPrefix(String message) {
         return "[Error] " + message;
