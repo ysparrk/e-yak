@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FCF8"
+    tools:context=".SignupActivity">
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/tmoney_bold"
+        android:text="추가 정보 입력"
+        android:textColor="#757863"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/nickNameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="닉네임:"
+                    android:textColor="#757863"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/nickNameInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:fontFamily="@font/tmoney_regular"
+                    android:inputType="text"
+                    android:text="닉네임을 입력하세요"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/nickNameChk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="#C4D7B2"
+                android:fontFamily="@font/tmoney_bold"
+                android:text="닉네임 중복 검사"
+                android:textColor="#757863" />
+
+            <TextView
+                android:id="@+id/timeSetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/tmoney_bold"
+                android:paddingTop="30dp"
+                android:text="시간 설정"
+                android:textColor="#757863"
+                android:textSize="24sp" />
+
+            <FrameLayout
+                android:id="@+id/wakeTimeFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/wakeTimeLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/wakeTimeText"
+                            android:layout_width="284dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_bold"
+                            android:gravity="center"
+                            android:text="일어나는 시간:"
+                            android:textColor="#757863"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/wakeTimeH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="06"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/wakeTimeM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="50"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/breakfastTimeFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/breakfastTimeLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/breakfastTimeText"
+                            android:layout_width="284dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_bold"
+                            android:gravity="center"
+                            android:paddingTop="10dp"
+                            android:text="아침 식사 시간:"
+                            android:textColor="#757863"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/breakfastTimeH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="07"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/breakfastTimeM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="20"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/lunchTimeFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/lunchTimeLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/lunchTimeText"
+                            android:layout_width="284dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_bold"
+                            android:gravity="center"
+                            android:paddingTop="10dp"
+                            android:text="점심 식사 시간:"
+                            android:textColor="#757863"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/lunchTimeH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="11"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/lunchTimeM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="10"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/dinnerTimeFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/dinnerTimeLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/dinnerTimeText"
+                            android:layout_width="284dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_bold"
+                            android:gravity="center"
+                            android:paddingTop="10dp"
+                            android:text="저녁 식사 시간:"
+                            android:textColor="#757863"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/dinnerTimeH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="19"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/dinnerTimeM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="45"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/bedTimeFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/bedTimeLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/bedTimeText"
+                            android:layout_width="284dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_bold"
+                            android:gravity="center"
+                            android:paddingTop="10dp"
+                            android:text="잠자는 시간:"
+                            android:textColor="#757863"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/bedTimeH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="01"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/bedTimeM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="00"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/eatingFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/eatingTimeLinearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/eatingTimeText"
+                            android:layout_width="284dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_bold"
+                            android:gravity="center"
+                            android:paddingTop="10dp"
+                            android:text="식사 시간:"
+                            android:textColor="#757863"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/eatingTimeH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="number|numberDecimal"
+                            android:text="00"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/eatingTimeM"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:inputType="datetime"
+                            android:text="20"
+                            android:textColor="#757863"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:text="* 식사 시간은 평균적으로 식사하는 시간을 의미 합니다" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="50dp"
+                android:backgroundTint="#C4D7B2"
+                android:fontFamily="@font/tmoney_bold"
+                android:text="회원 가입"
+                android:textColor="#757863" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

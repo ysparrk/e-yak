@@ -96,6 +96,7 @@
         android:fontFamily="@font/tmoney_bold"
         android:text="지금이:약"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#757863"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toEndOf="@+id/eyakLogo"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
