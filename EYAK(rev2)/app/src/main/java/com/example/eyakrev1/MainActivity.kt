@@ -80,8 +80,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeTabColor(index: Int) {
-        val colorOn = "#ff757863"
-        val colorOff = "#ffF7FFE5"
+        val colorOn = "#FFAAC8A7"
+        val colorOff = "#FFC9DBB2"
 
         binding.alarmTab.setColorFilter(Color.parseColor(if(index == 0) colorOn else colorOff))
         binding.medicineTab.setColorFilter(Color.parseColor(if(index == 1) colorOn else colorOff))
