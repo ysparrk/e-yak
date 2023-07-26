@@ -1,4 +1,4 @@
-package com.example.eyakrev1
+package com.example.eyakv1
 
 import android.content.Intent
 import android.content.IntentSender
@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.eyakrev1.databinding.ActivityLoginBinding
+import com.example.eyakv1.R
+import com.example.eyakv1.databinding.ActivityLoginBinding
+
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -39,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
                     // Your server's client ID, not your Android client ID.
                     .setServerClientId(getString(R.string.your_web_client_id))
                     // Only show accounts previously used to sign in.
-                    .setFilterByAuthorizedAccounts(true)
+                    .setFilterByAuthorizedAccounts(false)
                     .build())
             // Automatically sign in when exactly one credential is retrieved.
             .setAutoSelectEnabled(true)
