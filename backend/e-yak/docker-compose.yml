@@ -1,0 +1,14 @@
+version: '3'
+services:
+  spring-boot-app:
+    image: docker-springboot
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eyak
