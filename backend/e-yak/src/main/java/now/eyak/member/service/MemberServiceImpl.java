@@ -1,5 +1,6 @@
 package now.eyak.member.service;
 
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import now.eyak.member.domain.Member;
 import now.eyak.member.domain.MemberProfile;
@@ -40,6 +41,7 @@ public class MemberServiceImpl implements MemberService {
      *
      * @return OAuthSignInResponseDto
      */
+    @Transactional
     @Override
     public SignInResponseDto signIn(SignInDto signInDto) throws InvalidAccessTokenException, UnsupportedProviderException {
         log.debug("signIn()");
@@ -96,7 +98,12 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public RefreshResponseDto issueAccessTokenByRefreshToken(ReissueDto reissueDto) {
-        Member member = memberRepository.findByRefreshToken(reissueDto.getRefreshToken()).orElseThrow(() -> new InvalidRefreshTokenException("유효하지 않은 RefreshToken 입니다."));
+        Claims claims = jwtTokenProvider.parseRefreshToken(reissueDto.getRefreshToken());
+
+        Member member = memberRepository.findById(claims.get("id", Long.class)).orElseThrow(() -> new InvalidRefreshTokenException("해당 사용자가 존재하지 않습니다."));
+        if (!member.getRefreshToken().equals(reissueDto.getRefreshToken())) {
+            throw new InvalidRefreshTokenException("유효하지 않은 Refresh Token 입니다.");
+        }
 
         String refreshToken = jwtTokenProvider.buildRefreshToken(member);
         member.setRefreshToken(refreshToken);

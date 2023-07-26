@@ -1,10 +1,9 @@
 package now.eyak.util.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import now.eyak.member.domain.Member;
+import now.eyak.member.exception.InvalidRefreshTokenException;
 import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +26,8 @@ public class JwtTokenProvider {
     private final Key KEY = Keys.hmacShaKeyFor(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
     private static final String HEADER_KEY = "Authorization";
     private static final String PREFIX = "Bearer ";
+    private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
+    private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private final MemberRepository memberRepository;
 
     public JwtTokenProvider(
@@ -41,6 +42,7 @@ public class JwtTokenProvider {
     public String bulidAccessToken(Member member) {
         return Jwts.builder()
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME))
+                .setSubject(ACCESS_TOKEN_SUBJECT)
                 .addClaims(Map.of("id", member.getId()))
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
@@ -49,6 +51,7 @@ public class JwtTokenProvider {
     public String buildRefreshToken(Member member) {
         return Jwts.builder()
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_TIME))
+                .setSubject(REFRESH_TOKEN_SUBJECT)
                 .addClaims(Map.of("id", member.getId()))
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
@@ -56,12 +59,21 @@ public class JwtTokenProvider {
 
 
     public Claims parseToken(String token) {
-        Claims claims = Jwts
-                .parserBuilder()
-                .setSigningKey(KEY)
-                .build()
+        Claims claims = getJwtParser()
                 .parseClaimsJws(token)
                 .getBody();
+
+        return claims;
+    }
+
+    public Claims parseRefreshToken(String refreshToken) {
+        Claims claims = getJwtParser()
+                .parseClaimsJws(refreshToken)
+                .getBody();
+
+        if (!claims.getSubject().equals(REFRESH_TOKEN_SUBJECT)) {
+            throw new InvalidRefreshTokenException("유효한 Refresh Token이 아닙니다.");
+        }
 
         return claims;
     }
@@ -82,4 +94,10 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(member, token, authorities);
     }
 
+    private JwtParser getJwtParser() {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(KEY)
+                .build();
+    }
 }

@@ -8,6 +8,6 @@ import now.eyak.member.exception.UnsupportedProviderException;
 public interface MemberService {
     SignInResponseDto signIn(SignInDto signInDto) throws InvalidAccessTokenException, UnsupportedProviderException;
     Member signUp(SignUpDto signUpDto);
+    RefreshResponseDto issueAccessTokenByRefreshToken(ReissueDto reissueDto);
 
-    public RefreshResponseDto issueAccessTokenByRefreshToken(ReissueDto reissueDto);
 }
