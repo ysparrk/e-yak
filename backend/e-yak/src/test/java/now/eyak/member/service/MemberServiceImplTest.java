@@ -1,7 +1,6 @@
 package now.eyak.member.service;
 
 import now.eyak.member.domain.Member;
-import now.eyak.member.dto.MemberDto;
 import now.eyak.member.dto.MemberUpdateDto;
 import now.eyak.member.dto.SignUpDto;
 import now.eyak.member.repository.MemberRepository;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class MemberServiceImplTest {
@@ -65,5 +62,33 @@ class MemberServiceImplTest {
 
         //then
         Assertions.assertThat(actual.getEatingDuration()).isEqualToIgnoringNanos(updatedTime);
+    }
+
+    @Test
+    void deleteMember() {
+        //given
+        SignUpDto signUpDto = SignUpDto.builder()
+                .providerName("google")
+                .nickname("박길동")
+                .wakeTime(LocalTime.MIN)
+                .breakfastTime(LocalTime.MIN)
+                .lunchTime(LocalTime.NOON)
+                .dinnerTime(LocalTime.now())
+                .bedTime(LocalTime.MIDNIGHT)
+                .eatingDuration(LocalTime.of(2, 0))
+                .build();
+
+        Member member = new Member();
+        member = signUpDto.setMemberFields(member);
+
+        member.setProviderId("google_something");
+
+        memberRepository.save(member);
+
+        //when
+        memberService.deleteMember(member.getId());
+
+        //then
+        Assertions.assertThat(memberRepository.findById(member.getId())).isEmpty();
     }
 }
