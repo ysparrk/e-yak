@@ -1,10 +1,7 @@
 package now.eyak.member.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import now.eyak.member.domain.enumeration.Role;
 import now.eyak.prescription.domain.Prescription;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

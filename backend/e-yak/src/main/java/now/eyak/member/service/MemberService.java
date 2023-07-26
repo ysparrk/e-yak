@@ -9,5 +9,6 @@ public interface MemberService {
     SignInResponseDto signIn(SignInDto signInDto) throws InvalidAccessTokenException, UnsupportedProviderException;
     Member signUp(SignUpDto signUpDto);
     RefreshResponseDto issueAccessTokenByRefreshToken(ReissueDto reissueDto);
+    MemberDto updateMember(MemberUpdateDto memberUpdateDto, Long memberId);
 
 }

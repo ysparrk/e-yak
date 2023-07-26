@@ -116,6 +116,16 @@ public class MemberServiceImpl implements MemberService {
                 .build();
     }
 
+    @Transactional
+    @Override
+    public MemberDto updateMember(MemberUpdateDto memberUpdateDto, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당 회원은 존재하지 않습니다."));
+
+        Member updatedMember = memberUpdateDto.update(member);
+
+        return MemberDto.from(updatedMember);
+    }
+
     private OAuthProvider findProvider(String providerName) {
         return inMemoryProviderRepository.findByProviderName(providerName);
     }

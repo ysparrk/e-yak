@@ -101,7 +101,7 @@ public class JwtTokenProvider {
         );
 
 //        return UsernamePasswordAuthenticationToken.aumthenticated(member, token, authorities);
-        return new UsernamePasswordAuthenticationToken(member, token, authorities);
+        return new UsernamePasswordAuthenticationToken(member.getId(), token, authorities);
     }
 
     private boolean validateToken(String token) {
