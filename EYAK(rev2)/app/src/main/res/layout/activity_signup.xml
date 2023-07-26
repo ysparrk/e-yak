@@ -94,6 +94,14 @@
                 android:textColor="#757863"
                 android:textSize="24sp" />
 
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/tmoney_regular"
+                android:text="시간에 맞춰 알람을 울려드려요!"
+                android:textSize="14sp" />
+
             <FrameLayout
                 android:id="@+id/wakeTimeFrameLayout"
                 android:layout_width="match_parent"
@@ -445,7 +453,7 @@
                             android:ems="10"
                             android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
-                            android:inputType="datetime"
+                            android:inputType="number|numberDecimal"
                             android:text="20"
                             android:textColor="#757863"
                             android:textSize="14sp" />
