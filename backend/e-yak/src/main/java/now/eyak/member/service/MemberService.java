@@ -10,5 +10,5 @@ public interface MemberService {
     Member signUp(SignUpDto signUpDto);
     RefreshResponseDto issueAccessTokenByRefreshToken(ReissueDto reissueDto);
     MemberDto updateMember(MemberUpdateDto memberUpdateDto, Long memberId);
-
+    void deleteMember(Long memberId);
 }

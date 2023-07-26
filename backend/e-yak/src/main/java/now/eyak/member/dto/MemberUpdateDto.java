@@ -1,5 +1,6 @@
 package now.eyak.member.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import now.eyak.member.domain.Member;
@@ -8,6 +9,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
+@Builder
 public class MemberUpdateDto {
     private LocalTime wakeTime;
     private LocalTime breakfastTime;

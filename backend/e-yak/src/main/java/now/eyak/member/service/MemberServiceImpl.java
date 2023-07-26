@@ -126,6 +126,11 @@ public class MemberServiceImpl implements MemberService {
         return MemberDto.from(updatedMember);
     }
 
+    @Override
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
+    }
+
     private OAuthProvider findProvider(String providerName) {
         return inMemoryProviderRepository.findByProviderName(providerName);
     }
