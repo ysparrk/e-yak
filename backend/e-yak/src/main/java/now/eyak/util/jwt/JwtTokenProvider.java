@@ -78,6 +78,7 @@ public class JwtTokenProvider {
                 new SimpleGrantedAuthority(member.getRole().getKey())
         );
 
+//        return UsernamePasswordAuthenticationToken.aumthenticated(member, token, authorities);
         return new UsernamePasswordAuthenticationToken(member, token, authorities);
     }
 

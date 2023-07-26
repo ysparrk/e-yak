@@ -7,10 +7,7 @@ import now.eyak.member.dto.*;
 import now.eyak.member.service.MemberService;
 import now.eyak.util.ApiVersionHolder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,4 +42,10 @@ public class MemberController {
 
         return ResponseEntity.ok(refreshResponseDto);
     }
+
+    @GetMapping("/test")
+    public ResponseEntity test() {
+        return ResponseEntity.ok("테스트 성공");
+    }
+
 }
