@@ -3,7 +3,7 @@ services:
   spring-boot-app:
     image: docker-springboot
     ports:
-      - "3333:3333"
+      - "3333:8081"
     depends_on:
       - mariadb
 
