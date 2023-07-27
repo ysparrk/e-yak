@@ -21,7 +21,7 @@ class AlarmListAdapter (val context: Context, val medicineAlarmList: ArrayList<M
         return medicineAlarmList[position]
     }
 
-    override fun getItemId(p0: Int): Long {
+    override fun getItemId(position: Int): Long {
         // 나중에 약의 고유 id를 받던가 그렇게 하자 => DB 보고 추후에 결정
         return 0
     }
@@ -38,7 +38,7 @@ class AlarmListAdapter (val context: Context, val medicineAlarmList: ArrayList<M
         val medicineEatButton = view.findViewById<Button>(R.id.medicine_eat_button)
         val medicineDelayButton = view.findViewById<Button>(R.id.medicine_delay_button)
 
-        // /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
+        /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val medicineAlarm = medicineAlarmList[position]
 
         val resourceId = context.resources.getIdentifier(medicineAlarm.medicineIcon, "drawable", context.packageName)
