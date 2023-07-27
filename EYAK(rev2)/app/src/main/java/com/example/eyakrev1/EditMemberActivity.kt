@@ -1,5 +1,6 @@
 package com.example.eyakrev1
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.preference.PreferenceManager
@@ -16,6 +17,11 @@ class EditMemberActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadData()
+
+        binding.editCancel.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun loadData() {
