@@ -26,9 +26,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="20dp"
+                android:paddingLeft="10dp"
                 android:paddingTop="5dp"
-                android:paddingRight="20dp"
+                android:paddingRight="10dp"
                 android:paddingBottom="5dp">
 
                 <ImageView
@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="@font/tmoney_regular"
                     android:text="오후 1:30"
                     android:textColor="#757863"
@@ -57,7 +57,7 @@
                     android:fontFamily="@font/tmoney_bold"
                     android:text="약 이름 1"
                     android:textColor="#757863"
-                    android:textSize="30dp" />
+                    android:textSize="25dp" />
 
             </LinearLayout>
 
@@ -65,17 +65,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="20dp">
+                android:paddingLeft="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:fontFamily="@font/tmoney_regular"
                     android:text="다음 약 복용까지"
                     android:textColor="#757863"
-                    android:textSize="20dp" />
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/medicine_time_left"
@@ -86,7 +86,7 @@
                     android:fontFamily="@font/tmoney_regular"
                     android:text="00:31:58"
                     android:textColor="#757863"
-                    android:textSize="30dp" />
+                    android:textSize="25dp" />
 
             </LinearLayout>
 
