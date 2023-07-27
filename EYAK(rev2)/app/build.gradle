@@ -51,4 +51,7 @@ dependencies {
 
     //  SharedPreference
     implementation 'androidx.preference:preference-ktx:1.2.0'
+
+    // 카드뷰
+    implementation "androidx.cardview:cardview:1.0.0"
 }
