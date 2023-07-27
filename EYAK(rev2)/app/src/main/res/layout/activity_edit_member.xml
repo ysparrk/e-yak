@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8FCF8"
-    tools:context=".SignupActivity">
+    tools:context=".EditMemberActivity">
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/tmoney_bold"
-        android:text="추가 정보 입력"
+        android:text="내 정보 변경"
         android:textColor="#757863"
         android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,13 +25,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9">
+        app:layout_constraintTop_toBottomOf="@+id/textView5">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -59,10 +58,11 @@
                     android:textSize="24sp" />
 
                 <EditText
-                    android:id="@+id/nickNameInput"
+                    android:id="@+id/nickNameEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="#202E37"
                     android:ems="10"
                     android:fontFamily="@font/tmoney_regular"
                     android:includeFontPadding="false"
@@ -72,17 +72,6 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
-
-            <Button
-                android:id="@+id/nickNameChk"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#E3F2C1"
-                android:fontFamily="@font/tmoney_bold"
-                android:text="닉네임 중복 검사"
-                android:textColor="#757863" />
 
             <TextView
                 android:id="@+id/timeSetText"
@@ -478,16 +467,34 @@
 
             </FrameLayout>
 
-            <Button
-                android:id="@+id/signup"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="50dp"
-                android:backgroundTint="#E3F2C1"
-                android:fontFamily="@font/tmoney_bold"
-                android:text="회원 가입"
-                android:textColor="#757863" />
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/signup2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="50dp"
+                    android:backgroundTint="#E3F2C1"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="정보 변경 확인"
+                    android:textColor="#757863" />
+
+                <Button
+                    android:id="@+id/signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="50dp"
+                    android:backgroundTint="#E3F2C1"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="정보 변경 취소"
+                    android:textColor="#757863" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

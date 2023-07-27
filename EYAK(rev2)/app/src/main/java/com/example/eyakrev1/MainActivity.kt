@@ -1,5 +1,6 @@
 package com.example.eyakrev1
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -48,7 +49,8 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun accountSettingClick() {
-        Toast.makeText(this, "이게 되네", Toast.LENGTH_LONG).show()
+        val intent = Intent(this, EditMemberActivity::class.java)
+        startActivity(intent)
     }
 
     private fun alarmTabClick() {
