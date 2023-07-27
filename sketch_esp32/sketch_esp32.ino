@@ -96,6 +96,7 @@ void btnPushTask(void *param) {
     if (btConnectFlag == true) {
       if (state == 0) {
         alarmFlag = false;
+        //SerialBT.write(107);
       }
     }
   }
@@ -110,10 +111,10 @@ void boxOpenTask(void *param) {
     int sense = 0;
     sense = analogRead(HALLPIN);
     if (sense > 1900 || sense < 1800) { //"inled"
-      deviceOpen();
+      deviceClose();
       //Serial.println(sense);
     } else {
-      deviceClose();
+      deviceOpen();
     }
   }
 }
@@ -124,11 +125,11 @@ void boxOpenTask(void *param) {
 // alarm on
 void alarmOn() {
   digitalWrite(ALARMLED, HIGH);
-  //ledcWriteNote(channel, NOTE_D, 4);
+  ledcWriteNote(channel, NOTE_D, 4);
   delay(500);
-  //ledcWriteNote(channel, NOTE_F, 4);
+  ledcWriteNote(channel, NOTE_F, 4);
   delay(500);
-  //ledcWriteNote(channel, NOTE_A, 4);
+  ledcWriteNote(channel, NOTE_A, 4);
   delay(500);
   ledcWriteTone(channel, 0);
   digitalWrite(ALARMLED, LOW);
