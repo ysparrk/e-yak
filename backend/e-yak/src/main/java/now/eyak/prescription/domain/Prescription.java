@@ -1,9 +1,7 @@
 package now.eyak.prescription.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.member.domain.Member;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,4 +38,19 @@ public class Prescription {
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Builder
+    public Prescription(String customName, String icd, String krName, String engName, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer iotLocation, Integer medicineDose, String unit, List<MedicineRoutine> medicineRoutines, Member member) {
+        this.customName = customName;
+        this.icd = icd;
+        this.krName = krName;
+        this.engName = engName;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.iotLocation = iotLocation;
+        this.medicineDose = medicineDose;
+        this.unit = unit;
+        this.medicineRoutines = medicineRoutines;
+        this.member = member;
+    }
 }
