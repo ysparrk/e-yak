@@ -46,6 +46,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    //    구글 OAuth2
+    //  구글 OAuth2
     implementation 'com.google.android.gms:play-services-auth:20.6.0'
+
+    //  SharedPreference
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 }

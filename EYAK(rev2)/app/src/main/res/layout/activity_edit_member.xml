@@ -49,7 +49,7 @@
 
                 <TextView
                     android:id="@+id/nickNameText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="32dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/tmoney_bold"
@@ -57,17 +57,15 @@
                     android:textColor="#757863"
                     android:textSize="24sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/nickNameEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#202E37"
-                    android:ems="10"
                     android:fontFamily="@font/tmoney_regular"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:inputType="text"
-                    android:text="닉네임을 입력하세요"
+                    android:text="TextView"
                     android:textColor="#757863"
                     android:textSize="16sp" />
 
@@ -122,7 +120,7 @@
                             android:textSize="20sp" />
 
                         <EditText
-                            android:id="@+id/wakeTimeH"
+                            android:id="@+id/wakeTimeHEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -136,7 +134,7 @@
                             android:textSize="14sp" />
 
                         <EditText
-                            android:id="@+id/wakeTimeM"
+                            android:id="@+id/wakeTimeMEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -183,7 +181,7 @@
                             android:textSize="20sp" />
 
                         <EditText
-                            android:id="@+id/breakfastTimeH"
+                            android:id="@+id/breakfastTimeHEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -197,7 +195,7 @@
                             android:textSize="14sp" />
 
                         <EditText
-                            android:id="@+id/breakfastTimeM"
+                            android:id="@+id/breakfastTimeMEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -246,7 +244,7 @@
                             android:textSize="20sp" />
 
                         <EditText
-                            android:id="@+id/lunchTimeH"
+                            android:id="@+id/lunchTimeHEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -260,7 +258,7 @@
                             android:textSize="14sp" />
 
                         <EditText
-                            android:id="@+id/lunchTimeM"
+                            android:id="@+id/lunchTimeMEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -307,7 +305,7 @@
                             android:textSize="20sp" />
 
                         <EditText
-                            android:id="@+id/dinnerTimeH"
+                            android:id="@+id/dinnerTimeHEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -321,7 +319,7 @@
                             android:textSize="14sp" />
 
                         <EditText
-                            android:id="@+id/dinnerTimeM"
+                            android:id="@+id/dinnerTimeMEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -368,7 +366,7 @@
                             android:textSize="20sp" />
 
                         <EditText
-                            android:id="@+id/bedTimeH"
+                            android:id="@+id/bedTimeHEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -382,7 +380,7 @@
                             android:textSize="14sp" />
 
                         <EditText
-                            android:id="@+id/bedTimeM"
+                            android:id="@+id/bedTimeMEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -428,7 +426,7 @@
                             android:textSize="20sp" />
 
                         <EditText
-                            android:id="@+id/eatingTimeH"
+                            android:id="@+id/eatingTimeHEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -442,7 +440,7 @@
                             android:textSize="14sp" />
 
                         <EditText
-                            android:id="@+id/eatingTimeM"
+                            android:id="@+id/eatingTimeMEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -474,10 +472,11 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/signup2"
+                    android:id="@+id/editCommit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="50dp"
                     android:backgroundTint="#E3F2C1"
                     android:fontFamily="@font/tmoney_bold"
@@ -485,12 +484,13 @@
                     android:textColor="#757863" />
 
                 <Button
-                    android:id="@+id/signup"
+                    android:id="@+id/editCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="50dp"
-                    android:backgroundTint="#E3F2C1"
+                    android:backgroundTint="#FF9B9B"
                     android:fontFamily="@font/tmoney_bold"
                     android:text="정보 변경 취소"
                     android:textColor="#757863" />
