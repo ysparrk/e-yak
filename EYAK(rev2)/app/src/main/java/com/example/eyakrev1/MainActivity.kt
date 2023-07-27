@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.alarmTab.setOnClickListener {
             alarmTabClick()
+
         }
 
         binding.medicineTab.setOnClickListener {
@@ -45,8 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initPage() {
-        changeTabColor(0)
-
+        alarmTabClick()
     }
     private fun accountSettingClick() {
         val intent = Intent(this, EditMemberActivity::class.java)
@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun alarmTabClick() {
+        binding.titleView.text = "알람이:약"
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragment, AlarmFragment())
             .commit()
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun medicineTabClick() {
+        binding.titleView.text = "약이:약"
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragment, MedicineFragment())
             .commit()
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun familyTabClick() {
+        binding.titleView.text = "가족이:약"
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragment, FamilyFragment())
             .commit()
@@ -75,6 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun deviceTabClick() {
+        binding.titleView.text = "약통이:약"
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragment, DeviceFragment())
             .commit()
