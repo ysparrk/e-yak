@@ -201,7 +201,7 @@
                             android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:includeFontPadding="false"
-                            android:text="아침 식사 시간: "
+                            android:text="아침식사 시간: "
                             android:textAlignment="viewEnd"
                             android:textColor="#757863"
                             android:textSize="20sp" />
@@ -276,7 +276,7 @@
                             android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:includeFontPadding="false"
-                            android:text="점심 식사 시간: "
+                            android:text="점심식사 시간: "
                             android:textAlignment="viewEnd"
                             android:textColor="#757863"
                             android:textSize="20sp" />
@@ -350,7 +350,7 @@
                             android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:includeFontPadding="false"
-                            android:text="저녁 식사 시간: "
+                            android:text="저녁식사 시간: "
                             android:textAlignment="viewEnd"
                             android:textColor="#757863"
                             android:textSize="20sp" />
