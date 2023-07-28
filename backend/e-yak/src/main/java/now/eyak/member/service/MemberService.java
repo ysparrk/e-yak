@@ -11,4 +11,5 @@ public interface MemberService {
     RefreshResponseDto issueAccessTokenByRefreshToken(ReissueDto reissueDto);
     MemberDto updateMember(MemberUpdateDto memberUpdateDto, Long memberId);
     void deleteMember(Long memberId);
+    boolean isDuplicatedNickname(String nickname);
 }

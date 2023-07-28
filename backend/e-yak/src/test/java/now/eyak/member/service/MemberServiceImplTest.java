@@ -12,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalTime;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest
 class MemberServiceImplTest {
 
@@ -90,5 +93,22 @@ class MemberServiceImplTest {
 
         //then
         Assertions.assertThat(memberRepository.findById(member.getId())).isEmpty();
+    }
+
+    @Test
+    void duplicationCheck() {
+        //given
+        Member member = new Member();
+        member.setNickname("지금이약");
+
+        memberRepository.save(member);
+
+        //when
+        boolean expectedTrue = memberService.isDuplicatedNickname("지금이약");
+        boolean expectedFalse = memberService.isDuplicatedNickname("지금이아니약");
+
+        //then
+        assertTrue(expectedTrue);
+        assertFalse(expectedFalse);
     }
 }
