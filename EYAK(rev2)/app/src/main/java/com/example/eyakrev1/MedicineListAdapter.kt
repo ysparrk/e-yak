@@ -29,7 +29,7 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         /* 위에서 생성된 view를 medicine_tab_list_view_item.xml 파일의 각 View와 연결하는 과정이다. */
         val medicineListIconImageView = view.findViewById<ImageView>(R.id.medicine_list_icon)
         val medicineListNameTextView = view.findViewById<TextView>(R.id.medicine_list_name)
-        val medicineEatButton = view.findViewById<Button>(R.id.medicine_detail_button)
+        val medicineDetailButton = view.findViewById<Button>(R.id.medicine_detail_button)
 
         /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val medicine = medicineList[position]
