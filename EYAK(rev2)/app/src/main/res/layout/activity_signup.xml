@@ -547,7 +547,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:fontFamily="@font/tmoney_regular"
-                        android:text="* 식사 시간은 평균적으로 식사하는 시간을 의미 합니다" />
+                        android:text="* 식사 시간은 평균적으로 식사하는 시간을 의미 합니다"
+                        android:textAlignment="viewEnd" />
                 </LinearLayout>
 
             </FrameLayout>
