@@ -84,6 +84,9 @@ public class MemberServiceImpl implements MemberService {
         );
 
         checkDuplication(memberProfile.getProviderId());
+        if (isDuplicatedNickname(signUpDto.getNickname())) {
+            throw new DuplicatedNicknameException("닉네임이 중복됩니다.");
+        }
 
         Member member = memberProfile.toMember();
         member = signUpDto.setMemberFields(member);
@@ -129,6 +132,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
+    }
+
+    @Override
+    public boolean isDuplicatedNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 
     private OAuthProvider findProvider(String providerName) {

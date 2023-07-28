@@ -31,6 +31,7 @@ public class AuthController {
 
     @PostMapping("/auth/signup")
     public ResponseEntity signUp(@RequestBody SignUpDto signUpDto) throws URISyntaxException {
+        log.debug("signUp()");
         Member savedMember = memberService.signUp(signUpDto);
 
         return ResponseEntity.created( new URI(apiVersionHolder.getVersion() + "/members/" + savedMember.getId())).build();
@@ -41,6 +42,13 @@ public class AuthController {
         RefreshResponseDto refreshResponseDto = memberService.issueAccessTokenByRefreshToken(reissueDto);
 
         return ResponseEntity.ok(refreshResponseDto);
+    }
+
+    @GetMapping("/auth/duplication")
+    public ResponseEntity duplicationCheck(@RequestParam String nickname) {
+        boolean duplicated = memberService.isDuplicatedNickname(nickname);
+
+        return ResponseEntity.ok(duplicated);
     }
 
     @GetMapping("/test")
