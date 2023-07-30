@@ -8,7 +8,6 @@ import now.eyak.member.domain.Member;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +22,7 @@ public class ContentTextResult {
     @ManyToOne
     private SurveyContent surveyContent;
     @ManyToOne
-    private Member member;
+    private Member member;   // 질문, 왜 manytoone 인가 ...? -> onetoone 아님 ..?
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
