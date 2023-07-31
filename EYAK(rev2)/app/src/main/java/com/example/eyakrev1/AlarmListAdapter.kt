@@ -1,7 +1,6 @@
 package com.example.eyakrev1
 
 import android.content.Context
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,7 @@ class AlarmListAdapter (val context: Context, val medicineAlarmList: ArrayList<M
 
         /* 위에서 생성된 view를 alarm_tab_list_view_item.xml 파일의 각 View와 연결하는 과정이다. */
         val medicineIconImageView = view.findViewById<ImageView>(R.id.medicine_icon)
-        val medicineTimeTextView = view.findViewById<TextView>(R.id.medicine_time)
+        val medicineTimeTextView = view.findViewById<TextView>(R.id.medicine_time1)
         val medicineNameTextView = view.findViewById<TextView>(R.id.medicine_name)
         val medicineTimeLeftTextView = view.findViewById<TextView>(R.id.medicine_time_left)
         val medicineEatButton = view.findViewById<Button>(R.id.medicine_eat_button)
