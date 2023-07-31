@@ -1,15 +1,26 @@
 package com.example.eyakrev1
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import com.example.eyakrev1.databinding.AlarmTabMainBinding
+import java.time.LocalDate
+
 
 class AlarmFragment : Fragment() {
+
+    var targetDay: LocalDate = LocalDate.now()
+    val red: String = "#FF9B9B"
+    val green: String = "#E3F2C1"
+    val gray: String = "#DDE6ED"
 
     var medicineAlarmList = arrayListOf<MedicineAlarm>()
 
@@ -17,11 +28,22 @@ class AlarmFragment : Fragment() {
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
 
+
     override fun onCreateView(
+
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+        init()
+
+        val binding = AlarmTabMainBinding.inflate(inflater, container, false)
+
+        binding.todayDate.text = "${targetDay.monthValue.toString()} / ${targetDay.dayOfMonth.toString()}"
+        binding.yesterdayDate.text = "${targetDay.plusDays(-1).monthValue.toString()} / ${targetDay.plusDays(-1).dayOfMonth.toString()}"
+        binding.tomorrowDate.text = "${targetDay.plusDays(1).monthValue.toString()} / ${targetDay.plusDays(1).dayOfMonth.toString()}"
 
         for (i in 1..10) {
             // 임시 데이터 넣기
@@ -29,14 +51,42 @@ class AlarmFragment : Fragment() {
             medicineAlarmList.add(medicineAlarm)
         }
 
-        val layout = inflater.inflate(R.layout.alarm_tab_main, container, false)
-
         val alarmListAdapter = AlarmListAdapter(mainActivity, medicineAlarmList)
-        val alarmListView = layout.findViewById<ListView>(R.id.alramListView)
-        alarmListView?.adapter = alarmListAdapter
+        binding.alramListView.findViewById<ListView>(R.id.alramListView)
+        binding.alramListView.adapter = alarmListAdapter
 
-        return layout
+        binding.yesterdayFrameLayout.setOnClickListener {
+
+            changeDay(-1)
+            targetDay = targetDay.plusDays(-1)
+
+            binding.todayDate.text = "${targetDay.monthValue.toString()} / ${targetDay.dayOfMonth.toString()}"
+            binding.yesterdayDate.text = "${targetDay.plusDays(-1).monthValue.toString()} / ${targetDay.plusDays(-1).dayOfMonth.toString()}"
+            binding.tomorrowDate.text = "${targetDay.plusDays(1).monthValue.toString()} / ${targetDay.plusDays(1).dayOfMonth.toString()}"
+        }
+
+        binding.tomorrowFrameLayout.setOnClickListener {
+
+            targetDay = targetDay.plusDays(1)
+
+            binding.todayState.setColorFilter(Color.parseColor(red))
+            binding.todayDate.text = "${targetDay.monthValue.toString()} / ${targetDay.dayOfMonth.toString()}"
+            binding.yesterdayDate.text = "${targetDay.plusDays(-1).monthValue.toString()} / ${targetDay.plusDays(-1).dayOfMonth.toString()}"
+            binding.tomorrowDate.text = "${targetDay.plusDays(1).monthValue.toString()} / ${targetDay.plusDays(1).dayOfMonth.toString()}"
+        }
+
+        return binding.root
+
+
     }
+    private fun init() {
+        this.targetDay = LocalDate.now()
+    }
+
+    private fun changeDay(n: Int) {
+
+    }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
