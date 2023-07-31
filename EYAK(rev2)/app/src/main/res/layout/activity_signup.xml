@@ -550,6 +550,63 @@
                         android:text="* 식사 시간은 평균적으로 식사하는 시간을 의미 합니다"
                         android:textAlignment="viewEnd"
                         android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/tmoney_bold"
+                        android:includeFontPadding="false"
+                        android:text="개인 정보 수집 동의"
+                        android:textColor="#757863"
+                        android:textSize="20sp" />
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:text="님 정보 쓸거임 동의함? 동의 안하면 어쩔건데 ㅋ"
+                                android:textColor="#757863" />
+                        </LinearLayout>
+                    </ScrollView>
+
+                    <CheckBox
+                        android:id="@+id/checkBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:includeFontPadding="false"
+                        android:text="개인 정보 수집에 동의 합니다"
+                        android:textColor="#757863" />
+
                 </LinearLayout>
 
             </FrameLayout>
