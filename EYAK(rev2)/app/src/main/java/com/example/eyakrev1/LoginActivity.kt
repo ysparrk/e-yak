@@ -16,6 +16,10 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.material.snackbar.Snackbar
+import retrofit2.Retrofit
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     
@@ -25,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
+
+    val api = EyakService.create()
 
     private var oneTapClient: SignInClient? = null
     private var signUpRequest: BeginSignInRequest? = null
@@ -46,6 +52,8 @@ class LoginActivity : AppCompatActivity() {
                     val pref = PreferenceManager.getDefaultSharedPreferences(this)
                     val editor = pref.edit()
                     editor.putString("GOOGLE_TOKEN", idToken).apply()
+
+                    tryLoginToServer(idToken, isAutoLogin = false)
                 }
                 else -> {
                     // shouldn't happen
@@ -104,14 +112,10 @@ class LoginActivity : AppCompatActivity() {
             .build()
 
         // 이미 구글 토큰을 발급 받았을 경우
-        // 이를 활용해서 서버에 로그인 시도 => 성공하면 메인페이지로, 실패하면 회원가입
-        if (pref.getString("GOOGLE_TOKEN", null) != null) {
-            // 서버에 로그인 시도
+        // 자동 로그인 시도
+        val loadedGoogleToken = pref.getString("GOOGLE_TOKEN", null)
+        tryLoginToServer(loadedGoogleToken, isAutoLogin = true)
 
-            // 로그인 성공하면 메인페이지로
-            
-            // 로그인 실패하면 구글 토큰부터 재발급 (만료를 대비하여) => 회원가입 진행
-        }
         // 구글 토큰이 없다면 로그인 버튼 눌러서 진행하도록
 
         binding.tmpBtn.setOnClickListener {
@@ -122,13 +126,40 @@ class LoginActivity : AppCompatActivity() {
 
         binding.googleLoginLinearLayout.setOnClickListener {
             displaySignIn()
-
-
         }
     }
 
-    private fun tryLoginToServer(googleToken: String) {
+    private fun tryLoginToServer(loadedGoogleToken: String?, isAutoLogin: Boolean) {
+        if (loadedGoogleToken != null) {
+            // 서버에 로그인 시도
+            val data = LoginBodyModel("google", loadedGoogleToken)
+            api.signIn(data).enqueue(object: Callback<LoginResponseModel> {
+                override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
+                    Log.d("log",response.toString())
+                    Log.d("log", response.body().toString())
+                    if(!response.body().toString().isEmpty()) {
+//                        binding.text.setText(response.body().toString())
+                    }
+                }
 
+                override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
+                    // 실패
+                    Log.d("log",t.message.toString())
+                    Log.d("log","fail")
+                    
+                    // 로그인 실패 시 회원가입 페이지로 이동 (토큰은 발급받은 상태)
+                    // 거기서 회원가입 정보를 입력 받고 회원가입 진행
+                    // 자동 로그인 때는 이 작업을 강제시키지 말자
+                    if (!isAutoLogin) {
+                        val intent = Intent(getApplicationContext(), SignupActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+            })
+            // 로그인 성공하면 메인페이지로
+
+            // 로그인 실패하면 구글 토큰부터 재발급 (만료를 대비하여) => 회원가입 진행
+        }
     }
 
 
