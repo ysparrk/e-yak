@@ -1,37 +1,60 @@
 package now.eyak.survey.controller;
 
 import lombok.RequiredArgsConstructor;
-import now.eyak.member.domain.Member;
+import now.eyak.survey.domain.ContentTextResult;
 import now.eyak.survey.dto.ContentTextResultDto;
 import now.eyak.survey.service.ContentTextResultService;
-import org.springframework.http.HttpStatus;
+import now.eyak.util.ApiVersionHolder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/v1/")
 @RequiredArgsConstructor
 public class SurveyController {
 
+    private final ApiVersionHolder apiVersionHolder;
     private final ContentTextResultService contentTextResultService;
-    // text 문항 응답 기록
+
+    /**
+     * Text설문 응답
+     * @param contentTextResultDto
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
     @PostMapping("/survey-contents/{surveyContentId}/content-text-result")
-    public ResponseEntity<Long> postTextSurveyResult(
-            @PathVariable Long surveyContentId,
+    public ResponseEntity saveTextSurveyResult(
             @RequestBody ContentTextResultDto contentTextResultDto,
-            @RequestParam Long memberId) {
-        Member member = new Member(); // Member 엔티티에 대한 ID만 필요하므로 ID를 가진 객체를 생성해서 넣어줍니다.
-        member.setId(memberId);  // 멤버 객체에 id 설정
-        Long contentTextResultId = contentTextResultService.postTextSurveyResult(surveyContentId, contentTextResultDto, member);
-        return new ResponseEntity<>(contentTextResultId, HttpStatus.CREATED);
+            @AuthenticationPrincipal Long memberId
+        ) throws URISyntaxException {
+
+        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, memberId);
+
+        return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-text-results/" + contentTextResult.getId())).build();
     }
 
-    // 설문 조회
-//    @GetMapping("/surveys/{surveyId}")
-//    public ResponseEntity<List<ContentTextResult>> getTextSurveyResultsBySurveyContentId(
-//            @PathVariable Long surveyContentId) {
-//        List<ContentTextResult> results = textSurveyService.getTextSurveyResultsBySurveyContentId(surveyContentId);
-//        return new ResponseEntity<>(results, HttpStatus.OK);
-//    }
 
+    // 선택항목 응답 기록
+//    private final ContentChoiceResultService contentChoiceResultService;
+
+    // 단일선택 응답 기록
+//    @PostMapping("/content-choice-ㅂitem/{contentChoiceItemId}/content-choice-result")
+//    public ResponseEntity<Long> postChoiceSurveyResult(
+//            @PathVariable Long contentChoiceItemId,
+//            @RequestBody ContentChoiceResultDto contentChoiceResultDto
+//            ) {
+//        Long contentChoiceItemId = contentChoiceResultService.postChoiceSurveyResult(contentChoiceItemId, contentChoiceResultDto);
+//
+////        MemberDto memberDto = memberService.updateMember(memberUpdateDto, memberId);
+//
+//        return ResponseEntity.ok().build();
+//    }
 }

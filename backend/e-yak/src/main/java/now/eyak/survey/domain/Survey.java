@@ -1,6 +1,7 @@
 package now.eyak.survey.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,4 +26,11 @@ public class Survey {
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Builder
+    public Survey(List<SurveyContent> surveyContents, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.surveyContents = surveyContents;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

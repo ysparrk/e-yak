@@ -1,8 +1,8 @@
 package now.eyak.survey.repository;
 
 import now.eyak.survey.domain.ContentTextResult;
+import now.eyak.survey.domain.SurveyContent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ContentTextResultRepository extends JpaRepository<ContentTextResult, Long> {
-
+public interface SurveyContentRepository extends JpaRepository<SurveyContent, Long> {
 }

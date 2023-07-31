@@ -48,8 +48,20 @@ public class Member {
     private List<Prescription> prescriptions = new ArrayList<>();
 
     @Builder
-    public Member(String providerName, String providerId) {
+    public Member(String providerName, String providerId, String refreshToken, String nickname, Role role, LocalDateTime createdAt, LocalDateTime updatedAt, LocalTime wakeTime, LocalTime breakfastTime, LocalTime lunchTime, LocalTime dinnerTime, LocalTime bedTime, LocalTime eatingDuration, List<Prescription> prescriptions) {
         this.providerName = providerName;
         this.providerId = providerId;
+        this.refreshToken = refreshToken;
+        this.nickname = nickname;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.wakeTime = wakeTime;
+        this.breakfastTime = breakfastTime;
+        this.lunchTime = lunchTime;
+        this.dinnerTime = dinnerTime;
+        this.bedTime = bedTime;
+        this.eatingDuration = eatingDuration;
+        this.prescriptions = prescriptions;
     }
 }
