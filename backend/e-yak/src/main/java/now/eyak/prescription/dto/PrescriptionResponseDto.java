@@ -31,7 +31,6 @@ public class PrescriptionResponseDto {
     private Integer iotLocation; // 약통 칸 번호
     private Integer medicineDose; // 1회 투여 개수
     private String unit; // 투여 단위
-    private List<MedicineRoutine> medicineRoutines;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -47,7 +46,6 @@ public class PrescriptionResponseDto {
                 .iotLocation(prescription.getIotLocation())
                 .medicineDose(prescription.getMedicineDose())
                 .unit(prescription.getUnit())
-                .medicineRoutines(prescription.getMedicineRoutines())
                 .createdAt(prescription.getCreatedAt())
                 .updatedAt(prescription.getUpdatedAt())
                 .build();

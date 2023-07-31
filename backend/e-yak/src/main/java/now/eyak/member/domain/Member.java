@@ -26,7 +26,7 @@ public class Member {
     private String refreshToken;
     private String nickname;
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();

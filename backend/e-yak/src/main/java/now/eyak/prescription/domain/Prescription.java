@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.member.domain.Member;
+import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -30,8 +31,8 @@ public class Prescription {
     private Integer iotLocation; // 약통 칸 번호
     private Integer medicineDose; // 1회 투여 개수
     private String unit; // 투여 단위
-    @OneToMany
-    private List<MedicineRoutine> medicineRoutines = new ArrayList<>();
+    @OneToMany(mappedBy = "prescription")
+    private List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = new ArrayList<>();
     @ManyToOne
     private Member member;
     @CreationTimestamp
@@ -50,7 +51,10 @@ public class Prescription {
         this.iotLocation = iotLocation;
         this.medicineDose = medicineDose;
         this.unit = unit;
-        this.medicineRoutines = medicineRoutines;
         this.member = member;
+    }
+    public void add(PrescriptionMedicineRoutine prescriptionMedicineRoutine) {
+        prescriptionMedicineRoutines.add(prescriptionMedicineRoutine);
+        prescriptionMedicineRoutine.setPrescription(this);
     }
 }

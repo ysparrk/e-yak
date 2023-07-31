@@ -17,6 +17,7 @@ public class MedicineRoutine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
+    @Column(unique = true, insertable = false, updatable = false)
     private Routine routine;
 
     public MedicineRoutine(Long id, Routine routine) {
