@@ -6,10 +6,13 @@ import now.eyak.survey.domain.ContentTextResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.ContentTextResultDto;
+import now.eyak.survey.dto.ContentTextResultUpdateDto;
 import now.eyak.survey.repository.ContentTextResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,7 @@ import java.util.NoSuchElementException;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class ContentTextResultServiceTest {
+class ContentTextResultServiceImplTest {
 
     @Autowired
     ContentTextResultService contentTextResultService;
@@ -37,12 +40,14 @@ class ContentTextResultServiceTest {
     @Autowired
     SurveyRepository surveyRepository;
 
-    @Test
-    @Transactional
-    @Rollback(false)
-    void saveTextSurvey() {
-        // given
-        Member member = Member.builder()
+    Member member;
+    Survey survey;
+    SurveyContent surveyContent;
+    ContentTextResultDto contentTextResultDto;
+
+    @BeforeEach
+    void beforeEach() {
+        member = Member.builder()
                 .providerName("google")
                 .nickname("박길동")
                 .wakeTime(LocalTime.MIN)
@@ -54,22 +59,38 @@ class ContentTextResultServiceTest {
                 .build();
         member = memberRepository.save(member);
 
-        Survey survey = Survey.builder()
+        survey = Survey.builder()
                 .build();
 
         survey = surveyRepository.save(survey);
 
-        SurveyContent surveyContent = SurveyContent.builder()
+        surveyContent = SurveyContent.builder()
                 .survey(survey)
                 .question("오늘 몸상태가 어떠신가요? :)")
                 .build();
 
         surveyContent = surveyContentRepository.save(surveyContent);
 
-        ContentTextResultDto contentTextResultDto = ContentTextResultDto.builder()
-                .text("빌더 싫음")
+        contentTextResultDto = ContentTextResultDto.builder()
+                .text("오늘의 컨디션 입력합니다.")
                 .surveyContentId(surveyContent.getId())
                 .build();
+    }
+
+    @AfterEach
+    void afterEach() {
+        contentTextResultRepository.deleteAll();
+        memberRepository.deleteAll();
+        surveyContentRepository.deleteAll();
+        surveyRepository.deleteAll();
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    void saveTextSurvey() {
+        // given
 
         // when
         ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());
@@ -83,4 +104,29 @@ class ContentTextResultServiceTest {
 
     }
 
+    @Test
+    @Transactional
+    @Rollback(false)
+    void updateTextSurveyResult() {
+      
+        // given
+        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());  // 원본 값 저장
+
+        System.out.println("savedContentTextResult.getText() = " + savedContentTextResult.getText());
+        
+        ContentTextResultUpdateDto contentTextResultUpdateDto = ContentTextResultUpdateDto.builder()
+                .id(savedContentTextResult.getId())
+                .text("컨디션 수정할게요")
+                .surveyContentId(surveyContent.getId())
+                .build();
+        
+        // when
+        contentTextResultService.updateTextSurveyResult(contentTextResultUpdateDto, member.getId());
+        ContentTextResult findContentTextResult = contentTextResultRepository.findById(contentTextResultUpdateDto.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentTextResult가 존재하지 않습니다."));
+        
+        // then
+        Assertions.assertThat(findContentTextResult.getText()).isEqualTo(contentTextResultUpdateDto.getText());
+        System.out.println("findContentTextResult.getText() = " + findContentTextResult.getText());
+        
+    }
 }
