@@ -14,15 +14,7 @@ interface EyakService {
     // https://stickode.tistory.com/43
     @POST("/api/v1/auth/signup")
     fun signUp(
-        @Body providerName: String,
-        @Body token: String,
-        @Body nickname: String,
-        @Body wakeTime: String,
-        @Body breakfastTime: String,
-        @Body lunchTime: String,
-        @Body dinnerTime: String,
-        @Body bedTime: String,
-        @Body eatingDuration: String
+        @Body params: SignUpBodyModel,
     ): Call<Void>
 
     @POST("/api/v1/auth/signIn")

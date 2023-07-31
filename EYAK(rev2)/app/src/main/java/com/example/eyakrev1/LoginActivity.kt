@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
                     // Got an ID token from Google. Use it to authenticate
                     // with your backend
                     val msg = "idToken: $idToken"
-                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE).show()
+//                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE).show()
                     Log.d("google one tap", msg)
                     
                     // sharedPreference에 저장
@@ -137,9 +137,14 @@ class LoginActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
                     Log.d("log",response.toString())
                     Log.d("log", response.body().toString())
-                    if(!response.body().toString().isEmpty()) {
-//                        binding.text.setText(response.body().toString())
-                    }
+
+                    // 서버로부터 받은 토큰을 저장하자
+
+                    ///////////////////////////////
+
+                    // 메인 페이지를 띄워주자
+                    val intent = Intent(getApplicationContext(), MainActivity::class.java)
+                    startActivity(intent)
                 }
 
                 override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
@@ -150,7 +155,10 @@ class LoginActivity : AppCompatActivity() {
                     // 로그인 실패 시 회원가입 페이지로 이동 (토큰은 발급받은 상태)
                     // 거기서 회원가입 정보를 입력 받고 회원가입 진행
                     // 자동 로그인 때는 이 작업을 강제시키지 말자
-                    if (!isAutoLogin) {
+                    // 네트워크 에러인 경우, 저 주소를 찾을 수 없다고 나온다
+                    if (!isAutoLogin && t.message.toString().startsWith("Unable to resolve host")) {
+                        Toast.makeText(getApplicationContext(),"네트워크에 문제가 있습니다", Toast.LENGTH_SHORT).show();
+                    } else if (!isAutoLogin) { // 네트워크는 연결되어 있는데, 로그인에 실패한 경우
                         val intent = Intent(getApplicationContext(), SignupActivity::class.java)
                         startActivity(intent)
                     }
