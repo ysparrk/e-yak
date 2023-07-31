@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.alarmTab.setOnClickListener {
             alarmTabClick()
-
         }
 
         binding.medicineTab.setOnClickListener {
@@ -95,5 +94,9 @@ class MainActivity : AppCompatActivity() {
         binding.deviceTab.setColorFilter(Color.parseColor(if(index == 3) colorOn else colorOff))
     }
 
+    fun gotoTodayCondition() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.mainFragment, TodayConditionFragment()).commit()
+    }
 
 }

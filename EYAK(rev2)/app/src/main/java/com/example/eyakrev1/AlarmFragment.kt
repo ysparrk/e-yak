@@ -1,6 +1,7 @@
 package com.example.eyakrev1
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -11,11 +12,16 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.eyakrev1.databinding.ActivityMainBinding
 import com.example.eyakrev1.databinding.AlarmTabMainBinding
 import java.time.LocalDate
 
 
 class AlarmFragment : Fragment() {
+
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
 
     var targetDay: LocalDate = LocalDate.now()
     val red: String = "#FF9B9B"
@@ -27,7 +33,6 @@ class AlarmFragment : Fragment() {
     // https://curryyou.tistory.com/386
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
-
 
     override fun onCreateView(
 
@@ -57,7 +62,6 @@ class AlarmFragment : Fragment() {
 
         binding.yesterdayFrameLayout.setOnClickListener {
 
-            changeDay(-1)
             targetDay = targetDay.plusDays(-1)
 
             binding.todayDate.text = "${targetDay.monthValue.toString()} / ${targetDay.dayOfMonth.toString()}"
@@ -75,6 +79,11 @@ class AlarmFragment : Fragment() {
             binding.tomorrowDate.text = "${targetDay.plusDays(1).monthValue.toString()} / ${targetDay.plusDays(1).dayOfMonth.toString()}"
         }
 
+        binding.conditionLinearLayout.setOnClickListener {
+            mainActivity!!.gotoTodayCondition()
+
+        }
+
         return binding.root
 
 
@@ -82,11 +91,6 @@ class AlarmFragment : Fragment() {
     private fun init() {
         this.targetDay = LocalDate.now()
     }
-
-    private fun changeDay(n: Int) {
-
-    }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
