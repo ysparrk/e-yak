@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.preference.PreferenceManager
 import com.example.eyakrev1.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -37,10 +38,14 @@ class LoginActivity : AppCompatActivity() {
                 idToken != null -> {
                     // Got an ID token from Google. Use it to authenticate
                     // with your backend
-//                    prefHelper.savePreference("idToken", idToken)
                     val msg = "idToken: $idToken"
                     Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE).show()
                     Log.d("google one tap", msg)
+                    
+                    // sharedPreference에 저장
+                    val pref = PreferenceManager.getDefaultSharedPreferences(this)
+                    val editor = pref.edit()
+                    editor.putString("GOOGLE_TOKEN", idToken).apply()
                 }
                 else -> {
                     // shouldn't happen
@@ -73,6 +78,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        val pref = PreferenceManager.getDefaultSharedPreferences(this)
+        val editor = pref.edit()
+
         oneTapClient = Identity.getSignInClient(this)
         signUpRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
@@ -95,7 +103,16 @@ class LoginActivity : AppCompatActivity() {
                     .build())
             .build()
 
+        // 이미 구글 토큰을 발급 받았을 경우
+        // 이를 활용해서 서버에 로그인 시도 => 성공하면 메인페이지로, 실패하면 회원가입
+        if (pref.getString("GOOGLE_TOKEN", null) != null) {
+            // 서버에 로그인 시도
 
+            // 로그인 성공하면 메인페이지로
+            
+            // 로그인 실패하면 구글 토큰부터 재발급 (만료를 대비하여) => 회원가입 진행
+        }
+        // 구글 토큰이 없다면 로그인 버튼 눌러서 진행하도록
 
         binding.tmpBtn.setOnClickListener {
             //val intent = Intent(this, MainActivity::class.java)
@@ -105,8 +122,15 @@ class LoginActivity : AppCompatActivity() {
 
         binding.googleLoginLinearLayout.setOnClickListener {
             displaySignIn()
+
+
         }
     }
+
+    private fun tryLoginToServer(googleToken: String) {
+
+    }
+
 
     private fun displaySignIn() {
         oneTapClient?.beginSignIn(signInRequest!!)
