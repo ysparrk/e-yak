@@ -17,7 +17,7 @@ interface EyakService {
         @Body params: SignUpBodyModel,
     ): Call<Void>
 
-    @POST("/api/v1/auth/signIn")
+    @POST("/api/v1/auth/signin")
     fun signIn(
         @Body params: LoginBodyModel,
     ): Call<LoginResponseModel>

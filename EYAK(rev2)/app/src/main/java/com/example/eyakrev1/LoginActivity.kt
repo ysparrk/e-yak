@@ -135,16 +135,27 @@ class LoginActivity : AppCompatActivity() {
             val data = LoginBodyModel("google", loadedGoogleToken)
             api.signIn(data).enqueue(object: Callback<LoginResponseModel> {
                 override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
-                    Log.d("log",response.toString())
+                    Log.d("log", response.toString())
                     Log.d("log", response.body().toString())
 
-                    // 서버로부터 받은 토큰을 저장하자
 
-                    ///////////////////////////////
 
-                    // 메인 페이지를 띄워주자
-                    val intent = Intent(getApplicationContext(), MainActivity::class.java)
-                    startActivity(intent)
+                    if (response.code() == 400) {
+                        // 회원가입 페이지를 띄워주자
+                        if (!isAutoLogin) {
+                            val intent = Intent(getApplicationContext(), SignupActivity::class.java)
+                            startActivity(intent)
+                        }
+                    } else if (response.code() == 200) {
+                        // 서버로부터 받은 토큰을 저장하자
+
+                        ///////////////////////////////
+
+                        // 메인 페이지를 띄워주자
+                        val intent = Intent(getApplicationContext(), MainActivity::class.java)
+                        startActivity(intent)
+                    }
+
                 }
 
                 override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
@@ -164,9 +175,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             })
-            // 로그인 성공하면 메인페이지로
-
-            // 로그인 실패하면 구글 토큰부터 재발급 (만료를 대비하여) => 회원가입 진행
         }
     }
 
