@@ -14,7 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/survey-contents/{surveyContentId}")
 @RequiredArgsConstructor
 public class SurveyController {
 
@@ -28,7 +28,7 @@ public class SurveyController {
      * @return
      * @throws URISyntaxException
      */
-    @PostMapping("/survey-contents/{surveyContentId}/content-text-result")
+    @PostMapping("/content-text-result")
     public ResponseEntity saveTextSurveyResult(
             @RequestBody ContentTextResultDto contentTextResultDto,
             @AuthenticationPrincipal Long memberId
@@ -46,7 +46,7 @@ public class SurveyController {
      * @return
      * @throws URISyntaxException
      */
-    @PatchMapping("/survey-contents/{surveyContentId}/content-text-result")
+    @PatchMapping("/content-text-result")
     public ResponseEntity updateTextSurveyResult(
             @RequestBody ContentTextResultUpdateDto contentTextResultUpdateDto,
             @AuthenticationPrincipal Long memberId
@@ -64,7 +64,7 @@ public class SurveyController {
      * @return
      * @throws URISyntaxException
      */
-    @DeleteMapping("/survey-contents/{surveyContentId}/content-text-result/{contentTextResultId}")
+    @DeleteMapping("/content-text-result/{contentTextResultId}")
     public ResponseEntity deleteTextSurveyResult(
             @RequestBody ContentTextResultDto contentTextResultDto,
             @AuthenticationPrincipal Long memberId
