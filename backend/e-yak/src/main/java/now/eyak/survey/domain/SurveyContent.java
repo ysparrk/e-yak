@@ -22,9 +22,8 @@ public class SurveyContent {
 
     @OneToMany(mappedBy = "surveyContent")
     private List<ContentEmotionResult> contentEmotionResults = new ArrayList<>();  // emotion 설문
-//    @OneToOne
-//    private ContentStatusResult contentStatusResult;  // status 설문
-
+    @OneToMany(mappedBy = "surveyContent")
+    private List<ContentStatusResult> contentStatusResults = new ArrayList<>();  // status 설문
     private String question;  // text 설문
 
     @Builder

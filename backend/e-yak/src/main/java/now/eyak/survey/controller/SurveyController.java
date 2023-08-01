@@ -2,11 +2,14 @@ package now.eyak.survey.controller;
 
 import lombok.RequiredArgsConstructor;
 import now.eyak.survey.domain.ContentEmotionResult;
+import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.ContentTextResult;
 import now.eyak.survey.dto.ContentEmotionResultDto;
+import now.eyak.survey.dto.ContentStatusResultDto;
 import now.eyak.survey.dto.ContentTextResultDto;
 import now.eyak.survey.dto.ContentTextResultUpdateDto;
 import now.eyak.survey.service.ContentEmotionResultService;
+import now.eyak.survey.service.ContentStatusResultService;
 import now.eyak.survey.service.ContentTextResultService;
 import now.eyak.util.ApiVersionHolder;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,7 @@ public class SurveyController {
     private final ApiVersionHolder apiVersionHolder;
     private final ContentTextResultService contentTextResultService;
     private final ContentEmotionResultService contentEmotionResultService;
+    private final ContentStatusResultService contentStatusResultService;
 
     /**
      * Text설문 응답
@@ -134,5 +138,21 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Status 설문 응답 저장
+     * @param contentStatusResultDto
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @PostMapping("/content-status-result")
+    public ResponseEntity saveStatusSurveyResult(
+            @RequestBody ContentStatusResultDto contentStatusResultDto,
+            @AuthenticationPrincipal Long memberId
+            ) throws URISyntaxException {
+        ContentStatusResult contentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, memberId);
+
+        return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-status-results/" + contentStatusResult.getId())).build();
+    }
 
 }
