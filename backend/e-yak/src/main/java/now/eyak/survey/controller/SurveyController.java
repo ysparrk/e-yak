@@ -61,11 +61,19 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
-
+    /**
+     * Text 설문 응답 삭제
+     * @param contentTextResultDto
+     * @param memberId
+     * @param contentTextResultId
+     * @return
+     * @throws URISyntaxException
+     */
     @DeleteMapping("/content-text-result/{contentTextResultId}")
     public ResponseEntity deleteTextSurveyResult(
             @RequestBody ContentTextResultDto contentTextResultDto,
             @AuthenticationPrincipal Long memberId,
+            @PathVariable Long contentTextResultId
             ) throws URISyntaxException {
 
 
