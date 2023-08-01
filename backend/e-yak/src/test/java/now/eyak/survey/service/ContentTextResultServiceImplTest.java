@@ -133,7 +133,6 @@ class ContentTextResultServiceImplTest {
     @Transactional
     @Rollback(false)
     void deleteTextSurveyResult() {
-        // 삭제하는 사람이 자신의 것인지만 확인하고 지우기 ..?
         // given
         ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());  // 원본 값 저장
         System.out.println("savedContentTextResult.getText() = " + savedContentTextResult.getText());
