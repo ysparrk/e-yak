@@ -85,7 +85,7 @@ class ContentEmotionResultServiceImplTest {
 
         // when
         ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());
-        ContentEmotionResult findContentEmotionResult = contentEmotionResultRepository.findById(savedContentEmotionResult.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentEmotionReuslt가 없습니다."));
+        ContentEmotionResult findContentEmotionResult = contentEmotionResultRepository.findById(savedContentEmotionResult.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentEmotionResult가 없습니다."));
 
         // then
         System.out.println("savedContentEmotionResult = " + savedContentEmotionResult.getChoiceEmotion());
