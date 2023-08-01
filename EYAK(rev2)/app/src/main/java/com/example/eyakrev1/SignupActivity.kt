@@ -111,24 +111,19 @@ class SignupActivity : AppCompatActivity() {
                 
                 
                 // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
-                
-                // 회원 가입에 성공했으니 Login Activity로 이동 => sharedPreference 이미 있으니, 자동 로그인 시도할거 => 자동 로그인에 성공하면, Main Activity로 이동할테니
-                val intent = Intent(getApplicationContext(), LoginActivity::class.java)
-                startActivity(intent)
+                if (response.code() == 400) {
+                    Log.d("log","회원가입 실패")
+                } else if (response.code() == 201) {
+                    // 회원 가입에 성공했으니 Login Activity로 이동 => sharedPreference 이미 있으니, 자동 로그인 시도할거 => 자동 로그인에 성공하면, Main Activity로 이동할테니
+                    val intent = Intent(getApplicationContext(), LoginActivity::class.java)
+                    startActivity(intent)
+                }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 // 실패
                 Log.d("log",t.message.toString())
                 Log.d("log","fail")
-                Log.d("log","회원가입 시도했지만 실패")
-                Toast.makeText(getApplicationContext(), "회원 가입 시도했지만 실패", Toast.LENGTH_SHORT).show()
-
-                // 통신 제대로 성공하면 없앨 부분 /////////////
-                // 지금은 메인 페이지로 이동하기 위해 필요 //////
-                val intent = Intent(getApplicationContext(), MainActivity::class.java)
-                startActivity(intent)
-                //////////////////////////////////////////
             }
         })
     }

@@ -23,7 +23,7 @@ interface EyakService {
     ): Call<LoginResponseModel>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
-        private const val BASE_URL = "http://i9a103.p.ssafy.io:3333" // 주소
+        private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소
 
         fun create(): EyakService {
             val gson :Gson =   GsonBuilder().setLenient().create();
