@@ -155,4 +155,22 @@ public class SurveyController {
         return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-status-results/" + contentStatusResult.getId())).build();
     }
 
+    /**
+     * Status 설문 응답 수정
+     * @param contentStatusResultDto
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @PutMapping("/content-status-result")
+    public ResponseEntity updateStatusSurveyResult(
+            @RequestBody ContentStatusResultDto contentStatusResultDto,
+            @AuthenticationPrincipal Long memberId
+            ) throws URISyntaxException {
+        ContentStatusResult contentStatusResult = contentStatusResultService.updateStatusSurveyResult(contentStatusResultDto, memberId);
+
+        return ResponseEntity.ok().build();
+    }
+
+
 }
