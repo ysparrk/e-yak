@@ -121,14 +121,14 @@ class ContentEmotionResultServiceImplTest {
     @Rollback(false)
     void deleteEmotionSurveyResult() {
         // given
-        ContentEmotionResult savedcontentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());// 원본 값 저장
-        System.out.println("savedcontentEmotionResult.getChoiceEmotion() = " + savedcontentEmotionResult.getChoiceEmotion());
+        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());// 원본 값 저장
+        System.out.println("savedContentEmotionResult.getChoiceEmotion() = " + savedContentEmotionResult.getChoiceEmotion());
 
         // when
-        contentEmotionResultService.deleteEmotionSurveyResult(savedcontentEmotionResult.getId(), member.getId());
+        contentEmotionResultService.deleteEmotionSurveyResult(savedContentEmotionResult.getId(), member.getId());
 
         // then
-        Assertions.assertThat(contentEmotionResultRepository.findById(savedcontentEmotionResult.getId())).isEmpty();
-        System.out.println("contentEmotionResultRepository = " + contentEmotionResultRepository.findById(savedcontentEmotionResult.getId()));
+        Assertions.assertThat(contentEmotionResultRepository.findById(savedContentEmotionResult.getId())).isEmpty();
+        System.out.println("contentEmotionResultRepository = " + contentEmotionResultRepository.findById(savedContentEmotionResult.getId()));
     }
 }
