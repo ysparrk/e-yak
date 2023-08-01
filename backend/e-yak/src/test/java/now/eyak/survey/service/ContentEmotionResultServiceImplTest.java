@@ -115,4 +115,20 @@ class ContentEmotionResultServiceImplTest {
         Assertions.assertThat(findContentEmotionResult.getChoiceEmotion()).isEqualTo(contentEmotionResultDto.getChoiceEmotion());
         System.out.println("findContentEmotionResult.getChoiceEmotion() = " + findContentEmotionResult.getChoiceEmotion());
     }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    void deleteEmotionSurveyResult() {
+        // given
+        ContentEmotionResult savedcontentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());// 원본 값 저장
+        System.out.println("savedcontentEmotionResult.getChoiceEmotion() = " + savedcontentEmotionResult.getChoiceEmotion());
+
+        // when
+        contentEmotionResultService.deleteEmotionSurveyResult(savedcontentEmotionResult.getId(), member.getId());
+
+        // then
+        Assertions.assertThat(contentEmotionResultRepository.findById(savedcontentEmotionResult.getId())).isEmpty();
+        System.out.println("contentEmotionResultRepository = " + contentEmotionResultRepository.findById(savedcontentEmotionResult.getId()));
+    }
 }
