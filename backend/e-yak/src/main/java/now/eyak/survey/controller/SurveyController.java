@@ -96,4 +96,22 @@ public class SurveyController {
         return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-emotion-results/" + contentEmotionResult.getId())).build();
     }
 
+    /**
+     * Emotion설문 응답 수정
+     * @param contentEmotionResultDto
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @PutMapping("/content-emotion-result")
+    public ResponseEntity updateEmotionSurveyResult(
+            @RequestBody ContentEmotionResultDto contentEmotionResultDto,
+            @AuthenticationPrincipal Long memberId
+            ) throws URISyntaxException {
+
+        ContentEmotionResult contentEmotionResult = contentEmotionResultService.updateEmotionSurveyResult(contentEmotionResultDto, memberId);
+
+        return ResponseEntity.ok().build();
+    }
+
 }

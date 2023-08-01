@@ -5,4 +5,5 @@ import now.eyak.survey.dto.ContentEmotionResultDto;
 
 public interface ContentEmotionResultService {
     ContentEmotionResult saveEmotionSurveyResult(ContentEmotionResultDto contentEmotionResultDto, Long memberId); // 저장
+    ContentEmotionResult updateEmotionSurveyResult(ContentEmotionResultDto contentEmotionResultDto, Long memberId);  // 수정
 }

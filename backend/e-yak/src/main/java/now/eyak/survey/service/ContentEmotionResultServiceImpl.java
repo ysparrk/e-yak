@@ -45,5 +45,23 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
         return contentEmotionResultRepository.save(contentEmotionResult);
     }
 
+    /**
+     * Emotion 설문 응답 수정
+     * @param contentEmotionResultDto
+     * @param memberId
+     * @return
+     */
+    @Transactional
+    @Override
+    public ContentEmotionResult updateEmotionSurveyResult(ContentEmotionResultDto contentEmotionResultDto, Long memberId) {
+        SurveyContent surveyContent = surveyContentRepository.findById(contentEmotionResultDto.getSurveyContentId()).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+        ContentEmotionResult contentEmotionResult = contentEmotionResultRepository.findByIdAndMember(contentEmotionResultDto.getId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentEmotionResult가 존재하지 않습니다."));
+
+        contentEmotionResult = contentEmotionResultDto.update(contentEmotionResult);
+
+        return contentEmotionResultRepository.save(contentEmotionResult);
+    }
+
 
 }

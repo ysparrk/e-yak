@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -40,5 +41,19 @@ public class ContentEmotionResult {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.choiceEmotion = choiceEmotion;
+    }
+
+    // update
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContentEmotionResult that = (ContentEmotionResult) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getSurveyContent(), that.getSurveyContent()) && Objects.equals(getMember(), that.getMember()) && Objects.equals(getCreatedAt(), that.getCreatedAt()) && Objects.equals(getUpdatedAt(), that.getUpdatedAt()) && getChoiceEmotion() == that.getChoiceEmotion();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getSurveyContent(), getMember(), getCreatedAt(), getUpdatedAt(), getChoiceEmotion());
     }
 }
