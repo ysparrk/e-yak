@@ -62,5 +62,19 @@ public class ContentTextResultServiceImpl implements ContentTextResultService {
         return contentTextResultRepository.save(contentTextResult);
     }
 
+    /**
+     * Text설문 응답 삭제
+     * @param contextTextResultId
+     * @param memberId
+     */
+    @Transactional
+    @Override
+    public void deleteTextSurveyResult(Long contextTextResultId, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+
+        contentTextResultRepository.deleteById(contextTextResultId);
+
+    }
+
 }
 

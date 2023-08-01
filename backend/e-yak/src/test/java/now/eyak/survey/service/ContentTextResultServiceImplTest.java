@@ -108,7 +108,6 @@ class ContentTextResultServiceImplTest {
     @Transactional
     @Rollback(false)
     void updateTextSurveyResult() {
-      
         // given
         ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());  // 원본 값 저장
 
@@ -128,5 +127,22 @@ class ContentTextResultServiceImplTest {
         Assertions.assertThat(findContentTextResult.getText()).isEqualTo(contentTextResultUpdateDto.getText());
         System.out.println("findContentTextResult.getText() = " + findContentTextResult.getText());
         
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    void deleteTextSurveyResult() {
+        // 삭제하는 사람이 자신의 것인지만 확인하고 지우기 ..?
+        // given
+        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());  // 원본 값 저장
+        System.out.println("savedContentTextResult.getText() = " + savedContentTextResult.getText());
+
+        // when
+        contentTextResultService.deleteTextSurveyResult(savedContentTextResult.getId(), member.getId());
+
+        // then
+        Assertions.assertThat(contentTextResultRepository.findById(savedContentTextResult.getId())).isEmpty();
+        System.out.println("contentTextResultRepository = " + contentTextResultRepository.findById(savedContentTextResult.getId()));
     }
 }
