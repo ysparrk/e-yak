@@ -6,21 +6,19 @@ import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
-import now.eyak.routine.domain.MedicineRoutine;
+import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class PrescriptionServiceImplTest {
@@ -36,7 +34,7 @@ class PrescriptionServiceImplTest {
 
     static Member MEMBER;
 
-    static List<MedicineRoutine> medicineRoutines;
+    static List<Routine> medicineRoutines;
 
     @BeforeEach
     void beforeEach() {
@@ -55,14 +53,10 @@ class PrescriptionServiceImplTest {
                 .build();
 
         MEMBER = memberRepository.save(member);
-        medicineRoutines = medicineRoutineRepository.findAll();
+        medicineRoutines = medicineRoutineRepository.findAll().stream().map(medicineRoutine -> medicineRoutine.getRoutine()).toList();
     }
 
-    @AfterEach
-    void afterEach() {
-        prescriptionRepository.deleteAll();
-    }
-
+    @Transactional
     @Test
     void insert() {
         //given
@@ -90,6 +84,7 @@ class PrescriptionServiceImplTest {
         assertThat(prescription.getCustomName()).isEqualTo(expected.getCustomName());
     }
 
+    @Transactional
     @Test
     void findAllByMemberId() {
         PrescriptionDto prescriptionDto = PrescriptionDto.builder()
@@ -117,6 +112,7 @@ class PrescriptionServiceImplTest {
         assertThat(prescriptions).hasSize(3);
     }
 
+    @Transactional
     @Test
     void findById() {
         //given
@@ -142,6 +138,7 @@ class PrescriptionServiceImplTest {
         assertThat(prescription.getId()).isEqualTo(inserted.getId());
     }
 
+    @Transactional
     @Test
     void update() {
         //given
@@ -170,6 +167,7 @@ class PrescriptionServiceImplTest {
         assertThat(prescription.getCustomName()).isEqualTo(prescriptionDto.getCustomName());
     }
 
+    @Transactional
     @Test
     void delete() {
         //given
@@ -193,5 +191,10 @@ class PrescriptionServiceImplTest {
 
         //then
         assertThat(prescriptionService.findAllByMemberId(MEMBER.getId())).isEmpty();
+    }
+
+    @Transactional
+    @Test
+    void findPrescriptionMedicineRoutinesById() {
     }
 }
