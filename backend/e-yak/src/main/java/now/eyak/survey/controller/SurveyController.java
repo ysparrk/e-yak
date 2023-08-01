@@ -61,18 +61,12 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Text설문 응답 삭제
-     * @param contentTextResultDto
-     * @param memberId
-     * @return
-     * @throws URISyntaxException
-     */
+
     @DeleteMapping("/content-text-result/{contentTextResultId}")
     public ResponseEntity deleteTextSurveyResult(
             @RequestBody ContentTextResultDto contentTextResultDto,
-            @AuthenticationPrincipal Long memberId
-        ) throws URISyntaxException {
+            @AuthenticationPrincipal Long memberId,
+            ) throws URISyntaxException {
 
 
         return ResponseEntity.ok().build();
@@ -113,5 +107,24 @@ public class SurveyController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Emotion설문 응답 삭제
+     * @param contentEmotionResultDto
+     * @param memberId
+     * @param contentEmotionResultId
+     * @return
+     * @throws URISyntaxException
+     */
+    @DeleteMapping("/content-emotion-result/{contentEmotionResultId}")
+    public ResponseEntity deleteEmotionSurveyResult(
+            @RequestBody ContentEmotionResultDto contentEmotionResultDto,
+            @AuthenticationPrincipal Long memberId,
+            @PathVariable Long contentEmotionResultId
+            ) throws URISyntaxException {
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }
