@@ -10,7 +10,6 @@ import now.eyak.survey.dto.ContentTextResultDto;
 import now.eyak.survey.dto.ContentTextResultUpdateDto;
 import now.eyak.survey.repository.ContentTextResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
