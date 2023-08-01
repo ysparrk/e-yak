@@ -65,15 +65,15 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
 
     /**
      * Emotion 설문 응답 삭제
-     * @param contextEmotionResultId
+     * @param contentEmotionResultId
      * @param memberId
      */
     @Transactional
     @Override
-    public void deleteEmotionSurveyResult(Long contextEmotionResultId, Long memberId) {
+    public void deleteEmotionSurveyResult(Long contentEmotionResultId, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
-        contentEmotionResultRepository.deleteById(contextEmotionResultId);
+        contentEmotionResultRepository.deleteById(contentEmotionResultId);
 
     }
 
