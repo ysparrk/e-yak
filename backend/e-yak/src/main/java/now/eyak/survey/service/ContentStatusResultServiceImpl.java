@@ -25,6 +25,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
 
     /**
      * Status 설문 응답 저장
+     *
      * @param contentStatusResultDto
      * @param memberId
      * @return
@@ -44,6 +45,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
 
     /**
      * Status 설문 응답 수정
+     *
      * @param contentStatusResultDto
      * @param memberId
      * @return
@@ -60,4 +62,17 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
 
     }
 
+    /**
+     * Status 설문 응답 삭제
+     *
+     * @param contentStatusResultId
+     * @param memberId
+     */
+    @Override
+    public void deleteStatusSurveyResult(Long contentStatusResultId, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+
+        contentStatusResultRepository.deleteById(contentStatusResultId);
+
+    }
 }

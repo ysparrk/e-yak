@@ -172,5 +172,21 @@ public class SurveyController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Status 설문 응답 삭제
+     * @param contentEmotionResultDto
+     * @param memberId
+     * @param contentStatusResultId
+     * @return
+     * @throws URISyntaxException
+     */
+    @DeleteMapping("/content-status-result/{contentStatusResultId}")
+    public ResponseEntity deleteStatusSurveyResult(
+            @RequestBody ContentEmotionResultDto contentEmotionResultDto,
+            @AuthenticationPrincipal Long memberId,
+            @PathVariable Long contentStatusResultId
+            ) throws URISyntaxException {
+        return ResponseEntity.ok().build();
+    }
 
 }
