@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-
         initPage()
 
         binding.accountSetting.setOnClickListener {
@@ -95,8 +94,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun gotoTodayCondition() {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.mainFragment, TodayConditionFragment()).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainFragment, TodayConditionFragment())
+            .commit()
+    }
+
+    fun gotoAlarm() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainFragment, AlarmFragment())
+            .commit()
     }
 
     fun gotoMedicineDetail() {

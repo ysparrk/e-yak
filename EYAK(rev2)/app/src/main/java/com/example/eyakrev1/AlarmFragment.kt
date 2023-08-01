@@ -81,7 +81,6 @@ class AlarmFragment : Fragment() {
 
         binding.conditionLinearLayout.setOnClickListener {
             mainActivity!!.gotoTodayCondition()
-
         }
 
         return binding.root
