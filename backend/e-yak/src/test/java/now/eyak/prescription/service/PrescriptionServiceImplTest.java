@@ -168,12 +168,14 @@ class PrescriptionServiceImplTest {
 
         //when
         prescriptionDto.setCustomName("두통약");
+        prescriptionDto.setRoutines(List.of(Routine.BED_BEFORE, Routine.BED_AFTER));
         prescriptionService.update(inserted.getId(), prescriptionDto, MEMBER.getId());
 
         Prescription prescription = prescriptionService.findById(inserted.getId(), MEMBER.getId());
 
         //then
         assertThat(prescription.getCustomName()).isEqualTo(prescriptionDto.getCustomName());
+        assertThat(prescription.getPrescriptionMedicineRoutines()).hasSize(prescriptionDto.getRoutines().size());
     }
 
     @Transactional
