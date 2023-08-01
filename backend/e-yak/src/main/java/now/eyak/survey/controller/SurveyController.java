@@ -1,9 +1,12 @@
 package now.eyak.survey.controller;
 
 import lombok.RequiredArgsConstructor;
+import now.eyak.survey.domain.ContentEmotionResult;
 import now.eyak.survey.domain.ContentTextResult;
+import now.eyak.survey.dto.ContentEmotionResultDto;
 import now.eyak.survey.dto.ContentTextResultDto;
 import now.eyak.survey.dto.ContentTextResultUpdateDto;
+import now.eyak.survey.service.ContentEmotionResultService;
 import now.eyak.survey.service.ContentTextResultService;
 import now.eyak.util.ApiVersionHolder;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ public class SurveyController {
 
     private final ApiVersionHolder apiVersionHolder;
     private final ContentTextResultService contentTextResultService;
+    private final ContentEmotionResultService contentEmotionResultService;
 
     /**
      * Text설문 응답
@@ -72,6 +76,24 @@ public class SurveyController {
 
 
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Emotion설문 응답
+     * @param contentEmotionResultDto
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @PostMapping("/content-emotion-result")
+    public ResponseEntity saveEmotionSurveyResult(
+            @RequestBody ContentEmotionResultDto contentEmotionResultDto,
+            @AuthenticationPrincipal Long memberId
+            ) throws URISyntaxException {
+
+        ContentEmotionResult contentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, memberId);
+
+        return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-emotion-results/" + contentEmotionResult.getId())).build();
     }
 
 }
