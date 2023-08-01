@@ -6,6 +6,7 @@ import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.ContentStatusResultDto;
+import now.eyak.survey.enumeration.ChoiceEmotion;
 import now.eyak.survey.enumeration.ChoiceStatus;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
@@ -93,4 +94,31 @@ class ContentStatusResultServiceImplTest {
         System.out.println("findContentStatusResult = " + findContentStatusResult.getSelectedStatusChoices());
         Assertions.assertThat(savedContentStatusResult).isEqualTo(findContentStatusResult);
     }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    void updateStatusSurveyResult() {
+        // given
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());  // 원본 값 저장
+        System.out.println("savedContentStatusResult = " + savedContentStatusResult.getSelectedStatusChoices());
+        System.out.println("savedContentStatusResult.getId() = " + savedContentStatusResult.getId());
+
+        // 새로운 값 저장
+        ContentStatusResultDto contentStatusResultDto = ContentStatusResultDto.builder()
+                .id(savedContentStatusResult.getId())
+                .selectedStatusChoices(Arrays.asList(ChoiceStatus.HEADACHE, ChoiceStatus.COUGH, ChoiceStatus.VOMITING, ChoiceStatus.ABDOMINAL_PAIN))  // HEADACHE 제외한 다른 증상으로 변경
+                .surveyContentId(surveyContent.getId())
+                .build();
+        // when
+        contentStatusResultService.updateStatusSurveyResult(contentStatusResultDto, member.getId());
+        ContentStatusResult findContentStatusResult = contentStatusResultRepository.findById(contentStatusResultDto.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentStatusResult가 존재하지 않습니다."));
+
+        // then
+        System.out.println("findContentStatusResult = " + findContentStatusResult.getSelectedStatusChoices());
+        System.out.println("findContentStatusResult.getId() = " + findContentStatusResult.getId());
+        Assertions.assertThat(findContentStatusResult.getSelectedStatusChoices()).isEqualTo(contentStatusResultDto.getSelectedStatusChoices());
+
+    }
+
 }
