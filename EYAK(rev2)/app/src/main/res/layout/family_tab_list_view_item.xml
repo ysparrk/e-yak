@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:layout_margin="20dp"
         app:cardBackgroundColor="#DDE6ED"
         app:cardCornerRadius="20dp"
@@ -19,64 +19,108 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <ImageView
                 android:id="@+id/family_list_icon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="5dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
                 app:srcCompat="@drawable/baseline_person_24" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/family_list_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/tmoney_bold"
-                    android:text="이름"
-                    android:textColor="#757863"
-                    android:textSize="20dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="100">
 
-                <TextView
-                    android:id="@+id/family_list_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:fontFamily="@font/tmoney_regular"
-                    android:includeFontPadding="false"
-                    android:text="(닉네임)" />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="10" />
+
+                    <TextView
+                        android:id="@+id/family_list_nickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="30"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:text="(닉네임)" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="5" />
+
+                    <TextView
+                        android:id="@+id/family_list_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="45"
+                        android:fontFamily="@font/tmoney_bold"
+                        android:gravity="center_vertical"
+                        android:text="이름"
+                        android:textColor="#757863"
+                        android:textSize="20dp" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="10" />
+                </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                />
-
-            <Button
-                android:id="@+id/family_detail_button"
+            <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:backgroundTint="#E3F2C1"
-                android:fontFamily="@font/tmoney_regular"
-                android:includeFontPadding="false"
-                android:text="자세히"
-                android:textColor="#757863"
-                android:textSize="17dp" />
+                android:layout_weight="15" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="25"
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="10" />
+
+                <Button
+                    android:id="@+id/family_detail_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="80"
+                    android:backgroundTint="#E3F2C1"
+                    android:fontFamily="@font/tmoney_regular"
+                    android:includeFontPadding="false"
+                    android:text="자세히"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="10" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

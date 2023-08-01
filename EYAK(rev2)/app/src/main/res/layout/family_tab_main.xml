@@ -5,33 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/familyTitleLayout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:fontFamily="@font/tmoney_bold"
-            android:text="가족 전체 정보"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30dp" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/familyListView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+<<<<<<< Updated upstream
         app:layout_constraintTop_toBottomOf="@id/familyTitleLayout"
         app:layout_constraintVertical_bias="0.0" />
+=======
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <LinearLayout
+                android:id="@+id/familyTitleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="11"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="가족 전체 정보"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="#757863"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/familyListView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="89">
+
+            </ListView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:orientation="horizontal"
+            android:weightSum="15">
+
+            <ImageView
+                android:id="@+id/editFamily"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="10"
+                app:srcCompat="@drawable/baseline_add_circle_outline_24" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+>>>>>>> Stashed changes
 </androidx.constraintlayout.widget.ConstraintLayout>

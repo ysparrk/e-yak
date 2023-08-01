@@ -109,4 +109,9 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, MedicineDetailFragment()).commit()
     }
+
+    fun gotoEditFamily() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainFragment, FamilyAddFragment()).commit()
+    }
 }

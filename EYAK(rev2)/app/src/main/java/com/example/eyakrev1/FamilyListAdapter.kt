@@ -35,6 +35,10 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         /* ArrayList<MedicineAlarm>의 변수 family의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val family = familyList[position]
 
+        if(family.familyId == -1) {
+
+        }
+
         val resourceId = context.resources.getIdentifier(family.familyIcon, "drawable", context.packageName)
         familyListIconImageView.setImageResource(resourceId)
         familyListNameTextView.text = family.familyName
