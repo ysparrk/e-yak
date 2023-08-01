@@ -3,6 +3,7 @@ package now.eyak.survey.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.enumeration.ChoiceStatus;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public class ContentStatusResultDto {
     private Long id;
     private Long surveyContentId;
     private List<ChoiceStatus> selectedStatusChoices;
+
 }

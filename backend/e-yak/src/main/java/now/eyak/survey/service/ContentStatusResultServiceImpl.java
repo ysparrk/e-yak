@@ -10,7 +10,9 @@ import now.eyak.survey.dto.ContentStatusResultDto;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 @Service
@@ -39,4 +41,23 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
 
         return contentStatusResultRepository.save(contentStatusResult);
     }
+
+    /**
+     * Status 설문 응답 수정
+     * @param contentStatusResultDto
+     * @param memberId
+     * @return
+     */
+    @Transactional
+    @Override
+    public ContentStatusResult updateStatusSurveyResult(ContentStatusResultDto contentStatusResultDto, Long memberId) {
+        SurveyContent surveyContent = surveyContentRepository.findById(contentStatusResultDto.getSurveyContentId()).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+        ContentStatusResult contentStatusResult = contentStatusResultRepository.findByIdAndMember(contentStatusResultDto.getId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentStatusResult가 존재하지 않습니다."));
+
+        contentStatusResult.setSelectedStatusChoices(new ArrayList<>(contentStatusResultDto.getSelectedStatusChoices()));
+        return contentStatusResultRepository.save(contentStatusResult);
+
+    }
+
 }
