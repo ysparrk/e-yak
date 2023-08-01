@@ -92,4 +92,27 @@ class ContentEmotionResultServiceImplTest {
         System.out.println("findContentEmotionResult = " + findContentEmotionResult.getChoiceEmotion());
         Assertions.assertThat(savedContentEmotionResult).isEqualTo(findContentEmotionResult);
     }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    void updateEmotionSurveyResult() {
+        // given
+        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId()); // 원본 값 저장
+        System.out.println("savedContentEmotionResult.getChoiceEmotion() = " + savedContentEmotionResult.getChoiceEmotion());
+        
+        ContentEmotionResultDto contentEmotionResultDto = ContentEmotionResultDto.builder()
+                .id(savedContentEmotionResult.getId())
+                .choiceEmotion(ChoiceEmotion.GOOD)  // emotion 수정
+                .surveyContentId(surveyContent.getId())
+                .build();
+        
+        // when
+        contentEmotionResultService.updateEmotionSurveyResult(contentEmotionResultDto, member.getId());
+        ContentEmotionResult findContentEmotionResult = contentEmotionResultRepository.findById(contentEmotionResultDto.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentEmotionResult가 존재하지 않습니다."));
+
+        // then
+        Assertions.assertThat(findContentEmotionResult.getChoiceEmotion()).isEqualTo(contentEmotionResultDto.getChoiceEmotion());
+        System.out.println("findContentEmotionResult.getChoiceEmotion() = " + findContentEmotionResult.getChoiceEmotion());
+    }
 }
