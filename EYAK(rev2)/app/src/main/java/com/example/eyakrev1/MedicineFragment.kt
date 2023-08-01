@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
 import android.widget.Toast
@@ -50,11 +51,14 @@ class MedicineFragment : Fragment() {
 
         medicineListView?.adapter = medicineListAdapter
 
-        medicineListView.setOnItemClickListener {parent, view, position, id ->
-            val clickedMedicine = medicineList[position]
-            Log.d("이게 되네", "여기까진 오네")
+        medicineListView.setOnItemClickListener { parent, view, position, id ->
 
-            mainActivity!!.gotoMedicineDetail()
+            Toast.makeText(context, "Clicked item :"+" "+position,Toast.LENGTH_SHORT).show()
+
+//            val clickedMedicine = medicineList[position]
+//            Log.d("이게 되네", "여기까진 오네")
+//
+//            mainActivity!!.gotoMedicineDetail()
         }
 
         return layout
