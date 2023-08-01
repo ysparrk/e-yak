@@ -39,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
     private val oneTapResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()){ result ->
         try {
             val credential = oneTapClient?.getSignInCredentialFromIntent(result.data)
+            Log.d("여기 보자", "${credential}")
             val idToken = credential?.googleIdToken
             when {
                 idToken != null -> {

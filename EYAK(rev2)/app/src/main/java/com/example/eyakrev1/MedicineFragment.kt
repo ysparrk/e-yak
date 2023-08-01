@@ -1,12 +1,17 @@
 package com.example.eyakrev1
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+
 
 class MedicineFragment : Fragment() {
 
@@ -37,6 +42,13 @@ class MedicineFragment : Fragment() {
 
         val medicineListAdapter = MedicineListAdapter(mainActivity, medicineList)
         val medicineListView = layout.findViewById<ListView>(R.id.medicineListView)
+        medicineListView.setOnItemClickListener {parent, view, position, id ->
+            val clickedMedicine = medicineList[position]
+            Log.d("여기 보자", "여기까진 오네")
+
+            mainActivity!!.gotoMedicineDetail()
+        }
+
         medicineListView?.adapter = medicineListAdapter
 
         return layout

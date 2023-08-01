@@ -99,4 +99,8 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.mainFragment, TodayConditionFragment()).commit()
     }
 
+    fun gotoMedicineDetail() {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.mainFragment, MedicineDetailFragment()).commit()
+    }
 }
