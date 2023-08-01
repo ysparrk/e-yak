@@ -82,7 +82,18 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Member member = getMemberOrThrow(memberId);
         Prescription prescription = getPrescriptionAndCheckPermission(prescriptionId, member);
 
-        prescription = prescriptionDto.update(prescription);
+        prescriptionDto.update(prescription);
+
+        prescription.getPrescriptionMedicineRoutines().clear();
+        prescriptionDto.getRoutines().stream().forEach(routine -> {
+            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
+            PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
+                    .prescription(prescription)
+                    .medicineRoutine(medicineRoutine)
+                    .build();
+
+            prescription.add(prescriptionMedicineRoutine);
+        });
 
         return prescriptionRepository.save(prescription);
     }

@@ -31,7 +31,7 @@ public class Prescription {
     private Integer iotLocation; // 약통 칸 번호
     private Integer medicineDose; // 1회 투여 개수
     private String unit; // 투여 단위
-    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = new ArrayList<>();
     @ManyToOne
     private Member member;

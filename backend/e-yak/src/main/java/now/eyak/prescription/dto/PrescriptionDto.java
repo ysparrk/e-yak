@@ -41,7 +41,7 @@ public class PrescriptionDto {
                 .build();
     }
 
-    public Prescription update(Prescription prescription) {
+    public void update(Prescription prescription) {
         prescription.setCustomName(customName);
         prescription.setIcd(icd);
         prescription.setKrName(krName);
@@ -51,8 +51,6 @@ public class PrescriptionDto {
         prescription.setIotLocation(iotLocation);
         prescription.setMedicineDose(medicineDose);
         prescription.setUnit(unit);
-
-        return prescription;
     }
 
 }
