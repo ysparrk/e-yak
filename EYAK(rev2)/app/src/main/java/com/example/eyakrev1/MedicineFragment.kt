@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.eyakrev1.databinding.AlarmTabMainBinding
 import com.example.eyakrev1.databinding.MedicineTabMainBinding
+import kotlinx.coroutines.NonDisposableHandle.parent
 
 
 class MedicineFragment : Fragment() {
@@ -42,24 +43,14 @@ class MedicineFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = MedicineTabMainBinding.inflate(inflater, container, false)
-
         val layout = inflater.inflate(R.layout.medicine_tab_main, container, false)
 
         val medicineListAdapter = MedicineListAdapter(mainActivity, medicineList)
+        medicineListAdapter.mainActivity = mainActivity
+
         val medicineListView = layout.findViewById<ListView>(R.id.medicineListView)
 
-        medicineListView?.adapter = medicineListAdapter
-
-        medicineListView.setOnItemClickListener { parent, view, position, id ->
-
-            Toast.makeText(context, "Clicked item :"+" "+position,Toast.LENGTH_SHORT).show()
-
-//            val clickedMedicine = medicineList[position]
-//            Log.d("이게 되네", "여기까진 오네")
-//
-//            mainActivity!!.gotoMedicineDetail()
-        }
+        medicineListView.adapter = medicineListAdapter
 
         return layout
     }

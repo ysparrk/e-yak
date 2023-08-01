@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    fun gotoMedicineDetail() {
+    public fun gotoMedicineDetail() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.mainFragment, MedicineDetailFragment()).commit()
     }

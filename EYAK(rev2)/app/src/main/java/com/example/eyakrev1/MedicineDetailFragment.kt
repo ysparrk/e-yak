@@ -12,7 +12,6 @@ import com.example.eyakrev1.databinding.FragmentMedicineDetailBinding
 
 class MedicineDetailFragment : Fragment() {
 
-
     override fun onCreateView(
 
         inflater: LayoutInflater,
@@ -20,8 +19,8 @@ class MedicineDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentMedicineDetailBinding.inflate(inflater, container, false)
+        val layout = inflater.inflate(R.layout.fragment_medicine_detail, container, false)
 
-        return binding.root
+        return layout
     }
 }
