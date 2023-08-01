@@ -9,6 +9,7 @@ import now.eyak.member.domain.Member;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDate date; // 설문 해당 날짜(생성시간 X)
     @OneToMany(mappedBy = "survey")
     private List<SurveyContent> surveyContents;
     @CreationTimestamp
