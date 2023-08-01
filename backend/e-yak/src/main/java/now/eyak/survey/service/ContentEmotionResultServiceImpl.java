@@ -63,5 +63,19 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
         return contentEmotionResultRepository.save(contentEmotionResult);
     }
 
+    /**
+     * Emotion 설문 응답 삭제
+     * @param contextEmotionResultId
+     * @param memberId
+     */
+    @Transactional
+    @Override
+    public void deleteEmotionSurveyResult(Long contextEmotionResultId, Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+
+        contentEmotionResultRepository.deleteById(contextEmotionResultId);
+
+    }
+
 
 }
