@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
             deviceTabClick()
         }
 
-        binding.eyakLogo.setOnClickListener {
-            alarmTabClick()
-        }
+//        binding.eyakLogo.setOnClickListener {
+//            alarmTabClick()
+//        }
     }
 
     private fun initPage() {
