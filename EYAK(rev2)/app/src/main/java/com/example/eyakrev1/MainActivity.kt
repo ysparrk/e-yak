@@ -111,7 +111,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun gotoEditFamily() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFragment, FamilyAddFragment()).commit()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragment, FamilyEditFragment())
+            .commit()
+    }
+
+    fun gotoAddFamily() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragment, FamilyAddFragment())
+            .commit()
     }
 }

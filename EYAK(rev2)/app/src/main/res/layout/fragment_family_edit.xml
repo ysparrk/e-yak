@@ -32,6 +32,14 @@
             android:id="@+id/familyEditListView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="89" />
+            android:layout_weight="89" >
+
+        </ListView>
+
+        <Button
+            android:id="@+id/addFamily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추가하기" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
