@@ -121,4 +121,19 @@ class ContentStatusResultServiceImplTest {
 
     }
 
+    @Test
+    @Transactional
+    @Rollback(false)
+    void deleteStatusSurveyResult() {
+        // given
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());  // 원본 값 저장
+        System.out.println("savedContentStatusResult = " + savedContentStatusResult.getSelectedStatusChoices());
+
+        // when
+        contentStatusResultService.deleteStatusSurveyResult(savedContentStatusResult.getId(), member.getId());
+
+        // then
+        Assertions.assertThat(contentStatusResultRepository.findById(savedContentStatusResult.getId())).isEmpty();
+        System.out.println("contentStatusResultRepository = " + contentStatusResultRepository.findById(savedContentStatusResult.getId()));
+    }
 }
