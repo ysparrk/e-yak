@@ -90,6 +90,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/kakaoLoginLinearLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

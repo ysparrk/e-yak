@@ -127,6 +127,11 @@ class LoginActivity : AppCompatActivity() {
         binding.googleLoginLinearLayout.setOnClickListener {
             displaySignIn()
         }
+
+        binding.kakaoLoginLinearLayout.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun tryLoginToServer(loadedGoogleToken: String?, isAutoLogin: Boolean) {
