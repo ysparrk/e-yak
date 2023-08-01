@@ -74,7 +74,7 @@
                     android:weightSum="2">
 
                     <TextView
-                        android:id="@+id/textView30"
+                        android:id="@+id/medicineDetailName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -104,7 +104,7 @@
                             android:textSize="20dp" />
 
                         <TextView
-                            android:id="@+id/textView32"
+                            android:id="@+id/diseaseName"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -142,7 +142,7 @@
                     android:textSize="20dp" />
 
                 <TextView
-                    android:id="@+id/textView34"
+                    android:id="@+id/startDateTime"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
@@ -176,7 +176,7 @@
                     android:textSize="20dp" />
 
                 <TextView
-                    android:id="@+id/textView36"
+                    android:id="@+id/endDateTime"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
@@ -209,7 +209,7 @@
                     android:textSize="20dp" />
 
                 <TextView
-                    android:id="@+id/textView38"
+                    android:id="@+id/medicineDose"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
@@ -242,7 +242,7 @@
                     android:textSize="20dp" />
 
                 <TextView
-                    android:id="@+id/textView40"
+                    android:id="@+id/numberOfDosePerDay"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"

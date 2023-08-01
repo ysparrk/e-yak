@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
-import com.example.eyakrev1.databinding.FragmentMedicineDetailBinding
 
 class MedicineDetailFragment : Fragment() {
 
