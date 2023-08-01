@@ -6,6 +6,7 @@ import now.eyak.member.domain.Member;
 import now.eyak.member.domain.MemberProfile;
 import now.eyak.member.domain.OAuthAttributes;
 import now.eyak.member.domain.OAuthProvider;
+import now.eyak.member.domain.enumeration.Role;
 import now.eyak.member.dto.*;
 import now.eyak.member.exception.*;
 import now.eyak.member.repository.InMemoryProviderRepository;
@@ -90,6 +91,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberProfile.toMember();
         member = signUpDto.setMemberFields(member);
+        member.setRole(Role.USER);
         member = memberRepository.save(member);
 
         String refreshToken = jwtTokenProvider.buildRefreshToken(member);
