@@ -11,15 +11,15 @@ import now.eyak.routine.enumeration.Routine;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
 public class MedicineRoutine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-    @Column(unique = true, insertable = false, updatable = false)
+    @Column(unique = true)
     private Routine routine;
 
+    @Builder
     public MedicineRoutine(Long id, Routine routine) {
         this.id = id;
         this.routine = routine;

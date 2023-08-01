@@ -2,7 +2,6 @@ package now.eyak.prescription.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import now.eyak.exception.NoPermissionException;
 import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
@@ -16,9 +15,7 @@ import now.eyak.routine.repository.PrescriptionMedicineRoutineRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,22 +32,22 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional
     @Override
     public Prescription insert(PrescriptionDto prescriptionDto, Long memberId) {
-        Prescription prescription = prescriptionDto.toPrescription();
+        Prescription prescription = prescriptionDto.toEntity();
         log.debug("prescriptionDto = {}", prescriptionDto);
         Member member = getMemberOrThrow(memberId);
         prescription.setMember(member);
 
-        Prescription savedPrescription = prescriptionRepository.save(prescription);
-
-        prescriptionDto.getMedicineRoutines().stream().forEach(routine -> {
+        prescriptionDto.getRoutines().stream().forEach(routine -> {
             MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .medicineRoutine(medicineRoutine)
-                    .prescription(savedPrescription)
+                    .prescription(prescription)
                     .build();
 
-            prescriptionMedicineRoutineRepository.save(prescriptionMedicineRoutine);
+            prescription.add(prescriptionMedicineRoutine);
         });
+
+        Prescription savedPrescription = prescriptionRepository.save(prescription);
 
         return savedPrescription;
     }
@@ -95,7 +92,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public void delete(Long prescriptionId, Long memberId) {
         Member member = getMemberOrThrow(memberId);
 
+//        Prescription prescription = prescriptionRepository.findByIdAndMember(prescriptionId, member).orElseThrow(() -> new NoSuchElementException("해당 하는 복약 정보가 존재하지 않습니다."));
         prescriptionRepository.deleteByIdAndMember(prescriptionId, member);
+
+//        log.debug("prescription: {}", prescription.getPrescriptionMedicineRoutines());
     }
 
     @Override

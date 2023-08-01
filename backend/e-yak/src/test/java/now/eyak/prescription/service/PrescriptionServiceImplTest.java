@@ -6,6 +6,8 @@ import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
+import now.eyak.routine.domain.MedicineRoutine;
+import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,9 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class PrescriptionServiceImplTest {
@@ -34,7 +39,7 @@ class PrescriptionServiceImplTest {
 
     static Member MEMBER;
 
-    static List<Routine> medicineRoutines;
+    static List<Routine> routines;
 
     @BeforeEach
     void beforeEach() {
@@ -53,7 +58,11 @@ class PrescriptionServiceImplTest {
                 .build();
 
         MEMBER = memberRepository.save(member);
-        medicineRoutines = medicineRoutineRepository.findAll().stream().map(medicineRoutine -> medicineRoutine.getRoutine()).toList();
+
+        List<MedicineRoutine> medicineRoutines = Arrays.stream(Routine.values()).map(routine -> MedicineRoutine.builder().routine(routine).build()).toList();
+        medicineRoutineRepository.saveAll(medicineRoutines);
+
+        routines = List.of(Routine.BED_BEFORE, Routine.LUNCH_AFTER, Routine.DINNER_BEFORE);
     }
 
     @Transactional
@@ -71,14 +80,14 @@ class PrescriptionServiceImplTest {
                 .iotLocation(4)
                 .medicineDose(1)
                 .unit("정")
-                .medicineRoutines(medicineRoutines)
+                .routines(routines)
                 .build();
 
         //when
         Prescription prescription = prescriptionService.insert(prescriptionDto, MEMBER.getId());
 
         //then
-        Prescription expected = prescriptionDto.toPrescription();
+        Prescription expected = prescriptionDto.toEntity();
 
         // TODO: 테스트 코드 작성에 용이하게 구조 변경
         assertThat(prescription.getCustomName()).isEqualTo(expected.getCustomName());
@@ -97,7 +106,7 @@ class PrescriptionServiceImplTest {
                 .iotLocation(4)
                 .medicineDose(1)
                 .unit("정")
-                .medicineRoutines(medicineRoutines)
+                .routines(routines)
                 .build();
 
         //when
@@ -126,7 +135,7 @@ class PrescriptionServiceImplTest {
                 .iotLocation(4)
                 .medicineDose(1)
                 .unit("정")
-                .medicineRoutines(medicineRoutines)
+                .routines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -152,7 +161,7 @@ class PrescriptionServiceImplTest {
                 .iotLocation(4)
                 .medicineDose(1)
                 .unit("정")
-                .medicineRoutines(medicineRoutines)
+                .routines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -181,7 +190,7 @@ class PrescriptionServiceImplTest {
                 .iotLocation(4)
                 .medicineDose(1)
                 .unit("정")
-                .medicineRoutines(medicineRoutines)
+                .routines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -191,10 +200,32 @@ class PrescriptionServiceImplTest {
 
         //then
         assertThat(prescriptionService.findAllByMemberId(MEMBER.getId())).isEmpty();
+        assertThatThrownBy(() -> prescriptionService.findPrescriptionMedicineRoutinesById(inserted.getId(), MEMBER.getId())).isExactlyInstanceOf(NoSuchElementException.class);
     }
 
     @Transactional
     @Test
     void findPrescriptionMedicineRoutinesById() {
+        //given
+        PrescriptionDto prescriptionDto = PrescriptionDto.builder()
+                .customName("감기약")
+                .icd("RS-1203123")
+                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .engName("some english")
+                .startDateTime(LocalDateTime.now())
+                .endDateTime(LocalDateTime.now())
+                .iotLocation(4)
+                .medicineDose(1)
+                .unit("정")
+                .routines(routines)
+                .build();
+
+        Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
+
+        //when
+        List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = prescriptionService.findPrescriptionMedicineRoutinesById(inserted.getId(), MEMBER.getId());
+
+        //then
+        assertThat(prescriptionMedicineRoutines).hasSize(prescriptionDto.getRoutines().size());
     }
 }

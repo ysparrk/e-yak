@@ -1,19 +1,13 @@
 package now.eyak.prescription.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import now.eyak.member.domain.Member;
 import now.eyak.prescription.domain.Prescription;
-import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.enumeration.Routine;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,9 +25,9 @@ public class PrescriptionDto {
     private Integer iotLocation; // 약통 칸 번호
     private Integer medicineDose; // 1회 투여 개수
     private String unit; // 투여 단위
-    private List<Routine> medicineRoutines;
+    private List<Routine> routines;
 
-    public Prescription toPrescription() {
+    public Prescription toEntity() {
         return Prescription.builder()
                 .customName(customName)
                 .icd(icd)
