@@ -175,5 +175,11 @@ class TodayConditionFragment : Fragment() {
         binding.symptom7.setBackgroundColor(Color.parseColor(if(symptomState[7]) activeColor else nonColor))
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        // 2. Context를 액티비티로 형변환해서 할당
+        mainActivity = context as MainActivity
+    }
 
 }
