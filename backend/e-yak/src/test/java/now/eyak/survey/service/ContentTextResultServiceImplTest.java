@@ -66,7 +66,6 @@ class ContentTextResultServiceImplTest {
 
         surveyContent = SurveyContent.builder()
                 .survey(survey)
-                .question("오늘 몸상태가 어떠신가요? :)")
                 .build();
 
         surveyContent = surveyContentRepository.save(surveyContent);
