@@ -22,7 +22,7 @@ public class AuthController {
     private final ApiVersionHolder apiVersionHolder;
 
     @PostMapping("/auth/signin")
-    public ResponseEntity signIn(@RequestBody SignInDto signInDto) {
+    public ResponseEntity signIn(@RequestBody SignInDto signInDto) throws Exception {
         log.debug("signIn()");
         SignInResponseDto signInResponseDto = memberService.signIn(signInDto);
 
@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/signup")
-    public ResponseEntity signUp(@RequestBody SignUpDto signUpDto) throws URISyntaxException {
+    public ResponseEntity signUp(@RequestBody SignUpDto signUpDto) throws Exception {
         log.debug("signUp()");
         Member savedMember = memberService.signUp(signUpDto);
 

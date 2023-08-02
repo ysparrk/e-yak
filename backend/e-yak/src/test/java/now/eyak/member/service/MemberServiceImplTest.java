@@ -42,8 +42,7 @@ class MemberServiceImplTest {
                 .eatingDuration(LocalTime.of(2, 0))
                 .build();
 
-        Member member = new Member();
-        member = signUpDto.setMemberFields(member);
+        Member member = signUpDto.toEntity();
 
         member.setProviderId("google_something");
 
@@ -81,8 +80,7 @@ class MemberServiceImplTest {
                 .eatingDuration(LocalTime.of(2, 0))
                 .build();
 
-        Member member = new Member();
-        member = signUpDto.setMemberFields(member);
+        Member member = signUpDto.toEntity();
 
         member.setProviderId("google_something");
 
