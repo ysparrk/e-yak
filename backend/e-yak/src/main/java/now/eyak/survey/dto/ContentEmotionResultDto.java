@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import now.eyak.survey.domain.ContentEmotionResult;
-import now.eyak.survey.domain.ContentTextResult;
 import now.eyak.survey.enumeration.ChoiceEmotion;
 
 @Getter
