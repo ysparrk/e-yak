@@ -5,30 +5,95 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/medicineTitleLayout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:fontFamily="@font/tmoney_bold"
-            android:text="복약 전체 정보"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30dp" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/medicineListView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/medicineTitleLayout" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <LinearLayout
+                android:id="@+id/medicineTitleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="11"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
+                    android:text="복약 전체 정보"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="#757863"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/medicineListView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="89" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:orientation="horizontal"
+            android:weightSum="45">
+
+            <ImageView
+                android:id="@+id/medicinDetailCalender"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="10"
+                app:srcCompat="@drawable/baseline_calendar_month_24" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
+            <ImageView
+                android:id="@+id/medicinDetailPrint"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="10"
+                app:srcCompat="@drawable/baseline_print_24" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+
+            <ImageView
+                android:id="@+id/medicinAdd"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="10"
+                app:srcCompat="@drawable/baseline_add_circle_outline_24" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+        </LinearLayout>
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

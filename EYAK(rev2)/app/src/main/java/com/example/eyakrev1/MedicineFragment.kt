@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -51,6 +52,10 @@ class MedicineFragment : Fragment() {
         val medicineListView = layout.findViewById<ListView>(R.id.medicineListView)
 
         medicineListView.adapter = medicineListAdapter
+
+        layout.findViewById<ImageView>(R.id.medicinAdd).setOnClickListener {
+            mainActivity!!.gotoAddMedicine()
+        }
 
         return layout
     }
