@@ -6,7 +6,6 @@ import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.ContentStatusResultDto;
-import now.eyak.survey.enumeration.ChoiceEmotion;
 import now.eyak.survey.enumeration.ChoiceStatus;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;

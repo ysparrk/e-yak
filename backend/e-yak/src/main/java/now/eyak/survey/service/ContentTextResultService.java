@@ -1,6 +1,5 @@
 package now.eyak.survey.service;
 
-import now.eyak.member.domain.Member;
 import now.eyak.survey.domain.ContentTextResult;
 import now.eyak.survey.dto.ContentTextResultDto;
 import now.eyak.survey.dto.ContentTextResultUpdateDto;
