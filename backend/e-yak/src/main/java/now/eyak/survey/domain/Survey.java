@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import now.eyak.member.domain.Member;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -30,7 +29,8 @@ public class Survey {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @Builder
-    public Survey(List<SurveyContent> surveyContents, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Survey(LocalDate date, List<SurveyContent> surveyContents, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.date = date;
         this.surveyContents = surveyContents;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
