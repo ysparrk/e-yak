@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class OAuthProvider {
-    private String userInfoUrl;
+    private String jwks;
 
     public OAuthProvider(OAuthProperties.Provider provider) {
-        this.userInfoUrl = provider.getUserInfoUri();
+        this.jwks = provider.getJwks();
     }
 }
