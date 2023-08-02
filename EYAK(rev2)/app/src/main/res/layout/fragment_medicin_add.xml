@@ -330,23 +330,12 @@
                     android:layout_height="match_parent"
                     android:layout_weight="8"
                     android:orientation="vertical"
-                    android:weightSum="6">
+                    android:weightSum="50">
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"></LinearLayout>
-                    </HorizontalScrollView>
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1">
+                        android:layout_weight="9">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -355,7 +344,7 @@
 
                             <ImageView
                                 android:id="@+id/imageView16"
-                                android:layout_width="100dp"
+                                android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_glacier" />
 
@@ -365,7 +354,7 @@
 
                             <ImageView
                                 android:id="@+id/imageView18"
-                                android:layout_width="100dp"
+                                android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_afterglow" />
 
@@ -375,7 +364,7 @@
 
                             <ImageView
                                 android:id="@+id/imageView2"
-                                android:layout_width="100dp"
+                                android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_bougainvaillea" />
 
@@ -385,7 +374,7 @@
 
                             <ImageView
                                 android:id="@+id/imageView19"
-                                android:layout_width="100dp"
+                                android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_orchidice" />
 
@@ -396,7 +385,7 @@
 
                             <ImageView
                                 android:id="@+id/imageView20"
-                                android:layout_width="100dp"
+                                android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_silver" />
 
@@ -407,7 +396,7 @@
 
                             <ImageView
                                 android:id="@+id/imageView21"
-                                android:layout_width="100dp"
+                                android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_pinklady" />
 
@@ -418,12 +407,382 @@
 
                             <ImageView
                                 android:id="@+id/imageView8"
-                                android:layout_width="100dp"
+                                android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_fusioncoral" />
 
                         </LinearLayout>
                     </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView22"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView23"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView24"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView25"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView26"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView27"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView28"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_fusioncoral" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView29"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView30"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView31"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView32"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView33"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_packagepill_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView34"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView35"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_packagepill_fusioncoral" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView36"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_outpill_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView37"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView38"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView39"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView40"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView41"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView42"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_fusioncoral" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView43"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_potion_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView44"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView45"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView46"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView48"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView49"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/imageView50"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_fusioncoral" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
                 </LinearLayout>
 
                 <Space
