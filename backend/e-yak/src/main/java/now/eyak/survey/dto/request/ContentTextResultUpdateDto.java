@@ -1,4 +1,4 @@
-package now.eyak.survey.dto;
+package now.eyak.survey.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

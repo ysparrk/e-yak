@@ -1,8 +1,8 @@
 package now.eyak.survey.service;
 
 import now.eyak.survey.domain.ContentTextResult;
-import now.eyak.survey.dto.ContentTextResultDto;
-import now.eyak.survey.dto.ContentTextResultUpdateDto;
+import now.eyak.survey.dto.request.ContentTextResultDto;
+import now.eyak.survey.dto.request.ContentTextResultUpdateDto;
 
 
 public interface ContentTextResultService {

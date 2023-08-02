@@ -5,7 +5,7 @@ import now.eyak.member.repository.MemberRepository;
 import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
-import now.eyak.survey.dto.ContentStatusResultDto;
+import now.eyak.survey.dto.request.ContentStatusResultDto;
 import now.eyak.survey.enumeration.ChoiceStatus;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
@@ -65,7 +65,6 @@ class ContentStatusResultServiceImplTest {
 
         surveyContent = SurveyContent.builder()
                 .survey(survey)
-                .question("오늘 몸상태가 어떠신가요? :)")
                 .build();
 
         surveyContent = surveyContentRepository.save(surveyContent);

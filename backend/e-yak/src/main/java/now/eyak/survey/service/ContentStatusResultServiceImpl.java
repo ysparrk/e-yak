@@ -6,7 +6,7 @@ import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.SurveyContent;
-import now.eyak.survey.dto.ContentStatusResultDto;
+import now.eyak.survey.dto.request.ContentStatusResultDto;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import org.springframework.stereotype.Service;

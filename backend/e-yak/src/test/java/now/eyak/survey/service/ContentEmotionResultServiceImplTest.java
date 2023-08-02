@@ -5,7 +5,7 @@ import now.eyak.member.repository.MemberRepository;
 import now.eyak.survey.domain.ContentEmotionResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
-import now.eyak.survey.dto.ContentEmotionResultDto;
+import now.eyak.survey.dto.request.ContentEmotionResultDto;
 import now.eyak.survey.enumeration.ChoiceEmotion;
 import now.eyak.survey.repository.ContentEmotionResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
@@ -64,7 +64,6 @@ class ContentEmotionResultServiceImplTest {
 
         surveyContent = SurveyContent.builder()
                 .survey(survey)
-                .question("오늘 몸상태가 어떠신가요? :)")
                 .build();
 
         surveyContent = surveyContentRepository.save(surveyContent);
