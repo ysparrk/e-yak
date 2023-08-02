@@ -30,6 +30,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
      * @param memberId
      * @return
      */
+    @Transactional
     @Override
     public ContentStatusResult saveStatusSurveyResult(ContentStatusResultDto contentStatusResultDto, Long memberId) {
         SurveyContent surveyContent = surveyContentRepository.findById(contentStatusResultDto.getSurveyContentId()).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
@@ -68,6 +69,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
      * @param contentStatusResultId
      * @param memberId
      */
+    @Transactional
     @Override
     public void deleteStatusSurveyResult(Long contentStatusResultId, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
