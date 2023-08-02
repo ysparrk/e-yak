@@ -143,8 +143,7 @@ class LoginActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
                     Log.d("log", response.toString())
                     Log.d("log", response.body().toString())
-
-
+                    Log.d("log", response.body()?.memberDto?.nickname.toString() ?: "jhjk")
 
                     if (response.code() == 400) {
                         // 회원가입 페이지를 띄워주자
@@ -155,6 +154,13 @@ class LoginActivity : AppCompatActivity() {
                     } else if (response.code() == 200) {
                         // 서버로부터 받은 토큰을 저장하자
 
+                        Toast.makeText(applicationContext, "${response.body()?.memberDto?.nickname}님 안녕하세요", Toast.LENGTH_SHORT).show()
+
+                        val pref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                        val editor = pref.edit()
+                        editor.putString("SERVER_ACCESS_TOKEN", response.body()?.accessToken)
+                            .putString("SERVER_REFRESH_TOKEN", response.body()?.refreshToken)
+                            .apply()
                         ///////////////////////////////
 
                         // 메인 페이지를 띄워주자

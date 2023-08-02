@@ -55,7 +55,7 @@
             android:weightSum="45">
 
             <ImageView
-                android:id="@+id/medicinDetailCalender"
+                android:id="@+id/medicineDetailCalendar"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -68,7 +68,7 @@
                 android:layout_weight="5" />
 
             <ImageView
-                android:id="@+id/medicinDetailPrint"
+                android:id="@+id/medicineDetailPrint"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

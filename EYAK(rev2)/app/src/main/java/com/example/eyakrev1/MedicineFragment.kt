@@ -57,6 +57,11 @@ class MedicineFragment : Fragment() {
             mainActivity!!.gotoAddMedicine()
         }
 
+        layout.findViewById<ImageView>(R.id.medicineDetailCalendar).setOnClickListener {
+            val intent = Intent(mainActivity, MyCalendarActivity::class.java)
+            startActivity(intent)
+        }
+
         return layout
     }
 

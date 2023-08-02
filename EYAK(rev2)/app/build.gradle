@@ -57,4 +57,7 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    
+    // calendar view 라이브러리
+    implementation 'com.github.kizitonwose:CalendarView:1.0.4'
 }

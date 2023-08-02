@@ -94,22 +94,33 @@ class SignupActivity : AppCompatActivity() {
             .putString("KEY_EATING_TIME_M", if(eatingTimeM != "") eatingTimeM else "20")
             .apply()
 
-        val data = SignUpBodyModel("google",
-                                    token = pref.getString("GOOGLE_TOKEN", ""),
-                                    nickname = pref.getString("KEY_NICKNAME", ""),
-                                    wakeTime = "${pref.getString("KEY_WAKE_TIME_H", "06")}:${pref.getString("KEY_WAKE_TIME_M", "50")}:00",
-                                    breakfastTime = "${pref.getString("KEY_BREAKFAST_TIME_H", "07")}:${pref.getString("KEY_BREAKFAST_TIME_M", "20")}:00",
-                                    lunchTime = "${pref.getString("KEY_LUNCH_TIME_H", "11")}:${pref.getString("KEY_LUNCH_TIME_M", "10")}:00",
-                                    dinnerTime = "${pref.getString("KEY_DINNER_TIME_H", "19")}:${pref.getString("KEY_DINNER_TIME_M", "20")}:00",
-                                    bedTime = "${pref.getString("KEY_BED_TIME_H", "01")}:${pref.getString("KEY_BED_TIME_M", "00")}:00",
-                                    eatingDuration = "${pref.getString("KEY_EATING_TIME_H", "00")}:${pref.getString("KEY_EATING_TIME_M", "20")}:00")
+        val data = SignUpBodyModel(providerName = "google",
+                                   token = pref.getString("GOOGLE_TOKEN", ""),
+                                   nickname = pref.getString("KEY_NICKNAME", ""),
+                                   wakeTime = "${pref.getString("KEY_WAKE_TIME_H", "06")}:${pref.getString("KEY_WAKE_TIME_M", "50")}:00",
+                                   breakfastTime = "${pref.getString("KEY_BREAKFAST_TIME_H", "07")}:${pref.getString("KEY_BREAKFAST_TIME_M", "20")}:00",
+                                   lunchTime = "${pref.getString("KEY_LUNCH_TIME_H", "11")}:${pref.getString("KEY_LUNCH_TIME_M", "10")}:00",
+                                   dinnerTime = "${pref.getString("KEY_DINNER_TIME_H", "19")}:${pref.getString("KEY_DINNER_TIME_M", "20")}:00",
+                                   bedTime = "${pref.getString("KEY_BED_TIME_H", "01")}:${pref.getString("KEY_BED_TIME_M", "00")}:00",
+                                   eatingDuration = "${pref.getString("KEY_EATING_TIME_H", "00")}:${pref.getString("KEY_EATING_TIME_M", "20")}:00")
+
+        val tempToken = pref.getString("GOOGLE_TOKEN", "")
+
+        Log.d("log", data.providerName)
+        Log.d("log", "${data.token}")
+        Log.d("log", "${data.nickname}")
+        Log.d("log", "${data.wakeTime}")
+        Log.d("log", "${data.breakfastTime}")
+        Log.d("log", "${data.lunchTime}")
+        Log.d("log", "${data.dinnerTime}")
+        Log.d("log", "${data.bedTime}")
+        Log.d("log", "${data.eatingDuration}")
 
         api.signUp(data).enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Log.d("log",response.toString())
                 Log.d("log", response.body().toString())
-                
-                
+
                 // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
                 if (response.code() == 400) {
                     Log.d("log","회원가입 실패")
