@@ -173,7 +173,7 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
                 throw new IllegalArgumentException(("idToken의 iss 혹은 aud가 일치하지 않습니다."));
             }
 
-            if (jwtClaimsSet.getExpirationTime().after(new Date())) {
+            if (jwtClaimsSet.getExpirationTime().before(new Date())) {
                 throw new IllegalArgumentException("idToken이 만료되었습니다.");
             }
         } catch (JOSEException|ParseException e) {
