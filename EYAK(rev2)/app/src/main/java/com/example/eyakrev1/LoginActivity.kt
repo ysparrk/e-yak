@@ -68,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
                 CommonStatusCodes.CANCELED -> {
                     Log.d("google one tap", "One-tap dialog was closed")
                     // Don't re-prompt the user
-                    Snackbar.make(binding.root, "One-tap dialog was closed", Snackbar.LENGTH_INDEFINITE).show()
+                    // Snackbar.make(binding.root, "One-tap dialog was closed", Snackbar.LENGTH_INDEFINITE).show()
                 }
                 CommonStatusCodes.NETWORK_ERROR -> {
                     Log.d("google one tap", "One-tap encountered a network error")
@@ -119,18 +119,13 @@ class LoginActivity : AppCompatActivity() {
 
         // 구글 토큰이 없다면 로그인 버튼 눌러서 진행하도록
 
-        binding.tmpBtn.setOnClickListener {
-            //val intent = Intent(this, MainActivity::class.java)
-            val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
-        }
-
         binding.googleLoginLinearLayout.setOnClickListener {
             displaySignIn()
         }
 
-        binding.kakaoLoginLinearLayout.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+        binding.tmpBtn.setOnClickListener {
+            Toast.makeText(applicationContext, "속았지?", Toast.LENGTH_SHORT).show()
+            val intent = Intent(getApplicationContext(), MainActivity::class.java)
             startActivity(intent)
         }
     }
@@ -159,6 +154,7 @@ class LoginActivity : AppCompatActivity() {
                         val editor = pref.edit()
                         editor.putString("SERVER_ACCESS_TOKEN", response.body()?.accessToken)
                             .putString("SERVER_REFRESH_TOKEN", response.body()?.refreshToken)
+                            .putInt("SERVER_USER_ID", response.body()?.memberDto!!.id)
                             .apply()
                         ///////////////////////////////
 
@@ -219,7 +215,7 @@ class LoginActivity : AppCompatActivity() {
             }
             ?.addOnFailureListener(this) { e ->
                 // No Google Accounts found. Just continue presenting the signed-out UI
-                displaySignUp()
+                // displaySignUp()
                 Log.d("google login btn click", e.localizedMessage!!)
             }
     }

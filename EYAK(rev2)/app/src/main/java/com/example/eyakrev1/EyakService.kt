@@ -8,6 +8,9 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.http.DELETE
+import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EyakService {
@@ -27,6 +30,12 @@ interface EyakService {
     fun checkDuplicate(
         @Query("nickname") nickname: String,
     ): Call<String>
+
+    @DELETE("/api/v1/members/{memberId}")
+    fun deleteAccount(
+        @Path("memberId") memberId: Int,
+        @Header("Authorization") Authorization: String,
+    ): Call<Void>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소

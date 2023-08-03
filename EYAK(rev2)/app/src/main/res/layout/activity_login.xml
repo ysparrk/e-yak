@@ -9,111 +9,65 @@
 
     <ImageView
         android:id="@+id/loginPageLogo"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="250dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/eyak_logo" />
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_margin="20dp"
         android:fontFamily="@font/tmoney_regular"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:text="내 손안에 작은 의사"
+        android:text="내 손안에 작은 약사"
         android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="@+id/loginPageLogo"
-        app:layout_constraintTop_toBottomOf="@+id/loginPageLogo" />
+        app:layout_constraintTop_toBottomOf="@id/textView8"
+        tools:layout_editor_absoluteX="20dp" />
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_margin="20dp"
         android:fontFamily="@font/tmoney_bold"
+        android:gravity="center"
         android:text="지금이:약"
         android:textSize="50sp"
-        app:layout_constraintStart_toStartOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@id/loginPageLogo" />
 
     <LinearLayout
-        android:id="@+id/loginLinearLayout"
-        android:layout_width="0dp"
+        android:id="@+id/googleLoginLinearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:weightSum="6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8">
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/textView7">
 
-        <LinearLayout
-            android:id="@+id/googleLoginLinearLayout"
-            android:layout_width="300dp"
+        <ImageView
+            android:id="@+id/googleLogo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/googleLogo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center|center_horizontal"
-                app:srcCompat="@drawable/btn_google_signin_dark_normal" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/navarLogo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_naver_signin" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/kakaoLoginLinearLayout"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/navarLogo2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/bnt_kakao_signin" />
-
-        </LinearLayout>
-
+            android:layout_gravity="center|center_horizontal"
+            app:srcCompat="@drawable/google_login_button" />
     </LinearLayout>
 
     <Button
         android:id="@+id/tmpBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintStart_toEndOf="@+id/loginPageLogo"
-        app:layout_constraintTop_toTopOf="@+id/loginPageLogo" />
+        android:layout_marginTop="16dp"
+        android:text="누르면 터짐"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

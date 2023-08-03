@@ -1,10 +1,22 @@
 package com.example.eyakrev1
 
+import android.R
+import android.app.ProgressDialog.show
+import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.example.eyakrev1.databinding.ActivityEditMemberBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 class EditMemberActivity : AppCompatActivity() {
 
@@ -12,15 +24,62 @@ class EditMemberActivity : AppCompatActivity() {
         ActivityEditMemberBinding.inflate(layoutInflater)
     }
 
+    val api = EyakService.create()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         loadData()
 
+        binding.deleteAccountButton.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("정말 탈퇴하시겠습니까?")
+                .setMessage("회원 탈퇴 시 복구할 수 없으니, 신중하게 선택하시기 바랍니다")
+                .setPositiveButton("탈퇴하기", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, which: Int) {
+                        val pref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                        val memberId = pref.getInt("SERVER_USER_ID", -1)
+                        val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
+
+                        api.deleteAccount(memberId = memberId, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                Log.d("log", response.toString())
+                                Log.d("log", response.body().toString())
+
+                                if (response.code() == 401) {
+                                    Toast.makeText(applicationContext, "인증되지 않은 사용자입니다", Toast.LENGTH_SHORT).show()
+                                } else if (response.code() == 200) {
+                                    Toast.makeText(applicationContext, "지금까지 지금이:약을 이용해주셔서 감사합니다", Toast.LENGTH_LONG).show()
+
+                                    // 로그인 페이지를 띄워주자
+                                    val intent = Intent(getApplicationContext(), LoginActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                Toast.makeText(applicationContext, "연결이 불안정합니다", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                    }
+                })
+                .setNegativeButton("취소하기", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, which: Int) {
+                        Log.d("MyTag", "negative")
+                    }
+                })
+                .create()
+                .show()
+        }
+
         binding.editCancel.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.editCommit.setOnClickListener {
+
         }
     }
 
