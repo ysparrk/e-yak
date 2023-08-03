@@ -2,6 +2,7 @@ package com.example.eyakrev1
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.setFragmentResult
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
@@ -47,16 +50,43 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         medicineListIconImageView.setImageResource(resourceId)
         medicineListNameTextView.text = medicine.medicineName
 
+        val medicineCardView = view.findViewById<CardView>(R.id.medicineCardView)
+        if (position + 1 == getCount()) {
+            medicineCardView.setHeight(80)
+            medicineCardView.visibility = View.INVISIBLE
+            view.setBackgroundColor(Color.parseColor("#F8FCF8"))
+        }
+
         // medicine detail 버튼을 누르면 해당 상세 페이지로 이동하도록
         // fragment 간에 데이터 전달하기
 
         medicineDetailButton.setOnClickListener {
             Log.d("이게", "되네 ${medicine.medicineId}")
             mainActivity!!.gotoMedicineDetail()
-
         }
 
         return view
     }
 
+    /**
+     * Extension method to set View's height.
+     */
+    fun View.setHeight(value: Int) {
+        val lp = layoutParams
+        lp?.let {
+            lp.height = value
+            layoutParams = lp
+        }
+    }
+
+    /**
+     * Extension method to set View's width.
+     */
+    fun View.setWidth(value: Int) {
+        val lp = layoutParams
+        lp?.let {
+            lp.width = value
+            layoutParams = lp
+        }
+    }
 }

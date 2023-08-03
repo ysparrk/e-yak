@@ -6,20 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".MyCalendarActivity">
 
-    <com.kizitonwose.calendarview.CalendarView
-        android:id="@+id/calendar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingHorizontal="1dp"
-        android:paddingBottom="10dp"
-        app:cv_hasBoundaries="true"
-        app:cv_orientation="vertical"
-        app:cv_outDateStyle="endOfGrid"
-        app:cv_scrollMode="paged"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_calendar_indicator" />
+<!--    <com.kizitonwose.calendarview.CalendarView-->
+<!--        android:id="@+id/calendar"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/white"-->
+<!--        android:paddingHorizontal="1dp"-->
+<!--        android:paddingBottom="10dp"-->
+<!--        app:cv_hasBoundaries="true"-->
+<!--        app:cv_orientation="vertical"-->
+<!--        app:cv_outDateStyle="endOfGrid"-->
+<!--        app:cv_scrollMode="paged"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_calendar_indicator" />-->
 
     <TextView
         android:id="@+id/tv_calendar_indicator"

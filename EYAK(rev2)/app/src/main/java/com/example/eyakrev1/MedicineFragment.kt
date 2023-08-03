@@ -46,6 +46,8 @@ class MedicineFragment : Fragment() {
 
         val layout = inflater.inflate(R.layout.medicine_tab_main, container, false)
 
+        medicineList.add(Medicine(medicineId = -1, medicineIcon = "eyak_logo", medicineName = "빈 공간"))
+
         val medicineListAdapter = MedicineListAdapter(mainActivity, medicineList)
         medicineListAdapter.mainActivity = mainActivity
 

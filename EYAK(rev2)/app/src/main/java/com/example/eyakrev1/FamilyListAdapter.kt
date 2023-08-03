@@ -1,6 +1,7 @@
 package com.example.eyakrev1
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>): BaseAdapter() {
     override fun getCount(): Int {
@@ -35,8 +37,11 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         /* ArrayList<MedicineAlarm>의 변수 family의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val family = familyList[position]
 
-        if(family.familyId == -1) {
-
+        val familyCardView = view.findViewById<CardView>(R.id.familyCardView)
+        if (position + 1 == getCount()) {
+            familyCardView.setHeight(80)
+            familyCardView.visibility = View.INVISIBLE
+            view.setBackgroundColor(Color.parseColor("#F8FCF8"))
         }
 
         val resourceId = context.resources.getIdentifier(family.familyIcon, "drawable", context.packageName)
@@ -45,6 +50,28 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         familyListNicknameTextView.text = family.familyNickname
 
         return view
+    }
+
+    /**
+     * Extension method to set View's height.
+     */
+    fun View.setHeight(value: Int) {
+        val lp = layoutParams
+        lp?.let {
+            lp.height = value
+            layoutParams = lp
+        }
+    }
+
+    /**
+     * Extension method to set View's width.
+     */
+    fun View.setWidth(value: Int) {
+        val lp = layoutParams
+        lp?.let {
+            lp.width = value
+            layoutParams = lp
+        }
     }
 
 }

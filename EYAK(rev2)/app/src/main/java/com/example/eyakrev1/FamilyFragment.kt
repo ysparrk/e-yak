@@ -21,7 +21,6 @@ class FamilyFragment : Fragment() {
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = -1, familyIcon = "", familyName = "", familyNickname = ""),
         )
 
     // https://curryyou.tistory.com/386
@@ -34,6 +33,8 @@ class FamilyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val layout = inflater.inflate(R.layout.family_tab_main, container, false)
+
+        familyList.add(Family(familyId = -1, familyIcon = "baseline_person_24", familyName = "빈 공간", familyNickname = "빈 공간"))
 
         val familyListAdapter = FamilyListAdapter(mainActivity, familyList)
         val familyListView = layout.findViewById<ListView>(R.id.familyListView)

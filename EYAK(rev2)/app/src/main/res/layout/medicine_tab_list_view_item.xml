@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:focusable="auto"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/medicineCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
@@ -18,6 +20,7 @@
 
 
         <LinearLayout
+            android:id="@+id/medicineLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -47,8 +50,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                />
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/medicine_detail_button"
