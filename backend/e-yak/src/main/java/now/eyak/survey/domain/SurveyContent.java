@@ -24,11 +24,11 @@ public class SurveyContent {
     private List<ContentEmotionResult> contentEmotionResults = new ArrayList<>();  // emotion 설문
     @OneToMany(mappedBy = "surveyContent")
     private List<ContentStatusResult> contentStatusResults = new ArrayList<>();  // status 설문
-    @OneToOne
-    private ContentTextResult contentTextResult;  // text 설문
+    @OneToMany(mappedBy = "surveyContent")
+    private List<ContentTextResult> contentTextResult = new ArrayList<>();  // text 설문
 
     @Builder
-    public SurveyContent(Survey survey, List<ContentEmotionResult> contentEmotionResults, List<ContentStatusResult> contentStatusResults, ContentTextResult contentTextResult) {
+    public SurveyContent(Survey survey, List<ContentEmotionResult> contentEmotionResults, List<ContentStatusResult> contentStatusResults, List<ContentTextResult> contentTextResult) {
         this.survey = survey;
         this.contentEmotionResults = contentEmotionResults;
         this.contentStatusResults = contentStatusResults;
