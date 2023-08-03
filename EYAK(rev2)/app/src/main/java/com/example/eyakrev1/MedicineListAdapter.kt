@@ -61,7 +61,6 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         // fragment 간에 데이터 전달하기
 
         medicineDetailButton.setOnClickListener {
-            Log.d("이게", "되네 ${medicine.medicineId}")
             mainActivity!!.gotoMedicineDetail()
         }
 

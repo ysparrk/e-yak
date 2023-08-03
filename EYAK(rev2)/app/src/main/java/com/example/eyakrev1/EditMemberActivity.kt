@@ -5,6 +5,7 @@ import android.app.ProgressDialog.show
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
+import android.os.Build.VERSION_CODES.S
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -44,8 +45,8 @@ class EditMemberActivity : AppCompatActivity() {
 
                         api.deleteAccount(memberId = memberId, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<Void> {
                             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                Log.d("log", response.toString())
-                                Log.d("log", response.body().toString())
+//                                Log.d("log", response.toString())
+//                                Log.d("log", response.body().toString())
 
                                 if (response.code() == 401) {
                                     Toast.makeText(applicationContext, "인증되지 않은 사용자입니다", Toast.LENGTH_SHORT).show()
@@ -79,7 +80,20 @@ class EditMemberActivity : AppCompatActivity() {
         }
 
         binding.editCommit.setOnClickListener {
-
+            editCommitButtonClicked(
+                wakeTimeH = binding.wakeTimeHEdit.text.toString(),
+                wakeTimeM = binding.wakeTimeMEdit.text.toString(),
+                breakfastTimeH = binding.breakfastTimeHEdit.text.toString(),
+                breakfastTimeM = binding.breakfastTimeMEdit.text.toString(),
+                lunchTimeH = binding.lunchTimeHEdit.text.toString(),
+                lunchTimeM = binding.lunchTimeMEdit.text.toString(),
+                dinnerTimeH = binding.dinnerTimeHEdit.text.toString(),
+                dinnerTimeM = binding.dinnerTimeMEdit.text.toString(),
+                bedTimeH = binding.bedTimeHEdit.text.toString(),
+                bedTimeM = binding.bedTimeMEdit.text.toString(),
+                eatingTimeH = binding.eatingTimeHEdit.text.toString(),
+                eatingTimeM = binding.eatingTimeMEdit.text.toString(),
+            )
         }
     }
 
@@ -117,25 +131,63 @@ class EditMemberActivity : AppCompatActivity() {
         binding.eatingTimeMEdit.setText(eatingTimeM)
     }
 
-    private fun saveData(nickName: String, wakeTimeH: String, wakeTimeM: String, breakfastTimeH: String, breakfastTimeM: String,
+    private fun editCommitButtonClicked(wakeTimeH: String, wakeTimeM: String, breakfastTimeH: String, breakfastTimeM: String,
                          lunchTimeH: String, lunchTimeM: String, dinnerTimeH: String, dinnerTimeM: String,
                          bedTimeH: String, bedTimeM: String, eatingTimeH: String, eatingTimeM: String){
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
         val editor = pref.edit()
 
-        editor.putString("KEY_NICKNAME", nickName)
-            .putString("KEY_WAKE_TIME_H", if(wakeTimeH != "") wakeTimeH else "06")
-            .putString("KEY_WAKE_TIME_M", if(wakeTimeM != "") wakeTimeM else "50")
-            .putString("KEY_BREAKFAST_TIME_H", if(breakfastTimeH != "") breakfastTimeH else "07")
-            .putString("KEY_BREAKFAST_TIME_M", if(breakfastTimeM != "") breakfastTimeM else "20")
-            .putString("KEY_LUNCH_TIME_H", if(lunchTimeH != "") lunchTimeH else "11")
-            .putString("KEY_LUNCH_TIME_M", if(lunchTimeM != "") lunchTimeM else "10")
-            .putString("KEY_DINNER_TIME_H", if(dinnerTimeH != "") dinnerTimeH else "19")
-            .putString("KEY_DINNER_TIME_M", if(dinnerTimeM != "") dinnerTimeM else "20")
-            .putString("KEY_BED_TIME_H", if(bedTimeH != "") bedTimeH else "01")
-            .putString("KEY_BED_TIME_M", if(bedTimeM != "") bedTimeM else "00")
-            .putString("KEY_EATING_TIME_H", if(eatingTimeH != "") eatingTimeH else "00")
-            .putString("KEY_EATING_TIME_M", if(eatingTimeM != "") eatingTimeM else "20")
-            .apply()
+        val memberId = pref.getInt("SERVER_USER_ID", -1)
+        val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
+        val data = ChangeAccountInfoBodyModel(
+            wakeTime = "${wakeTimeH}:${wakeTimeM}:00",
+            breakfastTime = "${breakfastTimeH}:${breakfastTimeM}:00",
+            lunchTime = "${lunchTimeH}:${lunchTimeM}:00",
+            dinnerTime = "${dinnerTimeH}:${dinnerTimeM}:00",
+            bedTime = "${bedTimeH}:${bedTimeM}:00",
+            eatingDuration = "${eatingTimeH}:${eatingTimeM}:00",
+        )
+
+        api.changeAccountInfo(memberId = memberId, params = data, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<ChangeAccountInfoResponseModel> {
+            override fun onResponse(call: Call<ChangeAccountInfoResponseModel>, response: Response<ChangeAccountInfoResponseModel>) {
+                Log.d("log", response.toString())
+                Log.d("log", response.body().toString())
+
+                if (response.code() == 401) {
+                    Toast.makeText(applicationContext, "인증되지 않은 사용자입니다", Toast.LENGTH_SHORT).show()
+                } else if (response.code() == 400) {
+                    Toast.makeText(applicationContext, "해당 유저는 존재하지 않습니다", Toast.LENGTH_LONG).show()
+                }
+                else if (response.code() == 200) {
+                    Toast.makeText(applicationContext, "성공적으로 변경되었습니다", Toast.LENGTH_LONG).show()
+
+                    // 새로운 정보를 우리도 간단하게 저장
+                    editor.putString("KEY_WAKE_TIME_H", if(wakeTimeH != "") wakeTimeH else "06")
+                        .putString("KEY_WAKE_TIME_M", if(wakeTimeM != "") wakeTimeM else "50")
+                        .putString("KEY_BREAKFAST_TIME_H", if(breakfastTimeH != "") breakfastTimeH else "07")
+                        .putString("KEY_BREAKFAST_TIME_M", if(breakfastTimeM != "") breakfastTimeM else "20")
+                        .putString("KEY_LUNCH_TIME_H", if(lunchTimeH != "") lunchTimeH else "11")
+                        .putString("KEY_LUNCH_TIME_M", if(lunchTimeM != "") lunchTimeM else "10")
+                        .putString("KEY_DINNER_TIME_H", if(dinnerTimeH != "") dinnerTimeH else "19")
+                        .putString("KEY_DINNER_TIME_M", if(dinnerTimeM != "") dinnerTimeM else "20")
+                        .putString("KEY_BED_TIME_H", if(bedTimeH != "") bedTimeH else "01")
+                        .putString("KEY_BED_TIME_M", if(bedTimeM != "") bedTimeM else "00")
+                        .putString("KEY_EATING_TIME_H", if(eatingTimeH != "") eatingTimeH else "00")
+                        .putString("KEY_EATING_TIME_M", if(eatingTimeM != "") eatingTimeM else "20")
+                        .apply()
+
+                    // 메인 페이지를 띄워주자
+                    val intent = Intent(getApplicationContext(), MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            override fun onFailure(call: Call<ChangeAccountInfoResponseModel>, t: Throwable) {
+                Toast.makeText(applicationContext, "연결이 불안정합니다", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
+
+
     }
 }

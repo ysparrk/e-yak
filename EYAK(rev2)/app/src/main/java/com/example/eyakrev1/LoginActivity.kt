@@ -136,8 +136,8 @@ class LoginActivity : AppCompatActivity() {
             val data = LoginBodyModel("google", loadedGoogleToken)
             api.signIn(data).enqueue(object: Callback<LoginResponseModel> {
                 override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
-                    Log.d("log", response.toString())
-                    Log.d("log", response.body().toString())
+//                    Log.d("log", response.toString())
+//                    Log.d("log", response.body().toString())
 
                     if (response.code() == 400) {
                         // 회원가입 페이지를 띄워주자
@@ -167,8 +167,8 @@ class LoginActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
                     // 실패
-                    Log.d("log",t.message.toString())
-                    Log.d("log","fail")
+//                    Log.d("log",t.message.toString())
+//                    Log.d("log","fail")
                     
                     // 로그인 실패 시 회원가입 페이지로 이동 (토큰은 발급받은 상태)
                     // 거기서 회원가입 정보를 입력 받고 회원가입 진행

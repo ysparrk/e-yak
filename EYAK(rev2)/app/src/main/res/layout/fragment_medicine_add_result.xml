@@ -626,7 +626,7 @@
                     android:backgroundTint="#E3F2C1"
                     android:fontFamily="@font/tmoney_bold"
                     android:includeFontPadding="false"
-                    android:text="화인 완료"
+                    android:text="확인 완료"
                     android:textColor="#757863" />
 
                 <Space
