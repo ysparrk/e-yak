@@ -191,7 +191,7 @@
                             android:layout_weight="2"
                             android:gravity="center"
                             android:hint="연"
-                            android:inputType="number|numberDecimal" />
+                            android:inputType="number" />
 
                         <TextView
                             android:id="@+id/textView42"
@@ -209,7 +209,7 @@
                             android:layout_weight="2"
                             android:gravity="center"
                             android:hint="월"
-                            android:inputType="number|numberDecimal" />
+                            android:inputType="number" />
 
                         <TextView
                             android:id="@+id/textView43"
@@ -227,7 +227,7 @@
                             android:layout_weight="2"
                             android:gravity="center"
                             android:hint="일"
-                            android:inputType="number|numberDecimal" />
+                            android:inputType="number" />
 
                         <TextView
                             android:id="@+id/textView44"
@@ -245,7 +245,7 @@
                             android:layout_weight="2"
                             android:gravity="center"
                             android:hint="연"
-                            android:inputType="number|numberDecimal" />
+                            android:inputType="number" />
 
                         <TextView
                             android:id="@+id/textView45"
@@ -263,7 +263,7 @@
                             android:layout_weight="2"
                             android:gravity="center"
                             android:hint="월"
-                            android:inputType="number|numberDecimal" />
+                            android:inputType="number" />
 
                         <TextView
                             android:id="@+id/textView46"
@@ -281,7 +281,7 @@
                             android:layout_weight="2"
                             android:gravity="center"
                             android:hint="일"
-                            android:inputType="number|numberDecimal" />
+                            android:inputType="number" />
 
                         <Space
                             android:layout_width="0dp"

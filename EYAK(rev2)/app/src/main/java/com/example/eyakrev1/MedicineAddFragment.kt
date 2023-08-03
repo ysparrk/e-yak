@@ -57,18 +57,18 @@ class MedicineAddFragment : Fragment() {
             val resultBundle = Bundle()
 
             // 투여 약 이름
-            resultBundle.putString("medicineName", layout.findViewById<EditText>(R.id.medicineNameInput).text.toString())
+            resultBundle.putString("medicineName", if(layout.findViewById<EditText>(R.id.medicineNameInput).text.toString() != "") layout.findViewById<EditText>(R.id.medicineNameInput).text.toString() else "")
 
             // 질환 명
-            resultBundle.putString("diseaseName", layout.findViewById<EditText>(R.id.diseaseNameInput).text.toString())
+            resultBundle.putString("diseaseName", if(layout.findViewById<EditText>(R.id.diseaseNameInput).text.toString() != "") layout.findViewById<EditText>(R.id.diseaseNameInput).text.toString() else "")
 
             // 투여 기간
-            resultBundle.putString("startYear", if(layout.findViewById<EditText>(R.id.startYearInput).text.toString() != "") layout.findViewById<EditText>(R.id.startYearInput).text.toString() else targetDay.year.toString().substring(2, 4))
-            resultBundle.putString("startMonth", if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString() != "") layout.findViewById<EditText>(R.id.startMonthInput).text.toString() else targetDay.monthValue.toString())
-            resultBundle.putString("startDay", if(layout.findViewById<EditText>(R.id.startDayInput).text.toString() != "") layout.findViewById<EditText>(R.id.startDayInput).text.toString() else targetDay.dayOfMonth.toString())
-            resultBundle.putString("endYear", if(layout.findViewById<EditText>(R.id.endYearInput).text.toString() != "") layout.findViewById<EditText>(R.id.endYearInput).text.toString() else targetDay.year.toString().substring(2, 4))
-            resultBundle.putString("endMonth", if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString() != "") layout.findViewById<EditText>(R.id.endMonthInput).text.toString() else targetDay.monthValue.toString())
-            resultBundle.putString("endDay", if(layout.findViewById<EditText>(R.id.endDayInput).text.toString() != "") layout.findViewById<EditText>(R.id.endDayInput).text.toString() else targetDay.dayOfMonth.toString())
+            resultBundle.putInt("startYear", if(layout.findViewById<EditText>(R.id.startYearInput).text.toString() != "") layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt() else targetDay.year.toString().substring(2, 4).toInt())
+            resultBundle.putInt("startMonth", if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString() != "") layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() else targetDay.monthValue.toString().toInt())
+            resultBundle.putInt("startDay", if(layout.findViewById<EditText>(R.id.startDayInput).text.toString() != "") layout.findViewById<EditText>(R.id.startDayInput).text.toString().toInt() else targetDay.dayOfMonth.toString().toInt())
+            resultBundle.putInt("endYear", if(layout.findViewById<EditText>(R.id.endYearInput).text.toString() != "") layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt() else targetDay.year.toString().substring(2, 4).toInt())
+            resultBundle.putInt("endMonth", if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString() != "") layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() else targetDay.monthValue.toString().toInt())
+            resultBundle.putInt("endDay", if(layout.findViewById<EditText>(R.id.endDayInput).text.toString() != "") layout.findViewById<EditText>(R.id.endDayInput).text.toString().toInt() else targetDay.dayOfMonth.toString().toInt())
 
             // 투여 약 이모티콘
             resultBundle.putInt("medicineIcon", selectIcon)
@@ -141,6 +141,7 @@ class MedicineAddFragment : Fragment() {
             if(timeChk[7]) timeChk[7] = false else timeChk[7] = true
             if(timeChk[7]) layout.findViewById<ImageView>(R.id.bedChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.bedChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
         }
+
 
         return layout
     }

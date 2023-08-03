@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
+import java.time.LocalDate
 
 class MedicineAddResultFragment : Fragment() {
 
@@ -24,19 +26,19 @@ class MedicineAddResultFragment : Fragment() {
 
         setFragmentResultListener("medicineAddData") { requestKey, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundel ->
 
-            // 투여 기간
-            view?.findViewById<TextView>(R.id.medicineNameInputResult)?.text = bundle.getString("medicineName", "") ?: ""
+            // 투여 약 이름
+            view?.findViewById<TextView>(R.id.medicineNameInputResult)?.text = bundle.getString("medicineName", "")
 
             // 질환 명
-            view?.findViewById<TextView>(R.id.diseaseNameInputResult)?.text = bundle.getString("diseaseName", "") ?: ""
+            view?.findViewById<TextView>(R.id.diseaseNameInputResult)?.text = bundle.getString("diseaseName", "")
 
             // 투여 기간
-            view?.findViewById<TextView>(R.id.startYearInputResult)?.text = bundle.getString("startYear", "") ?: ""
-            view?.findViewById<TextView>(R.id.startMonthInputResult)?.text = bundle.getString("startMonth", "") ?: ""
-            view?.findViewById<TextView>(R.id.startDayInputResult)?.text = bundle.getString("startDay", "") ?: ""
-            view?.findViewById<TextView>(R.id.endYearInputResult)?.text = bundle.getString("endYear", "") ?: ""
-            view?.findViewById<TextView>(R.id.endMonthInputResult)?.text = bundle.getString("endMonth", "") ?: ""
-            view?.findViewById<TextView>(R.id.endDayInputResult)?.text = bundle.getString("endDay", "") ?: ""
+            view?.findViewById<TextView>(R.id.startYearInputResult)?.text = bundle.getInt("startYear", 0).toString()
+            view?.findViewById<TextView>(R.id.startMonthInputResult)?.text = bundle.getInt("startMonth", 0).toString()
+            view?.findViewById<TextView>(R.id.startDayInputResult)?.text = bundle.getInt("startDay", 0).toString()
+            view?.findViewById<TextView>(R.id.endYearInputResult)?.text = bundle.getInt("endYear", 0).toString()
+            view?.findViewById<TextView>(R.id.endMonthInputResult)?.text = bundle.getInt("endMonth", 0).toString()
+            view?.findViewById<TextView>(R.id.endDayInputResult)?.text = bundle.getInt("endDay", 0).toString()
 
             // 투여 약 이모티콘
             selectIcon = bundle.getInt("medicineIcon")
@@ -79,9 +81,9 @@ class MedicineAddResultFragment : Fragment() {
 
             }
 
-            //
+            // 시간 설정
             timeChk = bundle.getBooleanArray("timeArray") ?: booleanArrayOf(false, false, false, false, false, false, false, false)
-            // 시간 설정 화면 표시
+                // 시간 설정 화면 표시
             if(timeChk[0]) view?.findViewById<ImageView>(R.id.wakeChkResult)?.setImageResource(R.drawable.baseline_check_box_24) else view?.findViewById<ImageView>(R.id.wakeChkResult)?.setImageResource(R.drawable.baseline_check_box_outline_blank_24)
             if(timeChk[1]) view?.findViewById<ImageView>(R.id.breakfastBeforeChkResult)?.setImageResource(R.drawable.baseline_check_box_24) else view?.findViewById<ImageView>(R.id.breakfastBeforeChkResult)?.setImageResource(R.drawable.baseline_check_box_outline_blank_24)
             if(timeChk[2]) view?.findViewById<ImageView>(R.id.breakfastAfterChkResult)?.setImageResource(R.drawable.baseline_check_box_24) else view?.findViewById<ImageView>(R.id.breakfastAfterChkResult)?.setImageResource(R.drawable.baseline_check_box_outline_blank_24)
@@ -91,6 +93,9 @@ class MedicineAddResultFragment : Fragment() {
             if(timeChk[6]) view?.findViewById<ImageView>(R.id.dinnerAfterChkResult)?.setImageResource(R.drawable.baseline_check_box_24) else view?.findViewById<ImageView>(R.id.dinnerAfterChkResult)?.setImageResource(R.drawable.baseline_check_box_outline_blank_24)
             if(timeChk[7]) view?.findViewById<ImageView>(R.id.bedChkResult)?.setImageResource(R.drawable.baseline_check_box_24) else view?.findViewById<ImageView>(R.id.bedChkResult)?.setImageResource(R.drawable.baseline_check_box_outline_blank_24)
 
+            // 1회 투여양
+            view?.findViewById<TextView>(R.id.numberOfOneTimeInputResult)?.text = bundle.getFloat("numberOfOneTime", 0f).toString()
+            view?.findViewById<TextView>(R.id.unitTypeInputResult)?.text = bundle.getString("unitType", "-") ?: "-"
 
         }
     }
@@ -101,6 +106,10 @@ class MedicineAddResultFragment : Fragment() {
     ): View? {
 
         val layout = inflater.inflate(R.layout.fragment_medicine_add_result, container, false)
+
+        layout.findViewById<Button>(R.id.chkcomplete).setOnClickListener {
+            mainActivity!!.gotoMedicine()
+        }
 
         return layout
     }
