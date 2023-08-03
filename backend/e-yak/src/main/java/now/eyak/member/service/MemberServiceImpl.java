@@ -9,6 +9,7 @@ import now.eyak.member.domain.Member;
 import now.eyak.member.domain.OAuthProvider;
 import now.eyak.member.domain.enumeration.Role;
 import now.eyak.member.dto.*;
+import now.eyak.member.exception.AlreadySignUpException;
 import now.eyak.member.exception.InvalidRefreshTokenException;
 import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.InMemoryProviderRepository;
@@ -86,16 +87,20 @@ public class MemberServiceImpl implements MemberService {
         try {
             jwtTokenProvider.validateJwtWithJwk(token, jwksStr);
         } catch (Exception e) {
-            log.info("Id Token 검증 실패: {}", e.getMessage());
-            throw new IllegalArgumentException("Id Token이 유효하지 않습니다.");
+            throw new IllegalArgumentException("Id Token이 유효하지 않습니다. " + e.getMessage());
         }
 
         // 사용자 정보를 저장
         JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
         String sub = jwtClaimsSet.getStringClaim("sub");
+        String providerId = signUpDto.getProviderName() + "_" + sub;
+
+        memberRepository.findByProviderId(providerId).ifPresent(member -> {
+            throw new AlreadySignUpException("이미 가입된 사용자입니다.");
+        });
 
         Member member = signUpDto.toEntity();
-        member.setProviderId(signUpDto.getProviderName() + "_" + sub);
+        member.setProviderId(providerId);
         member.setRole(Role.USER);
 
         Member savedMember = memberRepository.save(member);
@@ -126,6 +131,13 @@ public class MemberServiceImpl implements MemberService {
         } catch (ParseException|JOSEException e) {
             throw new InvalidRefreshTokenException("유효하지 않은 Refresh Token 입니다. " + e.getMessage());
         }
+    }
+
+    @Override
+    public MemberDto retrieveMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당 회원은 존재하지 않습니다."));
+
+        return MemberDto.from(member);
     }
 
     @Transactional
