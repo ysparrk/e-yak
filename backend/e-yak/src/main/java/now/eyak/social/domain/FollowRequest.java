@@ -1,6 +1,7 @@
 package now.eyak.social.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +10,6 @@ import now.eyak.social.Scope;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,10 +24,19 @@ public class FollowRequest {
     private Member follower;
     @ManyToOne
     private Member followee;
+    private String customName;
     @Enumerated(EnumType.STRING)
     private Scope scope;
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Builder
+    public FollowRequest(Member follower, Member followee, String customName, Scope scope) {
+        this.follower = follower;
+        this.followee = followee;
+        this.customName = customName;
+        this.scope = scope;
+    }
 }
