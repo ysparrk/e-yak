@@ -1,6 +1,5 @@
 #include <DHT.h>
 #include "BluetoothSerial.h"
-#include "time.h"
 
 // power & bluetooth LED
 #define POWERLED 19
@@ -9,6 +8,7 @@
 #define ALARMLED 5
 #define ALARMBTN 17
 #define BUZPIN 12
+#define VIBPIN 14
 // temperature & density pin
 #define DHTPIN 13
 // hall sensor
@@ -19,8 +19,6 @@
 #define LED3 21
 #define LED4 32
 #define LED5 33
-#define LED6 25
-#define LED7 26
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -30,17 +28,22 @@
 #error Serial Bluetooth not available or not enabled. It is only available for the ESP32 chip.
 #endif
 
+
+
 //=== variables setup
+// bt data
+String r_data;
+String s_data;
+
 // multi core
-TaskHandle_t btnTask;
+// TaskHandle_t btnTask;
 
 // bluetooth setups
 String device_name = "ESP32-BT-TEST_2";
 BluetoothSerial SerialBT;
-bool btConnectFlag = false;
-int btData[11];
 
-// device open/close, alarm
+// flags
+bool btConnectFlag = false;
 bool deviceOpenFlag = false;
 bool alarmFlag = false;
 
@@ -49,12 +52,14 @@ int freq = 5000;
 int channel = 0;
 int resolution = 8;
 
+// dht
+DHT dht(DHTPIN, DHT11);
 
 
 
 
-//=== callback & task functions
-// temp: manual serial input.
+//=== serial & callback & task functions
+// bt serial input read.
 String readSerial(){
   String str = "";
   char ch;
@@ -69,21 +74,11 @@ String readSerial(){
 // callback on bluetooth connection events.
 void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t* param) {
   if (event == ESP_SPP_SRV_OPEN_EVT) {
-    Serial.println("Client Connected");
     btConnectFlag = true;
   } else if (event == ESP_SPP_SRV_STOP_EVT) {
-    Serial.println("Client Disconnected");
     btConnectFlag = false;
   } else if (event == ESP_SPP_CLOSE_EVT) {
-    Serial.println("Client Disconnected 2");
     btConnectFlag = false;
-  } else if (event == ESP_SPP_START_EVT) {
-    Serial.println("Server Started");
-  } else if (event == ESP_SPP_INIT_EVT) {
-    Serial.println("SPP Init");
-  }
-  else {
-    Serial.println("Else");
   }
 }
 
@@ -94,9 +89,9 @@ void btnPushTask(void *param) {
   while(1) {
     int state = digitalRead(ALARMBTN);
     if (btConnectFlag == true) {
-      if (state == 0) {
+      if (state == 0 && alarmFlag == true) {
         alarmFlag = false;
-        //SerialBT.write(107);
+        SerialBT.write(107); // k
       }
     }
   }
@@ -104,13 +99,13 @@ void btnPushTask(void *param) {
 
 // task function for box open
 void boxOpenTask(void *param) {
-  Serial.print("alarm task running...");
+  Serial.print("box task running...");
   Serial.println(xPortGetCoreID());
   while(1) {
     // hall sensor read
     int sense = 0;
     sense = analogRead(HALLPIN);
-    if (sense > 1900 || sense < 1800) { //"inled"
+    if (sense > 1900 || sense < 1800) {
       deviceClose();
       //Serial.println(sense);
     } else {
@@ -119,25 +114,69 @@ void boxOpenTask(void *param) {
   }
 }
 
+// task function for dht measure
+void dhtTask(void *param) {
+  Serial.print("dht task running...");
+  Serial.println(xPortGetCoreID());
+  while(1) {
+    int humid = dht.readHumidity();
+    float temp = dht.readTemperature();
+    if (humid >= 0 && humid <= 100) {
+      Serial.print("ok ");
+      
+    }
+    Serial.print(humid);
+    Serial.print(" ");
+    Serial.println(temp);
+    delay(10000);
+  }
+}
+
 
 
 //=== operation functions.
 // alarm on
 void alarmOn() {
-  digitalWrite(ALARMLED, HIGH);
-  ledcWriteNote(channel, NOTE_D, 4);
-  delay(500);
-  ledcWriteNote(channel, NOTE_F, 4);
-  delay(500);
-  ledcWriteNote(channel, NOTE_A, 4);
-  delay(500);
+  // first alarm
+  if (r_data[1] == '1') {
+    digitalWrite(ALARMLED, HIGH);
+  }
+  if (r_data[2] == '1' || r_data[3] == '1') {
+    for(int i=0; i<3; i++) {
+      if (r_data[2] == '1') ledcWriteNote(channel, NOTE_F, 4);
+      if (r_data[3] == '1') digitalWrite(VIBPIN, HIGH);
+      delay(300);
+      ledcWriteTone(channel, 0);
+      digitalWrite(VIBPIN, LOW);
+      delay(100);
+      if (r_data[2] == '1') ledcWriteNote(channel, NOTE_F, 4);
+      if (r_data[3] == '1') digitalWrite(VIBPIN, HIGH);
+      delay(500);
+      ledcWriteTone(channel, 0);
+      digitalWrite(VIBPIN, LOW);
+      delay(300);
+    }
+  }
   ledcWriteTone(channel, 0);
   digitalWrite(ALARMLED, LOW);
-  while(alarmFlag) {
-    digitalWrite(ALARMLED, HIGH);
+  // repeating alarm (LED)
+  int tm = 0;
+  while(alarmFlag && tm <= 10) {   // timer set.
+    if (r_data[1] == '1') digitalWrite(ALARMLED, HIGH);
     delay(500);
     digitalWrite(ALARMLED, LOW);
     delay(500);
+    tm++;
+  }
+  // alarm end
+  if (alarmFlag == false) {
+    digitalWrite(ALARMLED, LOW);
+    ledcWriteTone(channel, 0);
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, LOW);
+    digitalWrite(LED4, LOW);
+    digitalWrite(LED5, LOW);
   }
 }
 // on device open
@@ -148,13 +187,13 @@ void deviceOpen() {
   } else {
     digitalWrite(BTLED, LOW);
   }
-  digitalWrite(LED1, HIGH);
-  digitalWrite(LED2, HIGH);
-  digitalWrite(LED3, HIGH);
-  digitalWrite(LED4, HIGH);
-  digitalWrite(LED5, HIGH);
-  digitalWrite(LED6, HIGH);
-  digitalWrite(LED7, HIGH);
+  if (alarmFlag) {
+    int leds[5] = {LED1, LED2, LED3, LED4, LED5};
+    for(int i=0; i<5; i++) {
+      if (r_data[4+i] == '1')
+        digitalWrite(leds[i], HIGH);
+    }
+  }
 }
 // on device close
 void deviceClose() {
@@ -165,8 +204,6 @@ void deviceClose() {
   digitalWrite(LED3, LOW);
   digitalWrite(LED4, LOW);
   digitalWrite(LED5, LOW);
-  digitalWrite(LED6, LOW);
-  digitalWrite(LED7, LOW);
 }
 
 
@@ -187,9 +224,10 @@ void setup() {
     Serial.println("Using PIN");
   #endif
 
-  // buzzer setup
+  // buzzer & vib setup
   ledcSetup(channel, freq, resolution);
   ledcAttachPin(BUZPIN, channel);
+  pinMode(VIBPIN, OUTPUT);
   // btn setup
   pinMode(ALARMBTN, INPUT_PULLUP);
   // hall sensor setup
@@ -203,13 +241,11 @@ void setup() {
   pinMode(LED3, OUTPUT);
   pinMode(LED4, OUTPUT);
   pinMode(LED5, OUTPUT);
-  pinMode(LED6, OUTPUT);
-  pinMode(LED7, OUTPUT);
 
   // multi-core task setup
-  //xTaskCreatePinnedToCore (btnPush, "btnTask", 10000, NULL, 1, &btnTask, 0);
   xTaskCreate(btnPushTask, "btnTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
   xTaskCreate(boxOpenTask, "boxTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
+  xTaskCreate(dhtTask, "dhtTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
 }
 
 
@@ -218,22 +254,28 @@ void setup() {
 void loop() {
 
   // bluetooth signal out
-  String data;
-  if (Serial.available()) {
-    int d = Serial.read();
-    SerialBT.write(d);
-  }
+  // if (Serial.available()) {
+  //   int d = Serial.read();
+  //   SerialBT.write(d);
+
+  //   String s = "hello\n";
+  //   uint8_t buf[s.length()+1];
+  //   memcpy(buf, s.c_str(), s.length()+1);
+  //   SerialBT.write(buf, s.length()+1);
+  // }
 
   // bluetooth signal in
   if (SerialBT.available()) {
     // bluetooth signal read
-    data = readSerial();
-    Serial.println(data);
-    if (data == "alarm") {
+    r_data = readSerial();
+    Serial.println(r_data);
+    if (r_data[0] == '0') { // 0: alarm, 123: LED/sound/buzz
       alarmFlag = true;
       alarmOn();
+    } else if (r_data[0] == '1') { // 1: alarm off.
+      alarmFlag = false;
     }
   }
 
-  delay(100);
+  delay(200);
 }
