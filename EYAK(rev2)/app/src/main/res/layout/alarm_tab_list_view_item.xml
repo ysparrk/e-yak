@@ -124,7 +124,7 @@
                     android:fontFamily="@font/tmoney_regular"
                     android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="다음 약 복용까지:"
+                    android:text="다음 약 복용까지"
                     android:textColor="#757863"
                     android:textSize="16sp" />
 
