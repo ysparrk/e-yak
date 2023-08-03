@@ -82,8 +82,26 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t* param) {
   }
 }
 
+// task for bluetooth serial in.
+void btTask(void *param) {
+  Serial.print("bt task running...");
+  Serial.println(xPortGetCoreID());
+  while(1) {
+    if (SerialBT.available()) {
+      // bluetooth signal read
+      r_data = readSerial();
+      Serial.println(r_data);
+      if (r_data[0] == '0') { // 0: alarm, 123: LED/sound/buzz
+        alarmFlag = true;
+      } else if (r_data[0] == '1') { // 1: alarm off.
+        alarmFlag = false;
+      }
+    }
+  }
+}
+
 // task function for button push.
-void btnPushTask(void *param) {
+void btnTask(void *param) {
   Serial.print("btn task running...");
   Serial.println(xPortGetCoreID());
   while(1) {
@@ -91,14 +109,18 @@ void btnPushTask(void *param) {
     if (btConnectFlag == true) {
       if (state == 0 && alarmFlag == true) {
         alarmFlag = false;
-        SerialBT.write(107); // k
+        //SerialBT.write(107);
+        String s = "ok";
+        uint8_t buf[3];
+        memcpy(buf, s.c_str(), 3);
+        SerialBT.write(buf, 3);
       }
     }
   }
 }
 
 // task function for box open
-void boxOpenTask(void *param) {
+void boxTask(void *param) {
   Serial.print("box task running...");
   Serial.println(xPortGetCoreID());
   while(1) {
@@ -122,12 +144,10 @@ void dhtTask(void *param) {
     int humid = dht.readHumidity();
     float temp = dht.readTemperature();
     if (humid >= 0 && humid <= 100) {
-      Serial.print("ok ");
-      
+      char s[10];
+      sprintf(s, "%d %.1f", humid, temp);
+      Serial.println(s);
     }
-    Serial.print(humid);
-    Serial.print(" ");
-    Serial.println(temp);
     delay(10000);
   }
 }
@@ -138,19 +158,19 @@ void dhtTask(void *param) {
 // alarm on
 void alarmOn() {
   // first alarm
-  if (r_data[1] == '1') {
+  if (r_data[0] == '0' && r_data[1] == '1') {
     digitalWrite(ALARMLED, HIGH);
   }
   if (r_data[2] == '1' || r_data[3] == '1') {
     for(int i=0; i<3; i++) {
-      if (r_data[2] == '1') ledcWriteNote(channel, NOTE_F, 4);
-      if (r_data[3] == '1') digitalWrite(VIBPIN, HIGH);
+      if (r_data[0] == '0' && r_data[2] == '1') ledcWriteNote(channel, NOTE_F, 4);
+      if (r_data[0] == '0' && r_data[3] == '1') digitalWrite(VIBPIN, HIGH);
       delay(300);
       ledcWriteTone(channel, 0);
       digitalWrite(VIBPIN, LOW);
       delay(100);
-      if (r_data[2] == '1') ledcWriteNote(channel, NOTE_F, 4);
-      if (r_data[3] == '1') digitalWrite(VIBPIN, HIGH);
+      if (r_data[0] == '0' && r_data[2] == '1') ledcWriteNote(channel, NOTE_F, 4);
+      if (r_data[0] == '0' && r_data[3] == '1') digitalWrite(VIBPIN, HIGH);
       delay(500);
       ledcWriteTone(channel, 0);
       digitalWrite(VIBPIN, LOW);
@@ -161,14 +181,15 @@ void alarmOn() {
   digitalWrite(ALARMLED, LOW);
   // repeating alarm (LED)
   int tm = 0;
-  while(alarmFlag && tm <= 10) {   // timer set.
-    if (r_data[1] == '1') digitalWrite(ALARMLED, HIGH);
+  while(alarmFlag && tm <= 30) {   // timer set.
+    if (r_data[0] == '0' && r_data[1] == '1') digitalWrite(ALARMLED, HIGH);
     delay(500);
     digitalWrite(ALARMLED, LOW);
     delay(500);
     tm++;
   }
   // alarm end
+  alarmFlag = false;
   if (alarmFlag == false) {
     digitalWrite(ALARMLED, LOW);
     ledcWriteTone(channel, 0);
@@ -243,8 +264,9 @@ void setup() {
   pinMode(LED5, OUTPUT);
 
   // multi-core task setup
-  xTaskCreate(btnPushTask, "btnTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
-  xTaskCreate(boxOpenTask, "boxTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
+  xTaskCreate(btTask, "btTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
+  xTaskCreate(btnTask, "btnTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
+  xTaskCreate(boxTask, "boxTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
   xTaskCreate(dhtTask, "dhtTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
 }
 
@@ -264,18 +286,22 @@ void loop() {
   //   SerialBT.write(buf, s.length()+1);
   // }
 
-  // bluetooth signal in
-  if (SerialBT.available()) {
-    // bluetooth signal read
-    r_data = readSerial();
-    Serial.println(r_data);
-    if (r_data[0] == '0') { // 0: alarm, 123: LED/sound/buzz
-      alarmFlag = true;
-      alarmOn();
-    } else if (r_data[0] == '1') { // 1: alarm off.
-      alarmFlag = false;
-    }
+  if (alarmFlag == true) {
+    alarmOn();
   }
+
+  // bluetooth signal in
+  // if (SerialBT.available()) {
+  //   // bluetooth signal read
+  //   r_data = readSerial();
+  //   Serial.println(r_data);
+  //   if (r_data[0] == '0') { // 0: alarm, 123: LED/sound/buzz
+  //     alarmFlag = true;
+  //     alarmOn();
+  //   } else if (r_data[0] == '1') { // 1: alarm off.
+  //     alarmFlag = false;
+  //   }
+  // }
 
   delay(200);
 }
