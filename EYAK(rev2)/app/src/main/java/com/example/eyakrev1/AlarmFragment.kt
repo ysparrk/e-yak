@@ -52,7 +52,7 @@ class AlarmFragment : Fragment() {
 
         for (i in 1..10) {
             // 임시 데이터 넣기
-            val medicineAlarm = MedicineAlarm(medicineIcon = "eyak_logo", medicineTime = "오후 01:30", medicineName = "약이름 $i")
+            val medicineAlarm = MedicineAlarm(medicineIcon = "ic_packagepill_afterglow", medicineTime = "오후 01:30", medicineName = "약이름 $i")
             medicineAlarmList.add(medicineAlarm)
         }
 

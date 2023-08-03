@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/familyCardView"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="80dp"
         android:layout_margin="20dp"
         app:cardBackgroundColor="#DDE6ED"
         app:cardCornerRadius="20dp"
@@ -30,6 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="20"
+                android:padding="5dp"
                 app:srcCompat="@drawable/baseline_person_24" />
 
             <LinearLayout
@@ -84,27 +85,22 @@
             </LinearLayout>
 
             <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="15" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="13" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="25"
+                android:layout_weight="32"
+                android:gravity="center"
                 android:orientation="vertical"
                 android:weightSum="100">
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="10" />
-
                 <Button
                     android:id="@+id/family_detail_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="80"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:backgroundTint="#E3F2C1"
                     android:fontFamily="@font/tmoney_regular"
                     android:includeFontPadding="false"
@@ -112,16 +108,12 @@
                     android:textColor="#757863"
                     android:textSize="14sp" />
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="10" />
             </LinearLayout>
 
             <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
