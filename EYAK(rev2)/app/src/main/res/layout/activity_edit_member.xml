@@ -11,13 +11,30 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="left"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/tmoney_bold"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
         android:text="내 정보 변경"
         android:textColor="#757863"
         android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/deleteAccountButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="#FF9B9B"
+        android:fontFamily="@font/tmoney_bold"
+        android:text="회원 탈퇴"
+        android:textColor="#757863"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
@@ -29,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
+        app:layout_constraintTop_toBottomOf="@id/textView5">
 
         <LinearLayout
             android:id="@+id/linearLayout"

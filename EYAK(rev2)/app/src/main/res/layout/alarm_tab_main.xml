@@ -104,7 +104,8 @@
             android:id="@+id/alramListView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7" />
+            android:layout_weight="7"
+            android:divider="#FFFFFF" />
 
         <LinearLayout
             android:id="@+id/conditionLinearLayout"

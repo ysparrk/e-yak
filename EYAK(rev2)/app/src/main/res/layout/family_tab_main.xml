@@ -43,7 +43,8 @@
                 android:id="@+id/familyListView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="89">
+                android:layout_weight="89"
+                android:divider="#FFFFFF">
 
             </ListView>
 
