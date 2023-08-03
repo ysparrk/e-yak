@@ -143,7 +143,6 @@ class LoginActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
                     Log.d("log", response.toString())
                     Log.d("log", response.body().toString())
-                    Log.d("log", response.body()?.memberDto?.nickname.toString() ?: "jhjk")
 
                     if (response.code() == 400) {
                         // 회원가입 페이지를 띄워주자

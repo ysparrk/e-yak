@@ -39,3 +39,7 @@ data class LoginBodyModel(
     var providerName: String,
     var token: String
 )
+
+//data class duplicateCheckResponse(
+//
+//)

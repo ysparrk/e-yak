@@ -8,6 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.http.Query
 
 interface EyakService {
 
@@ -21,6 +22,11 @@ interface EyakService {
     fun signIn(
         @Body params: LoginBodyModel,
     ): Call<LoginResponseModel>
+
+    @GET("/api/v1/auth/duplication")
+    fun checkDuplicate(
+        @Query("nickname") nickname: String,
+    ): Call<String>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소

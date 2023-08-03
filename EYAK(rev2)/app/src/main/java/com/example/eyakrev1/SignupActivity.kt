@@ -3,8 +3,11 @@ package com.example.eyakrev1
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.preference.PreferenceManager
 import com.example.eyakrev1.databinding.ActivitySignupBinding
 import retrofit2.Call
@@ -29,9 +32,45 @@ class SignupActivity : AppCompatActivity() {
         // 중복 체크 버튼을 클릭하면
         binding.nickNameChk.setOnClickListener {
             // 서버로부터 중복체크 요청을 보내고 확인을 받아야함 => 중복되지 않았을 경우에만 true로 바꿔주자
-            isDuplicateChecked = true
-            Toast.makeText(getApplicationContext(), "중복 검사 완료되었습니다!", Toast.LENGTH_SHORT).show()
+
+            api.checkDuplicate(nickname = binding.nickNameInput.text.toString()).enqueue(object: Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    Log.d("log",response.toString())
+                    Log.d("log", response.body().toString())
+
+                    // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
+                    if (response.code() == 400) {
+                        Log.d("log","중복체크 실패")
+                    } else if (response.code() == 200) {
+                        if (response.body().toString() == "true") { // if true => 중복인거
+                            Toast.makeText(getApplicationContext(), "이미 사용중인 닉네임입니다", Toast.LENGTH_SHORT).show()
+                        } else { // if false
+                            isDuplicateChecked = true
+                            Toast.makeText(getApplicationContext(), "중복 검사 완료되었습니다!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    // 실패
+                    Log.d("log",t.message.toString())
+                    Log.d("log","fail")
+                }
+            })
         }
+
+
+        val nickNameInputView = binding.nickNameInput
+        nickNameInputView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // 이전 중복체크 여부와 관계 없이 다시 수행해야함
+                isDuplicateChecked = false
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
 
         binding.signup.setOnClickListener {
             if (binding.nickNameInput.text.isNotBlank()) {
@@ -124,6 +163,7 @@ class SignupActivity : AppCompatActivity() {
                 // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
                 if (response.code() == 400) {
                     Log.d("log","회원가입 실패")
+                    Toast.makeText(getApplicationContext(), "이미 가입하셨거나, 유효하지 않은 토큰입니다", Toast.LENGTH_SHORT).show()
                 } else if (response.code() == 201) {
                     // 회원 가입에 성공했으니 Login Activity로 이동 => sharedPreference 이미 있으니, 자동 로그인 시도할거 => 자동 로그인에 성공하면, Main Activity로 이동할테니
                     val intent = Intent(getApplicationContext(), LoginActivity::class.java)
