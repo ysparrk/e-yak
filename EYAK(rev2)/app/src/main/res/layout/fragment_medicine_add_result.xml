@@ -471,14 +471,14 @@
                         android:weightSum="2">
 
                         <ImageView
-                            android:id="@+id/dinnerBeforeChkResult"
+                            android:id="@+id/lunchBeforeChkResult"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                         <ImageView
-                            android:id="@+id/dinnerAfterChkResult"
+                            android:id="@+id/lunchAfterChkResult"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -494,14 +494,14 @@
                         android:weightSum="2">
 
                         <ImageView
-                            android:id="@+id/lunchBeforeChkResult"
+                            android:id="@+id/dinnerBeforeChkResult"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                         <ImageView
-                            android:id="@+id/lunchAfterChkResult"
+                            android:id="@+id/dinnerAfterChkResult"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
