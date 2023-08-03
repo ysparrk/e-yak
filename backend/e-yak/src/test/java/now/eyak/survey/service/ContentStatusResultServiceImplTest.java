@@ -6,12 +6,14 @@ import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentStatusResultDto;
+import now.eyak.survey.dto.response.ContentStatusResultResponseDto;
 import now.eyak.survey.enumeration.ChoiceStatus;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @ExtendWith(SpringExtension.class)
@@ -43,6 +47,7 @@ class ContentStatusResultServiceImplTest {
     Survey survey;
     SurveyContent surveyContent;
     ContentStatusResultDto contentStatusResultDto;
+    ContentStatusResultResponseDto contentStatusResultResponseDto;
 
     @BeforeEach
     void beforeEach() {
@@ -59,6 +64,7 @@ class ContentStatusResultServiceImplTest {
         member = memberRepository.save(member);
 
         survey = Survey.builder()
+                .date(LocalDate.of(2023,8,1))
                 .build();
 
         survey = surveyRepository.save(survey);
@@ -133,5 +139,60 @@ class ContentStatusResultServiceImplTest {
         // then
         Assertions.assertThat(contentStatusResultRepository.findById(savedContentStatusResult.getId())).isEmpty();
         System.out.println("contentStatusResultRepository = " + contentStatusResultRepository.findById(savedContentStatusResult.getId()));
+    }
+
+    @DisplayName("Status GET")
+    @Test
+    @Transactional
+    @Rollback(false)
+    void getStatusResultsByDateAndMember() {
+        // given
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());  // 원본 값 저장
+
+        // 새로운 사용자 및 설문 응답 추가
+        Member memberA = Member.builder()
+                .providerName("google")
+                .nickname("드민")
+                .wakeTime(LocalTime.MIN)
+                .breakfastTime(LocalTime.MIN)
+                .lunchTime(LocalTime.NOON)
+                .dinnerTime(LocalTime.now())
+                .bedTime(LocalTime.MIDNIGHT)
+                .eatingDuration(LocalTime.of(2, 0))
+                .build();
+        memberA = memberRepository.save(memberA);
+
+
+        Survey surveyA = Survey.builder()
+                .date(LocalDate.of(2023,7,1))
+                .build();
+
+        surveyA = surveyRepository.save(surveyA);
+
+        SurveyContent surveyContentA = SurveyContent.builder()
+                .survey(surveyA)
+                .build();
+
+        surveyContentA = surveyContentRepository.save(surveyContentA);
+
+
+        contentStatusResultDto = ContentStatusResultDto.builder()
+                .selectedStatusChoices(Arrays.asList(ChoiceStatus.VOMITING, ChoiceStatus.COUGH))
+                .surveyContentId(surveyContentA.getId())
+                .build();
+
+        savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, memberA.getId());  // 원본 값 저장
+        System.out.println("savedContentStatusResult = " + savedContentStatusResult.getSelectedStatusChoices());
+        System.out.println("savedContentStatusResult = " + savedContentStatusResult.getMember().getNickname());
+
+        // when
+        System.out.println("survey.getDate() = " + survey.getDate());
+        System.out.println("membememememr = " + member.getId());
+        List<ContentStatusResultResponseDto> findStatusResultsByDateAndMember = contentStatusResultService.getStatusResultsByDateAndMember(surveyA.getDate(), memberA.getId());
+
+        // then
+        Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(findStatusResultsByDateAndMember.get(0).getMemberId());
+        System.out.println("findStatusResultsByDateAndMember = " + findStatusResultsByDateAndMember);
+
     }
 }
