@@ -573,6 +573,7 @@
                         android:layout_weight="2"
                         android:gravity="center"
                         android:hint="용량"
+                        android:inputType="number|numberDecimal"
                         android:textColor="#DDE6ED"
                         android:textSize="18sp" />
 
