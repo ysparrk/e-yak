@@ -133,6 +133,13 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    public MemberDto retrieveMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당 회원은 존재하지 않습니다."));
+
+        return MemberDto.from(member);
+    }
+
     @Transactional
     @Override
     public MemberDto updateMember(MemberUpdateDto memberUpdateDto, Long memberId) {
