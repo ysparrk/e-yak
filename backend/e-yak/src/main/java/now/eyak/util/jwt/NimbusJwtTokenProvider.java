@@ -149,15 +149,15 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
     @Override
     public void validateJwtWithJwk(String token, String jwkStr) throws JOSEException, ParseException {
         try {
-            log.debug("token: {}, jwkStr: {}", token, jwkStr);
+            log.debug("JWK를 이용하여 JWT 검증 시작... token: {}, jwkStr: {}", token, jwkStr);
 
             SignedJWT signedJWT = SignedJWT.parse(token);
-            log.debug("signedJWT: {}", signedJWT.getJWTClaimsSet().toString());
+            log.debug("검증 대상 토큰의 Calims signedJWT: {}", signedJWT.getJWTClaimsSet().toString());
             JWKSelector jwkSelector = new JWKSelector(JWKMatcher.forJWSHeader(signedJWT.getHeader()));
 
-            log.debug("JWKSet.parse() call");
+            log.debug("JWK String을 파싱...");
             JWKSet jwkSet = JWKSet.parse(jwkStr);
-            log.debug("jwkSet: {}", jwkSet.getKeys());
+            log.debug("JWK String 파싱 결과 jwkSet: {}", jwkSet.getKeys());
             JWK jwk = jwkSelector.select(jwkSet).get(0);
 
             PublicKey publicKey = jwk.toRSAKey().toPublicKey();
