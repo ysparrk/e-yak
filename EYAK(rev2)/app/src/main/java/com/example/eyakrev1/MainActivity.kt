@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.example.eyakrev1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -131,7 +130,7 @@ class MainActivity : AppCompatActivity() {
     fun gotoAddMedicine() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.mainFragment, MedicinAddFragment())
+            .replace(R.id.mainFragment, MedicineAddFragment())
             .commit()
     }
 
@@ -140,6 +139,5 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.mainFragment, MedicineAddResultFragment())
             .commit()
-
     }
 }

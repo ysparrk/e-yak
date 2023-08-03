@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 
-class MedicinAddFragment : Fragment() {
+class MedicineAddFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
@@ -17,7 +17,7 @@ class MedicinAddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val layout = inflater.inflate(R.layout.fragment_medicin_add, container, false)
+        val layout = inflater.inflate(R.layout.fragment_medicine_add, container, false)
 
         layout.findViewById<Button>(R.id.resultBtn).setOnClickListener {
             mainActivity!!.gotoAddMedicineRsult()
