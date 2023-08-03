@@ -71,10 +71,12 @@
                         android:id="@+id/medicineNameInput"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:ems="10"
+                        android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:hint="투여 약 이름 입력"
-                        android:inputType="text" />
+                        android:includeFontPadding="false"
+                        android:inputType="text"
+                        android:textColor="#757863" />
                 </FrameLayout>
 
                 <Space
@@ -343,7 +345,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:id="@+id/imageView16"
+                                android:id="@+id/medicineIcon1"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_glacier" />
@@ -353,7 +355,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView18"
+                                android:id="@+id/medicineIcon2"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_afterglow" />
@@ -363,7 +365,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView2"
+                                android:id="@+id/medicineIcon3"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_bougainvaillea" />
@@ -373,7 +375,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView19"
+                                android:id="@+id/medicineIcon4"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_orchidice" />
@@ -384,7 +386,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView20"
+                                android:id="@+id/medicineIcon5"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_silver" />
@@ -395,7 +397,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView21"
+                                android:id="@+id/medicineIcon6"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_pinklady" />
@@ -406,7 +408,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView8"
+                                android:id="@+id/medicineIcon7"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_pill_fusioncoral" />
@@ -430,7 +432,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:id="@+id/imageView22"
+                                android:id="@+id/medicineIcon8"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_roundpill_glacier" />
@@ -440,7 +442,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView23"
+                                android:id="@+id/medicineIcon9"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_roundpill_afterglow" />
@@ -450,7 +452,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView24"
+                                android:id="@+id/medicineIcon10"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_roundpill_bougainvillea" />
@@ -460,7 +462,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView25"
+                                android:id="@+id/medicineIcon11"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_roundpill_orchidice" />
@@ -470,7 +472,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView26"
+                                android:id="@+id/medicineIcon12"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_roundpill_silver" />
@@ -480,7 +482,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView27"
+                                android:id="@+id/medicineIcon13"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_roundpill_pinklady" />
@@ -490,7 +492,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView28"
+                                android:id="@+id/medicineIcon14"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_roundpill_fusioncoral" />
@@ -514,7 +516,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:id="@+id/imageView29"
+                                android:id="@+id/medicineIcon15"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_packagepill_glacier" />
@@ -524,7 +526,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView30"
+                                android:id="@+id/medicineIcon16"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_packagepill_afterglow" />
@@ -535,7 +537,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView31"
+                                android:id="@+id/medicineIcon17"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_packagepill_bougainvillea" />
@@ -545,7 +547,7 @@
                                 android:layout_height="match_parent" />
 
                             <ImageView
-                                android:id="@+id/imageView32"
+                                android:id="@+id/medicineIcon18"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_packagepill_orchidice" />
@@ -556,7 +558,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView33"
+                                android:id="@+id/medicineIcon19"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -568,7 +570,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView34"
+                                android:id="@+id/medicineIcon20"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_packagepill_pinklady" />
@@ -579,7 +581,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView35"
+                                android:id="@+id/medicineIcon21"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -604,7 +606,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:id="@+id/imageView36"
+                                android:id="@+id/medicineIcon22"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_outpill_glacier" />
@@ -615,7 +617,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView37"
+                                android:id="@+id/medicineIcon23"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -627,7 +629,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView38"
+                                android:id="@+id/medicineIcon24"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -639,7 +641,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView39"
+                                android:id="@+id/medicineIcon25"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -651,7 +653,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView40"
+                                android:id="@+id/medicineIcon26"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -663,7 +665,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView41"
+                                android:id="@+id/medicineIcon27"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -675,7 +677,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView42"
+                                android:id="@+id/medicineIcon28"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -699,7 +701,7 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:id="@+id/imageView43"
+                                android:id="@+id/medicineIcon29"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_potion_glacier" />
@@ -710,7 +712,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView44"
+                                android:id="@+id/medicineIcon30"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -722,7 +724,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView45"
+                                android:id="@+id/medicineIcon31"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -734,7 +736,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView46"
+                                android:id="@+id/medicineIcon32"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -746,7 +748,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView48"
+                                android:id="@+id/medicineIcon33"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -758,7 +760,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView49"
+                                android:id="@+id/medicineIcon34"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -770,7 +772,7 @@
                                 android:layout_weight="1" />
 
                             <ImageView
-                                android:id="@+id/imageView50"
+                                android:id="@+id/medicineIcon35"
                                 android:layout_width="90dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -895,7 +897,7 @@
                     android:weightSum="5">
 
                     <ImageView
-                        android:id="@+id/imageView3"
+                        android:id="@+id/wakeChk"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
@@ -910,14 +912,14 @@
                         android:weightSum="2">
 
                         <ImageView
-                            android:id="@+id/imageView54"
+                            android:id="@+id/breakfastBeforeChk"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                         <ImageView
-                            android:id="@+id/imageView53"
+                            android:id="@+id/breakfastAfterChk"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -933,14 +935,14 @@
                         android:weightSum="2">
 
                         <ImageView
-                            android:id="@+id/imageView6"
+                            android:id="@+id/lunchBeforeChk"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                         <ImageView
-                            android:id="@+id/imageView47"
+                            android:id="@+id/lunchAfterChk"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -957,14 +959,14 @@
                         android:weightSum="2">
 
                         <ImageView
-                            android:id="@+id/imageView51"
+                            android:id="@+id/dinnerBeforeChk"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                         <ImageView
-                            android:id="@+id/imageView52"
+                            android:id="@+id/dinnerAfterChk"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -972,7 +974,7 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/imageView55"
+                        android:id="@+id/bedChk"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
@@ -1012,8 +1014,8 @@
                 android:weightSum="10">
 
                 <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="2" />
 
                 <LinearLayout
@@ -1036,7 +1038,7 @@
                         android:background="#DDE6ED"
                         android:gravity="center"
                         android:hint="용량"
-                        android:inputType="number" />
+                        android:inputType="number|numberDecimal" />
 
                     <Space
                         android:layout_width="0dp"
@@ -1062,7 +1064,7 @@
 
                 <Space
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="2" />
             </LinearLayout>
 
