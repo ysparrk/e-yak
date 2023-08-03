@@ -1,0 +1,1109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MedicineAddFragment" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="복약 정보 추가"
+                android:textColor="#757863"
+                android:textSize="30sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/textView36"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="투여 약 이름"
+                android:textColor="#757863"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="6"
+                    android:background="#DDE6ED">
+
+                    <EditText
+                        android:id="@+id/medicineNameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center"
+                        android:hint="투여 약 이름 입력"
+                        android:includeFontPadding="false"
+                        android:inputType="text"
+                        android:textColor="#757863" />
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView38"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="질환 명"
+                android:textColor="#757863"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:background="#DDE6ED">
+
+                    <EditText
+                        android:id="@+id/diseaseNameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="질환 명 입력"
+                        android:inputType="text" />
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView40"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="투여 기간"
+                android:textColor="#757863"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:background="#DDE6ED">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="22">
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <EditText
+                            android:id="@+id/startYearInput"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="연"
+                            android:inputType="number" />
+
+                        <TextView
+                            android:id="@+id/textView42"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="/"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/startMonthInput"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="월"
+                            android:inputType="number" />
+
+                        <TextView
+                            android:id="@+id/textView43"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="/"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/startDayInput"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="일"
+                            android:inputType="number" />
+
+                        <TextView
+                            android:id="@+id/textView44"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:gravity="center"
+                            android:text="~"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/endYearInput"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="연"
+                            android:inputType="number" />
+
+                        <TextView
+                            android:id="@+id/textView45"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="/"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/endMonthInput"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="월"
+                            android:inputType="number" />
+
+                        <TextView
+                            android:id="@+id/textView46"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="/"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/endDayInput"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="일"
+                            android:inputType="number" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="투여 약 이모티콘"
+                android:textColor="#757863"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:orientation="vertical"
+                    android:weightSum="50">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/medicineIcon1"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pill_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon2"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pill_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon3"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pill_bougainvaillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon4"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pill_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon5"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pill_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon6"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pill_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon7"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_pill_fusioncoral" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/medicineIcon8"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon9"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon10"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon11"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon12"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon13"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon14"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_roundpill_fusioncoral" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/medicineIcon15"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon16"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon17"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon18"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon19"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_packagepill_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon20"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_packagepill_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon21"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_packagepill_fusioncoral" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/medicineIcon22"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_outpill_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon23"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon24"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon25"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon26"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon27"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon28"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outpill_fusioncoral" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/medicineIcon29"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_potion_glacier" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon30"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_afterglow" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon31"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_bougainvillea" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon32"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_orchidice" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon33"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_silver" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon34"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_pinklady" />
+
+                            <Space
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/medicineIcon35"
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_potion_fusioncoral" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="시간 설정"
+                android:textColor="#757863"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:orientation="vertical"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:id="@+id/textView49"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="일어나는 시간"
+                        android:textColor="#757863" />
+
+                    <TextView
+                        android:id="@+id/textView50"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="아침식사 시간(전/후)"
+                        android:textColor="#757863" />
+
+                    <TextView
+                        android:id="@+id/textView52"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="점심식사 시간(전/후)"
+                        android:textColor="#757863" />
+
+                    <TextView
+                        android:id="@+id/textView53"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="저녁식사 시간(전/후)"
+                        android:textColor="#757863" />
+
+                    <TextView
+                        android:id="@+id/textView54"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="잠자는 시간"
+                        android:textColor="#757863" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="#DDE6ED"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:weightSum="5">
+
+                    <ImageView
+                        android:id="@+id/wakeChk"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <ImageView
+                            android:id="@+id/breakfastBeforeChk"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                        <ImageView
+                            android:id="@+id/breakfastAfterChk"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <ImageView
+                            android:id="@+id/lunchBeforeChk"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                        <ImageView
+                            android:id="@+id/lunchAfterChk"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <ImageView
+                            android:id="@+id/dinnerBeforeChk"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                        <ImageView
+                            android:id="@+id/dinnerAfterChk"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/bedChk"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/textView55"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="1회 투여 양"
+                android:textColor="#757863"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:orientation="horizontal"
+                    android:weightSum="7">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:id="@+id/numberOfOneTimeInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="#DDE6ED"
+                        android:gravity="center"
+                        android:hint="용량"
+                        android:inputType="number|numberDecimal" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:id="@+id/unitTypeInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="#DDE6ED"
+                        android:gravity="center"
+                        android:hint="단위"
+                        android:inputType="text" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+
+                <Button
+                    android:id="@+id/resultBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:backgroundTint="#E3F2C1"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:includeFontPadding="false"
+                    android:text="결정이다!"
+                    android:textColor="#757863" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
