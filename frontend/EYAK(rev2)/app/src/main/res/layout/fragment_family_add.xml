@@ -121,7 +121,7 @@
                     android:background="#DDE6ED">
 
                     <EditText
-                        android:id="@+id/myDefineNameInput"
+                        android:id="@+id/myDefineNameAddSideInput"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="10"
@@ -171,20 +171,21 @@
                     android:layout_height="match_parent"
                     android:layout_weight="4"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="4">
 
                     <ImageView
-                        android:id="@+id/imageView2"
+                        android:id="@+id/entireScopeAddSideChk"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                     <TextView
                         android:id="@+id/textView75"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:includeFontPadding="false"
@@ -202,10 +203,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="4">
 
                     <ImageView
-                        android:id="@+id/imageView3"
+                        android:id="@+id/calendarScopeAddSideChk"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -215,7 +217,7 @@
                         android:id="@+id/textView76"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:includeFontPadding="false"
