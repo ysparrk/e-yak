@@ -1,0 +1,8 @@
+version: '3'
+services:
+  spring-boot-app:
+    image: docker-springboot
+    ports:
+      - "3333:8081"
+
+    container_name: springboot
