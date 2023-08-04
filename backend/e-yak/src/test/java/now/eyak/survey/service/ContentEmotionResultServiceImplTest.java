@@ -7,7 +7,6 @@ import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentEmotionResultDto;
 import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
-import now.eyak.survey.dto.response.ContentTextResultResponseDto;
 import now.eyak.survey.enumeration.ChoiceEmotion;
 import now.eyak.survey.repository.ContentEmotionResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +45,7 @@ class ContentEmotionResultServiceImplTest {
     Survey survey;
     SurveyContent surveyContent;
     ContentEmotionResultDto contentEmotionResultDto;
-    ContentTextResultResponseDto contentTextResultResponseDto;
+
 
     @BeforeEach
     void beforeEach() {
@@ -86,7 +84,6 @@ class ContentEmotionResultServiceImplTest {
 
     @Test
     @Transactional
-    @Rollback(false)
     void saveEmotionSurveyResult() {
         // given
 
@@ -102,7 +99,6 @@ class ContentEmotionResultServiceImplTest {
 
     @Test
     @Transactional
-    @Rollback(false)
     void updateEmotionSurveyResult() {
         // given
         ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId()); // 원본 값 저장
@@ -126,7 +122,6 @@ class ContentEmotionResultServiceImplTest {
 
     @Test
     @Transactional
-    @Rollback(false)
     void deleteEmotionSurveyResult() {
         // given
         ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());// 원본 값 저장
@@ -143,7 +138,6 @@ class ContentEmotionResultServiceImplTest {
     @DisplayName("Emotion GET")
     @Test
     @Transactional
-    @Rollback(false)
     void getEmotionResultsByDateAndMember() {
         // given
         ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());// 원본 값 저장
@@ -181,7 +175,7 @@ class ContentEmotionResultServiceImplTest {
                 .build();
 
 
-        savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, memberA.getId());// 원본 값 저장
+        savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, memberA.getId());// 새로운 값 저장
         System.out.println("savedContentEmotionResult.getChoiceEmotion() = " + savedContentEmotionResult.getChoiceEmotion());
         System.out.println("savedContentEmotionResult.getMember().getNickname() = " + savedContentEmotionResult.getMember().getNickname());
 
