@@ -64,3 +64,22 @@ data class ChangeAccountInfoResponseModel(
     var eatingDuration: String,
     var oauthId: String,
 )
+
+data class FollowRequestBodyModel(
+    var followerScope: String,
+    var followeeNickname: String,
+    var customName: String,
+)
+
+data class PrescriptionBodyModel(   // 복약 정보 등록 바디
+    var icd: String,
+    var kr_name: String,
+    var eng_name: String,
+    var custom_name: String,
+    var start_date_time: String,
+    var end_date_time: String,
+    var medicine_routines: MutableList<String>,
+    var medicine_shape: Int,
+    var medicine_dose: Float,
+    var unit: String,
+)
