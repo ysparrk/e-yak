@@ -36,9 +36,9 @@ public class FollowRequestServiceImpl implements FollowRequestService {
     @Transactional
     @Override
     public FollowRequest insertFollowRequest(FollowRequestDto followRequestDto, Long followerId) {
-        Long followeeId = followRequestDto.getFolloweeId();
+        String followeeNickname = followRequestDto.getFolloweeNickname();
 
-        Member followee = getFollowee(followeeId);
+        Member followee = memberRepository.findByNickname(followeeNickname).orElseThrow(() -> new NoSuchMemberException("닉네임과 일치하는 회원이 존재하지 않습니다."));
         Member follower = getFollower(followerId);
 
         FollowRequest followRequest = FollowRequest.builder()
