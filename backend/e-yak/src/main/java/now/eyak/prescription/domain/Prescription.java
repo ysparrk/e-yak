@@ -30,8 +30,8 @@ public class Prescription {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Integer iotLocation; // 약통 칸 번호
-    private Float medicineDose; // 1회 투여 개수
     private Integer medicineShape; // 이모지 번호
+    private Float medicineDose; // 1회 투여 개수
     private String unit; // 투여 단위
     @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = new ArrayList<>();
@@ -51,11 +51,12 @@ public class Prescription {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.iotLocation = iotLocation;
-        this.medicineDose = medicineDose;
         this.medicineShape = medicineShape;
+        this.medicineDose = medicineDose;
         this.unit = unit;
         this.member = member;
     }
+
     public void add(PrescriptionMedicineRoutine prescriptionMedicineRoutine) {
         prescriptionMedicineRoutines.add(prescriptionMedicineRoutine);
         prescriptionMedicineRoutine.setPrescription(this);
