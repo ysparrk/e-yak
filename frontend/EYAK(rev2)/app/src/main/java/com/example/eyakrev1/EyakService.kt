@@ -49,7 +49,13 @@ interface EyakService {
     fun followRequest(
         @Path("followerId") followerId: Int,
         @Header("Authorization") Authorization: String,
-        @Body params: followRequestBodyModel,
+        @Body params: FollowRequestBodyModel,
+    ): Call<Void>
+
+    @POST("/api/v1/prescriptions")  // 복약 정보 등록
+    fun prescription(
+        @Header("Authorization") Authorization: String,
+        @Body params: PrescriptionBodyModel,
     ): Call<Void>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.

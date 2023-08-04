@@ -20,7 +20,7 @@ class SignupActivity : AppCompatActivity() {
         ActivitySignupBinding.inflate(layoutInflater)
     }
 
-    val api = EyakService.create()
+    private val api = EyakService.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -52,7 +52,6 @@ class FamilyAddFragment : Fragment() {
                         }
                     }
                 }
-
                 override fun onFailure(call: Call<Boolean>, t: Throwable) {
 
                 }
@@ -85,7 +84,7 @@ class FamilyAddFragment : Fragment() {
                 val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
                 val serverUserId = pref.getInt("SERVER_USER_ID", -1)  // 팔로워 아이디
                 val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
-                val data = followRequestBodyModel(
+                val data = FollowRequestBodyModel(
                     followerScope = if(scope == 1) "ALL" else if(scope == 2) "CALENDAR" else "",
                     followeeNickname = layout.findViewById<EditText>(R.id.nicknameInput).text.toString(),
                     customName = layout.findViewById<EditText>(R.id.myDefineNameAddSideInput).text.toString(),
@@ -109,7 +108,6 @@ class FamilyAddFragment : Fragment() {
                     }
                 })
             }
-
         }
 
         return layout

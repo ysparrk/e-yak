@@ -2,7 +2,6 @@ package com.example.eyakrev1
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
-import java.time.LocalDate
+import androidx.preference.PreferenceManager
 
 class MedicineAddResultFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
-    private var selectIcon: Int = 5
+    private val api = EyakService.create()
+
+    private var selectIcon: Int = 0
 
     private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
 
@@ -107,7 +109,60 @@ class MedicineAddResultFragment : Fragment() {
 
         val layout = inflater.inflate(R.layout.fragment_medicine_add_result, container, false)
 
-        layout.findViewById<Button>(R.id.chkcomplete).setOnClickListener {
+        val startYear: String = "20${layout.findViewById<TextView>(R.id.startYearInputResult).text.toString()}"
+        val startMonth: String = if(layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString()
+        val startDay: String = if(layout.findViewById<TextView>(R.id.startDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.startDayInputResult).text.toString()
+        val endYear: String = "20${layout.findViewById<TextView>(R.id.endYearInputResult).text.toString()}"
+        val endMonth: String = if(layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString()
+        val endDay: String = if(layout.findViewById<TextView>(R.id.endDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.endDayInputResult).text.toString()
+
+        val medicineRoutines: MutableList<String> = mutableListOf()
+
+        if(timeChk[0]) medicineRoutines.add("BED_AFTER")
+        if(timeChk[1]) medicineRoutines.add("BREAKFAST_BEFORE")
+        if(timeChk[2]) medicineRoutines.add("BREAKFAST_AFTER")
+        if(timeChk[3]) medicineRoutines.add("LUNCH_BEFORE")
+        if(timeChk[4]) medicineRoutines.add("LUNCH_AFTER")
+        if(timeChk[5]) medicineRoutines.add("DINNER_BEFORE")
+        if(timeChk[6]) medicineRoutines.add("DINNER_AFTER")
+        if(timeChk[7]) medicineRoutines.add("BED_BEFORE")
+
+
+        layout.findViewById<Button>(R.id.chkComplete).setOnClickListener {
+            val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+            val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+            val data = PrescriptionBodyModel(
+                icd = "",
+                kr_name = layout.findViewById<TextView>(R.id.diseaseNameInputResult).text.toString(),
+                eng_name = "",
+                custom_name = layout.findViewById<TextView>(R.id.medicineNameInputResult).text.toString(),
+                start_date_time = "${startYear}-${startMonth}-${startDay}T00:00:00",
+                end_date_time = "${endYear}-${endMonth}-${endDay}T00:00:00",
+                medicine_routines = medicineRoutines,
+                medicine_shape = selectIcon,
+                medicine_dose = layout.findViewById<TextView>(R.id.numberOfOneTimeInputResult).text.toString().toFloat(),
+                unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),
+            )
+
+            api.prescription(Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if(response.code() == 201) {
+                        Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                        mainActivity!!.gotoEditFamily()
+                    }
+                    else if(response.code() == 401) {
+                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                    }
+                    else if(response.code() == 400) {
+                        Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                }
+            })
+
+
             mainActivity!!.gotoMedicine()
         }
 
