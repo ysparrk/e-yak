@@ -92,7 +92,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainFragment"
-        android:name="com.example.eyakrev1.AlarmFragment"
+        android:name="a103.dev.eyakrev1.AlarmFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/BottomLinearLayout"

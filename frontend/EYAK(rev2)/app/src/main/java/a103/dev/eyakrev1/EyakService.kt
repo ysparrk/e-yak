@@ -1,0 +1,75 @@
+package a103.dev.eyakrev1
+
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.http.DELETE
+import retrofit2.http.Header
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+interface EyakService {
+
+    // https://stickode.tistory.com/43
+    @POST("/api/v1/auth/signup")
+    fun signUp(
+        @Body params: a103.dev.eyakrev1.SignUpBodyModel,
+    ): Call<Void>
+
+    @POST("/api/v1/auth/signin")
+    fun signIn(
+        @Body params: a103.dev.eyakrev1.LoginBodyModel,
+    ): Call<a103.dev.eyakrev1.LoginResponseModel>
+
+    @GET("/api/v1/auth/duplication")
+    fun checkDuplicate(
+        @Query("nickname") nickname: String,
+    ): Call<Boolean>
+
+    @DELETE("/api/v1/members/{memberId}")
+    fun deleteAccount(
+        @Path("memberId") memberId: Int,
+        @Header("Authorization") Authorization: String,
+    ): Call<Void>
+
+    @PUT("/api/v1/members/{memberId}")
+    fun changeAccountInfo(
+        @Path("memberId") memberId: Int,
+        @Body params: a103.dev.eyakrev1.ChangeAccountInfoBodyModel,
+        @Header("Authorization") Authorization: String,
+    ): Call<a103.dev.eyakrev1.ChangeAccountInfoResponseModel>
+
+    @POST("/api/v1/members/{followerId}/follow-requests")
+    fun followRequest(
+        @Path("followerId") followerId: Int,
+        @Header("Authorization") Authorization: String,
+        @Body params: a103.dev.eyakrev1.FollowRequestBodyModel,
+    ): Call<Void>
+
+    @POST("/api/v1/prescriptions")  // 복약 정보 등록
+    fun prescription(
+        @Header("Authorization") Authorization: String,
+        @Body params: a103.dev.eyakrev1.PrescriptionBodyModel,
+    ): Call<Void>
+
+    companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
+        private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소
+
+        fun create(): EyakService {
+            val gson :Gson =   GsonBuilder().setLenient().create();
+
+            return Retrofit.Builder()
+                .baseUrl(BASE_URL)
+//                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+                .create(EyakService::class.java)
+        }
+    }
+}
