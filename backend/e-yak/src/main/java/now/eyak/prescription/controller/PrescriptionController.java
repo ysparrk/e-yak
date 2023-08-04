@@ -3,6 +3,7 @@ package now.eyak.prescription.controller;
 import lombok.RequiredArgsConstructor;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.MedicineRoutineResponseDto;
+import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
 import now.eyak.prescription.service.PrescriptionService;
@@ -72,5 +73,12 @@ public class PrescriptionController {
         }).toList();
 
         return ResponseEntity.ok(medicineRoutineResponseDtoList);
+    }
+
+    @PutMapping("/{prescriptionId}/routines")
+    public ResponseEntity putMedicineRoutines(@RequestBody MedicineRoutineUpdateDto medicineRoutineUpdateDto, @PathVariable Long prescriptionId, @AuthenticationPrincipal Long memberId) {
+        prescriptionService.updatePrescriptionMedicineRoutinesById(medicineRoutineUpdateDto, prescriptionId, memberId);
+
+        return ResponseEntity.ok().build();
     }
 }
