@@ -1,14 +1,16 @@
 package now.eyak.prescription.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
-import now.eyak.routine.domain.MedicineRoutine;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import now.eyak.member.domain.Member;
+import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +27,11 @@ public class Prescription {
     private String icd;
     private String krName;
     private String engName;
-    // TODO: 커스텀 아이콘 정보 추가
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Integer iotLocation; // 약통 칸 번호
-    private Integer medicineDose; // 1회 투여 개수
+    private Float medicineDose; // 1회 투여 개수
+    private Integer medicineShape; // 이모지 번호
     private String unit; // 투여 단위
     @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = new ArrayList<>();
@@ -41,7 +43,7 @@ public class Prescription {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @Builder
-    public Prescription(String customName, String icd, String krName, String engName, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer iotLocation, Integer medicineDose, String unit, List<MedicineRoutine> medicineRoutines, Member member) {
+    public Prescription(String customName, String icd, String krName, String engName, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer iotLocation, Float medicineDose, Integer medicineShape, String unit, List<MedicineRoutine> medicineRoutines, Member member) {
         this.customName = customName;
         this.icd = icd;
         this.krName = krName;
@@ -50,6 +52,7 @@ public class Prescription {
         this.endDateTime = endDateTime;
         this.iotLocation = iotLocation;
         this.medicineDose = medicineDose;
+        this.medicineShape = medicineShape;
         this.unit = unit;
         this.member = member;
     }

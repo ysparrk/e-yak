@@ -15,28 +15,29 @@ import java.util.List;
 @Builder
 @ToString
 public class PrescriptionDto {
-    private String customName;
     private String icd;
+    private String customName;
     private String krName;
     private String engName;
-    // TODO: 커스텀 아이콘 정보 추가
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private Integer iotLocation; // 약통 칸 번호
-    private Integer medicineDose; // 1회 투여 개수
-    private String unit; // 투여 단위
     private List<Routine> routines;
+    private Integer iotLocation; // 약통 칸 번호
+    private Float medicineDose; // 1회 투여 개수
+    private Integer medicineShape; // 이모지 번호
+    private String unit; // 투여 단위
 
     public Prescription toEntity() {
         return Prescription.builder()
-                .customName(customName)
                 .icd(icd)
+                .customName(customName)
                 .krName(krName)
                 .engName(engName)
                 .startDateTime(startDateTime)
                 .endDateTime(endDateTime)
                 .iotLocation(iotLocation)
                 .medicineDose(medicineDose)
+                .medicineShape(medicineShape)
                 .unit(unit)
                 .build();
     }
@@ -50,6 +51,7 @@ public class PrescriptionDto {
         prescription.setEndDateTime(endDateTime);
         prescription.setIotLocation(iotLocation);
         prescription.setMedicineDose(medicineDose);
+        prescription.setMedicineShape(medicineShape);
         prescription.setUnit(unit);
     }
 

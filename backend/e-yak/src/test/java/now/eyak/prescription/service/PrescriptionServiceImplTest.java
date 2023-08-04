@@ -73,7 +73,7 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
                 .routines(routines)
                 .build();
@@ -99,7 +99,7 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
                 .routines(routines)
                 .build();
@@ -128,7 +128,7 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
                 .routines(routines)
                 .build();
@@ -154,7 +154,7 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
                 .routines(routines)
                 .build();
@@ -185,7 +185,7 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
                 .routines(routines)
                 .build();
@@ -212,7 +212,7 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
                 .routines(routines)
                 .build();
