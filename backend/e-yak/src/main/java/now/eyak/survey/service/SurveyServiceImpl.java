@@ -1,4 +1,9 @@
 package now.eyak.survey.service;
 
-public class SurveyServiceImpl implements SurveyService{
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class SurveyServiceImpl implements SurveyService {
 }
