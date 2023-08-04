@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'a103.dev.eyakrev1'
+    namespace 'com.example.eyakrev1'
     compileSdk 33
 
     defaultConfig {
-        applicationId "a103.dev.eyakrev1"
+        applicationId "com.example.eyakrev1"
         minSdk 26
         targetSdk 33
         versionCode 1
