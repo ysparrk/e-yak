@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     private fun deviceTabClick() {
         binding.titleView.text = "약통이:약"
         supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFragment, DeviceFragment())
+            .replace(R.id.mainFragment, DeviceRegisterFragment())
             .commit()
         changeTabColor(3)
     }
