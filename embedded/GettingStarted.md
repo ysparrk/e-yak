@@ -18,11 +18,13 @@ https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads
     * 1:1 전송, 연결확인
     * 대용량 데이터 전송 가능
     * 최대 3MB/sec
+    * 안정적
 2. Blue tooth Low Energy mode
     * 1:1 및 1:다 broadcasting 
     * 적은 데이터 전송
     * 저전력
     * 최대 2MB/sec
+    * 불안정
 
 [각종 튜토리얼 있는 사이트](https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/)
 
@@ -254,7 +256,7 @@ temp: 12<br>
 humid: 2147483647<br>
 temp: 214748364<br>
 
--> 사용할 만한 결과 안나옴
+-> 결과 불안정. 정상 작동은 한다.
 ### 2. 진동모터
 ```arduino
 #define VIBPIN 21
