@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    fun gotoAddMedicineRsult() {
+    fun gotoAddMedicineResult() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainFragment, MedicineAddResultFragment())

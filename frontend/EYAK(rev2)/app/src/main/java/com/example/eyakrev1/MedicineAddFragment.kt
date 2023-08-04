@@ -82,7 +82,7 @@ class MedicineAddFragment : Fragment() {
 
             setFragmentResult("medicineAddData", resultBundle)
 
-            mainActivity!!.gotoAddMedicineRsult()
+            mainActivity!!.gotoAddMedicineResult()
         }
 
         for(iconIdIterator in 1..35) {
