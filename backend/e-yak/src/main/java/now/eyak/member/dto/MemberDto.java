@@ -13,7 +13,6 @@ import java.time.LocalTime;
 public class MemberDto {
     private Long id;
     private String providerName; // ex) google, naver, kakao
-    private String oAuthId; // Google, Naver, Kakao에서 로그인시 전달되는 토큰
     private String refreshToken;
     private String nickname;
 
@@ -28,10 +27,9 @@ public class MemberDto {
     private LocalTime eatingDuration;
 
     @Builder
-    public MemberDto(Long id, String providerName, String oAuthId, String refreshToken, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt, LocalTime wakeTime, LocalTime breakfastTime, LocalTime lunchTime, LocalTime dinnerTime, LocalTime bedTime, LocalTime eatingDuration) {
+    public MemberDto(Long id, String providerName, String refreshToken, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt, LocalTime wakeTime, LocalTime breakfastTime, LocalTime lunchTime, LocalTime dinnerTime, LocalTime bedTime, LocalTime eatingDuration) {
         this.id = id;
         this.providerName = providerName;
-        this.oAuthId = oAuthId;
         this.refreshToken = refreshToken;
         this.nickname = nickname;
         this.createdAt = createdAt;
@@ -48,7 +46,6 @@ public class MemberDto {
         return MemberDto.builder()
                 .id(member.getId())
                 .providerName(member.getProviderName())
-                .oAuthId(member.getProviderId())
                 .refreshToken(member.getRefreshToken())
                 .nickname(member.getNickname())
                 .createdAt(member.getCreatedAt())

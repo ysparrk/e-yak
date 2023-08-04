@@ -1,10 +1,11 @@
 package now.eyak.member.domain;
 
-import java.util.HashMap;
-import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @ConfigurationProperties(prefix = "oauth2")
@@ -14,6 +15,6 @@ public class OAuthProperties {
     @Getter
     @Setter
     public static class Provider {
-        private String userInfoUri;
+        private String jwks;
     }
 }
