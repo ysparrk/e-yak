@@ -29,6 +29,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private final MedicineRoutineRepository medicineRoutineRepository;
     private final PrescriptionMedicineRoutineRepository prescriptionMedicineRoutineRepository;
 
+    /**
+     * 복약 정보를 등록한다.
+     *
+     * @param prescriptionDto
+     * @param memberId
+     * @return
+     */
     @Transactional
     @Override
     public Prescription insert(PrescriptionDto prescriptionDto, Long memberId) {
@@ -59,6 +66,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return prescriptionRepository.findAllByMember(member);
     }
 
+    /**
+     * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환한다.
+     *
+     * @param memberId
+     * @param dateTime
+     * @return
+     */
     @Override
     public List<Prescription> findAllByMemberIdBetweenDate(Long memberId, LocalDateTime dateTime) {
         Member member = getMemberOrThrow(memberId);
@@ -66,6 +80,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return prescriptionRepository.findAllByMemberAndStartDateTimeLessThanEqualAndEndDateTimeGreaterThanEqual(member, dateTime, dateTime);
     }
 
+    /**
+     * 사용자(memberId)의 복약 정보(prescriptionId)를 반환한다.
+     *
+     * @param prescriptionId
+     * @param memberId
+     * @return
+     */
     @Transactional
     @Override
     public Prescription findById(Long prescriptionId, Long memberId) {
@@ -76,6 +97,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return prescription;
     }
 
+    /**
+     * 사용자(memberId)의 복약 정보(prescriptionId)를 수정한다.
+     *
+     * @param prescriptionId
+     * @param prescriptionDto
+     * @param memberId
+     * @return
+     */
     @Transactional
     @Override
     public Prescription update(Long prescriptionId, PrescriptionDto prescriptionDto, Long memberId) {
@@ -98,17 +127,27 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return prescriptionRepository.save(prescription);
     }
 
+    /**
+     * 사용자(memberId)의 복약 정보(prescriptionId)를 삭제한다.
+     *
+     * @param prescriptionId
+     * @param memberId
+     */
     @Transactional
     @Override
     public void delete(Long prescriptionId, Long memberId) {
         Member member = getMemberOrThrow(memberId);
 
-//        Prescription prescription = prescriptionRepository.findByIdAndMember(prescriptionId, member).orElseThrow(() -> new NoSuchElementException("해당 하는 복약 정보가 존재하지 않습니다."));
         prescriptionRepository.deleteByIdAndMember(prescriptionId, member);
-
-//        log.debug("prescription: {}", prescription.getPrescriptionMedicineRoutines());
     }
 
+    /**
+     * 사용자(memberId)의 복약 정보(prescriptionId)의 복약 루틴을 반환한다.
+     *
+     * @param prescriptionId
+     * @param memberId
+     * @return
+     */
     @Override
     public List<PrescriptionMedicineRoutine> findPrescriptionMedicineRoutinesById(Long prescriptionId, Long memberId) {
         Member member = getMemberOrThrow(memberId);

@@ -69,11 +69,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /**
-     * 회원가입을 진행한다. 인자로 받은 Access Token 으로 Authorization Server 에 유저정보를 요청한다. 해당 유저정보가 DB에 없다면 회원가입을 진행한다. 있다면 예외를
+     * 회원가입을 진행한다. 인자로 받은 ID Token을 검증한다. 해당 유저정보가 DB에 없다면 회원가입을 진행한다. 있다면 예외를
      * 발생시킨다.
      *
-     * @param signUpDto Access Token 과 이용약관 동의 목록을 가진다.
-     * @return OAuthSignUpResponseDto 성공을 나타내는 "success"를 가진다.
+     * @param signUpDto ID Token과 과 이용약관 동의 목록을 가진다.
+     * @return
      */
     @Transactional
     @Override
@@ -108,6 +108,12 @@ public class MemberServiceImpl implements MemberService {
         return savedMember;
     }
 
+    /**
+     * Refresh Token으로 Access Token을 재발급한다.
+     *
+     * @param reissueDto
+     * @return
+     */
     @Transactional
     @Override
     public RefreshResponseDto issueAccessTokenByRefreshToken(ReissueDto reissueDto) {
