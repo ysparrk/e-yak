@@ -7,6 +7,7 @@
     tools:context=".FamilyEditFragment" >
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -32,14 +33,26 @@
             android:id="@+id/familyEditListView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="89" >
+            android:layout_weight="89"
+            android:divider="#FFFFFF">
 
         </ListView>
 
-        <Button
-            android:id="@+id/addFamily"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="추가하기" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/addFamily"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="추가하기"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/acceptFamilyBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="수락하기"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
