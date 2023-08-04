@@ -174,6 +174,7 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
             }
 
             if (jwtClaimsSet.getExpirationTime().before(new Date())) {
+                log.info("만료시각을 검증중... now: {}, exp: {}", new Date(), jwtClaimsSet.getExpirationTime());
                 throw new IllegalArgumentException("idToken이 만료되었습니다.");
             }
         } catch (JOSEException|ParseException e) {
