@@ -147,4 +147,11 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.mainFragment, MedicineFragment())
             .commit()
     }
+
+    fun gotoAcceptFamily() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragment, FamilyAcceptFragment())
+            .commit()
+    }
 }

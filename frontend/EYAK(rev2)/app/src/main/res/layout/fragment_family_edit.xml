@@ -41,7 +41,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/addFamily"
+        android:id="@+id/addFamilyBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="추가하기"
