@@ -21,15 +21,16 @@ public class SignUpDto {
     private LocalTime bedTime;
     private LocalTime eatingDuration;
 
-    public Member setMemberFields(Member member) {
-        member.setNickname(this.nickname);
-        member.setWakeTime(this.wakeTime);
-        member.setBreakfastTime(this.breakfastTime);
-        member.setLunchTime(this.lunchTime);
-        member.setDinnerTime(this.dinnerTime);
-        member.setBedTime(this.bedTime);
-        member.setEatingDuration(this.eatingDuration);
-
-        return member;
+    public Member toEntity() {
+        return Member.builder()
+                .providerName(providerName)
+                .nickname(nickname)
+                .wakeTime(wakeTime)
+                .breakfastTime(breakfastTime)
+                .lunchTime(lunchTime)
+                .dinnerTime(dinnerTime)
+                .bedTime(bedTime)
+                .eatingDuration(eatingDuration)
+                .build();
     }
 }
