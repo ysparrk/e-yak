@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FamilyAddFragment">
+    tools:context=".FamilyAcceptFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,16 +17,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView56"
+                android:id="@+id/textView77"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:fontFamily="@font/tmoney_bold"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:text="가족 추가 하기"
+                android:text="가족 수락 하기"
                 android:textColor="#757863"
                 android:textSize="30sp" />
 
@@ -35,13 +35,13 @@
                 android:layout_height="10dp" />
 
             <TextView
-                android:id="@+id/textView57"
+                android:id="@+id/textView78"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:fontFamily="@font/tmoney_bold"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:text="닉네임"
+                android:text="닉네임 / 공개 범위"
                 android:textColor="#757863"
                 android:textSize="20sp" />
 
@@ -60,23 +60,47 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2" />
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="6"
-                    android:background="#DDE6ED">
+                    android:orientation="horizontal"
+                    android:weightSum="7">
 
-                    <EditText
-                        android:id="@+id/nicknameInput"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/nicknameRequestSideInput"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="3"
                         android:fontFamily="@font/tmoney_regular"
-                        android:gravity="center"
-                        android:hint="닉네임 입력"
+                        android:gravity="center|center_horizontal"
                         android:includeFontPadding="false"
-                        android:inputType="text"
+                        android:text="닉네임"
+                        android:textColor="#757863"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/textView80"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center|center_horizontal"
+                        android:text="/"
                         android:textColor="#757863" />
-                </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/requestScope"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:gravity="center|center_horizontal"
+                        android:includeFontPadding="false"
+                        android:text="공개 범위"
+                        android:textColor="#757863"
+                        android:textSize="18sp" />
+                </LinearLayout>
 
                 <Space
                     android:layout_width="0dp"
@@ -86,42 +110,10 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-                <Button
-                    android:id="@+id/nickNameChkBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:backgroundTint="#E3F2C1"
-                    android:fontFamily="@font/tmoney_bold"
-                    android:includeFontPadding="false"
-                    android:text="닉네임 확인"
-                    android:textColor="#757863" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
                 android:layout_height="20dp" />
 
             <TextView
-                android:id="@+id/textView62"
+                android:id="@+id/textView82"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:fontFamily="@font/tmoney_bold"
@@ -153,7 +145,7 @@
                     android:background="#DDE6ED">
 
                     <EditText
-                        android:id="@+id/myDefineNameAddSideInput"
+                        android:id="@+id/myDefineNameAcceptSideInput"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="10"
@@ -173,7 +165,7 @@
                 android:layout_height="20dp" />
 
             <TextView
-                android:id="@+id/textView73"
+                android:id="@+id/textView83"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:fontFamily="@font/tmoney_bold"
@@ -207,14 +199,14 @@
                     android:weightSum="4">
 
                     <ImageView
-                        android:id="@+id/entireScopeAddSideChk"
+                        android:id="@+id/entireScopeAcceptSideChk"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                     <TextView
-                        android:id="@+id/textView75"
+                        android:id="@+id/textView84"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="3"
@@ -223,7 +215,6 @@
                         android:includeFontPadding="false"
                         android:text="전체 공개"
                         android:textColor="#757863" />
-
                 </LinearLayout>
 
                 <Space
@@ -235,27 +226,27 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:weightSum="4">
 
                     <ImageView
-                        android:id="@+id/calendarScopeAddSideChk"
+                        android:id="@+id/entireScopeAcceptSideChk3"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                     <TextView
-                        android:id="@+id/textView76"
+                        android:id="@+id/textView85"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="3"
                         android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:includeFontPadding="false"
-                        android:text="달력 공개"
+                        android:text="전체 공개"
                         android:textColor="#757863" />
-
                 </LinearLayout>
 
                 <Space
@@ -271,7 +262,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -281,14 +271,14 @@
                     android:layout_weight="2" />
 
                 <Button
-                    android:id="@+id/requestBtn"
+                    android:id="@+id/acceptBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:backgroundTint="#E3F2C1"
                     android:fontFamily="@font/tmoney_bold"
                     android:includeFontPadding="false"
-                    android:text="가족 요청 보내기"
+                    android:text="가족 요청 수락하기"
                     android:textColor="#757863" />
 
                 <Space

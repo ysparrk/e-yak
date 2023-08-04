@@ -151,5 +151,4 @@ class MedicineAddFragment : Fragment() {
 
         mainActivity = context as MainActivity
     }
-
 }

@@ -113,38 +113,45 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.mainFragment, MedicineDetailFragment()).commit()
     }
 
-    fun gotoEditFamily() {
+    public fun gotoEditFamily() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainFragment, FamilyEditFragment())
             .commit()
     }
 
-    fun gotoAddFamily() {
+    public fun gotoAddFamily() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainFragment, FamilyAddFragment())
             .commit()
     }
 
-    fun gotoAddMedicine() {
+    public fun gotoAddMedicine() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainFragment, MedicineAddFragment())
             .commit()
     }
 
-    fun gotoAddMedicineResult() {
+    public fun gotoAddMedicineResult() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainFragment, MedicineAddResultFragment())
             .commit()
     }
 
-    fun gotoMedicine() {
+    public fun gotoMedicine() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainFragment, MedicineFragment())
+            .commit()
+    }
+
+    public fun gotoAcceptFamily() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragment, FamilyAcceptFragment())
             .commit()
     }
 }

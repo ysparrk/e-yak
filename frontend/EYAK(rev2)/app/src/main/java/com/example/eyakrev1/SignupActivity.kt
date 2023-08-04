@@ -33,8 +33,8 @@ class SignupActivity : AppCompatActivity() {
         binding.nickNameChk.setOnClickListener {
             // 서버로부터 중복체크 요청을 보내고 확인을 받아야함 => 중복되지 않았을 경우에만 true로 바꿔주자
 
-            api.checkDuplicate(nickname = binding.nickNameInput.text.toString()).enqueue(object: Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+            api.checkDuplicate(nickname = binding.nickNameInput.text.toString()).enqueue(object: Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                     Log.d("log",response.toString())
                     Log.d("log", response.body().toString())
 
@@ -42,7 +42,7 @@ class SignupActivity : AppCompatActivity() {
                     if (response.code() == 400) {
                         Log.d("log","중복체크 실패")
                     } else if (response.code() == 200) {
-                        if (response.body().toString() == "true") { // if true => 중복인거
+                        if (response.body() == true) { // if true => 중복인거
                             Toast.makeText(getApplicationContext(), "이미 사용중인 닉네임입니다", Toast.LENGTH_SHORT).show()
                         } else { // if false
                             isDuplicateChecked = true
@@ -51,7 +51,7 @@ class SignupActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
                     // 실패
                     Log.d("log",t.message.toString())
                     Log.d("log","fail")
@@ -147,12 +147,12 @@ class SignupActivity : AppCompatActivity() {
 
         api.signUp(data).enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                Log.d("log",response.toString())
-//                Log.d("log", response.body().toString())
+                Log.d("log",response.toString())
+                Log.d("log", response.body().toString())
 
                 // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
                 if (response.code() == 400) {
-//                    Log.d("log","회원가입 실패")
+                    Log.d("log","회원가입 실패")
                     Toast.makeText(getApplicationContext(), "이미 가입하셨거나, 유효하지 않은 토큰입니다", Toast.LENGTH_SHORT).show()
                 } else if (response.code() == 201) {
                     // 회원 가입에 성공했으니 Login Activity로 이동 => sharedPreference 이미 있으니, 자동 로그인 시도할거 => 자동 로그인에 성공하면, Main Activity로 이동할테니

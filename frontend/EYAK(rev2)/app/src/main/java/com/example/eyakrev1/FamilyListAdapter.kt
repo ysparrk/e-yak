@@ -29,7 +29,7 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         val view: View = LayoutInflater.from(context).inflate(R.layout.family_tab_list_view_item, null)
 
         /* 위에서 생성된 view를 family_tab_list_view_item.xml 파일의 각 View와 연결하는 과정이다. */
-        val familyListIconImageView = view.findViewById<ImageView>(R.id.family_list_icon)
+//        val familyListIconImageView = view.findViewById<ImageView>(R.id.family_list_icon)
         val familyListNameTextView = view.findViewById<TextView>(R.id.family_list_name)
         val familyListNicknameTextView = view.findViewById<TextView>(R.id.family_list_nickname)
         val familyDetailButton = view.findViewById<Button>(R.id.family_detail_button)
@@ -44,8 +44,8 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
             view.setBackgroundColor(Color.parseColor("#F8FCF8"))
         }
 
-        val resourceId = context.resources.getIdentifier(family.familyIcon, "drawable", context.packageName)
-        familyListIconImageView.setImageResource(resourceId)
+//        val resourceId = context.resources.getIdentifier(family.familyIcon, "drawable", context.packageName)
+//        familyListIconImageView.setImageResource(resourceId)
         familyListNameTextView.text = family.familyName
         familyListNicknameTextView.text = family.familyNickname
 
