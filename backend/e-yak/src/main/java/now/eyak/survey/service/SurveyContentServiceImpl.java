@@ -39,13 +39,7 @@ public class SurveyContentServiceImpl implements SurveyContentService {
         List<ContentStatusResultResponseDto> statusResults = contentStatusResultService.getStatusResultsByDateAndMember(date, memberId);
         List<ContentTextResultResponseDto> textResult = contentTextResultService.getTextResultsByDateAndMember(date, memberId);
 
-
-//        List<ContentEmotionResultResponseDto> emotionResponses = Optional.ofNullable(...).orElse(Collections.emptyList());
-//        List<ContentStatusResultResponseDto> statusResponses = Optional.ofNullable(...).orElse(Collections.emptyList());
-//        List<ContentTextResultResponseDto> textResponses = Optional.ofNullable(...).orElse(Collections.emptyList());
-
         List<SurveyContentDto> surveyContentResponseList = new ArrayList<>();
-
         SurveyContentDto surveyContentDto = SurveyContentDto.builder()
                 .contentEmotionResultResponses(emotionResult)
                 .contentStatusResultResponses(statusResults)
@@ -54,17 +48,6 @@ public class SurveyContentServiceImpl implements SurveyContentService {
 
         surveyContentResponseList.add(surveyContentDto);
 
-
-
-//        if (!emotionResult.isEmpty() || !statusResults.isEmpty() || !textResult.isEmpty()) {
-//            SurveyContentDto resultDto = SurveyContentDto.builder()
-//                    .contentEmotionResultResponses(emotionResult)
-//                    .contentStatusResultResponses(statusResults)
-//                    .contentTextResultResponse(textResult)
-//                    .build();
-//
-//            resultDtoList.add(resultDto);
-//        }
 
         return surveyContentResponseList;
     }
