@@ -29,10 +29,10 @@ class FamilyAddFragment : Fragment() {
         val layout: View = inflater.inflate(R.layout.fragment_family_add, container, false)
 
         layout.findViewById<Button>(R.id.nickNameChkBtn).setOnClickListener {   // 닉네임 확인 버튼 -> 추가하고자 하는 가족의 닉네임이 있는가?
-            api.checkDuplicate(layout.findViewById<EditText>(R.id.nicknameInput).text.toString()).enqueue(object: Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+            api.checkDuplicate(layout.findViewById<EditText>(R.id.nicknameInput).text.toString()).enqueue(object: Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                     if(response.code() == 200) {    // 잘 보내 졌습니다
-                        if(response.body().toString() == "true") {  // 중복된 닉네임이 있음 -> 가족 추가 가능
+                        if(response.body() == true) {  // 중복된 닉네임이 있음 -> 가족 추가 가능
                             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
 
                             if(layout.findViewById<EditText>(R.id.nicknameInput).text.toString() == pref.getString("KEY_NICKNAME", "")) {   // 내 낵네임을 입력한 경우
@@ -51,7 +51,7 @@ class FamilyAddFragment : Fragment() {
 //                    }
                 }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
 
                 }
             })

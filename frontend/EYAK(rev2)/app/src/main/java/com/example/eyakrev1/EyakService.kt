@@ -30,7 +30,7 @@ interface EyakService {
     @GET("/api/v1/auth/duplication")
     fun checkDuplicate(
         @Query("nickname") nickname: String,
-    ): Call<String>
+    ): Call<Boolean>
 
     @DELETE("/api/v1/members/{memberId}")
     fun deleteAccount(
