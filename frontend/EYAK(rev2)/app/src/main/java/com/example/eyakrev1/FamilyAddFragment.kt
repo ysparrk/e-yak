@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.preference.PreferenceManager
 import retrofit2.Call
@@ -21,6 +22,9 @@ class FamilyAddFragment : Fragment() {
     lateinit var mainActivity: MainActivity
 
     private val api = EyakService.create()
+
+    var nickNameChk: Boolean = false
+    var scope: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,26 +44,72 @@ class FamilyAddFragment : Fragment() {
                             }
                             else {  // 가족 신청 가능
                                 Toast.makeText(mainActivity, "가족 확인 완료", Toast.LENGTH_SHORT).show()
+                                nickNameChk = true
                             }
                         }
                         else {
                             Toast.makeText(mainActivity, "존재하지 않는 닉네임 입니다", Toast.LENGTH_SHORT).show()
                         }
                     }
-//                    else {
-//
-//                    }
                 }
 
                 override fun onFailure(call: Call<Boolean>, t: Throwable) {
 
                 }
             })
+        }
 
+        layout.findViewById<ImageView>(R.id.entireScopeAddSideChk).setOnClickListener {
+            scope = 1
+            layout.findViewById<ImageView>(R.id.entireScopeAddSideChk).setImageResource(R.drawable.baseline_check_box_24)
+            layout.findViewById<ImageView>(R.id.calendarScopeAddSideChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+        }
+
+        layout.findViewById<ImageView>(R.id.calendarScopeAddSideChk).setOnClickListener {
+            scope = 2
+            layout.findViewById<ImageView>(R.id.entireScopeAddSideChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+            layout.findViewById<ImageView>(R.id.calendarScopeAddSideChk).setImageResource(R.drawable.baseline_check_box_24)
         }
 
         layout.findViewById<Button>(R.id.requestBtn).setOnClickListener {
-            mainActivity!!.gotoEditFamily()
+            if(!nickNameChk) {
+                Toast.makeText(mainActivity, "가족 닉네임을 확인해 주세요", Toast.LENGTH_SHORT).show()
+            }
+            else if(scope == 0) {
+                Toast.makeText(mainActivity, "공개 범위를 설정해 주세요", Toast.LENGTH_SHORT).show()   // 공개 범위 설정이 안되어 있음
+            }
+            else if(layout.findViewById<EditText>(R.id.myDefineNameAddSideInput).text.toString() == "") {
+                Toast.makeText(mainActivity, "내가 지정할 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+                val serverUserId = pref.getInt("SERVER_USER_ID", -1)  // 팔로워 아이디
+                val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+                val data = followRequestBodyModel(
+                    followerScope = if(scope == 1) "ALL" else if(scope == 2) "CALENDAR" else "",
+                    followeeNickname = layout.findViewById<EditText>(R.id.nicknameInput).text.toString(),
+                    customName = layout.findViewById<EditText>(R.id.myDefineNameAddSideInput).text.toString(),
+                )
+
+                api.followRequest(followerId = serverUserId, Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if(response.code() == 201) {
+                            Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                            mainActivity!!.gotoEditFamily()
+                        }
+                        else if(response.code() == 401) {
+                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                        }
+                        else if(response.code() == 400) {
+                            Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                    }
+                })
+            }
+
         }
 
         return layout

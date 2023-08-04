@@ -64,3 +64,9 @@ data class ChangeAccountInfoResponseModel(
     var eatingDuration: String,
     var oauthId: String,
 )
+
+data class followRequestBodyModel(
+    var followerScope: String,
+    var followeeNickname: String,
+    var customName: String,
+)
