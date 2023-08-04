@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentManager
 
 class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Medicine>): BaseAdapter() {
 
-    lateinit var mainActivity: MainActivity
+    var mainActivity: MainActivity = context as MainActivity
 
     override fun getCount(): Int {
         return medicineList.size

@@ -31,10 +31,6 @@ class FamilyEditFragment : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_family_edit, container, false)
 
-        layout.findViewById<Button>(R.id.addFamilyBtn).setOnClickListener {
-            mainActivity!!.gotoAddFamily()
-        }
-
         layout.findViewById<Button>(R.id.acceptFamilyBtn).setOnClickListener {
             mainActivity!!.gotoAcceptFamily()
         }
