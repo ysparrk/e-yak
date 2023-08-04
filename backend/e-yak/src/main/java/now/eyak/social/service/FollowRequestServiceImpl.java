@@ -15,6 +15,7 @@ import now.eyak.social.repository.FollowRequestRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -40,7 +41,8 @@ public class FollowRequestServiceImpl implements FollowRequestService {
 
         Member followee = memberRepository.findByNickname(followeeNickname).orElseThrow(() -> new NoSuchMemberException("닉네임과 일치하는 회원이 존재하지 않습니다."));
         Member follower = getFollower(followerId);
-
+        
+        // TODO: 이미 팔로우 관계이거나 A, B 사용자가 있을 때 A가 B에게 이미 요청을 보낸 상태에서 B가 A에게 요청을 보내는 것을 못하게 막아야함
         FollowRequest followRequest = FollowRequest.builder()
                 .followee(followee)
                 .follower(follower)
@@ -113,6 +115,32 @@ public class FollowRequestServiceImpl implements FollowRequestService {
         followRepository.save(followInverse);
 
         return follow;
+    }
+
+    /**
+     * 팔로잉 사용자(FollowerId)가 요청한 현재 팔로우 요청 전체를 반환한다.
+     *
+     * @param followerId
+     * @return
+     */
+    @Override
+    public List<FollowRequest> retrieveAllFollowRequestByFollowerId(Long followerId) {
+        Member follower = getFollower(followerId);
+
+        return followRequestRepository.findByFollower(follower);
+    }
+
+    /**
+     * 피팔로잉 사용자(FollowerId)에게 요청된 현재 팔로우 요청 전체를 반환한다.
+     *
+     * @param followeeId
+     * @return
+     */
+    @Override
+    public List<FollowRequest> retrieveAllFollowRequestByFolloweeId(Long followeeId) {
+        Member followee = getFollowee(followeeId);
+
+        return followRequestRepository.findByFollowee(followee);
     }
 
     private FollowRequest getFollowRequest(Long followRequestId) {
