@@ -11,7 +11,6 @@ import now.eyak.survey.dto.request.ContentEmotionResultDto;
 import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
 import now.eyak.survey.repository.ContentEmotionResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
-import now.eyak.survey.repository.SurveyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +25,6 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
     private final ContentEmotionResultRepository contentEmotionResultRepository;
     private final SurveyContentRepository surveyContentRepository;
     private final MemberRepository memberRepository;
-    private final SurveyRepository surveyRepository;
 
     private final JPAQueryFactory queryFactory;
     /**
@@ -77,8 +75,7 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
     public void deleteEmotionSurveyResult(Long contentEmotionResultId, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
-        contentEmotionResultRepository.deleteById(contentEmotionResultId);
-
+        contentEmotionResultRepository.deleteByIdAndMember(contentEmotionResultId, member);
     }
 
     /**

@@ -84,8 +84,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
     public void deleteStatusSurveyResult(Long contentStatusResultId, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
-        contentStatusResultRepository.deleteById(contentStatusResultId);
-
+        contentStatusResultRepository.deleteByIdAndMember(contentStatusResultId, member);
     }
 
     /**

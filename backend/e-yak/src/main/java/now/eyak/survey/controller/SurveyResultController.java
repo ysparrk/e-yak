@@ -91,7 +91,6 @@ public class SurveyResultController {
 
     /**
      * Text 설문 응답 삭제
-     * @param contentTextResultDto
      * @param memberId
      * @param contentTextResultId
      * @return
@@ -99,11 +98,11 @@ public class SurveyResultController {
      */
     @DeleteMapping("/survey-contents/{surveyContentId}/content-text-result/{contentTextResultId}")
     public ResponseEntity deleteTextSurveyResult(
-            @RequestBody ContentTextResultDto contentTextResultDto,
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentTextResultId
             ) throws URISyntaxException {
 
+        contentTextResultService.deleteTextSurveyResult(contentTextResultId, memberId);
 
         return ResponseEntity.ok().build();
     }
@@ -146,7 +145,6 @@ public class SurveyResultController {
 
     /**
      * Emotion설문 응답 삭제
-     * @param contentEmotionResultDto
      * @param memberId
      * @param contentEmotionResultId
      * @return
@@ -154,10 +152,11 @@ public class SurveyResultController {
      */
     @DeleteMapping("/survey-contents/{surveyContentId}/content-emotion-result/{contentEmotionResultId}")
     public ResponseEntity deleteEmotionSurveyResult(
-            @RequestBody ContentEmotionResultDto contentEmotionResultDto,
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentEmotionResultId
             ) throws URISyntaxException {
+
+        contentEmotionResultService.deleteEmotionSurveyResult(contentEmotionResultId, memberId);
 
         return ResponseEntity.ok().build();
     }
@@ -198,7 +197,6 @@ public class SurveyResultController {
 
     /**
      * Status 설문 응답 삭제
-     * @param contentEmotionResultDto
      * @param memberId
      * @param contentStatusResultId
      * @return
@@ -206,10 +204,12 @@ public class SurveyResultController {
      */
     @DeleteMapping("/survey-contents/{surveyContentId}/content-status-result/{contentStatusResultId}")
     public ResponseEntity deleteStatusSurveyResult(
-            @RequestBody ContentEmotionResultDto contentEmotionResultDto,
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentStatusResultId
             ) throws URISyntaxException {
+
+        contentStatusResultService.deleteStatusSurveyResult(contentStatusResultId, memberId);
+
         return ResponseEntity.ok().build();
     }
 
