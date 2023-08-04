@@ -147,12 +147,12 @@ class SignupActivity : AppCompatActivity() {
 
         api.signUp(data).enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                Log.d("log",response.toString())
-//                Log.d("log", response.body().toString())
+                Log.d("log",response.toString())
+                Log.d("log", response.body().toString())
 
                 // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
                 if (response.code() == 400) {
-//                    Log.d("log","회원가입 실패")
+                    Log.d("log","회원가입 실패")
                     Toast.makeText(getApplicationContext(), "이미 가입하셨거나, 유효하지 않은 토큰입니다", Toast.LENGTH_SHORT).show()
                 } else if (response.code() == 201) {
                     // 회원 가입에 성공했으니 Login Activity로 이동 => sharedPreference 이미 있으니, 자동 로그인 시도할거 => 자동 로그인에 성공하면, Main Activity로 이동할테니
