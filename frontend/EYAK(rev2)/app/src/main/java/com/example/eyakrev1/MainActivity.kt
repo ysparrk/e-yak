@@ -154,4 +154,11 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.mainFragment, FamilyAcceptFragment())
             .commit()
     }
+
+    public fun gotoMyCalendar() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragment, MyCalendarFragment())
+            .commit()
+    }
 }

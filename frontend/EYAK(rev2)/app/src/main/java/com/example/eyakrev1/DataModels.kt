@@ -83,3 +83,9 @@ data class PrescriptionBodyModel(   // 복약 정보 등록 바디
     var medicine_dose: Float,
     var unit: String,
 )
+
+data class Dates(
+    var date: String,
+    var full_dose: Int,
+    var actual_dose: Int,
+)
