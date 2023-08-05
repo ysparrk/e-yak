@@ -12,6 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.PreferenceManager
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MedicineAddResultFragment : Fragment() {
 
@@ -144,17 +147,15 @@ class MedicineAddResultFragment : Fragment() {
                 unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),
             )
 
-            api.prescription(Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
+            api.prescription(Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object:
+                Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if(response.code() == 201) {
                         Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
-                        mainActivity!!.gotoEditFamily()
+                        mainActivity!!.gotoMedicine()
                     }
                     else if(response.code() == 401) {
                         Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
-                    }
-                    else if(response.code() == 400) {
-                        Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
                     }
                 }
                 override fun onFailure(call: Call<Void>, t: Throwable) {
