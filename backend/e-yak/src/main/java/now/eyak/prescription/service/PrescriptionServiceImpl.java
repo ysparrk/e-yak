@@ -44,7 +44,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Member member = getMemberOrThrow(memberId);
         prescription.setMember(member);
 
-        prescriptionDto.getRoutines().stream().forEach(routine -> {
+        prescriptionDto.getMedicineRoutines().stream().forEach(routine -> {
             MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .medicineRoutine(medicineRoutine)
@@ -114,7 +114,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         prescriptionDto.update(prescription);
 
         prescription.getPrescriptionMedicineRoutines().clear();
-        prescriptionDto.getRoutines().stream().forEach(routine -> {
+        prescriptionDto.getMedicineRoutines().stream().forEach(routine -> {
             MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .prescription(prescription)
