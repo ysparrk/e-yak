@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class MyCalendarFragment : Fragment() {
@@ -22,6 +24,12 @@ class MyCalendarFragment : Fragment() {
     lateinit var mainActivity: MainActivity
 
     var DayList = arrayListOf<Dates>()
+
+    var today: LocalDate = LocalDate.now()
+    var targetDate: LocalDate = LocalDate.now()
+    var targetMonth = targetDate.monthValue
+    var targetYear = targetDate.year
+    var targetDay = targetDate.dayOfMonth
 
     override fun onCreateView(
 
@@ -32,14 +40,12 @@ class MyCalendarFragment : Fragment() {
 
         val layout = inflater.inflate(R.layout.fragment_my_calendar, container, false)
 
-        var targetDay: LocalDate = LocalDate.now()
-        var thisMonth = targetDay.monthValue
-        var thisYear = targetDay.year
-        var thisDay = targetDay.dayOfMonth
-        var numberOfDaysInThisMonth = getDaysInMonth(thisYear, thisMonth)
+
+        var numberOfDaysInThisMonth = getDaysInMonth(targetYear, targetMonth)
+
 
         val calendarIndicatorTextView = layout.findViewById<TextView>(R.id.tv_calendar_indicator)
-        calendarIndicatorTextView.setText("${thisYear}년 ${thisMonth}월")
+        calendarIndicatorTextView.setText("${targetYear}년 ${targetMonth}월")
 
         for (i in 1..numberOfDaysInThisMonth) {
             val dayItem = Dates(date = i.toString(), full_dose = 3, actual_dose = i % 4)
@@ -50,7 +56,60 @@ class MyCalendarFragment : Fragment() {
         val mySingleRowCalendarAdapter = mySingleRowCalendarListAdapter(DayList)
 
         mySingleRowCalendarRecyclerView.adapter = mySingleRowCalendarAdapter
-        mySingleRowCalendarRecyclerView.scrollToPosition(kotlin.math.max(thisDay - 3, 0))
+        mySingleRowCalendarRecyclerView.scrollToPosition(kotlin.math.max(targetDay - 3, 0))
+
+        val prevMonthBtn = layout.findViewById<ImageButton>(R.id.btn_monthPrev)
+        val nextMonthBtn = layout.findViewById<ImageButton>(R.id.btn_monthNext)
+
+        // 이전 달 클릭했을 때
+        prevMonthBtn.setOnClickListener {
+            targetDate = targetDate.minusMonths(1)
+            targetMonth = targetDate.monthValue
+            targetYear = targetDate.year
+            targetDay = targetDate.dayOfMonth
+
+            numberOfDaysInThisMonth = getDaysInMonth(targetYear, targetMonth)
+
+            val calendarIndicatorTextView = layout.findViewById<TextView>(R.id.tv_calendar_indicator)
+            calendarIndicatorTextView.setText("${targetYear}년 ${targetMonth}월")
+
+            DayList = arrayListOf<Dates>()
+            for (i in 1..numberOfDaysInThisMonth) {
+                val dayItem = Dates(date = i.toString(), full_dose = 3, actual_dose = i % 4)
+                DayList.add(dayItem)
+            }
+
+            val mySingleRowCalendarRecyclerView = layout.findViewById<RecyclerView>(R.id.mySingleRowCalendar)
+            val mySingleRowCalendarAdapter = mySingleRowCalendarListAdapter(DayList)
+
+            mySingleRowCalendarRecyclerView.adapter = mySingleRowCalendarAdapter
+            mySingleRowCalendarRecyclerView.scrollToPosition(0)
+        }
+        
+        // 다음 달 클릭했을 때
+        nextMonthBtn.setOnClickListener {
+            targetDate = targetDate.plusMonths(1)
+            targetMonth = targetDate.monthValue
+            targetYear = targetDate.year
+            targetDay = targetDate.dayOfMonth
+
+            numberOfDaysInThisMonth = getDaysInMonth(targetYear, targetMonth)
+
+            val calendarIndicatorTextView = layout.findViewById<TextView>(R.id.tv_calendar_indicator)
+            calendarIndicatorTextView.setText("${targetYear}년 ${targetMonth}월")
+
+            DayList = arrayListOf<Dates>()
+            for (i in 1..numberOfDaysInThisMonth) {
+                val dayItem = Dates(date = i.toString(), full_dose = 3, actual_dose = i % 4)
+                DayList.add(dayItem)
+            }
+
+            val mySingleRowCalendarRecyclerView = layout.findViewById<RecyclerView>(R.id.mySingleRowCalendar)
+            val mySingleRowCalendarAdapter = mySingleRowCalendarListAdapter(DayList)
+
+            mySingleRowCalendarRecyclerView.adapter = mySingleRowCalendarAdapter
+            mySingleRowCalendarRecyclerView.scrollToPosition(0)
+        }
 
         return layout
     }
@@ -83,16 +142,20 @@ class MyCalendarFragment : Fragment() {
 
         fun bind(dayText: String, fullDose: Int, actualDose: Int) {
             myCalendarDayTextView.text = dayText
+            val itemDate: LocalDate = LocalDate.of(targetYear, targetMonth, dayText.toInt())
 
-            if (actualDose == fullDose) {
+            if (itemDate.compareTo(today) > 0) {
+                // 배경색으로 두자
+                // 기본적으로 배경색으로 색칠되어 있지만, 리사이클러뷰가 이전꺼를 재활용하는 특성 때문에
+                // 이렇게 강제로 설정하지 않으면 주기적으로 색칠된다
+                myCalendarDayImageView.setColorFilter(resources.getColor(R.color.background))
+            } else if (actualDose == fullDose) {
                 // 전부 먹었을 때
                 // 나중에 미래 시점은 걸러주면 좋을듯
                 myCalendarDayImageView.setColorFilter(resources.getColor(R.color.green))
-
             } else if (actualDose == 0) {
                 // 먹어야할 약이 있는데 하나도 안 먹었을 때
                 myCalendarDayImageView.setColorFilter(resources.getColor(R.color.red))
-
             } else {
                 // 일부만 먹었을 때
                 myCalendarDayImageView.setColorFilter(resources.getColor(R.color.yellow))

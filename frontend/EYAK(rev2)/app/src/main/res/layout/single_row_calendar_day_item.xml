@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="80"
-            android:tint="#FFFFFF"
+            android:tint="#F8FCF8"
             app:srcCompat="@drawable/round_rectangle_24" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
