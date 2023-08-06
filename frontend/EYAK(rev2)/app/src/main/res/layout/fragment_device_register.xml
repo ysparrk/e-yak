@@ -197,16 +197,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:visibility="gone" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btListCard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     app:cardBackgroundColor="#DDE6ED"
                     app:cardCornerRadius="20dp"
                     app:contentPadding="10dp">
+
+                    <TextView
+                        android:id="@+id/btListNotFoundText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:includeFontPadding="false"
+                        android:text="근처의 약통을 찾지 못했습니다"
+                        android:textAlignment="center"
+                        android:textColor="#757863"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/btListLayout"
@@ -215,16 +229,6 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/btListNotFoundText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/tmoney_regular"
-                            android:includeFontPadding="false"
-                            android:text="근처의 약통을 찾지 못했습니다"
-                            android:textAlignment="center"
-                            android:textColor="#757863"
-                            android:textSize="16sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

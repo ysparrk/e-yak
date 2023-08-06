@@ -5,13 +5,16 @@ import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,11 +22,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import org.w3c.dom.Text
+import java.lang.Exception
 import kotlin.concurrent.timer
 
 class DeviceRegisterFragment : Fragment() {
@@ -42,7 +49,9 @@ class DeviceRegisterFragment : Fragment() {
         android.Manifest.permission.BLUETOOTH,
         android.Manifest.permission.BLUETOOTH_ADMIN,
         android.Manifest.permission.BLUETOOTH_CONNECT,
+        android.Manifest.permission.ACCESS_COARSE_LOCATION,
         android.Manifest.permission.ACCESS_FINE_LOCATION,
+        android.Manifest.permission.BLUETOOTH_SCAN,
     )
 
     // layout
@@ -67,6 +76,15 @@ class DeviceRegisterFragment : Fragment() {
         if (btAdapter == null) {
             Toast.makeText(requireActivity(), "이 기기에서 블루투스를 지원하지 않음", Toast.LENGTH_LONG).show()
         }
+        // intent 등록
+        try {
+            val filter_start = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+            requireActivity().registerReceiver(receiver, filter_start)
+            val filter_found = IntentFilter(BluetoothDevice.ACTION_FOUND)
+            requireActivity().registerReceiver(receiver, filter_found)
+            val filter_finished = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+            requireActivity().registerReceiver(receiver, filter_finished)
+        } catch (e: Exception) {}
     }
 
     override fun onCreateView(
@@ -101,12 +119,20 @@ class DeviceRegisterFragment : Fragment() {
             layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.GONE
             layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.VISIBLE
             layout.findViewById<TextView>(R.id.btConnName).text = deviceNameSaved
-            bluetoothPaired()
+            if (permFlag == true) bluetoothPaired()
         }
         // 등록 디바이스 삭제
         layout.findViewById<Button>(R.id.btConnOffBtn).setOnClickListener {
 
         }
+
+        // 근처 기기 찾기
+        layout.findViewById<Button>(R.id.btFindBtn).setOnClickListener {
+            bluetoothSearch()
+        }
+
+
+
 
         return layout
     }
@@ -172,6 +198,53 @@ class DeviceRegisterFragment : Fragment() {
         }
     }
 
+    // 디바이스 관련 broadcast receiver
+    private val receiver = object: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val action: String? = intent?.action
+            when (action) {
+                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> { // 근처 기기 탐색 시작
+                    layout.findViewById<CardView>(R.id.btListCard).visibility = View.VISIBLE
+                    layout.findViewById<LinearLayout>(R.id.btListLayout).removeAllViews()
+                    deviceFindFlag = false
+                    layout.findViewById<TextView>(R.id.btListNotFoundText).visibility = View.GONE
+                    layout.findViewById<Button>(R.id.btFindBtn).visibility = View.GONE
+                    layout.findViewById<ProgressBar>(R.id.btFindProgressBar).visibility = View.VISIBLE
+                }
+                BluetoothDevice.ACTION_FOUND -> { // 근처 기기 찾음
+                    layout.findViewById<Button>(R.id.btFindBtn).visibility = View.GONE
+                    layout.findViewById<ProgressBar>(R.id.btFindProgressBar).visibility = View.VISIBLE
+                    layout.findViewById<CardView>(R.id.btListCard).visibility = View.VISIBLE
+                    val device = intent?.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    if (device?.name != null) { // (추후 약통만 식별하도록 설정)
+                        try {
+                            deviceFindFlag = true
+                            val deviceView = LinearLayout(getContext())
+                            val deviceText = TextView(getContext())
+                            val deviceBtn = Button(getContext())
+                            deviceText.text = "${device?.name}"
+                            deviceBtn.text = "연결"
+                            deviceBtn.setOnClickListener { connectDevice(device) }
+                            deviceView.addView(deviceText)
+                            deviceView.addView(deviceBtn)
+                            layout.findViewById<LinearLayout>(R.id.btListLayout).addView(deviceView)
+                        } catch (e: Exception) {}
+                    }
+                }
+                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> { // 근처 기기 탐색 종료
+                    layout.findViewById<CardView>(R.id.btListCard).visibility = View.VISIBLE
+                    if (deviceFindFlag == false) {
+                        layout.findViewById<TextView>(R.id.btListNotFoundText).visibility = View.VISIBLE
+                    } else {
+                        layout.findViewById<TextView>(R.id.btListNotFoundText).visibility = View.GONE
+                    }
+                    layout.findViewById<ProgressBar>(R.id.btFindProgressBar).visibility = View.GONE
+                    layout.findViewById<Button>(R.id.btFindBtn).visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
     // bluetooth 켜기/끄기 action result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode) {
@@ -200,5 +273,22 @@ class DeviceRegisterFragment : Fragment() {
             layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#747679"))
             layout.findViewById<TextView>(R.id.btConnState).text = "약통과 연결이 끊어졌습니다."
         }
+    }
+
+    // bluetooth 근처 기기 찾기 (페어링 되지 않은 것)
+    private fun bluetoothSearch() {
+        if (btAdapter?.isEnabled == true) {
+            val tmp: Boolean? = btAdapter?.startDiscovery()
+            if (tmp == false) {
+                Toast.makeText(requireActivity(), "근처 기기를 찾을 수 없습니다", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(requireActivity(), "블루투스를 먼저 켜주세요", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // 특정 디바이스와 연결
+    private fun connectDevice(targetDevice: BluetoothDevice?) {
+        //
     }
 }
