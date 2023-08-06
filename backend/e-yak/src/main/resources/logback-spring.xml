@@ -4,7 +4,8 @@
 
 
     <!--Environment 내의 프로퍼티들을 개별적으로 설정할 수도 있다.-->
-    <springProperty scope="context" name="LOG_LEVEL" source="logging.level.now.eyak"/>
+    <springProperty scope="context" name="LOG_LEVEL" source="logging.level"/>
+
 
     <!-- log file path -->
     <property name="LOG_PATH" value="./logs"/>
@@ -14,7 +15,7 @@
     <property name="ERR_LOG_FILE_NAME" value="err_log"/>
     <!-- pattern -->
     <property name="LOG_PATTERN"
-              value="%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"/>
+              value="%-5level %d{yyyy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"/>
 
     <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -78,12 +79,5 @@
         <appender-ref ref="FILE"/>
         <appender-ref ref="Error"/>
     </root>
-
-    <logger name="org.apache.ibatis" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-        <appender-ref ref="Error"/>
-    </logger>
-
 
 </configuration>
