@@ -89,7 +89,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
+                    android:gravity="center_horizontal|center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -102,28 +102,54 @@
                         android:tint="@color/material_dynamic_neutral50" />
 
                     <TextView
-                        android:id="@+id/textView57"
+                        android:id="@+id/btConnState"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:includeFontPadding="false"
+                        android:text="Current State"
+                        android:textAlignment="viewStart"
+                        android:textColor="#757863"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btConnName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="0"
                         android:fontFamily="@font/tmoney_bold"
                         android:includeFontPadding="false"
                         android:text="Device Name"
                         android:textColor="#757863"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
                     <Button
                         android:id="@+id/btConnOffBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:backgroundTint="#E3F2C1"
                         android:fontFamily="@font/tmoney_regular"
                         android:includeFontPadding="false"
                         android:text="약통 삭제"
                         android:textColor="#757863" />
-
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
