@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -37,8 +38,8 @@ class DeviceRegisterFragment : Fragment() {
     private val TAG = "myapp"
     private val REQUEST_CODE_ENABLE_BT:Int = 1;
     private var permFlag: Boolean? = null
-    private var deviceFindFlag = false
     private var devicePairedFlag = false
+    private var deviceFindFlag = false
 
     // 권한 리스트
     private val PERMISSION = arrayOf(
@@ -78,12 +79,6 @@ class DeviceRegisterFragment : Fragment() {
     ): View? {
         layout = inflater.inflate(R.layout.fragment_device_register, container, false)
 
-        // 블루투스 On/Off view
-        bluetoothOnOffUI()
-        layout.findViewById<Button>(R.id.btOnOffBtn).setOnClickListener {
-//            val intent = Intent(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
-//            startActivityForResult(intent, REQUEST_CODE_ENABLE_BT)
-        }
         // 권한 체크
         permFlag = checkPermissions(activity as Context, PERMISSION)
         // 권한 허용 상태에 따라 UI.
@@ -95,6 +90,16 @@ class DeviceRegisterFragment : Fragment() {
         layout.findViewById<Button>(R.id.permBtn).setOnClickListener {
             requestPermissionLauncher.launch(PERMISSION)
         }
+
+        // 블루투스 On/Off view
+        bluetoothOnOffUI()
+        layout.findViewById<Button>(R.id.btOnOffBtn).setOnClickListener {
+            val intent = Intent(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+            startActivityForResult(intent, REQUEST_CODE_ENABLE_BT)
+        }
+
+        // 이미 페어링된 디바이스 유무 확인
+
 
         return layout
     }
@@ -145,9 +150,15 @@ class DeviceRegisterFragment : Fragment() {
             activity?.runOnUiThread {
                 if (btAdapter?.isEnabled == true) {
                     layout.findViewById<ImageView>(R.id.btImage).setImageResource(R.drawable.baseline_bluetooth_24)
-                    layout.findViewById<TextView>(R.id.btOnOffBtn).text = "블루투스 끄기"
+                    var btBtn = layout.findViewById<Button>(R.id.btOnOffBtn)
+                    btBtn.isClickable = false
+                    btBtn.background.setTint(Color.parseColor("#E0E0E0"))
+                    layout.findViewById<TextView>(R.id.btOnOffBtn).text = "블루투스 켜짐"
                 } else {
                     layout.findViewById<ImageView>(R.id.btImage).setImageResource(R.drawable.baseline_bluetooth_disabled_24)
+                    var btBtn = layout.findViewById<Button>(R.id.btOnOffBtn)
+                    btBtn.isClickable = true
+                    btBtn.background.setTint(Color.parseColor("#E3F2C1"))
                     layout.findViewById<TextView>(R.id.btOnOffBtn).text = "블루투스 켜기"
                 }
             }
@@ -155,11 +166,11 @@ class DeviceRegisterFragment : Fragment() {
     }
 
     // bluetooth 켜기/끄기 action result
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        when(requestCode) {
-//            REQUEST_CODE_ENABLE_BT ->
-//                if (resultCode != Activity.RESULT_OK) {}
-//        }
-//        super.onActivityResult(requestCode, resultCode, data)
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when(requestCode) {
+            REQUEST_CODE_ENABLE_BT ->
+                if (resultCode != Activity.RESULT_OK) {}
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 }
