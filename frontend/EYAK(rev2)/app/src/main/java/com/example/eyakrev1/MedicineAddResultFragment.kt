@@ -112,10 +112,11 @@ class MedicineAddResultFragment : Fragment() {
 
         val layout = inflater.inflate(R.layout.fragment_medicine_add_result, container, false)
 
-        val startYear: String = "20${layout.findViewById<TextView>(R.id.startYearInputResult).text.toString()}"
+        // 입력 밭은 날짜 정보
+        val startYear: String = if(layout.findViewById<TextView>(R.id.startYearInputResult).text.toString().toInt() < 10) "200" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString() else "20" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString()
         val startMonth: String = if(layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString()
         val startDay: String = if(layout.findViewById<TextView>(R.id.startDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.startDayInputResult).text.toString()
-        val endYear: String = "20${layout.findViewById<TextView>(R.id.endYearInputResult).text.toString()}"
+        val endYear: String = if(layout.findViewById<TextView>(R.id.endDayInputResult).text.toString().toInt() < 10) "200" + layout.findViewById<TextView>(R.id.endYearInputResult).text.toString() else "20" + layout.findViewById<TextView>(R.id.endYearInputResult).text.toString()
         val endMonth: String = if(layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString()
         val endDay: String = if(layout.findViewById<TextView>(R.id.endDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.endDayInputResult).text.toString()
 
@@ -129,7 +130,6 @@ class MedicineAddResultFragment : Fragment() {
         if(timeChk[5]) medicineRoutines.add("DINNER_BEFORE")
         if(timeChk[6]) medicineRoutines.add("DINNER_AFTER")
         if(timeChk[7]) medicineRoutines.add("BED_BEFORE")
-
 
         layout.findViewById<Button>(R.id.chkComplete).setOnClickListener {
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
