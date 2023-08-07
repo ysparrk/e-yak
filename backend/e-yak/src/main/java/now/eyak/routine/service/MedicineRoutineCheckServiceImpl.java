@@ -173,7 +173,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
     }
 
     /**
-     * 하루 단위 복용 상세 조회(약 하나에 따른 복용 내용 + 컨디션)
+     * 하루 단위 복용 상세 조회(약 하나에 따른 복용 내용 + 설문조사)
      * @param date
      * @param memberId
      * @return
@@ -182,19 +182,19 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
     public MedicineRoutineDateResponseDto getDateDetailResultsByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
-        // 컨디션(하나)
+        // survey
         List<SurveyContentDto> surveyResults = surveyContentService.getSurveyResultByDateAndMember(date, memberId);
 
 
-        // 복용 정보(여러개)
+        // 복용 정보
         QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
         QPrescription prescription = QPrescription.prescription;
 
 
         List<MedicineRoutineCheckDto> dateResults = queryFactory
                 .select(Projections.constructor(MedicineRoutineCheckDto.class,
-                        qMedicineRoutineCheck.prescription,
-                        qMedicineRoutineCheck.medicineRoutine,
+                        qMedicineRoutineCheck.prescription.id,
+                        qMedicineRoutineCheck.medicineRoutine.routine,
                         qMedicineRoutineCheck.took))
                 .from(qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.date.eq(date).and(qMedicineRoutineCheck.member.eq(member)))

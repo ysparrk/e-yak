@@ -2,21 +2,18 @@ package now.eyak.routine.controller;
 
 import lombok.RequiredArgsConstructor;
 import now.eyak.routine.domain.MedicineRoutineCheck;
+import now.eyak.routine.dto.MedicineRoutineCheckDto;
 import now.eyak.routine.dto.MedicineRoutineCheckUpdateDto;
+import now.eyak.routine.dto.MedicineRoutineDateResponseDto;
 import now.eyak.routine.dto.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.service.MedicineRoutineCheckService;
-import now.eyak.survey.domain.ContentTextResult;
-import now.eyak.survey.dto.request.ContentTextResultDto;
 import now.eyak.util.ApiVersionHolder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.time.Year;
 import java.time.YearMonth;
 
 @RestController
@@ -63,6 +60,26 @@ public class RoutineController {
         MedicineRoutineMonthResponseDto monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId);
 
         return ResponseEntity.ok(monthResultsByMonthAndMember);
+    }
+
+    /**
+     * 하루 단위 복용 상세 조회
+     * @param medicineRoutineCheckDto
+     * @param date
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @GetMapping("{memberId}/medicine-routine-checks/day")
+    public ResponseEntity getDateDetailResultsByDateAndMember(
+            @RequestBody MedicineRoutineCheckDto medicineRoutineCheckDto,
+            @RequestParam LocalDate date,
+            @AuthenticationPrincipal Long memberId
+        ) throws URISyntaxException {
+
+        MedicineRoutineDateResponseDto dateDetailResultsByDateAndMember = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(date, memberId);
+
+        return ResponseEntity.ok(dateDetailResultsByDateAndMember);
     }
 
 }
