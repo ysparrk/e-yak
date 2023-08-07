@@ -3,7 +3,7 @@ package com.a103.eyakrev1
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import org.w3c.dom.Text
 import java.time.LocalDate
 
 class MedicineAddFragment : Fragment() {
@@ -54,6 +56,7 @@ class MedicineAddFragment : Fragment() {
         // 데이터 전달
         layout.findViewById<Button>(R.id.resultBtn).setOnClickListener {
             val resultBundle = Bundle()
+            var flag: Boolean = true
 
             // 투여 약 이름
             resultBundle.putString("medicineName", if(layout.findViewById<EditText>(R.id.medicineNameInput).text.toString() != "") layout.findViewById<EditText>(R.id.medicineNameInput).text.toString() else "")
@@ -81,31 +84,93 @@ class MedicineAddFragment : Fragment() {
 
             if(layout.findViewById<EditText>(R.id.medicineNameInput).text.toString() == "") {
                 Toast.makeText(mainActivity, "투여약 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                flag = false
             }
             else if(layout.findViewById<EditText>(R.id.diseaseNameInput).text.toString() == "") {
                 Toast.makeText(mainActivity, "질환명을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                flag = false
             }
             else if(layout.findViewById<EditText>(R.id.startYearInput).text.toString() != "") {
                 if (layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt() < 0 || layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt() > 99) {
                     Toast.makeText(mainActivity, "0에서 99사이의 투여 시작 년도를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                    flag = false
                 }
             }
             else if(layout.findViewById<EditText>(R.id.endYearInput).text.toString() != "") {
                 if (layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt() < 0 || layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt() > 99) {
                     Toast.makeText(mainActivity, "0에서 99사이의 투여 종료 년도를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                    flag = false
                 }
             }
             else if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString() != "") {
                 if (layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() > 12) {
                     Toast.makeText(mainActivity, "1에서 12사이의 투여 시작 월을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                    flag = false
                 }
             }
             else if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString() != "") {
                 if (layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() > 12) {
                     Toast.makeText(mainActivity, "1에서 12사이의 투여 종료 월을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                    flag = false
+                }
+
+            }
+            else if(layout.findViewById<EditText>(R.id.startDayInput).text.toString() != "") {
+                var startYearData: String = ""
+                var startMonthData: String = ""
+
+                if(layout.findViewById<EditText>(R.id.startYearInput).text.toString() == "") {
+                    startYearData = (2000 + layout.findViewById<EditText>(R.id.startYearInput).hint.toString().toInt()).toString()
+                }
+                else {
+                    startYearData = (2000 + layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt()).toString()
+                }
+
+                if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString() == "") {
+                    startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).hint.toString();
+                }
+                else {
+                    startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).text.toString();
+                }
+
+
+                val startDate: LocalDate = LocalDate.parse("${startYearData}-${startMonthData}-01")
+                val lastDay: Int = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
+
+                if(layout.findViewById<EditText>(R.id.startDayInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.startDayInput).text.toString().toInt() > lastDay) {
+                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${startMonthData}월)", Toast.LENGTH_SHORT).show()
+                    flag = false
                 }
             }
-            else {
+            else if(layout.findViewById<EditText>(R.id.endDayInput).text.toString() != "") {
+                var endYearData: String = ""
+                var endMonthData: String = ""
+
+                if(layout.findViewById<EditText>(R.id.endYearInput).text.toString() == "") {
+                    endYearData = (2000 + layout.findViewById<EditText>(R.id.endYearInput).hint.toString().toInt()).toString()
+                }
+                else {
+                    endYearData = (2000 + layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt()).toString()
+                }
+
+                if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString() == "") {
+                    endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).hint.toString();
+                }
+                else {
+                    endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).text.toString();
+                }
+
+
+                val startDate: LocalDate = LocalDate.parse("${endYearData}-${endMonthData}-01")
+                val lastDay: Int = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
+
+                if(layout.findViewById<EditText>(R.id.endDayInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.endDayInput).text.toString().toInt() > lastDay) {
+                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${endMonthData}월)", Toast.LENGTH_SHORT).show()
+                    flag = false
+                }
+            }
+
+            if(flag) {
                 setFragmentResult("medicineAddData", resultBundle)
 
                 mainActivity!!.gotoAddMedicineResult()
