@@ -57,7 +57,7 @@ interface EyakService {
         @Header("Authorization") Authorization: String,
         @Body params: PrescriptionBodyModel,
     ): Call<Void>
-    
+
     @GET("/api/v1/follow-requests") // 사용자가 요청한/사용자에게 요청된 팔로우 요청 전체 조회
     fun followRequests(
         @Header("Authorization") Authorization: String,
