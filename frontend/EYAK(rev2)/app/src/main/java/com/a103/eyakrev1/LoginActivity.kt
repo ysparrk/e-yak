@@ -122,11 +122,11 @@ class LoginActivity : AppCompatActivity() {
             displaySignIn()
         }
 
-        binding.tmpBtn.setOnClickListener {
-            Toast.makeText(applicationContext, "속았지?", Toast.LENGTH_SHORT).show()
-            val intent = Intent(getApplicationContext(), MainActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.tmpBtn.setOnClickListener {
+//            Toast.makeText(applicationContext, "속았지?", Toast.LENGTH_SHORT).show()
+//            val intent = Intent(getApplicationContext(), MainActivity::class.java)
+//            startActivity(intent)
+//        }
     }
 
     private fun tryLoginToServer(loadedGoogleToken: String?, isAutoLogin: Boolean) {
