@@ -8,6 +8,7 @@ import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.dto.MedicineRoutineCheckDto;
+import now.eyak.routine.dto.MedicineRoutineCheckUpdateDto;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @EnableScheduling  // 스케줄링 활성화
 @ExtendWith(SpringExtension.class)
@@ -125,4 +127,31 @@ class MedicineRoutineCheckServiceImplTest {
 
     }
 
+    @DisplayName("MedicineRoutine Check")
+    @Test
+    @Transactional
+    void updateMedicineRoutineCheck() {
+        // given
+
+        // when
+        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
+
+        Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
+
+        MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
+                .id(testPrescription.getId())
+                .date(LocalDate.now())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .memberId(member.getId())
+                .prescriptionId(testPrescription.getId())
+                .build();
+
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // toggle
+
+        // then
+        Assertions.assertThat(true).isEqualTo(medicineRoutineCheckRepository.findByIdAndMemberAndDate(testPrescription.getId(), member, LocalDate.now())
+                        .orElseThrow(() -> new NoSuchElementException("해당 복약에 대한 체크가 존재하지 않습니다."))
+                        .getTook()
+                );
+    }
 }
