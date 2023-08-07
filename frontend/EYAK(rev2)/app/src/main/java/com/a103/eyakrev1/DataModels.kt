@@ -87,3 +87,17 @@ data class Dates(
     var full_dose: Int,
     var actual_dose: Int,
 )
+
+data class FollowRequestsDataModel(
+    var followRequestId: Int,
+    var followerId: Int,
+    var followeeId: Int,
+    var followeeNickname: String,
+    var customName: String,
+    var scope: String,
+)
+
+data class AcceptFollowRequestBodyModel(
+    var followeeScope: String,
+    var customName: String,
+)

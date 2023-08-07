@@ -31,10 +31,6 @@ class FamilyEditFragment : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_family_edit, container, false)
 
-        layout.findViewById<Button>(R.id.acceptFamilyBtn).setOnClickListener {
-            mainActivity!!.gotoAcceptFamily()
-        }
-
         familyList.add(Family(familyId = -1, familyIcon = "baseline_person_24", familyName = "빈 공간", familyNickname = "빈 공간"))
         val familyEditListAdapter = FamilyEditListAdapter(mainActivity, familyList)
         val familyEditListView = layout.findViewById<ListView>(R.id.familyEditListView)

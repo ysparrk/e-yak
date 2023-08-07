@@ -231,7 +231,7 @@
                     android:weightSum="4">
 
                     <ImageView
-                        android:id="@+id/entireScopeAcceptSideChk3"
+                        android:id="@+id/calendarScopeAcceptSideChk"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -245,7 +245,7 @@
                         android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:includeFontPadding="false"
-                        android:text="전체 공개"
+                        android:text="달력 공개"
                         android:textColor="#757863" />
                 </LinearLayout>
 
