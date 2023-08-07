@@ -97,7 +97,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
         MedicineRoutineCheck medicineRoutineCheck = medicineRoutineCheckRepository.findByIdAndMemberAndDate(medicineRoutineCheckUpdateDto.getId(), member, medicineRoutineCheckUpdateDto.getDate())
                 .orElseThrow(() -> new NoSuchElementException("해당 날짜에 회원에 대한 복약 기록이 존재하지 않습니다."));
 
-        medicineRoutineCheckUpdateDto.update(medicineRoutineCheck);
+        medicineRoutineCheckUpdateDto.update(medicineRoutineCheck);  // toggle
 
         return medicineRoutineCheckRepository.save(medicineRoutineCheck);
     }
@@ -140,7 +140,6 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
                 .build();
 
         return medicineRoutineMonthDateDto;
-
     }
 
     /**
