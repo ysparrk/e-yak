@@ -10,6 +10,6 @@ import now.eyak.social.Scope;
 @Builder
 public class FollowRequestDto {
     private Scope followerScope;
-    private Long followeeId;
+    private String followeeNickname;
     private String customName;
 }
