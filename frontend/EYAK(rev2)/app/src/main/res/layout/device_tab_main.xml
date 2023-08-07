@@ -15,6 +15,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <Button
+            android:id="@+id/backDeviceEditBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="뒤로" />
+
         <ImageView
             android:id="@+id/connectState"
             android:layout_width="50dp"
@@ -34,30 +40,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/deviceSettingInfo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/baseline_info_24" />
-
-        <ImageView
-            android:id="@+id/deviceSetting"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/baseline_settings_24" />
-    </LinearLayout>
-
     <HorizontalScrollView
         android:id="@+id/deviceScroll"
         android:layout_width="0dp"
@@ -72,13 +54,56 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/btEditCell1"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+
+                    <ImageView
+                        android:id="@+id/btEditCell2"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/btEditCell3"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+
+                    <ImageView
+                        android:id="@+id/btEditCell4"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                </TableRow>
+
+            </TableLayout>
 
             <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="800dp"
-                android:layout_height="250dp"
-                app:srcCompat="@drawable/common_google_signin_btn_text_dark_focused" />
+                android:id="@+id/btEditCell5"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -99,70 +124,20 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/testEditImage1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginRight="30dp"
                 app:srcCompat="@drawable/baseline_access_time_24" />
 
             <ImageView
-                android:id="@+id/imageView9"
+                android:id="@+id/testEditImage2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/baseline_access_time_24" />
-
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_access_time_24" />
-
-            <ImageView
-                android:id="@+id/imageView11"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_access_time_24" />
-
-            <ImageView
-                android:id="@+id/imageView12"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_access_time_24" />
-
-            <ImageView
-                android:id="@+id/imageView13"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_access_time_24" />
-
-            <ImageView
-                android:id="@+id/imageView14"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_access_time_24" />
-
         </LinearLayout>
     </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="58dp"
-        android:layout_height="19dp"
-        android:layout_marginBottom="6dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

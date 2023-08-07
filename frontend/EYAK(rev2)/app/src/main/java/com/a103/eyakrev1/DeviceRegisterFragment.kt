@@ -164,6 +164,11 @@ class DeviceRegisterFragment : Fragment() {
             bluetoothSearch()
         }
 
+        // 등록 기기 편집 창으로 이동
+        layout.findViewById<Button>(R.id.btDeviceEditBtn).setOnClickListener {
+            moveDeviceEdit()
+        }
+
 
 
         return layout
@@ -369,5 +374,12 @@ class DeviceRegisterFragment : Fragment() {
         } catch (e: Exception) {
             Toast.makeText(requireActivity(), "삭제 실패", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // 디바이스 편집 창으로 이동
+    private fun moveDeviceEdit() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.mainFragment, DeviceFragment())
+            .commit()
     }
 }
