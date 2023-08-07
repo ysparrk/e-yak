@@ -14,7 +14,7 @@
     <property name="ERR_LOG_FILE_NAME" value="err_log"/>
     <!-- pattern -->
     <property name="LOG_PATTERN"
-              value="%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"/>
+              value="%-5level %d{yyyy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"/>
 
     <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -78,6 +78,5 @@
         <appender-ref ref="FILE"/>
         <appender-ref ref="Error"/>
     </root>
-
 
 </configuration>

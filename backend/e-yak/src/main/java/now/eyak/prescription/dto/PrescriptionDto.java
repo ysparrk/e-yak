@@ -1,5 +1,9 @@
 package now.eyak.prescription.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,13 +11,11 @@ import lombok.ToString;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.routine.enumeration.Routine;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
 @ToString
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PrescriptionDto {
     private String icd;
     private String customName;
@@ -26,6 +28,7 @@ public class PrescriptionDto {
     private Float medicineDose; // 1회 투여 개수
     private Integer medicineShape; // 이모지 번호
     private String unit; // 투여 단위
+    private List<Routine> medicineRoutines;
 
     public Prescription toEntity() {
         return Prescription.builder()
