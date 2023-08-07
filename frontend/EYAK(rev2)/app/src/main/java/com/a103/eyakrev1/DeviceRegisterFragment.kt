@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
@@ -29,9 +30,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.lang.reflect.Method
+import java.util.Objects
 import java.util.UUID
 import kotlin.Exception
 import kotlin.concurrent.timer
@@ -44,9 +48,13 @@ class DeviceRegisterFragment : Fragment() {
     private var devicePairedFlag = false
     private var deviceFindFlag = false
 
+    // Preference
+    var pref: SharedPreferences? = null
+    var editor: SharedPreferences.Editor? = null
+
     // (임시) 등록된 디바이스 이름 & 디바이스
     private var deviceSaved: BluetoothDevice? = null
-    private var deviceNameSaved = "ESP32-BT-TEST_2"
+    private var deviceNameSaved: String? = null //"ESP32-BT-TEST_2"
 
     // 통신을 위한 var.
     private var socket: BluetoothSocket? = null
@@ -83,6 +91,10 @@ class DeviceRegisterFragment : Fragment() {
         arguments?.let {
 
         }
+        // Preference Data 셋업
+        pref = requireContext().applicationContext.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        editor = pref?.edit()
+        deviceNameSaved = pref?.getString("DEVICE_NAME", "")
         // 모바일이 블루투스를 지원하는 기기인지 확인
         if (btAdapter == null) {
             Toast.makeText(requireActivity(), "이 기기에서 블루투스를 지원하지 않음", Toast.LENGTH_LONG).show()
@@ -95,6 +107,8 @@ class DeviceRegisterFragment : Fragment() {
             requireActivity().registerReceiver(receiver, filter_found)
             val filter_finished = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
             requireActivity().registerReceiver(receiver, filter_finished)
+            val filter_bonded = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+            requireActivity().registerReceiver(receiver, filter_bonded)
         } catch (e: Exception) {}
     }
 
@@ -103,6 +117,8 @@ class DeviceRegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         layout = inflater.inflate(R.layout.fragment_device_register, container, false)
+
+
 
         // 권한 체크
         permFlag = checkPermissions(activity as Context, PERMISSION)
@@ -132,16 +148,21 @@ class DeviceRegisterFragment : Fragment() {
             layout.findViewById<TextView>(R.id.btConnName).text = deviceNameSaved
             if (permFlag == true) bluetoothPaired()
         }
+
         // 등록 디바이스 삭제
         layout.findViewById<Button>(R.id.btConnOffBtn).setOnClickListener {
-            bluetoothDelete()
+            AlertDialog.Builder(getContext()).apply {
+                setTitle("약통 삭제")
+                setMessage("약통을 삭제 하시겠습니까? \n언제든지 다시 연결할 수 있습니다.")
+                setPositiveButton("삭제") {_, _ -> bluetoothDelete() }
+                setNegativeButton("취소") {_, _ -> }
+            }.show()
         }
 
         // 근처 기기 찾기
         layout.findViewById<Button>(R.id.btFindBtn).setOnClickListener {
             bluetoothSearch()
         }
-
 
 
 
@@ -235,7 +256,7 @@ class DeviceRegisterFragment : Fragment() {
                             val deviceBtn = Button(getContext())
                             deviceText.text = "${device?.name}"
                             deviceBtn.text = "연결"
-                            deviceBtn.setOnClickListener { connectDevice(device) }
+                            deviceBtn.setOnClickListener { pairDevice(device) }
                             deviceView.addView(deviceText)
                             deviceView.addView(deviceBtn)
                             layout.findViewById<LinearLayout>(R.id.btListLayout).addView(deviceView)
@@ -251,6 +272,23 @@ class DeviceRegisterFragment : Fragment() {
                     }
                     layout.findViewById<ProgressBar>(R.id.btFindProgressBar).visibility = View.GONE
                     layout.findViewById<Button>(R.id.btFindBtn).visibility = View.VISIBLE
+                }
+                BluetoothDevice.ACTION_BOND_STATE_CHANGED -> { // 페어링 상태 변화 감지
+                    if (deviceSaved?.bondState == BluetoothDevice.BOND_BONDED) {
+                        // 페어링 승인됨
+                        editor?.putString("DEVICE_NAME", deviceNameSaved)?.apply()
+                        layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.GONE
+                        layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.VISIBLE
+                        layout.findViewById<TextView>(R.id.btConnName).text = deviceNameSaved
+                    } else if (deviceSaved?.bondState == BluetoothDevice.BOND_BONDING) {
+                        // 페어링 승인 중...
+                    } else if (deviceSaved?.bondState == BluetoothDevice.BOND_NONE) {
+                        // 페어링 거부됨
+                        layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.VISIBLE
+                        layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.GONE
+                        deviceSaved = null
+                        deviceNameSaved = ""
+                    }
                 }
             }
         }
@@ -295,16 +333,14 @@ class DeviceRegisterFragment : Fragment() {
 
     // 특정 디바이스와 페어링
     private fun pairDevice(targetDevice: BluetoothDevice?) {
-//        if (targetDevice?.bondState == BluetoothDevice.BOND_NONE) {
+        if (targetDevice?.bondState == BluetoothDevice.BOND_NONE) {
+            deviceSaved = targetDevice
+            deviceNameSaved = targetDevice?.name
             targetDevice?.createBond()
-//        } else {
-//            Toast.makeText(requireActivity(), "already bonded?", Toast.LENGTH_SHORT).show()
-//        }
+        }
     }
     // 특정 디바이스와 연결 (소켓)
     private fun connectDevice(targetDevice: BluetoothDevice?) {
-//        deviceSaved = targetDevice
-//        deviceNameSaved = targetDevice?.name
         val thread = Thread {
             val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
             socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
@@ -327,7 +363,8 @@ class DeviceRegisterFragment : Fragment() {
     // 디바이스 삭제
     private fun bluetoothDelete() {
         try {
-            javaClass.getMethod("removeBond").invoke(deviceSaved)
+            deviceSaved!!::class.java.getMethod("removeBond").invoke(deviceSaved)
+            editor?.remove("DEVICE_NAME")?.commit()
             deviceNameSaved = ""
         } catch (e: Exception) {
             Toast.makeText(requireActivity(), "삭제 실패", Toast.LENGTH_SHORT).show()
