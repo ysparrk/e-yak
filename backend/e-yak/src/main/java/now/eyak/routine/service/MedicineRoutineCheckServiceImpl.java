@@ -178,6 +178,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
      * @param memberId
      * @return
      */
+    @Transactional
     @Override
     public MedicineRoutineDateResponseDto getDateDetailResultsByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
