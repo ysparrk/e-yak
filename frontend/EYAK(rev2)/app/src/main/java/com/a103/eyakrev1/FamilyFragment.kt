@@ -22,6 +22,14 @@ import retrofit2.Response
 
 class FamilyFragment : Fragment() {
 
+    lateinit var mainActivity: MainActivity
+
+    private val api = EyakService.create()
+
+    private var followRequestCnt: Int? = 0
+    private val lightOn: Int = Color.parseColor("#FFF6FA70")
+    private val lightOff: Int = Color.parseColor("#FF9BABB8")
+
     var familyList = arrayListOf<Family>(
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
@@ -32,16 +40,7 @@ class FamilyFragment : Fragment() {
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
         Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        )
-
-    // https://curryyou.tistory.com/386
-    // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
-    lateinit var mainActivity: MainActivity
-
-    private val api = EyakService.create()
-
-    private val lightOn: Int = Color.parseColor("#FFF6FA70")
-    private val lightOff: Int = Color.parseColor("#FF9BABB8")
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,20 +63,23 @@ class FamilyFragment : Fragment() {
             override fun onResponse(call: Call<MutableList<FollowRequestsDataModel>>, response: Response<MutableList<FollowRequestsDataModel>>) {
 
                 val followRequestsList: MutableList<FollowRequestsDataModel>? = response.body()
+               followRequestCnt = followRequestsList?.size
 
                 if(response.code() == 200) {
+                    if (followRequestCnt == 0) {
+                        layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setColorFilter(lightOff)
+                        layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.INVISIBLE
+                    } else {
+                        layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setColorFilter(lightOn)
+                        layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.VISIBLE
+                        layout.findViewById<TextView>(R.id.acceptFamilyCnt).text = followRequestCnt.toString()
+                    }
 
                     layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setOnClickListener {
 
-                        if (followRequestsList?.size == 0) {
-                            layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setColorFilter(lightOff)
-                            layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.INVISIBLE
-                        } else {
-                            layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setColorFilter(lightOn)
-                            layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.VISIBLE
-                            layout.findViewById<TextView>(R.id.acceptFamilyCnt).setText(response.body()?.size.toString())
-
+                        if (followRequestCnt != 0) {
                             if (followRequestsList?.isNotEmpty() == true) {
+
                                 val requestBundle = Bundle()
                                 requestBundle.putInt("followRequestId", followRequestsList[0].followRequestId)
                                 requestBundle.putInt("followerId", followRequestsList[0].followerId)
