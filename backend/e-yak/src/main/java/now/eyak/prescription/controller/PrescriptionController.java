@@ -3,11 +3,11 @@ package now.eyak.prescription.controller;
 import lombok.RequiredArgsConstructor;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.MedicineRoutineResponseDto;
+import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
 import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.util.ApiVersionHolder;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class PrescriptionController {
     }
 
     @GetMapping
-    public ResponseEntity getAllByMemberId(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTime, @AuthenticationPrincipal Long memberId) {
+    public ResponseEntity getAllByMemberId(@RequestParam(required = false) LocalDateTime dateTime, @AuthenticationPrincipal Long memberId) {
         List<PrescriptionResponseDto> responseDtoList = null;
         if (dateTime == null) {
             responseDtoList = prescriptionService.findAllByMemberId(memberId).stream().map(PrescriptionResponseDto::from).toList();
@@ -72,5 +72,12 @@ public class PrescriptionController {
         }).toList();
 
         return ResponseEntity.ok(medicineRoutineResponseDtoList);
+    }
+
+    @PutMapping("/{prescriptionId}/routines")
+    public ResponseEntity putMedicineRoutines(@RequestBody MedicineRoutineUpdateDto medicineRoutineUpdateDto, @PathVariable Long prescriptionId, @AuthenticationPrincipal Long memberId) {
+        prescriptionService.updatePrescriptionMedicineRoutinesById(medicineRoutineUpdateDto, prescriptionId, memberId);
+
+        return ResponseEntity.ok().build();
     }
 }
