@@ -2,6 +2,7 @@ package com.a103.eyakrev1
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -91,14 +92,17 @@ class FamilyAddFragment : Fragment() {
 
                 api.followRequest(followerId = serverUserId, Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if(response.code() == 201) {
+                        if(response.code() == 201) {    // 201 Created: 요청이 성공적으로 서버에 생성된 경우
                             Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
                             mainActivity!!.gotoEditFamily()
                         }
-                        else if(response.code() == 401) {
+                        else if(response.code() == 200) {   // 200 OK: A → B 에게 팔로우 요청을 보낸 상태에서 B ← A 에게 팔로우 요청을 보낸 경우 무시, A 와 B 사이가 이미 팔로우 상태인 경우에도 무시
+                            Toast.makeText(mainActivity, "이미 가족이거나 같은 요청이 있어요", Toast.LENGTH_SHORT).show()
+                        }
+                        else if(response.code() == 401) {   // 401 Unauthorized: AccessToken이 유효하지 않은 경우
                             Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
                         }
-                        else if(response.code() == 400) {
+                        else if(response.code() == 400) {   // 400 Bad Request: 해당하는 member가 존재하지 않는 경우, 자기자신에게 팔로우 요청을 보내는 경우
                             Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
                         }
                     }

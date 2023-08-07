@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.setFragmentResult
 import java.time.LocalDate
 
@@ -78,9 +79,37 @@ class MedicineAddFragment : Fragment() {
             resultBundle.putFloat("numberOfOneTime", if(layout.findViewById<EditText>(R.id.numberOfOneTimeInput).text.toString() != "") layout.findViewById<EditText>(R.id.numberOfOneTimeInput).text.toString().toFloat() else 0f)
             resultBundle.putString("unitType", if(layout.findViewById<EditText>(R.id.unitTypeInput).text.toString() != "") layout.findViewById<EditText>(R.id.unitTypeInput).text.toString() else "null")
 
-            setFragmentResult("medicineAddData", resultBundle)
+            if(layout.findViewById<EditText>(R.id.medicineNameInput).text.toString() == "") {
+                Toast.makeText(mainActivity, "투여약 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            }
+            else if(layout.findViewById<EditText>(R.id.diseaseNameInput).text.toString() == "") {
+                Toast.makeText(mainActivity, "질환명을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            }
+            else if(layout.findViewById<EditText>(R.id.startYearInput).text.toString() != "") {
+                if (layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt() < 0 || layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt() > 99) {
+                    Toast.makeText(mainActivity, "0에서 99사이의 투여 시작 년도를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else if(layout.findViewById<EditText>(R.id.endYearInput).text.toString() != "") {
+                if (layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt() < 0 || layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt() > 99) {
+                    Toast.makeText(mainActivity, "0에서 99사이의 투여 종료 년도를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString() != "") {
+                if (layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() > 12) {
+                    Toast.makeText(mainActivity, "1에서 12사이의 투여 시작 월을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString() != "") {
+                if (layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() > 12) {
+                    Toast.makeText(mainActivity, "1에서 12사이의 투여 종료 월을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else {
+                setFragmentResult("medicineAddData", resultBundle)
 
-            mainActivity!!.gotoAddMedicineResult()
+                mainActivity!!.gotoAddMedicineResult()
+            }
         }
 
         for(iconIdIterator in 1..35) {
