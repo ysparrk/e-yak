@@ -9,6 +9,8 @@ import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.dto.MedicineRoutineCheckDto;
 import now.eyak.routine.dto.MedicineRoutineCheckUpdateDto;
+import now.eyak.routine.dto.MedicineRoutineMonthDateDto;
+import now.eyak.routine.dto.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -153,5 +156,61 @@ class MedicineRoutineCheckServiceImplTest {
                         .orElseThrow(() -> new NoSuchElementException("해당 복약에 대한 체크가 존재하지 않습니다."))
                         .getTook()
                 );
+    }
+
+    @DisplayName("Date to Month")
+    @Test
+    @Transactional
+    void getDateResultsByDateAndMember() {
+        // given
+
+        // when
+        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
+
+        Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
+
+        MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
+                .id(testPrescription.getId())
+                .date(LocalDate.now())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .memberId(member.getId())
+                .prescriptionId(testPrescription.getId())
+                .build();
+
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // true 값 1개 만들기
+
+        MedicineRoutineMonthDateDto dateResults = medicineRoutineCheckService.getDateResultsByDateAndMember(LocalDate.now(), member.getId());
+
+        // then
+        // TODO: Assertion 작성
+
+    }
+
+    @DisplayName("Month")
+    @Test
+    @Transactional
+    void getMonthResultsByMonthAndMember() {
+        // given
+
+        // when
+        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
+
+        Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
+
+        MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
+                .id(testPrescription.getId())
+                .date(LocalDate.now())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .memberId(member.getId())
+                .prescriptionId(testPrescription.getId())
+                .build();
+
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());
+        MedicineRoutineMonthResponseDto monthResult = medicineRoutineCheckService.getMonthResultsByMonthAndMember(YearMonth.now(), member.getId()); // 데이터 모으기
+
+        // then
+        System.out.println("monthResult = " + monthResult);
+        // TODO: Assertion 작성
+
     }
 }
