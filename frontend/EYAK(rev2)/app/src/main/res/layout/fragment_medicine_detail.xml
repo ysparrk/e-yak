@@ -27,10 +27,11 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/medicineDetailCardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="80dp"
         app:cardBackgroundColor="#DDE6ED"
         app:cardCornerRadius="10dp"
@@ -55,7 +56,7 @@
                 android:weightSum="10">
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/medicineDetailIcon"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
@@ -204,7 +205,7 @@
                     android:fontFamily="@font/tmoney_regular"
                     android:gravity="right|center_vertical"
                     android:includeFontPadding="false"
-                    android:text="1회 복용 알수 : "
+                    android:text="1회 투여 양 : "
                     android:textColor="#757863"
                     android:textSize="20dp" />
 
@@ -237,7 +238,7 @@
                     android:fontFamily="@font/tmoney_regular"
                     android:gravity="right|center_vertical"
                     android:includeFontPadding="false"
-                    android:text="1일 복용 횟수 : "
+                    android:text="1일 투여 횟수 : "
                     android:textColor="#757863"
                     android:textSize="20dp" />
 
@@ -260,19 +261,33 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:scrollbars="vertical">
 
-                <TextView
-                    android:id="@+id/textView41"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/tmoney_regular"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="◇ 아침 식후 30분 ◇\n◇ 저녁 식후 30분 ◇"
-                    android:textColor="#757863"
-                    android:textSize="18dp" />
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/dosePerDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="◇ 아침 식후 30분 ◇\n◇ 저녁 식후 30분 ◇"
+                            android:textColor="#757863"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+                </ScrollView>
+
             </LinearLayout>
 
             <LinearLayout
@@ -284,7 +299,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/medicineDetailEditButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
@@ -297,7 +312,7 @@
                     android:textSize="17dp" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/medicineDetailDeleteButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
