@@ -21,7 +21,7 @@ public class PrescriptionDto {
     private String engName;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private List<Routine> routines;
+    private List<Routine> medicineRoutines;
     private Integer iotLocation; // 약통 칸 번호
     private Float medicineDose; // 1회 투여 개수
     private Integer medicineShape; // 이모지 번호

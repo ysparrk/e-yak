@@ -8,7 +8,6 @@ import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
 import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.util.ApiVersionHolder;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,7 @@ public class PrescriptionController {
     }
 
     @GetMapping
-    public ResponseEntity getAllByMemberId(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTime, @AuthenticationPrincipal Long memberId) {
+    public ResponseEntity getAllByMemberId(@RequestParam(required = false) LocalDateTime dateTime, @AuthenticationPrincipal Long memberId) {
         List<PrescriptionResponseDto> responseDtoList = null;
         if (dateTime == null) {
             responseDtoList = prescriptionService.findAllByMemberId(memberId).stream().map(PrescriptionResponseDto::from).toList();
