@@ -2,6 +2,7 @@ package com.example.eyakrev1
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +16,16 @@ import androidx.preference.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
+import kotlin.reflect.typeOf
 
 class MedicineAddResultFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
     private val api = EyakService.create()
+
+    private val targetDay: LocalDate = LocalDate.now()
 
     private var selectIcon: Int = 0
 
@@ -29,7 +34,7 @@ class MedicineAddResultFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragmentResultListener("medicineAddData") { requestKey, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundel ->
+        setFragmentResultListener("medicineAddData") { requestKey, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
 
             // 투여 약 이름
             view?.findViewById<TextView>(R.id.medicineNameInputResult)?.text = bundle.getString("medicineName", "")
@@ -45,6 +50,7 @@ class MedicineAddResultFragment : Fragment() {
             view?.findViewById<TextView>(R.id.endMonthInputResult)?.text = bundle.getInt("endMonth", 0).toString()
             view?.findViewById<TextView>(R.id.endDayInputResult)?.text = bundle.getInt("endDay", 0).toString()
 
+            Log.d("여기는 언제?", "여기 언제?")
             // 투여 약 이모티콘
             selectIcon = bundle.getInt("medicineIcon")
             when(selectIcon) {
@@ -109,9 +115,9 @@ class MedicineAddResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val layout = inflater.inflate(R.layout.fragment_medicine_add_result, container, false)
 
+        var deee: Int = 2
         // 입력 밭은 날짜 정보
         val startYear: String = if(layout.findViewById<TextView>(R.id.startYearInputResult).text.toString().toInt() < 10) "200" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString() else "20" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString()
         val startMonth: String = if(layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString()
@@ -162,7 +168,6 @@ class MedicineAddResultFragment : Fragment() {
 
                 }
             })
-
 
             mainActivity!!.gotoMedicine()
         }
