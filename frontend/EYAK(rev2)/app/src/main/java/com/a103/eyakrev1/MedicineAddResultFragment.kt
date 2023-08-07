@@ -30,10 +30,10 @@ class MedicineAddResultFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragmentResultListener("medicineAddData") { requestKey, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
+        setFragmentResultListener("medicineAddData") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
 
             // 투여 약 이름
-            view?.findViewById<TextView>(R.id.medicineNameInputResult)?.text = bundle.getString("medicineName", "")
+            view?.findViewById<TextView>(R.id.nicknameRequestSideInput)?.text = bundle.getString("medicineName", "")
 
             // 질환 명
             view?.findViewById<TextView>(R.id.diseaseNameInputResult)?.text = bundle.getString("diseaseName", "")
@@ -46,7 +46,6 @@ class MedicineAddResultFragment : Fragment() {
             view?.findViewById<TextView>(R.id.endMonthInputResult)?.text = bundle.getInt("endMonth", 0).toString()
             view?.findViewById<TextView>(R.id.endDayInputResult)?.text = bundle.getInt("endDay", 0).toString()
 
-            Log.d("여기는 언제?", "여기 언제?")
             // 투여 약 이모티콘
             selectIcon = bundle.getInt("medicineIcon")
             when(selectIcon) {
@@ -113,6 +112,7 @@ class MedicineAddResultFragment : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_medicine_add_result, container, false)
 
+        // 등록하는 약의 정보를 확인했고 서버에 전송
         layout.findViewById<Button>(R.id.chkComplete).setOnClickListener {
 
             // 입력 밭은 날짜 정보
