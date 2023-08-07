@@ -2,6 +2,7 @@ package com.example.eyakrev1
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,8 @@ import androidx.preference.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
+import kotlin.reflect.typeOf
 
 class MedicineAddResultFragment : Fragment() {
 
@@ -29,7 +32,7 @@ class MedicineAddResultFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragmentResultListener("medicineAddData") { requestKey, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundel ->
+        setFragmentResultListener("medicineAddData") { requestKey, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
 
             // 투여 약 이름
             view?.findViewById<TextView>(R.id.medicineNameInputResult)?.text = bundle.getString("medicineName", "")
@@ -45,6 +48,7 @@ class MedicineAddResultFragment : Fragment() {
             view?.findViewById<TextView>(R.id.endMonthInputResult)?.text = bundle.getInt("endMonth", 0).toString()
             view?.findViewById<TextView>(R.id.endDayInputResult)?.text = bundle.getInt("endDay", 0).toString()
 
+            Log.d("여기는 언제?", "여기 언제?")
             // 투여 약 이모티콘
             selectIcon = bundle.getInt("medicineIcon")
             when(selectIcon) {
@@ -109,29 +113,29 @@ class MedicineAddResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val layout = inflater.inflate(R.layout.fragment_medicine_add_result, container, false)
 
-        // 입력 밭은 날짜 정보
-        val startYear: String = if(layout.findViewById<TextView>(R.id.startYearInputResult).text.toString().toInt() < 10) "200" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString() else "20" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString()
-        val startMonth: String = if(layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString()
-        val startDay: String = if(layout.findViewById<TextView>(R.id.startDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.startDayInputResult).text.toString()
-        val endYear: String = if(layout.findViewById<TextView>(R.id.endDayInputResult).text.toString().toInt() < 10) "200" + layout.findViewById<TextView>(R.id.endYearInputResult).text.toString() else "20" + layout.findViewById<TextView>(R.id.endYearInputResult).text.toString()
-        val endMonth: String = if(layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString()
-        val endDay: String = if(layout.findViewById<TextView>(R.id.endDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.endDayInputResult).text.toString()
-
-        val medicineRoutines: MutableList<String> = mutableListOf()
-
-        if(timeChk[0]) medicineRoutines.add("BED_AFTER")
-        if(timeChk[1]) medicineRoutines.add("BREAKFAST_BEFORE")
-        if(timeChk[2]) medicineRoutines.add("BREAKFAST_AFTER")
-        if(timeChk[3]) medicineRoutines.add("LUNCH_BEFORE")
-        if(timeChk[4]) medicineRoutines.add("LUNCH_AFTER")
-        if(timeChk[5]) medicineRoutines.add("DINNER_BEFORE")
-        if(timeChk[6]) medicineRoutines.add("DINNER_AFTER")
-        if(timeChk[7]) medicineRoutines.add("BED_BEFORE")
-
         layout.findViewById<Button>(R.id.chkComplete).setOnClickListener {
+
+            // 입력 밭은 날짜 정보
+            val startYear: String = if(layout.findViewById<TextView>(R.id.startYearInputResult).text.toString().toInt() < 10) "200" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString() else "20" + layout.findViewById<TextView>(R.id.startYearInputResult).text.toString()
+            val startMonth: String = if(layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.startMonthInputResult).text.toString()
+            val startDay: String = if(layout.findViewById<TextView>(R.id.startDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.startDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.startDayInputResult).text.toString()
+            val endYear: String = if(layout.findViewById<TextView>(R.id.endYearInputResult).text.toString().toInt() < 10) "200" + layout.findViewById<TextView>(R.id.endYearInputResult).text.toString() else "20" + layout.findViewById<TextView>(R.id.endYearInputResult).text.toString()
+            val endMonth: String = if(layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString() else layout.findViewById<TextView>(R.id.endMonthInputResult).text.toString()
+            val endDay: String = if(layout.findViewById<TextView>(R.id.endDayInputResult).text.toString().toInt() < 10) "0" + layout.findViewById<TextView>(R.id.endDayInputResult).text.toString() else layout.findViewById<TextView>(R.id.endDayInputResult).text.toString()
+
+            val medicineRoutines: MutableList<String> = mutableListOf()
+
+            if(timeChk[0]) medicineRoutines.add("BED_AFTER")
+            if(timeChk[1]) medicineRoutines.add("BREAKFAST_BEFORE")
+            if(timeChk[2]) medicineRoutines.add("BREAKFAST_AFTER")
+            if(timeChk[3]) medicineRoutines.add("LUNCH_BEFORE")
+            if(timeChk[4]) medicineRoutines.add("LUNCH_AFTER")
+            if(timeChk[5]) medicineRoutines.add("DINNER_BEFORE")
+            if(timeChk[6]) medicineRoutines.add("DINNER_AFTER")
+            if(timeChk[7]) medicineRoutines.add("BED_BEFORE")
+
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
             val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
             val data = PrescriptionBodyModel(
@@ -162,7 +166,6 @@ class MedicineAddResultFragment : Fragment() {
 
                 }
             })
-
 
             mainActivity!!.gotoMedicine()
         }
