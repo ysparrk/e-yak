@@ -117,8 +117,8 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
         // 요청받은 날짜의 복약 기록을 다 가져오기
         QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
 
-        List<MedicineRoutineCheckDto> dateResults = queryFactory
-                .select(Projections.constructor(MedicineRoutineCheckDto.class,
+        List<MedicineRoutineCheckUpdateDto> dateResults = queryFactory
+                .select(Projections.constructor(MedicineRoutineCheckUpdateDto.class,
                         qMedicineRoutineCheck.date,
                         qMedicineRoutineCheck.took))
                 .from(qMedicineRoutineCheck)
@@ -129,7 +129,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
         // 실제 복용 개수 계산
         Long actualDose = dateResults.stream()
-                .filter(MedicineRoutineCheckDto::isTook)
+                .filter(MedicineRoutineCheckUpdateDto::isTook)
                 .count();
 
         MedicineRoutineMonthDateDto medicineRoutineMonthDateDto = MedicineRoutineMonthDateDto.builder()
