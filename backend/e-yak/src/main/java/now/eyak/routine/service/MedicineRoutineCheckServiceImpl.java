@@ -104,7 +104,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
 
     /**
-     * 일자에 따른 약 복용량 반환
+     * 일자에 따른 약 복용량 반환 -> Month
      * @param date
      * @param memberId
      * @return
@@ -113,9 +113,8 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
     @Override
     public MedicineRoutineMonthDateDto getDateResultsByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
-//        MedicineRoutineCheck routineCheckRepositoryByMemberAndDate = medicineRoutineCheckRepository.findByMemberAndDate(member, date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜에 대한 사용자의 복용 정보가 없습니다."));  // 이 부분은 필요 없을 것 같다
 
-        // 내가 요청 받은 날짜의 복약 기록을 다 가져온다.
+        // 요청받은 날짜의 복약 기록을 다 가져오기
         QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
 
         List<MedicineRoutineCheckDto> dateResults = queryFactory
@@ -128,7 +127,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
         Long fullDose = (long) dateResults.size();
 
-        // 실제 복용 개수를 계산
+        // 실제 복용 개수 계산
         Long actualDose = dateResults.stream()
                 .filter(MedicineRoutineCheckDto::isTook)
                 .count();
@@ -143,7 +142,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
     }
 
     /**
-     * 한달 단위로 데이터 모으기
+     * 한달 단위 복용 확인
      * @param yearMonth
      * @param memberId
      * @return
