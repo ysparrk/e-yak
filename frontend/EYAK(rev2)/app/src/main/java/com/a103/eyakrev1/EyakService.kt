@@ -76,6 +76,12 @@ interface EyakService {
         @Header("Authorization") Authorization: String,
     ): Call<ArrayList<Medicine>>
 
+    @GET("/api/v1/prescriptions/{prescriptionId}")
+    fun getPrescriptionDetail(
+        @Header("Authorization") Authorization: String,
+        @Path("prescriptionId") prescriptionId: Int,
+    ): Call<Medicine>
+
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소
 
