@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -30,19 +31,31 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.w3c.dom.Text
-import java.lang.Exception
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.UUID
+import kotlin.Exception
 import kotlin.concurrent.timer
 
 class DeviceRegisterFragment : Fragment() {
     // flag & signal
     private val TAG = "myapp"
-    private val REQUEST_CODE_ENABLE_BT:Int = 1;
+    private val REQUEST_CODE_ENABLE_BT:Int = 1
     private var permFlag: Boolean? = null
     private var devicePairedFlag = false
     private var deviceFindFlag = false
 
-    // (임시) 등록된 디바이스 이름
+    // (임시) 등록된 디바이스 이름 & 디바이스
+    private var deviceSaved: BluetoothDevice? = null
     private var deviceNameSaved = "ESP32-BT-TEST_2"
+
+    // 통신을 위한 var.
+    private var socket: BluetoothSocket? = null
+    private var fallbackSocket: BluetoothSocket? = null
+    private var outStream: OutputStream? = null
+    private var inStream: InputStream? = null
+    private var buffer: ByteArray = ByteArray(1024)
 
     // 권한 리스트
     private val PERMISSION = arrayOf(
@@ -123,7 +136,7 @@ class DeviceRegisterFragment : Fragment() {
         }
         // 등록 디바이스 삭제
         layout.findViewById<Button>(R.id.btConnOffBtn).setOnClickListener {
-
+            bluetoothDelete()
         }
 
         // 근처 기기 찾기
@@ -259,15 +272,13 @@ class DeviceRegisterFragment : Fragment() {
         val pairedDevices: Set<BluetoothDevice>? = btAdapter?.bondedDevices  //"${pairedDevices?.size}"
         devicePairedFlag = false
         pairedDevices?.forEach { device ->
-//            val deviceName = device.name
-//            val deviceHardwareAddress = device.address // MAC address
             if (device.name == deviceNameSaved) {
+                deviceSaved = device
                 devicePairedFlag = true
                 layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#E3F2C1"))
                 layout.findViewById<TextView>(R.id.btConnState).text = "약통과 페어링 되었습니다."
                 return@forEach
             }
-//            binding.deviceList.append("\n${deviceName} ${deviceHardwareAddress}")
         }
         if (devicePairedFlag == false) {
             layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#747679"))
@@ -278,17 +289,50 @@ class DeviceRegisterFragment : Fragment() {
     // bluetooth 근처 기기 찾기 (페어링 되지 않은 것)
     private fun bluetoothSearch() {
         if (btAdapter?.isEnabled == true) {
-            val tmp: Boolean? = btAdapter?.startDiscovery()
-            if (tmp == false) {
-                Toast.makeText(requireActivity(), "근처 기기를 찾을 수 없습니다", Toast.LENGTH_LONG).show()
-            }
+            btAdapter?.startDiscovery()
         } else {
             Toast.makeText(requireActivity(), "블루투스를 먼저 켜주세요", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // 특정 디바이스와 연결
+    // 특정 디바이스와 페어링
+    private fun pairDevice(targetDevice: BluetoothDevice?) {
+//        if (targetDevice?.bondState == BluetoothDevice.BOND_NONE) {
+            targetDevice?.createBond()
+//        } else {
+//            Toast.makeText(requireActivity(), "already bonded?", Toast.LENGTH_SHORT).show()
+//        }
+    }
+    // 특정 디바이스와 연결 (소켓)
     private fun connectDevice(targetDevice: BluetoothDevice?) {
-        //
+//        deviceSaved = targetDevice
+//        deviceNameSaved = targetDevice?.name
+        val thread = Thread {
+            val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+            socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
+            var clazz = socket?.remoteDevice?.javaClass
+            var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
+            var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
+            fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
+            try {
+                fallbackSocket?.connect()
+            } catch (e: Exception) {
+                try {
+                    socket?.close()
+                    fallbackSocket?.close()
+                } catch (e: IOException) {}
+            }
+        }
+        thread.start()
+    }
+
+    // 디바이스 삭제
+    private fun bluetoothDelete() {
+        try {
+            javaClass.getMethod("removeBond").invoke(deviceSaved)
+            deviceNameSaved = ""
+        } catch (e: Exception) {
+            Toast.makeText(requireActivity(), "삭제 실패", Toast.LENGTH_SHORT).show()
+        }
     }
 }
