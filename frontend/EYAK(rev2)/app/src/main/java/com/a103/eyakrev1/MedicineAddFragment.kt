@@ -37,6 +37,7 @@ class MedicineAddFragment : Fragment() {
         val layout = inflater.inflate(R.layout.fragment_medicine_add, container, false)
 
         // 기본 정보 초기화 start
+            // 날짜 정보 초기화
         layout.findViewById<EditText>(R.id.startYearInput).hint = targetDay.year.toString().substring(2, 4)
         layout.findViewById<EditText>(R.id.startMonthInput).hint = targetDay.monthValue.toString()
         layout.findViewById<EditText>(R.id.startDayInput).hint = targetDay.dayOfMonth.toString()
@@ -51,6 +52,10 @@ class MedicineAddFragment : Fragment() {
         iconResourceId?.let { resourceId ->
             layout.findViewById<ImageView>(resourceId)?.setBackgroundColor(Color.parseColor(activeColor))
         }
+
+            // 1회 투여양
+        layout.findViewById<EditText>(R.id.numberOfOneTimeInput).hint = 1f.toString()
+        layout.findViewById<EditText>(R.id.unitTypeInput).hint = "정"
         // 기본 정보 초기화 end
 
         // 데이터 전달
@@ -79,8 +84,8 @@ class MedicineAddFragment : Fragment() {
             resultBundle.putBooleanArray("timeArray", timeChk)
 
             // 1회 투여양
-            resultBundle.putFloat("numberOfOneTime", if(layout.findViewById<EditText>(R.id.numberOfOneTimeInput).text.toString() != "") layout.findViewById<EditText>(R.id.numberOfOneTimeInput).text.toString().toFloat() else 0f)
-            resultBundle.putString("unitType", if(layout.findViewById<EditText>(R.id.unitTypeInput).text.toString() != "") layout.findViewById<EditText>(R.id.unitTypeInput).text.toString() else "null")
+            resultBundle.putFloat("numberOfOneTime", if(layout.findViewById<EditText>(R.id.numberOfOneTimeInput).text.toString() != "") layout.findViewById<EditText>(R.id.numberOfOneTimeInput).text.toString().toFloat() else layout.findViewById<EditText>(R.id.numberOfOneTimeInput).hint.toString().toFloat())
+            resultBundle.putString("unitType", if(layout.findViewById<EditText>(R.id.unitTypeInput).text.toString() != "") layout.findViewById<EditText>(R.id.unitTypeInput).text.toString() else layout.findViewById<EditText>(R.id.unitTypeInput).hint.toString())
 
             if(layout.findViewById<EditText>(R.id.medicineNameInput).text.toString() == "") {
                 Toast.makeText(mainActivity, "투여약 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
@@ -138,7 +143,7 @@ class MedicineAddFragment : Fragment() {
                 val lastDay: Int = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
 
                 if(layout.findViewById<EditText>(R.id.startDayInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.startDayInput).text.toString().toInt() > lastDay) {
-                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${startMonthData}월)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${startMonthData.toInt()}월)", Toast.LENGTH_SHORT).show()
                     flag = false
                 }
             }
@@ -165,7 +170,7 @@ class MedicineAddFragment : Fragment() {
                 val lastDay: Int = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
 
                 if(layout.findViewById<EditText>(R.id.endDayInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.endDayInput).text.toString().toInt() > lastDay) {
-                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${endMonthData}월)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${endMonthData.toInt()}월)", Toast.LENGTH_SHORT).show()
                     flag = false
                 }
             }
