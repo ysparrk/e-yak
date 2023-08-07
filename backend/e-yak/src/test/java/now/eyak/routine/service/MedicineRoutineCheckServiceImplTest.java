@@ -7,13 +7,17 @@ import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.routine.domain.MedicineRoutineCheck;
-import now.eyak.routine.dto.MedicineRoutineCheckDto;
-import now.eyak.routine.dto.MedicineRoutineCheckUpdateDto;
-import now.eyak.routine.dto.MedicineRoutineMonthDateDto;
-import now.eyak.routine.dto.MedicineRoutineMonthResponseDto;
+import now.eyak.routine.dto.*;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
+import now.eyak.survey.domain.ContentTextResult;
+import now.eyak.survey.domain.Survey;
+import now.eyak.survey.domain.SurveyContent;
+import now.eyak.survey.dto.request.ContentTextResultDto;
+import now.eyak.survey.repository.SurveyContentRepository;
+import now.eyak.survey.repository.SurveyRepository;
+import now.eyak.survey.service.ContentTextResultService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,6 +46,8 @@ class MedicineRoutineCheckServiceImplTest {
     @Autowired
     MedicineRoutineCheckService medicineRoutineCheckService;
     @Autowired
+    ContentTextResultService contentTextResultService;
+    @Autowired
     PrescriptionRepository prescriptionRepository;
     @Autowired
     PrescriptionService prescriptionService;
@@ -49,13 +55,19 @@ class MedicineRoutineCheckServiceImplTest {
     MedicineRoutineCheckRepository medicineRoutineCheckRepository;
     @Autowired
     MedicineRoutineRepository medicineRoutineRepository;
-
+    @Autowired
+    SurveyRepository surveyRepository;
+    @Autowired
+    SurveyContentRepository surveyContentRepository;
 
     Member member;
     Prescription prescription;
     PrescriptionDto prescriptionDto;
     MedicineRoutineCheckDto medicineRoutineCheckDto;
     MedicineRoutineCheck medicineRoutineCheck;
+    Survey survey;
+    SurveyContent surveyContent;
+    ContentTextResultDto contentTextResultDto;
 
     static List<Routine> routines;
 
@@ -130,7 +142,7 @@ class MedicineRoutineCheckServiceImplTest {
 
     }
 
-    @DisplayName("MedicineRoutine Check")
+    @DisplayName("Routine Check")
     @Test
     @Transactional
     void updateMedicineRoutineCheck() {
@@ -212,5 +224,55 @@ class MedicineRoutineCheckServiceImplTest {
         System.out.println("monthResult = " + monthResult);
         // TODO: Assertion 작성
 
+    }
+
+    @DisplayName("Date Detail")
+    @Test
+    @Transactional
+    void getDateDetailResultsByDateAndMember() {
+        // given
+
+        // when
+        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
+
+        Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
+
+        MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
+                .id(testPrescription.getId())
+                .date(LocalDate.now())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .memberId(member.getId())
+                .prescriptionId(testPrescription.getId())
+                .build();
+
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
+
+
+        survey = Survey.builder()
+                .date(LocalDate.now())
+                .build();
+
+        survey = surveyRepository.save(survey);
+
+        surveyContent = SurveyContent.builder()
+                .survey(survey)
+                .build();
+
+        surveyContent = surveyContentRepository.save(surveyContent);
+
+        contentTextResultDto = ContentTextResultDto.builder()
+                .text("오늘의 컨디션 입력합니다.")
+                .surveyContentId(surveyContent.getId())
+                .build();
+
+        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());
+
+        MedicineRoutineDateResponseDto detailResult = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(LocalDate.now(), member.getId()); // 결과 불러오기
+
+        // then
+        Assertions.assertThat(contentTextResult.getText()).isEqualTo(detailResult.getSurveyContentDtos().get(0).getContentTextResultResponse().get(0).getText());
+        System.out.println("detailResult = " + detailResult.getMedicineRoutineDateDtos());
+        System.out.println("detailResult = " + detailResult);
+        // TODO: Assertions 작성
     }
 }
