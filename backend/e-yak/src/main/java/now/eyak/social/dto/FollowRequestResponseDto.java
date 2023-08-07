@@ -10,7 +10,7 @@ import now.eyak.social.domain.FollowRequest;
 @Setter
 @Builder
 public class FollowRequestResponseDto {
-    private Long followId;
+    private Long followRequestId;
     private Long followerId;
     private Long followeeId;
     private String followeeNickname;
@@ -19,7 +19,7 @@ public class FollowRequestResponseDto {
 
     public static FollowRequestResponseDto from(FollowRequest followRequest) {
         return FollowRequestResponseDto.builder()
-                .followId(followRequest.getId())
+                .followRequestId(followRequest.getId())
                 .followerId(followRequest.getFollower().getId())
                 .followeeId(followRequest.getFollowee().getId())
                 .followeeNickname(followRequest.getFollowee().getNickname())
