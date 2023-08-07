@@ -3,6 +3,7 @@ package now.eyak.routine.controller;
 import lombok.RequiredArgsConstructor;
 import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.dto.MedicineRoutineCheckUpdateDto;
+import now.eyak.routine.dto.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.service.MedicineRoutineCheckService;
 import now.eyak.survey.domain.ContentTextResult;
 import now.eyak.survey.dto.request.ContentTextResultDto;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 
 @RestController
 @RequestMapping("/api/v1/members")
@@ -34,12 +38,31 @@ public class RoutineController {
     public ResponseEntity updateMedicineRoutineCheck(
             @RequestBody MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto,
             @AuthenticationPrincipal Long memberId
-    ) throws URISyntaxException {
+        ) throws URISyntaxException {
 
         MedicineRoutineCheck medicineRoutineCheck = medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto, memberId);
 
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 한달 단위 복용 조회
+     * @param medicineRoutineCheckUpdateDto
+     * @param yearMonth
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @GetMapping("{memberId}/medicine-routine-checks/month")
+    public ResponseEntity getMonthResultsByMonthAndMember(
+            @RequestBody MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto,
+            @RequestParam YearMonth yearMonth,
+            @AuthenticationPrincipal Long memberId
+        ) throws URISyntaxException {
+
+        MedicineRoutineMonthResponseDto monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId);
+
+        return ResponseEntity.ok(monthResultsByMonthAndMember);
+    }
 
 }
