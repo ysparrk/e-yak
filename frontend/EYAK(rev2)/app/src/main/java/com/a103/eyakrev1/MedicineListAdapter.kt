@@ -2,6 +2,7 @@ package com.a103.eyakrev1
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Medicine>?): BaseAdapter() {
+
+class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Medicine>?, private val viewModel: MedicineClickedViewModel): BaseAdapter() {
 
     var mainActivity: MainActivity = context as MainActivity
 
@@ -39,7 +45,7 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
 
         /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val medicine = medicineList!![position]
-        Log.d("log", "$medicine")
+//        Log.d("log", "$medicine")
 
         when(medicine.medicineShape) {
             1 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_glacier)
@@ -92,10 +98,19 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         // fragment 간에 데이터 전달하기
 
         medicineDetailButton.setOnClickListener {
-            mainActivity!!.gotoMedicineDetail()
+            viewModel.setSelectedMedicineId(medicine.id)
         }
 
         return view
+    }
+
+    class MedicineClickedViewModel : ViewModel() {
+        private val _selectedMedicineId = MutableLiveData<Int>()
+        val selectedMedicineId: LiveData<Int> = _selectedMedicineId
+
+        fun setSelectedMedicineId(id: Int) {
+            _selectedMedicineId.value = id
+        }
     }
 
     /**
