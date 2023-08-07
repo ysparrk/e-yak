@@ -1,5 +1,6 @@
 package now.eyak.routine.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,11 +32,18 @@ public class MedicineRoutineCheckUpdateDto {
         this.prescriptionId = prescriptionId;
     }
 
-
-
+    @QueryProjection
+    public MedicineRoutineCheckUpdateDto(LocalDate date, Boolean took) {
+        this.date = date;
+        this.took = took;
+    }
 
     // 복용 기록 업데이트
     public void update(MedicineRoutineCheck medicineRoutineCheck) {
         medicineRoutineCheck.setTook(!medicineRoutineCheck.getTook());
+    }
+
+    public static boolean isTook(MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto) {
+        return medicineRoutineCheckUpdateDto.getTook();
     }
 }

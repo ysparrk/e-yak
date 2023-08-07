@@ -19,15 +19,8 @@ public class MedicineRoutineCheckDto {
     private Long memberId;
     private Long prescriptionId;
 
-    @QueryProjection
-    public MedicineRoutineCheckDto(LocalDate date, Boolean took) {
-        this.date = date;
-        this.took = took;
-    }
 
 
-    public static boolean isTook(MedicineRoutineCheckDto medicineRoutineCheckDto) {
-        return medicineRoutineCheckDto.getTook();
-    }
+
 
 }
