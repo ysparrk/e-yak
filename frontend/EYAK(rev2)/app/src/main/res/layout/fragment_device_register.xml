@@ -157,7 +157,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="20dp"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/btNotFindText"
@@ -170,6 +171,92 @@
                     android:textAlignment="center"
                     android:textColor="#757863"
                     android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/btDeviceUiLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TableLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:id="@+id/btCell1"
+                                    android:layout_width="70dp"
+                                    android:layout_height="70dp"
+                                    android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                                <ImageView
+                                    android:id="@+id/btCell2"
+                                    android:layout_width="70dp"
+                                    android:layout_height="70dp"
+                                    android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:id="@+id/btCell3"
+                                    android:layout_width="70dp"
+                                    android:layout_height="70dp"
+                                    android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                                <ImageView
+                                    android:id="@+id/btCell4"
+                                    android:layout_width="70dp"
+                                    android:layout_height="70dp"
+                                    android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                            </TableRow>
+
+                        </TableLayout>
+
+                        <ImageView
+                            android:id="@+id/btCell5"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/btCellText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Medicine Name"
+                        android:textSize="16sp" />
+
+                    <Button
+                        android:id="@+id/btDeviceEditBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#E3F2C1"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:includeFontPadding="false"
+                        android:text="약통 편집하기"
+                        android:textColor="#757863" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
