@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -48,7 +49,7 @@ class MedicineFragment : Fragment() {
         viewModel.selectedMedicineId.observe(viewLifecycleOwner) { medicineId ->
             // medicineId를 사용하여 상세 정보 Fragment로 이동할 때 bundle에 담아서 전달하자
             val bundle = Bundle()
-            bundle.putInt("medicineId", medicineId)
+            bundle.putInt("clickedMedicineId", medicineId)
             setFragmentResult("medicineDetailClicked", bundle)
 
             mainActivity!!.gotoMedicineDetail()
@@ -72,6 +73,13 @@ class MedicineFragment : Fragment() {
                     val medicineListView = layout.findViewById<ListView>(R.id.medicineListView)
 
                     medicineListView.adapter = medicineListAdapter
+
+                    if (medicineList?.size == 1) {
+                        // 아무 것도 없는 경우
+                        val emptyLinearLayout = layout.findViewById<LinearLayout>(R.id.emptyLinearLayout)
+                        emptyLinearLayout.visibility = View.VISIBLE
+                        medicineListView.visibility = View.GONE
+                    }
                 }
             }
 

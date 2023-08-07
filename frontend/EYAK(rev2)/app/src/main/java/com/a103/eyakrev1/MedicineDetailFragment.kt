@@ -50,7 +50,7 @@ class MedicineDetailFragment : Fragment() {
         val medicineDetailDeleteButton = layout.findViewById<Button>(R.id.medicineDetailDeleteButton)
 
         setFragmentResultListener("medicineDetailClicked") { requestKey, bundle ->
-            val clickedMedicineId = bundle.getInt("medicineId", -1)
+            val clickedMedicineId = bundle.getInt("clickedMedicineId", -1)
 
             if (clickedMedicineId != -1) {
                 // 제대로 전달된 상황
@@ -147,6 +147,34 @@ class MedicineDetailFragment : Fragment() {
                     }
                 })
             }
+        }
+
+        medicineDetailDeleteButton.setOnClickListener {
+            val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+            val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
+
+            api.deletePrescription(Authorization= "Bearer ${serverAccessToken}", prescriptionId=medicine!!.id).enqueue(object:
+                Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                    Log.d("log", response.toString())
+//                    Log.d("log", response.body().toString())
+
+                    if (response.code() == 401) {
+//                        Log.d("log", "인증되지 않은 사용자입니다")
+                    } else if (response.code() == 400) {
+//                        Log.d("log", "없는 약입니다")
+                    } else if (response.code() == 200) {
+                        // 삭제 완료 후 복약 탭으로 이동
+                        Toast.makeText(mainActivity,"성공적으로 삭제되었습니다", Toast.LENGTH_LONG).show()
+                        mainActivity!!.gotoMedicine()
+                    }
+                }
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                }
+            })
+
+
         }
 
         return layout

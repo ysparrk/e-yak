@@ -33,7 +33,7 @@ class MedicineAddResultFragment : Fragment() {
         setFragmentResultListener("medicineAddData") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
 
             // 투여 약 이름
-            view?.findViewById<TextView>(R.id.nicknameRequestSideInput)?.text = bundle.getString("medicineName", "")
+            view?.findViewById<TextView>(R.id.medicineNameInputResult)?.text = bundle.getString("medicineName", "")
 
             // 질환 명
             view?.findViewById<TextView>(R.id.diseaseNameInputResult)?.text = bundle.getString("diseaseName", "")
