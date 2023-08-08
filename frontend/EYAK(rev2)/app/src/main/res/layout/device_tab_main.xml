@@ -42,44 +42,99 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                            <ImageView
+                            <LinearLayout
                                 android:id="@+id/btEditCell1"
-                                android:layout_width="70dp"
-                                android:layout_height="70dp"
-                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:background="@drawable/baseline_check_box_outline_blank_24"
+                                android:backgroundTint="#AAABAE"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                            <ImageView
+                                <TextView
+                                    android:id="@+id/btEditCell1Text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="text" />
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:id="@+id/btEditCell2"
-                                android:layout_width="70dp"
-                                android:layout_height="70dp"
-                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:background="@drawable/baseline_check_box_outline_blank_24"
+                                android:backgroundTint="#AAABAE"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/btEditCell2Text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="text" />
+                            </LinearLayout>
+
                         </TableRow>
 
                         <TableRow
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                            <ImageView
+                            <LinearLayout
                                 android:id="@+id/btEditCell3"
-                                android:layout_width="70dp"
-                                android:layout_height="70dp"
-                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/baseline_check_box_outline_blank_24"
+                                android:backgroundTint="#AAABAE"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                            <ImageView
+                                <TextView
+                                    android:id="@+id/btEditCell3Text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="TextView" />
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:id="@+id/btEditCell4"
-                                android:layout_width="70dp"
-                                android:layout_height="70dp"
-                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:background="@drawable/baseline_check_box_outline_blank_24"
+                                android:backgroundTint="#AAABAE"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/btEditCell4Text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="TextView" />
+                            </LinearLayout>
                         </TableRow>
 
                     </TableLayout>
 
-                    <ImageView
+                    <LinearLayout
                         android:id="@+id/btEditCell5"
-                        android:layout_width="140dp"
-                        android:layout_height="140dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:background="@drawable/baseline_check_box_outline_blank_24"
+                        android:backgroundTint="#AAABAE"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/btEditCell5Text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="TextView" />
+                    </LinearLayout>
 
                 </LinearLayout>
             </HorizontalScrollView>
