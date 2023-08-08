@@ -5,139 +5,138 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/backDeviceEditBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="뒤로" />
-
-        <ImageView
-            android:id="@+id/connectState"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:tint="#C4D7B2"
-            app:srcCompat="@drawable/baseline_circle_24" />
-
-        <TextView
-            android:id="@+id/connectStateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:fontFamily="@font/tmoney_bold"
-            android:text="약통과 연결되었습니다"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-    <HorizontalScrollView
-        android:id="@+id/deviceScroll"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/btEditCell1"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
-
-                    <ImageView
-                        android:id="@+id/btEditCell2"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/btEditCell3"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
-
-                    <ImageView
-                        android:id="@+id/btEditCell4"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
-                </TableRow>
-
-            </TableLayout>
-
-            <ImageView
-                android:id="@+id/btEditCell5"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
-        android:id="@+id/medicineScroll"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deviceScroll">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/testEditImage1"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="30dp"
-                app:srcCompat="@drawable/baseline_access_time_24" />
+            <Button
+                android:id="@+id/backDeviceEditBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="뒤로" />
 
-            <ImageView
-                android:id="@+id/testEditImage2"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/baseline_access_time_24" />
+            <HorizontalScrollView
+                android:id="@+id/deviceScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/btEditCell1"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+
+                            <ImageView
+                                android:id="@+id/btEditCell2"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/btEditCell3"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+
+                            <ImageView
+                                android:id="@+id/btEditCell4"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+                        </TableRow>
+
+                    </TableLayout>
+
+                    <ImageView
+                        android:id="@+id/btEditCell5"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/baseline_check_box_outline_blank_24" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:id="@+id/medicineScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/testEditImage1"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginRight="30dp"
+                        app:srcCompat="@drawable/baseline_access_time_24" />
+
+                    <ImageView
+                        android:id="@+id/testEditImage2"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/baseline_access_time_24" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <Switch
+                android:id="@+id/deviceSoundSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:text="알림 소리"
+                android:textColor="#757863"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/deviceBuzzSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/tmoney_bold"
+                android:text="알림 진동"
+                android:textColor="#757863"
+                android:textSize="16sp" />
+
         </LinearLayout>
-    </HorizontalScrollView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

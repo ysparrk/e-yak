@@ -256,14 +256,9 @@ class DeviceRegisterFragment : Fragment() {
                     if (device?.name != null) { // (추후 약통만 식별하도록 설정)
                         try {
                             deviceFindFlag = true
-                            val deviceView = LinearLayout(getContext())
-                            val deviceText = TextView(getContext())
-                            val deviceBtn = Button(getContext())
-                            deviceText.text = "${device?.name}"
-                            deviceBtn.text = "연결"
-                            deviceBtn.setOnClickListener { pairDevice(device) }
-                            deviceView.addView(deviceText)
-                            deviceView.addView(deviceBtn)
+                            var deviceView = LayoutInflater.from(requireContext()).inflate(R.layout.device_tab_list_view_item, null)
+                            deviceView.findViewById<TextView>(R.id.deviceNameText).text = "${device?.name}"
+                            deviceView.findViewById<Button>(R.id.deviceConnBtn).setOnClickListener { pairDevice(device) }
                             layout.findViewById<LinearLayout>(R.id.btListLayout).addView(deviceView)
                         } catch (e: Exception) {}
                     }
