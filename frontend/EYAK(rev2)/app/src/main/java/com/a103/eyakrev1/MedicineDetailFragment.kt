@@ -148,7 +148,8 @@ class MedicineDetailFragment : Fragment() {
                 })
             }
         }
-
+        
+        // 삭제 버튼을 클릭했을 때
         medicineDetailDeleteButton.setOnClickListener {
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
             val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
@@ -173,8 +174,11 @@ class MedicineDetailFragment : Fragment() {
 
                 }
             })
+        }
 
-
+        // 수정 버튼을 클릭했을 때
+        medicineDetailEditButton.setOnClickListener {
+            
         }
 
         return layout
