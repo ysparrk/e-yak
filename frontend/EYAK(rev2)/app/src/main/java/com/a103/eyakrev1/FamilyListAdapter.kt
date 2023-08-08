@@ -43,10 +43,8 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
             view.setBackgroundColor(Color.parseColor("#F8FCF8"))
         }
 
-//        val resourceId = context.resources.getIdentifier(family.familyIcon, "drawable", context.packageName)
-//        familyListIconImageView.setImageResource(resourceId)
-        familyListNameTextView.text = family.familyName
-        familyListNicknameTextView.text = family.familyNickname
+        familyListNameTextView.text = family.custom_name
+        familyListNicknameTextView.text = family.nickname
 
         return view
     }

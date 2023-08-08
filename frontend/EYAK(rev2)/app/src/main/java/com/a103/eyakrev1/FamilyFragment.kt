@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -30,17 +31,7 @@ class FamilyFragment : Fragment() {
     private val lightOn: Int = Color.parseColor("#FFF6FA70")
     private val lightOff: Int = Color.parseColor("#FF9BABB8")
 
-    var familyList = arrayListOf<Family>(
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-    )
+    var familyList = arrayListOf<Family>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,16 +47,39 @@ class FamilyFragment : Fragment() {
 
         // 기본 정보 초기화 끝
 
-
-        familyList.add(Family(familyId = -1, familyIcon = "baseline_person_24", familyName = "빈 공간", familyNickname = "빈 공간"))
-
-        val familyListAdapter = FamilyListAdapter(mainActivity, familyList)
-        val familyListView = layout.findViewById<ListView>(R.id.familyListView)
-        familyListView?.adapter = familyListAdapter
-
         // 나에게 팔로워 요청한 사람 전체 정보 -> isGetFollowers: true
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+        val memberId = pref.getInt("SERVER_USER_ID", -1)
+
+        api.getAllFollowers(memberId = memberId, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<ArrayList<Family>> {
+            override fun onResponse(call: Call<ArrayList<Family>>, response: Response<ArrayList<Family>>) {
+                if(response.code() == 200) {
+                    familyList = response.body()!!
+
+                    // 마지막 빈 공간을 위해서 더미 데이터 추가
+                    familyList.add(Family())
+
+                    if (familyList.size == 1) {
+                        layout.findViewById<LinearLayout>(R.id.emptyFamilyLinearLayout).visibility = View.VISIBLE
+                    }
+
+                    val familyListAdapter = FamilyListAdapter(mainActivity, familyList)
+                    val familyListView = layout.findViewById<ListView>(R.id.familyListView)
+                    familyListView?.adapter = familyListAdapter
+                }
+                else if(response.code() == 401) {
+                    Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                }
+                else if(response.code() == 400) {
+                    Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Family>>, t: Throwable) {
+
+            }
+        })
 
         api.followRequests(Authorization = "Bearer ${serverAccessToken}", isGetFollowers = true).enqueue(object: Callback<MutableList<FollowRequestsDataModel>> {
             override fun onResponse(call: Call<MutableList<FollowRequestsDataModel>>, response: Response<MutableList<FollowRequestsDataModel>>) {

@@ -116,3 +116,9 @@ data class AcceptFollowRequestBodyModel(
     var followeeScope: String,
     var customName: String,
 )
+
+data class TodayDoseInfoBodyModel(
+    var date: String,
+    var fullDose: Int,
+    var actualDose: Int,
+)
