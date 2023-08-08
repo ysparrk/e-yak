@@ -591,7 +591,7 @@
 
                     <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="100dp"
                         android:paddingTop="10dp">
 
                         <LinearLayout
@@ -601,12 +601,149 @@
 
                             <TextView
                                 android:id="@+id/textView4"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/tmoney_regular"
                                 android:includeFontPadding="false"
-                                android:text="님 정보 쓸거임 동의함? 동의 안하면 어쩔건데 ㅋ"
-                                android:textColor="#757863" />
+                                android:text="개인정보보호법에 따라 지금이:약에 회원가입 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용목적, 개인정보의 보유 및 이용기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내 드리오니 자세히 읽은 후 동의하여 주시기 바랍니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView79"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_bold"
+                                android:includeFontPadding="false"
+                                android:paddingTop="10dp"
+                                android:text="1. 수집하는 개인정보"
+                                android:textColor="#757863"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/textView81"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_bold"
+                                android:includeFontPadding="false"
+                                android:text="회원가입 시점에 지금이:약이 이용자로부터 수집하는 개인정보는 아래와 같습니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView86"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:text="- 회원 가입 시 필수항목으로 닉네임, 6개의 시간 정보(일어나는 시간, 아침식사 시간, 점심식사 시간, 저녁식사 시간, 잠자는 시간, 식사 시간), 질병의 종류와 복약하는 약의 종류와 1회 투여 용량에 대한 정보를 수집합니다.  "
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView87"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_bold"
+                                android:includeFontPadding="false"
+                                android:paddingTop="10dp"
+                                android:text="2. 수집한 개인정보의 이용"
+                                android:textColor="#757863"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/textView88"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_bold"
+                                android:includeFontPadding="false"
+                                android:text="아래의 목적으로만 개인정보를 이용합니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView89"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:text="- 회원 가입 의사의 확인,이용자 식별, 회원탈퇴 의사의 확인 등 회원관리를 위하여 개인정보를 이용합니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView90"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:text="- 인구통계학적 분석, 알람, 소셜 기능을 이용한 확인된 사용자에 대한 정보 공유 등을 위하여 개인정보를 이용합니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView91"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:text="- 법령 및 지금이:약 이용약관을 위반하는 회원에 대한 이용 제한 조치, 부정 이용 행위를 포함하여 서비스의 원활한 운영에 지장을 주는 행위에 대한 방지 및 제재, 계정도용 및 부정거래 방지, 약관 개정 등의 고지사항 전달, 분쟁조정을 위한 기록 보존, 민원처리 등 이용자 보호 및 서비스 운영을 위하여 개인정보를 이용합니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView92"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:text="- 보안, 프라이버시, 안전 측면에서 이용자가 안심하고 이용할 수 있는 서비스 이용환경 구축을 위해 개인정보를 이용합니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView93"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_bold"
+                                android:includeFontPadding="false"
+                                android:paddingTop="10dp"
+                                android:text="3. 개인정보의 보관기간"
+                                android:textColor="#757863"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/textView94"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:text="지금이:약은 원칙적으로 이용자의 개인정보를 회원 탈퇴 시 지체없이 파기하고 있습니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textView95"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_bold"
+                                android:includeFontPadding="false"
+                                android:paddingTop="10dp"
+                                android:text="4. 개인정보 수집 및 이용 동의를 거부할 권리"
+                                android:textColor="#757863"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/textView96"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:includeFontPadding="false"
+                                android:paddingBottom="10dp"
+                                android:text="이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가 있습니다. 회원가입 시 수집하는 최소한의 개인정보, 즉, 필수 항목에 대한 수집 및 이용 동의를 거부하실 경우, 회원가입이 어려울 수 있습니다."
+                                android:textColor="#757863"
+                                android:textSize="12sp" />
+
                         </LinearLayout>
                     </ScrollView>
 
