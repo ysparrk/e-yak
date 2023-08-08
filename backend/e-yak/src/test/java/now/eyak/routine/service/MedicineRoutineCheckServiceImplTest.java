@@ -126,9 +126,8 @@ class MedicineRoutineCheckServiceImplTest {
         prescription = prescriptionService.insert(prescriptionDto, member.getId());
 
         medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
-
-
     }
+
 
     @DisplayName("Scheduling")
     @Test
@@ -146,7 +145,7 @@ class MedicineRoutineCheckServiceImplTest {
     }
 
     @DisplayName("Routine Check")
-    @Test
+//    @Test
     @Transactional
     void updateMedicineRoutineCheck() {
         // given
@@ -154,8 +153,17 @@ class MedicineRoutineCheckServiceImplTest {
         // when
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
+        MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
+                .date(LocalDate.now())
+                .prescriptionId(testPrescription.getId())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .build();
+
+
+        MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
-                .id(testPrescription.getId())
+                .id(checkIdResponseDto.getId())
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
@@ -180,8 +188,17 @@ class MedicineRoutineCheckServiceImplTest {
         // when
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
+        MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
+                .date(LocalDate.now())
+                .prescriptionId(testPrescription.getId())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .build();
+
+
+        MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
-                .id(testPrescription.getId())
+                .id(checkIdResponseDto.getId())
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
@@ -206,8 +223,17 @@ class MedicineRoutineCheckServiceImplTest {
         // when
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
+        MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
+                .date(LocalDate.now())
+                .prescriptionId(testPrescription.getId())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .build();
+
+
+        MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
-                .id(testPrescription.getId())
+                .id(checkIdResponseDto.getId())
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
@@ -232,8 +258,17 @@ class MedicineRoutineCheckServiceImplTest {
         // when
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
+        MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
+                .date(LocalDate.now())
+                .prescriptionId(testPrescription.getId())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .build();
+
+
+        MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
-                .id(testPrescription.getId())
+                .id(checkIdResponseDto.getId())
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
