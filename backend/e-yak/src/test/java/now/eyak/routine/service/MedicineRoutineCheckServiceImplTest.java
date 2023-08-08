@@ -6,9 +6,9 @@ import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.prescription.service.PrescriptionService;
-import now.eyak.routine.domain.MedicineRoutineCheck;
-import now.eyak.routine.dto.request.MedicineRoutineCheckDto;
+import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
+import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
 import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
@@ -67,8 +67,6 @@ class MedicineRoutineCheckServiceImplTest {
     Member member;
     Prescription prescription;
     PrescriptionDto prescriptionDto;
-    MedicineRoutineCheckDto medicineRoutineCheckDto;
-    MedicineRoutineCheck medicineRoutineCheck;
     Survey survey;
     SurveyContent surveyContent;
     ContentTextResultDto contentTextResultDto;
@@ -127,7 +125,7 @@ class MedicineRoutineCheckServiceImplTest {
 
         prescription = prescriptionService.insert(prescriptionDto, member.getId());
 
-        medicineRoutineCheckService.scheduleMedicineRoutineCheck();
+        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
 
 
     }
@@ -273,4 +271,25 @@ class MedicineRoutineCheckServiceImplTest {
         // TODO: Assertions 작성
     }
 
+    @DisplayName("Get MedicineRoutineCheckId")
+    @Test
+    @Transactional
+    void getMedicineRoutineCheckId() {
+        // given
+        Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
+
+        MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
+                .date(LocalDate.now())
+                .prescriptionId(testPrescription.getId())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(0).getMedicineRoutine().getRoutine())
+                .build();
+
+        // when
+        MedicineRoutineCheckIdResponseDto medicineRoutineCheckId = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
+        // then
+        System.out.println("medicineRoutineCheckId = " + medicineRoutineCheckId);
+        // TODO: Assertions 작성
+
+    }
 }
