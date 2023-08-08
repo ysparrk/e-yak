@@ -29,6 +29,8 @@ class MedicineDetailFragment : Fragment() {
     var medicine: Medicine? = Medicine()
     var clickedMedicineId = -1
 
+    private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
+
     override fun onCreateView(
 
         inflater: LayoutInflater,
@@ -83,20 +85,28 @@ class MedicineDetailFragment : Fragment() {
                             for (engTime in medicine!!.routines) {
                                 if (engTime == "BED_AFTER") {
                                     dosePerDayText = dosePerDayText.plus("○ 취침 후 ○\n")
+                                    timeChk[0] = true
                                 } else if (engTime == "BREAKFAST_BEFORE") {
                                     dosePerDayText = dosePerDayText.plus("○ 아침 식사 전 ○\n")
+                                    timeChk[1] = true
                                 } else if (engTime == "BREAKFAST_AFTER") {
                                     dosePerDayText = dosePerDayText.plus("○ 아침 식사 후 ○\n")
+                                    timeChk[2] = true
                                 } else if (engTime == "LUNCH_BEFORE") {
                                     dosePerDayText = dosePerDayText.plus("○ 점심 식사 전 ○\n")
+                                    timeChk[3] = true
                                 } else if (engTime == "LUNCH_AFTER") {
                                     dosePerDayText = dosePerDayText.plus("○ 점심 식사 후 ○\n")
+                                    timeChk[4] = true
                                 } else if (engTime == "DINNER_BEFORE") {
                                     dosePerDayText = dosePerDayText.plus("○ 저녁 식사 전 ○\n")
+                                    timeChk[5] = true
                                 } else if (engTime == "DINNER_AFTER") {
                                     dosePerDayText = dosePerDayText.plus("○ 저녁 식사 후 ○\n")
+                                    timeChk[6] = true
                                 } else if (engTime == "BED_BEFORE") {
                                     dosePerDayText = dosePerDayText.plus("○ 취침 전 ○\n")
+                                    timeChk[7] = true
                                 }
                             }
                             dosePerDayTextView.text = dosePerDayText.substring(0, kotlin.math.max(dosePerDayText.length - 1, 0))
@@ -185,6 +195,15 @@ class MedicineDetailFragment : Fragment() {
 
             bundle.putBoolean("isEdit", isEdit)
             bundle.putInt("clickedMedicineId", clickedMedicineId)
+            bundle.putString("medicineName", medicine?.customName)
+            bundle.putString("diseaseName", medicine?.krName)
+            bundle.putBooleanArray("timeChk", timeChk)
+            bundle.putInt("medicineShape", medicine?.medicineShape!!)
+            bundle.putFloat("medicineDose", medicine?.medicineDose!!)
+            bundle.putString("unit", medicine?.unit)
+            bundle.putString("startDateTime", layout.findViewById<TextView>(R.id.startDateTime).toString())
+            bundle.putString("endDateTime", layout.findViewById<TextView>(R.id.endDateTime).toString())
+
             setFragmentResult("medicineEditData", bundle)
 
             mainActivity!!.gotoAddMedicine()

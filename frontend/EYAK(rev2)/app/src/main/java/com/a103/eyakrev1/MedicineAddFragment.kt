@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import org.w3c.dom.Text
 import java.time.LocalDate
 
@@ -29,6 +31,8 @@ class MedicineAddFragment : Fragment() {
 
     private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
 
+    val api = EyakService.create()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,8 +40,69 @@ class MedicineAddFragment : Fragment() {
 
         val layout = inflater.inflate(R.layout.fragment_medicine_add, container, false)
 
+        var isEdit = false
+        var clickedMedicineId = -1
+
+        // 이게 복약 수정 인지 체크
+        // 비동기로 처리됨
+        setFragmentResultListener("medicineEditData") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
+
+            isEdit = bundle.getBoolean("isEdit", false)
+            clickedMedicineId = bundle.getInt("clickedMedicineId", -1)
+
+            if (isEdit) {
+                // 제목부터 바꾸자
+                val medicineAddTitleTextView = layout.findViewById<TextView>(R.id.medicineAddTitleTextView)
+                medicineAddTitleTextView.text = "복약 정보 수정"
+                
+                // 약 이름, 질환 이름 초기 설정
+                layout.findViewById<EditText>(R.id.medicineNameInput).setText(bundle.getString("medicineName", ""))
+                layout.findViewById<EditText>(R.id.diseaseNameInput).setText(bundle.getString("diseaseName", ""))
+
+                // 시간 초기 설정
+                timeChk = bundle.getBooleanArray("timeChk") ?: booleanArrayOf(false, false, false, false, false, false, false, false)
+
+                if(timeChk[0]) layout.findViewById<ImageView>(R.id.wakeChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.wakeChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+                if(timeChk[1]) layout.findViewById<ImageView>(R.id.breakfastBeforeChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.breakfastBeforeChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+                if(timeChk[2]) layout.findViewById<ImageView>(R.id.breakfastAfterChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.breakfastAfterChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+                if(timeChk[3]) layout.findViewById<ImageView>(R.id.lunchBeforeChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.lunchBeforeChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+                if(timeChk[4]) layout.findViewById<ImageView>(R.id.lunchAfterChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.lunchAfterChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+                if(timeChk[5]) layout.findViewById<ImageView>(R.id.dinnerBeforeChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.dinnerBeforeChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+                if(timeChk[6]) layout.findViewById<ImageView>(R.id.dinnerAfterChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.dinnerAfterChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+                if(timeChk[7]) layout.findViewById<ImageView>(R.id.bedChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.bedChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
+
+                // 아이콘 초기 설정
+                val prevSelectedIcon = selectIcon
+                val prevIconResourceId = resources?.getIdentifier("medicineIcon${prevSelectedIcon}", "id", context?.packageName)
+                prevIconResourceId?.let { prevIconResourceId ->
+                    layout.findViewById<ImageView>(prevIconResourceId)?.setBackgroundColor(Color.parseColor(nonColor))
+                }
+
+                selectIcon = bundle.getInt("medicineShape", 1)
+                val iconResourceId = resources?.getIdentifier("medicineIcon${selectIcon}", "id", context?.packageName)
+                iconResourceId?.let { iconResourceId ->
+                    layout.findViewById<ImageView>(iconResourceId)?.setBackgroundColor(Color.parseColor(activeColor))
+                }
+
+                // 1회 투여 양, 단위 설정
+                layout.findViewById<EditText>(R.id.numberOfOneTimeInput).setText(bundle.getFloat("medicineDose", 1.0F).toString())
+                layout.findViewById<EditText>(R.id.unitTypeInput).setText(bundle.getString("unit", "정"))
+
+                // 날짜 정보 설정
+                val startDateTime = bundle.getString("startDateTime")
+                val endDateTime = bundle.getString("endDateTime")
+
+                layout.findViewById<EditText>(R.id.startYearInput).setText(startDateTime!!.substring(2 until 4))
+                layout.findViewById<EditText>(R.id.startMonthInput).setText(startDateTime!!.substring(5 until 7))
+                layout.findViewById<EditText>(R.id.startDayInput).setText(startDateTime!!.substring(8 until 10))
+                layout.findViewById<EditText>(R.id.endYearInput).setText(endDateTime!!.substring(2 until 4))
+                layout.findViewById<EditText>(R.id.endMonthInput).setText(endDateTime!!.substring(5 until 7))
+                layout.findViewById<EditText>(R.id.endDayInput).setText(endDateTime!!.substring(8 until 10))
+            }
+        }
+
         // 기본 정보 초기화 start
-            // 날짜 정보 초기화
+        // 날짜 정보 초기화
         layout.findViewById<EditText>(R.id.startYearInput).hint = targetDay.year.toString().substring(2, 4)
         layout.findViewById<EditText>(R.id.startMonthInput).hint = targetDay.monthValue.toString()
         layout.findViewById<EditText>(R.id.startDayInput).hint = targetDay.dayOfMonth.toString()
@@ -215,7 +280,7 @@ class MedicineAddFragment : Fragment() {
                 }
             }
         }
-        // 아니 if(timeChk[0]) timeChk[0] = false else timeChk[0] = true 이렇게 안쓰고 timeChk[0] != timeChk[0] 이거 왜 안됨..??
+        // 아니 if(timeChk[0]) timeChk[0] = false else timeChk[0] = true 이렇게 안쓰고 timeChk[0] = !timeChk[0] 이거 왜 안됨..??
         layout.findViewById<ImageView>(R.id.wakeChk).setOnClickListener {
             if(timeChk[0]) timeChk[0] = false else timeChk[0] = true
             if(timeChk[0]) layout.findViewById<ImageView>(R.id.wakeChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.wakeChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
