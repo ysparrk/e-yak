@@ -1,9 +1,12 @@
-package now.eyak.member.dto;
+package now.eyak.member.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import now.eyak.member.dto.request.MemberDto;
 
+@Schema
 @Getter
 @Setter
 public class SignInResponseDto {

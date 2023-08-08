@@ -2,8 +2,8 @@ package now.eyak.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import now.eyak.member.dto.MemberDto;
-import now.eyak.member.dto.MemberUpdateDto;
+import now.eyak.member.dto.request.MemberDto;
+import now.eyak.member.dto.request.MemberUpdateDto;
 import now.eyak.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
