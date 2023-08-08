@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoutineController {
 
-    private final ApiVersionHolder apiVersionHolder;
     private final MedicineRoutineCheckService medicineRoutineCheckService;
 
     /**
@@ -48,7 +47,6 @@ public class RoutineController {
 
     /**
      * 한달 단위 복용 조회
-     * @param medicineRoutineCheckUpdateDto
      * @param yearMonth
      * @param memberId
      * @return
@@ -56,7 +54,6 @@ public class RoutineController {
      */
     @GetMapping("/month")
     public ResponseEntity getMonthResultsByMonthAndMember(
-            @RequestBody MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto,
             @RequestParam YearMonth yearMonth,
             @AuthenticationPrincipal Long memberId
         ) throws URISyntaxException {
@@ -68,7 +65,6 @@ public class RoutineController {
 
     /**
      * 하루 단위 복용 상세 조회
-     * @param medicineRoutineCheckDto
      * @param date
      * @param memberId
      * @return
@@ -76,7 +72,6 @@ public class RoutineController {
      */
     @GetMapping("/day")
     public ResponseEntity getDateDetailResultsByDateAndMember(
-            @RequestBody MedicineRoutineCheckDto medicineRoutineCheckDto,
             @RequestParam LocalDate date,
             @AuthenticationPrincipal Long memberId
         ) throws URISyntaxException {
