@@ -82,6 +82,20 @@ data class PrescriptionBodyModel(   // 복약 정보 등록 바디
     var unit: String,
 )
 
+data class PrescriptionEditBodyModel(
+    var icd: String,
+    var krName: String,
+    var engName: String,
+    var customName: String,
+    var startDateTime: String,
+    var endDateTime: String,
+    var medicineRoutines: MutableList<String>,
+    var iotLocation: Int,
+    var medicineShape: Int,
+    var medicineDose: Float,
+    var unit: String,
+)
+
 data class Dates(
     var date: String,
     var full_dose: Int,

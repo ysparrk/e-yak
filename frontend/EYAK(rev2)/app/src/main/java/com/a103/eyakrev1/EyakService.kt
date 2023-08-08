@@ -82,6 +82,13 @@ interface EyakService {
         @Path("prescriptionId") prescriptionId: Int,
     ): Call<Medicine>
 
+    @PUT("/api/v1/prescriptions/{prescriptionId}")
+    fun editPrescriptionDetail(
+        @Header("Authorization") Authorization: String,
+        @Body params: PrescriptionEditBodyModel,
+        @Path("prescriptionId") prescriptionId: Int,
+    ): Call<Medicine>
+
     @DELETE("/api/v1/prescriptions/{prescriptionId}")
     fun deletePrescription(
         @Header("Authorization") Authorization: String,

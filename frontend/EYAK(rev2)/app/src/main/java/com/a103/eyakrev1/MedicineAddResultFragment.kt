@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.PreferenceManager
 import retrofit2.Call
@@ -27,10 +28,18 @@ class MedicineAddResultFragment : Fragment() {
 
     private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
 
+    var isEdit = false
+    var clickedMedicineId = -1
+    var iotLocation = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setFragmentResultListener("medicineAddData") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
+
+            isEdit = bundle.getBoolean("isEdit", false)
+            clickedMedicineId = bundle.getInt("clickedMedicineId", -1)
+            iotLocation = bundle.getInt("iotLocation", -1)
 
             // 투여 약 이름
             view?.findViewById<TextView>(R.id.medicineNameInputResult)?.text = bundle.getString("medicineName", "")
@@ -136,36 +145,83 @@ class MedicineAddResultFragment : Fragment() {
 
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
             val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
-            val data = PrescriptionBodyModel(
-                icd = "",
-                kr_name = layout.findViewById<TextView>(R.id.diseaseNameInputResult).text.toString(),
-                eng_name = "",
-                custom_name = layout.findViewById<TextView>(R.id.medicineNameInputResult).text.toString(),
-                start_date_time = "${startYear}-${startMonth}-${startDay}T00:00:00",
-                end_date_time = "${endYear}-${endMonth}-${endDay}T00:00:00",
-                medicine_routines = medicineRoutines,
-                medicine_shape = selectIcon,
-                medicine_dose = layout.findViewById<TextView>(R.id.numberOfOneTimeInputResult).text.toString().toFloat(),
-                unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),
-            )
 
-            api.prescription(Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object:
-                Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if(response.code() == 201) {
-                        Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
-                        mainActivity!!.gotoMedicine()
+
+            if (isEdit) {
+                // 이게 edit이라면, clickedMedicineId가 -1이 아닐거
+                val data = PrescriptionEditBodyModel(
+                    icd = "",
+                    krName = layout.findViewById<TextView>(R.id.diseaseNameInputResult).text.toString(),
+                    engName = "",
+                    customName = layout.findViewById<TextView>(R.id.medicineNameInputResult).text.toString(),
+                    startDateTime = "${startYear}-${startMonth}-${startDay}T00:00:00",
+                    endDateTime = "${endYear}-${endMonth}-${endDay}T00:00:00",
+                    medicineRoutines = medicineRoutines,
+                    iotLocation = iotLocation,
+                    medicineShape = selectIcon,
+                    medicineDose = layout.findViewById<TextView>(R.id.numberOfOneTimeInputResult).text.toString().toFloat(),
+                    unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),
+                )
+
+                api.editPrescriptionDetail(Authorization = "Bearer ${serverAccessToken}", params = data, prescriptionId = clickedMedicineId).enqueue(object:
+                    Callback<Medicine> {
+                    override fun onResponse(call: Call<Medicine>, response: Response<Medicine>) {
+                        if(response.code() == 200) {
+                            Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                            // 해당 복약 상세 조회를 띄워주자
+                            val bundle = Bundle()
+                            bundle.putInt("clickedMedicineId", clickedMedicineId)
+                            setFragmentResult("medicineDetailClicked", bundle)
+                            mainActivity!!.gotoMedicineDetail()
+                        }
+                        else if(response.code() == 401) {
+                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                        } else if(response.code() == 400) {
+                            Toast.makeText(mainActivity, "해당 복약 정보가 존재하지 않습니다", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    else if(response.code() == 401) {
-                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                    override fun onFailure(call: Call<Medicine>, t: Throwable) {
+
                     }
-                }
-                override fun onFailure(call: Call<Void>, t: Throwable) {
+                })
+            } else {
+                // 이게 add라면 (기존꺼)
+                val data = PrescriptionBodyModel(
+                    icd = "",
+                    kr_name = layout.findViewById<TextView>(R.id.diseaseNameInputResult).text.toString(),
+                    eng_name = "",
+                    custom_name = layout.findViewById<TextView>(R.id.medicineNameInputResult).text.toString(),
+                    start_date_time = "${startYear}-${startMonth}-${startDay}T00:00:00",
+                    end_date_time = "${endYear}-${endMonth}-${endDay}T00:00:00",
+                    medicine_routines = medicineRoutines,
+                    medicine_shape = selectIcon,
+                    medicine_dose = layout.findViewById<TextView>(R.id.numberOfOneTimeInputResult).text.toString().toFloat(),
+                    unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),
+                )
 
-                }
-            })
+                api.prescription(Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object:
+                    Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if(response.code() == 201) {
+                            Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                            // 복약 전체조회를 띄워주자
+                            mainActivity!!.gotoMedicine()
+                        }
+                        else if(response.code() == 401) {
+                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
 
-            mainActivity!!.gotoMedicine()
+                    }
+                })
+//                // 복약 전체조회를 띄워주자 => 성공 시에만 띄워주자
+//                mainActivity!!.gotoMedicine()
+            }
+
+
+
+
         }
 
         return layout
