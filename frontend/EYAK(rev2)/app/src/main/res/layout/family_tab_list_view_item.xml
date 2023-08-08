@@ -51,7 +51,8 @@
                         android:fontFamily="@font/tmoney_regular"
                         android:gravity="center_vertical"
                         android:includeFontPadding="false"
-                        android:text="(닉네임)" />
+                        android:text="(닉네임)"
+                        android:textColor="#757863" />
 
                     <Space
                         android:layout_width="match_parent"

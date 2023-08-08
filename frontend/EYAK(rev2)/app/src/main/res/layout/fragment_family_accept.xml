@@ -264,7 +264,7 @@
                 android:layout_height="60dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:weightSum="11">
+                android:weightSum="13">
 
                 <Space
                     android:layout_width="0dp"
@@ -275,7 +275,7 @@
                     android:id="@+id/acceptBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:backgroundTint="#E3F2C1"
                     android:fontFamily="@font/tmoney_bold"
                     android:includeFontPadding="false"
@@ -291,7 +291,7 @@
                     android:id="@+id/refuseBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:backgroundTint="#FF9B9B"
                     android:fontFamily="@font/tmoney_bold"
                     android:includeFontPadding="false"

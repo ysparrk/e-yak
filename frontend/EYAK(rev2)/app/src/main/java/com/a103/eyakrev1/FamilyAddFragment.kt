@@ -43,7 +43,7 @@ class FamilyAddFragment : Fragment() {
                                 Toast.makeText(mainActivity, "자신을 추가할 수 없어요ㅠㅠ", Toast.LENGTH_SHORT).show()
                             }
                             else {  // 가족 신청 가능
-                                Toast.makeText(mainActivity, "가족 확인 완료", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(mainActivity, "닉네임 확인 완료", Toast.LENGTH_SHORT).show()
                                 nickNameChk = true
                             }
                         }

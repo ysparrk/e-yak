@@ -397,7 +397,8 @@
                         android:layout_height="match_parent"
                         android:background="#DDE6ED"
                         android:gravity="top"
-                        android:hint="기타 특이 사항" />
+                        android:hint="기타 특이 사항"
+                        android:textColor="#757863" />
                 </FrameLayout>
 
                 <Space

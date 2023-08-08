@@ -201,8 +201,9 @@ class MedicineDetailFragment : Fragment() {
             bundle.putInt("medicineShape", medicine?.medicineShape!!)
             bundle.putFloat("medicineDose", medicine?.medicineDose!!)
             bundle.putString("unit", medicine?.unit)
-            bundle.putString("startDateTime", layout.findViewById<TextView>(R.id.startDateTime).toString())
-            bundle.putString("endDateTime", layout.findViewById<TextView>(R.id.endDateTime).toString())
+            bundle.putString("startDateTime", layout.findViewById<TextView>(R.id.startDateTime).text.toString())
+            bundle.putString("endDateTime", layout.findViewById<TextView>(R.id.endDateTime).text.toString())
+            bundle.putInt("iotLocation", medicine?.iotLocation!!)
 
             setFragmentResult("medicineEditData", bundle)
 

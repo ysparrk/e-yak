@@ -1,7 +1,6 @@
 package com.a103.eyakrev1
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -76,7 +74,7 @@ class MedicineFragment : Fragment() {
 
                     if (medicineList?.size == 1) {
                         // 아무 것도 없는 경우
-                        val emptyLinearLayout = layout.findViewById<LinearLayout>(R.id.emptyLinearLayout)
+                        val emptyLinearLayout = layout.findViewById<LinearLayout>(R.id.emptyMedicineLinearLayout)
                         emptyLinearLayout.visibility = View.VISIBLE
                         medicineListView.visibility = View.GONE
                     }

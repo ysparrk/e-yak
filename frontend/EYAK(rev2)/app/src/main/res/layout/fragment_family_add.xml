@@ -159,7 +159,8 @@
                         android:ems="10"
                         android:gravity="center"
                         android:hint="내가 지정할 이름 입력"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:textColor="#757863" />
                 </FrameLayout>
 
                 <Space

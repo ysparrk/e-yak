@@ -42,6 +42,7 @@ class MedicineAddFragment : Fragment() {
 
         var isEdit = false
         var clickedMedicineId = -1
+        var iotLocation = -1
 
         // 이게 복약 수정 인지 체크
         // 비동기로 처리됨
@@ -49,6 +50,7 @@ class MedicineAddFragment : Fragment() {
 
             isEdit = bundle.getBoolean("isEdit", false)
             clickedMedicineId = bundle.getInt("clickedMedicineId", -1)
+            iotLocation = bundle.getInt("iotLocation", -1)
 
             if (isEdit) {
                 // 제목부터 바꾸자
@@ -91,6 +93,8 @@ class MedicineAddFragment : Fragment() {
                 // 날짜 정보 설정
                 val startDateTime = bundle.getString("startDateTime")
                 val endDateTime = bundle.getString("endDateTime")
+                Log.d("log", startDateTime!!)
+                Log.d("log", endDateTime!!)
 
                 layout.findViewById<EditText>(R.id.startYearInput).setText(startDateTime!!.substring(2 until 4))
                 layout.findViewById<EditText>(R.id.startMonthInput).setText(startDateTime!!.substring(5 until 7))
@@ -202,7 +206,7 @@ class MedicineAddFragment : Fragment() {
                 startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).hint.toString();
             }
             else {
-                startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).text.toString();
+                startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt().toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).text.toString();
             }
 
             if(layout.findViewById<EditText>(R.id.startDayInput).text.toString() == "") {
@@ -237,7 +241,7 @@ class MedicineAddFragment : Fragment() {
                 endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).hint.toString();
             }
             else {
-                endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).text.toString();
+                endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt().toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).text.toString();
             }
 
             if(layout.findViewById<EditText>(R.id.endDayInput).text.toString() == "") {
@@ -255,6 +259,11 @@ class MedicineAddFragment : Fragment() {
                 flag = false
             }
             // 종료 날짜 체크 끝
+            
+            // 이게 add인지 edit인지 구분하는 비트
+            resultBundle.putBoolean("isEdit", isEdit)
+            resultBundle.putInt("clickedMedicineId", clickedMedicineId)
+            resultBundle.putInt("iotLocation", iotLocation)
 
             if(flag) {
                 setFragmentResult("medicineAddData", resultBundle)
@@ -320,7 +329,6 @@ class MedicineAddFragment : Fragment() {
             if(timeChk[7]) timeChk[7] = false else timeChk[7] = true
             if(timeChk[7]) layout.findViewById<ImageView>(R.id.bedChk).setImageResource(R.drawable.baseline_check_box_24) else layout.findViewById<ImageView>(R.id.bedChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
         }
-
 
         return layout
     }
