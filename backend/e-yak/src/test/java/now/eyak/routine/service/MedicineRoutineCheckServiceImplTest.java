@@ -145,7 +145,7 @@ class MedicineRoutineCheckServiceImplTest {
     }
 
     @DisplayName("Routine Check")
-//    @Test
+    @Test
     @Transactional
     void updateMedicineRoutineCheck() {
         // given
@@ -173,7 +173,7 @@ class MedicineRoutineCheckServiceImplTest {
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // toggle
 
         // then
-        Assertions.assertThat(true).isEqualTo(medicineRoutineCheckRepository.findByIdAndMemberAndDate(testPrescription.getId(), member, LocalDate.now())
+        Assertions.assertThat(true).isEqualTo(medicineRoutineCheckRepository.findByIdAndMemberAndDate(medicineRoutineCheckUpdateDto.getId(), member, LocalDate.now())
                         .orElseThrow(() -> new NoSuchElementException("해당 복약에 대한 체크가 존재하지 않습니다."))
                         .getTook()
                 );
