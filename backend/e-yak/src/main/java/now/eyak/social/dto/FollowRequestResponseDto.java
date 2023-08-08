@@ -13,6 +13,7 @@ public class FollowRequestResponseDto {
     private Long followRequestId;
     private Long followerId;
     private Long followeeId;
+    private String followerNickname;
     private String followeeNickname;
     private String customName;
     private Scope scope;
@@ -22,6 +23,7 @@ public class FollowRequestResponseDto {
                 .followRequestId(followRequest.getId())
                 .followerId(followRequest.getFollower().getId())
                 .followeeId(followRequest.getFollowee().getId())
+                .followerNickname(followRequest.getFollower().getNickname())
                 .followeeNickname(followRequest.getFollowee().getNickname())
                 .customName(followRequest.getCustomName())
                 .scope(followRequest.getScope())
