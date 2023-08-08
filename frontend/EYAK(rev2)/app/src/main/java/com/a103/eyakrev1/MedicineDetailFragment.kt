@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
@@ -184,7 +185,9 @@ class MedicineDetailFragment : Fragment() {
 
             bundle.putBoolean("isEdit", isEdit)
             bundle.putInt("clickedMedicineId", clickedMedicineId)
+            setFragmentResult("medicineEditData", bundle)
 
+            mainActivity!!.gotoAddMedicine()
         }
 
         return layout
