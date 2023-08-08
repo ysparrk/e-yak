@@ -1,5 +1,6 @@
 package now.eyak.routine.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-public class MedicineRoutineCheckDto {
+public class MedicineRoutineCheckMonthDto {
     private Long id;
     private LocalDate date;
     private Routine routine;
@@ -19,13 +20,24 @@ public class MedicineRoutineCheckDto {
     private Long memberId;
     private Long prescriptionId;
 
+    @QueryProjection
+    public MedicineRoutineCheckMonthDto(LocalDate date, Boolean took) {
+        this.date = date;
+        this.took = took;
+    }
+
     @Builder
-    public MedicineRoutineCheckDto(Long id, LocalDate date, Routine routine, Boolean took, Long memberId, Long prescriptionId) {
+    public MedicineRoutineCheckMonthDto(Long id, LocalDate date, Routine routine, Boolean took, Long memberId, Long prescriptionId) {
         this.id = id;
         this.date = date;
         this.routine = routine;
         this.took = took;
         this.memberId = memberId;
         this.prescriptionId = prescriptionId;
+    }
+
+
+    public static boolean isTook(MedicineRoutineCheckMonthDto medicineRoutineCheckMonthDto) {
+        return medicineRoutineCheckMonthDto.getTook();
     }
 }

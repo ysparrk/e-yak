@@ -8,7 +8,6 @@ import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
-import now.eyak.prescription.domain.QPrescription;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.routine.domain.MedicineRoutineCheck;
@@ -117,8 +116,8 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
         // 요청받은 날짜의 복약 기록을 다 가져오기
         QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
 
-        List<MedicineRoutineCheckUpdateDto> dateResults = queryFactory
-                .select(Projections.constructor(MedicineRoutineCheckUpdateDto.class,
+        List<MedicineRoutineCheckMonthDto> dateResults = queryFactory
+                .select(Projections.constructor(MedicineRoutineCheckMonthDto.class,
                         qMedicineRoutineCheck.date,
                         qMedicineRoutineCheck.took))
                 .from(qMedicineRoutineCheck)
@@ -129,7 +128,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
         // 실제 복용 개수 계산
         Long actualDose = dateResults.stream()
-                .filter(MedicineRoutineCheckUpdateDto::isTook)
+                .filter(MedicineRoutineCheckMonthDto::isTook)
                 .count();
 
         MedicineRoutineMonthDateDto medicineRoutineMonthDateDto = MedicineRoutineMonthDateDto.builder()
@@ -189,11 +188,10 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
         // 복용 정보
         QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
-        QPrescription prescription = QPrescription.prescription;
 
 
-        List<MedicineRoutineCheckDto> dateResults = queryFactory
-                .select(Projections.constructor(MedicineRoutineCheckDto.class,
+        List<MedicineRoutineCheckDateDto> dateResults = queryFactory
+                .select(Projections.constructor(MedicineRoutineCheckDateDto.class,
                         qMedicineRoutineCheck.prescription.id,
                         qMedicineRoutineCheck.medicineRoutine.routine,
                         qMedicineRoutineCheck.took))
@@ -225,5 +223,31 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
     }
 
+    /**
+     * MedicineRoutineCheck의 id 조회(요청한 date, member, routine, prescription에 대하여)
+     * @param medicineRoutineCheckIdDto
+     * @param memberId
+     * @return
+     */
+//    @Transactional
+//    @Override
+//    public MedicineRoutineCheckIdDto getMedicineRoutineCheckId(MedicineRoutineCheckIdDto medicineRoutineCheckIdDto, Long memberId) {
+//        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+//
+//        QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
+//
+//        MedicineRoutineCheckIdDto getId = (MedicineRoutineCheckIdDto) queryFactory
+//                .select(Projections.constructor(MedicineRoutineCheckDto.class,
+//                        qMedicineRoutineCheck.id
+//                        ))
+//                .from(qMedicineRoutineCheck)
+//                .where(qMedicineRoutineCheck.date.eq(medicineRoutineCheckIdDto.getDate())
+//                        .and(qMedicineRoutineCheck.member.eq(member))
+//                        .and(qMedicineRoutineCheck.prescription.id.eq(medicineRoutineCheckIdDto.getPrescriptionId()))
+//                        .and(qMedicineRoutineCheck.medicineRoutine.routine.eq(medicineRoutineCheckIdDto.getRoutine())))
+//                .fetch();
+//
+//        return getId;
+//    }
 
 }
