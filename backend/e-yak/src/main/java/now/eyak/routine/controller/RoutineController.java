@@ -5,6 +5,7 @@ import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.dto.request.MedicineRoutineCheckDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
+import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.service.MedicineRoutineCheckService;
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 @RestController
-@RequestMapping("/api/v1/members")
+@RequestMapping("/api/v1/medicine-routine-checks")
 @RequiredArgsConstructor
 public class RoutineController {
 
@@ -32,7 +33,7 @@ public class RoutineController {
      * @return
      * @throws URISyntaxException
      */
-    @PostMapping("{memberId}/medicine-routine-checks")
+    @PostMapping
     public ResponseEntity updateMedicineRoutineCheck(
             @RequestBody MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto,
             @AuthenticationPrincipal Long memberId
@@ -51,7 +52,7 @@ public class RoutineController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("{memberId}/medicine-routine-checks/month")
+    @GetMapping("/month")
     public ResponseEntity getMonthResultsByMonthAndMember(
             @RequestBody MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto,
             @RequestParam YearMonth yearMonth,
@@ -71,7 +72,7 @@ public class RoutineController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("{memberId}/medicine-routine-checks/day")
+    @GetMapping("/day")
     public ResponseEntity getDateDetailResultsByDateAndMember(
             @RequestBody MedicineRoutineCheckDto medicineRoutineCheckDto,
             @RequestParam LocalDate date,
@@ -90,13 +91,13 @@ public class RoutineController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("{memberId}/medicine-routine-checks/id")
+    @GetMapping("/id")
     public ResponseEntity getMedicineRoutineCheckId(
             @RequestBody MedicineRoutineCheckIdDto medicineRoutineCheckIdDto,
             @AuthenticationPrincipal Long memberId
             ) throws URISyntaxException {
 
-        MedicineRoutineCheckIdDto medicineRoutineCheckId = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, memberId);
+        MedicineRoutineCheckIdResponseDto medicineRoutineCheckId = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, memberId);
 
         return ResponseEntity.ok(medicineRoutineCheckId);
     }

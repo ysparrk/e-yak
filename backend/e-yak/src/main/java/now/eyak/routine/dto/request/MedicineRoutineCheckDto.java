@@ -1,5 +1,6 @@
 package now.eyak.routine.dto.request;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,5 +28,11 @@ public class MedicineRoutineCheckDto {
         this.took = took;
         this.memberId = memberId;
         this.prescriptionId = prescriptionId;
+    }
+
+    @QueryProjection
+    public MedicineRoutineCheckDto(Long id, Boolean took) {
+        this.id = id;
+        this.took = took;
     }
 }

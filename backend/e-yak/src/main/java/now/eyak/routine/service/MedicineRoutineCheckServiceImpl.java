@@ -15,13 +15,9 @@ import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import now.eyak.routine.domain.QMedicineRoutineCheck;
 import now.eyak.routine.dto.query.MedicineRoutineCheckDateQueryDto;
 import now.eyak.routine.dto.query.MedicineRoutineCheckMonthQueryDto;
-import now.eyak.routine.dto.request.MedicineRoutineCheckDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
-import now.eyak.routine.dto.response.MedicineRoutineDateDto;
-import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
-import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
-import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
+import now.eyak.routine.dto.response.*;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.PrescriptionMedicineRoutineRepository;
 import now.eyak.survey.dto.response.SurveyContentDto;
@@ -232,20 +228,20 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
     }
 
     /**
-     * MedicineRoutineCheck의 id 조회(요청한 date, member, routine, prescription에 대하여)
+     * MedicineRoutineCheck의 id 조회(요청한 date, member, routine, prescription으로 조회)
      * @param medicineRoutineCheckIdDto
      * @param memberId
      * @return
      */
     @Transactional
     @Override
-    public MedicineRoutineCheckIdDto getMedicineRoutineCheckId(MedicineRoutineCheckIdDto medicineRoutineCheckIdDto, Long memberId) {
+    public MedicineRoutineCheckIdResponseDto getMedicineRoutineCheckId(MedicineRoutineCheckIdDto medicineRoutineCheckIdDto, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
         QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
 
-        MedicineRoutineCheckIdDto getId = (MedicineRoutineCheckIdDto) queryFactory
-                .select(Projections.constructor(MedicineRoutineCheckDto.class,
+        MedicineRoutineCheckIdResponseDto getId = queryFactory
+                .select(Projections.constructor(MedicineRoutineCheckIdResponseDto.class,
                         qMedicineRoutineCheck.id,
                         qMedicineRoutineCheck.took
                         ))
@@ -254,7 +250,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.prescription.id.eq(medicineRoutineCheckIdDto.getPrescriptionId()))
                         .and(qMedicineRoutineCheck.medicineRoutine.routine.eq(medicineRoutineCheckIdDto.getRoutine())))
-                .fetch();
+                .fetchOne();
 
         return getId;
     }
