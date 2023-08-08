@@ -49,8 +49,8 @@ public class AuthController {
         return ResponseEntity.created( new URI(apiVersionHolder.getVersion() + "/members/" + savedMember.getId())).build();
     }
 
-    @Operation(summary = "Sign Up", description = "Open ID Connect에서의 Open Id Token 을 이용해 sign up을 진행한다.")
-    @ApiResponse(responseCode = "201", description = "성공", content = @Content(schema = @Schema(implementation = SignUpResponseDto.class)))
+    @Operation(summary = "Reissue", description = "Sign In 의 응답값인 Refresh Token을 사용하여 Access Token과 Refresh Token을 재발급 한다. 사용한 Refresh Token은 폐기되며 유효기간은 28일이다.")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = RefreshResponseDto.class)))
     @PostMapping("/auth/reissue")
     public ResponseEntity reissue(@RequestBody ReissueDto reissueDto) {
         RefreshResponseDto refreshResponseDto = memberService.issueAccessTokenByRefreshToken(reissueDto);
@@ -58,6 +58,8 @@ public class AuthController {
         return ResponseEntity.ok(refreshResponseDto);
     }
 
+    @Operation(summary = "Duplication", description = "사용자의 닉네임을 중복 검사한다.")
+    @ApiResponse(responseCode = "200", description = "성공") // TODO: content 추가
     @GetMapping("/auth/duplication")
     public ResponseEntity duplicationCheck(@RequestParam String nickname) {
         boolean duplicated = memberService.isDuplicatedNickname(nickname);
