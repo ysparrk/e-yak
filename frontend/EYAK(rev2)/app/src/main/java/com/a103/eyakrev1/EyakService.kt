@@ -58,6 +58,12 @@ interface EyakService {
         @Body params: PrescriptionBodyModel,
     ): Call<Void>
 
+    @GET("/api/v1/members/{memberId}/follwers")
+    fun getAllFollowers(
+        @Path("memberId") memberId: Int,
+        @Header("Authorization") Authorization: String,
+    ): Call<ArrayList<Family>>
+
     @GET("/api/v1/follow-requests") // 사용자가 요청한/사용자에게 요청된 팔로우 요청 전체 조회
     fun followRequests(
         @Header("Authorization") Authorization: String,

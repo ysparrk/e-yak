@@ -13,17 +13,7 @@ class FamilyEditFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
-    var familyList = arrayListOf<Family>(
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-        Family(familyId = 1, familyIcon = "baseline_person_24", familyName = "이름 1", familyNickname = "닉네임 1"),
-    )
+    var familyList = arrayListOf<Family>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +21,7 @@ class FamilyEditFragment : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_family_edit, container, false)
 
-        familyList.add(Family(familyId = -1, familyIcon = "baseline_person_24", familyName = "빈 공간", familyNickname = "빈 공간"))
+        familyList.add(Family())
         val familyEditListAdapter = FamilyEditListAdapter(mainActivity, familyList)
         val familyEditListView = layout.findViewById<ListView>(R.id.familyEditListView)
         familyEditListView?.adapter = familyEditListAdapter

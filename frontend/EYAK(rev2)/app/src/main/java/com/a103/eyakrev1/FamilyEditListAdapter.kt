@@ -50,8 +50,8 @@ class FamilyEditListAdapter(val context: Context, val familyList: ArrayList<Fami
             /* ArrayList<MedicineAlarm>의 변수 family의 이미지와 데이터를 ImageView와 TextView에 담는다. */
             val family = familyList[position]
 
-            familyListNameTextView.text = family.familyName
-            familyListNicknameTextView.text = family.familyNickname
+            familyListNameTextView.text = family.custom_name
+            familyListNicknameTextView.text = family.nickname
 
             return view
         }
