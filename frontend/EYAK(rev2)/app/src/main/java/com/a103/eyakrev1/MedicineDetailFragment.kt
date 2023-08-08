@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
@@ -26,6 +27,7 @@ class MedicineDetailFragment : Fragment() {
 
     val api = EyakService.create()
     var medicine: Medicine? = Medicine()
+    var clickedMedicineId = -1
 
     override fun onCreateView(
 
@@ -50,7 +52,7 @@ class MedicineDetailFragment : Fragment() {
         val medicineDetailDeleteButton = layout.findViewById<Button>(R.id.medicineDetailDeleteButton)
 
         setFragmentResultListener("medicineDetailClicked") { requestKey, bundle ->
-            val clickedMedicineId = bundle.getInt("clickedMedicineId", -1)
+            clickedMedicineId = bundle.getInt("clickedMedicineId", -1)
 
             if (clickedMedicineId != -1) {
                 // 제대로 전달된 상황
@@ -97,7 +99,7 @@ class MedicineDetailFragment : Fragment() {
                                     dosePerDayText = dosePerDayText.plus("○ 취침 전 ○\n")
                                 }
                             }
-                            dosePerDayTextView.text = dosePerDayText.substring(0, dosePerDayText.length - 1)
+                            dosePerDayTextView.text = dosePerDayText.substring(0, kotlin.math.max(dosePerDayText.length - 1, 0))
 
                             val medicineDetailIconImageView = layout.findViewById<ImageView>(R.id.medicineDetailIcon)
                             when(medicine!!.medicineShape) {
@@ -148,7 +150,8 @@ class MedicineDetailFragment : Fragment() {
                 })
             }
         }
-
+        
+        // 삭제 버튼을 클릭했을 때
         medicineDetailDeleteButton.setOnClickListener {
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
             val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
@@ -173,8 +176,18 @@ class MedicineDetailFragment : Fragment() {
 
                 }
             })
+        }
 
+        // 수정 버튼을 클릭했을 때
+        medicineDetailEditButton.setOnClickListener {
+            val bundle = Bundle()
+            val isEdit = true
 
+            bundle.putBoolean("isEdit", isEdit)
+            bundle.putInt("clickedMedicineId", clickedMedicineId)
+            setFragmentResult("medicineEditData", bundle)
+
+            mainActivity!!.gotoAddMedicine()
         }
 
         return layout

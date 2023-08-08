@@ -49,6 +49,14 @@ class FamilyFragment : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.family_tab_main, container, false)
 
+        // 기본 정보 초기화
+
+        layout.findViewById<ImageView>(R.id.acceptFamilyBtn).visibility = View.INVISIBLE
+        layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.INVISIBLE
+
+        // 기본 정보 초기화 끝
+
+
         familyList.add(Family(familyId = -1, familyIcon = "baseline_person_24", familyName = "빈 공간", familyNickname = "빈 공간"))
 
         val familyListAdapter = FamilyListAdapter(mainActivity, familyList)
@@ -68,9 +76,11 @@ class FamilyFragment : Fragment() {
                 if(response.code() == 200) {
                     if (followRequestCnt == 0) {
                         layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setColorFilter(lightOff)
+                        layout.findViewById<ImageView>(R.id.acceptFamilyBtn).visibility = View.VISIBLE
                         layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.INVISIBLE
                     } else {
                         layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setColorFilter(lightOn)
+                        layout.findViewById<ImageView>(R.id.acceptFamilyBtn).visibility = View.VISIBLE
                         layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.VISIBLE
                         layout.findViewById<TextView>(R.id.acceptFamilyCnt).text = followRequestCnt.toString()
                     }
@@ -83,6 +93,7 @@ class FamilyFragment : Fragment() {
                                 val requestBundle = Bundle()
                                 requestBundle.putInt("followRequestId", followRequestsList[0].followRequestId)
                                 requestBundle.putInt("followerId", followRequestsList[0].followerId)
+                                requestBundle.putString("followerNickname", followRequestsList[0].followerNickname)
                                 requestBundle.putString("followeeNickname", followRequestsList[0].followeeNickname)
                                 requestBundle.putString("customName", followRequestsList[0].customName)
                                 requestBundle.putString("scope", followRequestsList[0].scope)

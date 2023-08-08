@@ -120,60 +120,76 @@ class MedicineAddFragment : Fragment() {
                 }
 
             }
-            else if(layout.findViewById<EditText>(R.id.startDayInput).text.toString() != "") {
-                var startYearData: String = ""
-                var startMonthData: String = ""
 
-                if(layout.findViewById<EditText>(R.id.startYearInput).text.toString() == "") {
-                    startYearData = (2000 + layout.findViewById<EditText>(R.id.startYearInput).hint.toString().toInt()).toString()
-                }
-                else {
-                    startYearData = (2000 + layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt()).toString()
-                }
+            // 시작 날짜 체크
+            var startYearData: String = ""
+            var startMonthData: String = ""
+            var startDayData: String = ""
 
-                if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString() == "") {
-                    startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).hint.toString();
-                }
-                else {
-                    startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).text.toString();
-                }
-
-
-                val startDate: LocalDate = LocalDate.parse("${startYearData}-${startMonthData}-01")
-                val lastDay: Int = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
-
-                if(layout.findViewById<EditText>(R.id.startDayInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.startDayInput).text.toString().toInt() > lastDay) {
-                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${startMonthData.toInt()}월)", Toast.LENGTH_SHORT).show()
-                    flag = false
-                }
+            if(layout.findViewById<EditText>(R.id.startYearInput).text.toString() == "") {
+                startYearData = (2000 + layout.findViewById<EditText>(R.id.startYearInput).hint.toString().toInt()).toString()
             }
-            else if(layout.findViewById<EditText>(R.id.endDayInput).text.toString() != "") {
-                var endYearData: String = ""
-                var endMonthData: String = ""
-
-                if(layout.findViewById<EditText>(R.id.endYearInput).text.toString() == "") {
-                    endYearData = (2000 + layout.findViewById<EditText>(R.id.endYearInput).hint.toString().toInt()).toString()
-                }
-                else {
-                    endYearData = (2000 + layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt()).toString()
-                }
-
-                if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString() == "") {
-                    endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).hint.toString();
-                }
-                else {
-                    endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).text.toString();
-                }
-
-
-                val startDate: LocalDate = LocalDate.parse("${endYearData}-${endMonthData}-01")
-                val lastDay: Int = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
-
-                if(layout.findViewById<EditText>(R.id.endDayInput).text.toString().toInt() < 1 || layout.findViewById<EditText>(R.id.endDayInput).text.toString().toInt() > lastDay) {
-                    Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${endMonthData.toInt()}월)", Toast.LENGTH_SHORT).show()
-                    flag = false
-                }
+            else {
+                startYearData = (2000 + layout.findViewById<EditText>(R.id.startYearInput).text.toString().toInt()).toString()
             }
+
+            if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString() == "") {
+                startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).hint.toString();
+            }
+            else {
+                startMonthData = if(layout.findViewById<EditText>(R.id.startMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.startMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.startMonthInput).text.toString();
+            }
+
+            if(layout.findViewById<EditText>(R.id.startDayInput).text.toString() == "") {
+                startDayData = layout.findViewById<EditText>(R.id.startDayInput).hint.toString()
+            }
+            else {
+                startDayData = layout.findViewById<EditText>(R.id.startDayInput).text.toString()
+            }
+
+            var startDate: LocalDate = LocalDate.parse("${startYearData}-${startMonthData}-01")
+            var lastDay: Int = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
+
+            if(startDayData.toInt() < 1 || startDayData.toInt() > lastDay) {
+                Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 시작 일을 입력해 주세요(${startMonthData.toInt()}월)", Toast.LENGTH_SHORT).show()
+                flag = false
+            }
+            // 시작 날짜 체크 끝
+
+            // 종료 날짜 체크 시작
+            var endYearData: String = ""
+            var endMonthData: String = ""
+            var endDayData: String = ""
+
+            if(layout.findViewById<EditText>(R.id.endYearInput).text.toString() == "") {
+                endYearData = (2000 + layout.findViewById<EditText>(R.id.endYearInput).hint.toString().toInt()).toString()
+            }
+            else {
+                endYearData = (2000 + layout.findViewById<EditText>(R.id.endYearInput).text.toString().toInt()).toString()
+            }
+
+            if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString() == "") {
+                endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).hint.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).hint.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).hint.toString();
+            }
+            else {
+                endMonthData = if(layout.findViewById<EditText>(R.id.endMonthInput).text.toString().toInt() < 10) "0${layout.findViewById<EditText>(R.id.endMonthInput).text.toString()}" else layout.findViewById<EditText>(R.id.endMonthInput).text.toString();
+            }
+
+            if(layout.findViewById<EditText>(R.id.endDayInput).text.toString() == "") {
+                endDayData = layout.findViewById<EditText>(R.id.endDayInput).hint.toString()
+            }
+            else {
+                endDayData = layout.findViewById<EditText>(R.id.endDayInput).text.toString()
+            }
+
+            startDate = LocalDate.parse("${endYearData}-${endMonthData}-01")
+            lastDay = startDate.withDayOfMonth(startDate.lengthOfMonth()).toString().substring(8, 10).toInt()
+
+            if(endDayData.toInt() < 1 || endDayData.toInt() > lastDay) {
+                Toast.makeText(mainActivity, "1에서 ${lastDay}사이의 투여 종료 일을 입력해 주세요(${endMonthData.toInt()}월)", Toast.LENGTH_SHORT).show()
+                flag = false
+            }
+            // 종료 날짜 체크 끝
 
             if(flag) {
                 setFragmentResult("medicineAddData", resultBundle)
@@ -181,6 +197,7 @@ class MedicineAddFragment : Fragment() {
                 mainActivity!!.gotoAddMedicineResult()
             }
         }
+
 
         for(iconIdIterator in 1..35) {
             val iconId: String = "medicineIcon${iconIdIterator}"

@@ -24,10 +24,10 @@ class FamilyAcceptFragment : Fragment() {
 
     private val api = EyakService.create()
 
-    var scope: Int = 0
+    var scope: Int = 0  // scope: 공개 범위 -> 0 선택되지 않음, 1 전체 공개, 2: 달력 공개
 
-    var followerId: Int = 0
-    var followRequestId: Int = 0
+    var followerId: Int = 0 // floowerId: 팔로워 아이디
+    var followRequestId: Int = 0    // followerRequetId: 팔로워 요청 아이디
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +35,7 @@ class FamilyAcceptFragment : Fragment() {
         setFragmentResultListener("followRequestData") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
 
             // 상대 닉네임
-            view?.findViewById<TextView>(R.id.nicknameRequestSideInput)?.text = bundle.getString("followeeNickname", "")
-            Log.d("ㅁㅁㅁㅁㅁㅁㅁ", "${bundle.getString("followeeNickname", "")}")
+            view?.findViewById<TextView>(R.id.nicknameRequestSideInput)?.text = bundle.getString("followerNickname", "")
 
             // 상대 공개 범위
             view?.findViewById<TextView>(R.id.requestScope)?.text = if(bundle.getString("scope", "") == "ALL") "전체 공개" else "달력 공개"
@@ -56,42 +55,42 @@ class FamilyAcceptFragment : Fragment() {
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_family_accept, container, false)
 
-        layout.findViewById<ImageView>(R.id.entireScopeAcceptSideChk).setOnClickListener {
+        layout.findViewById<ImageView>(R.id.entireScopeAcceptSideChk).setOnClickListener {  // 전체 공개 선택
             scope = 1
             layout.findViewById<ImageView>(R.id.entireScopeAcceptSideChk).setImageResource(R.drawable.baseline_check_box_24)
             layout.findViewById<ImageView>(R.id.calendarScopeAcceptSideChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
         }
 
-        layout.findViewById<ImageView>(R.id.calendarScopeAcceptSideChk).setOnClickListener {
+        layout.findViewById<ImageView>(R.id.calendarScopeAcceptSideChk).setOnClickListener {    // 달력 공개 선택
             scope = 2
             layout.findViewById<ImageView>(R.id.entireScopeAcceptSideChk).setImageResource(R.drawable.baseline_check_box_outline_blank_24)
             layout.findViewById<ImageView>(R.id.calendarScopeAcceptSideChk).setImageResource(R.drawable.baseline_check_box_24)
         }
 
-        layout.findViewById<Button>(R.id.acceptBtn).setOnClickListener {
-            if(scope == 0) {
+        layout.findViewById<Button>(R.id.acceptBtn).setOnClickListener {    // 요청 수락
+            if(scope == 0) {    // 공개 범위를 선택하지 않은 경우
                 Toast.makeText(mainActivity, "공개 범위를 설정해 주세요", Toast.LENGTH_SHORT).show()   // 공개 범위 설정이 안되어 있음
             }
-            else if(layout.findViewById<EditText>(R.id.myDefineNameAcceptSideInput).text.toString() == "") {
+            else if(layout.findViewById<EditText>(R.id.myDefineNameAcceptSideInput).text.toString() == "") {    // 내가 지정할 이름을 입력하지 않은 경우
                 Toast.makeText(mainActivity, "내가 지정할 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
             }
-            else {
+            else {  // 요청을 받을 준비 완료
                 val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
                 val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
-                val data= AcceptFollowRequestBodyModel(
-                    followeeScope = if(scope == 1) "ALL" else if(scope == 2) "CALENDAR" else "",
-                    customName = layout.findViewById<EditText>(R.id.myDefineNameAcceptSideInput).text.toString(),
+                val data = AcceptFollowRequestBodyModel(
+                    followeeScope = if(scope == 1) "ALL" else if(scope == 2) "CALENDAR" else "",    // 요청 범위
+                    customName = layout.findViewById<EditText>(R.id.myDefineNameAcceptSideInput).text.toString(),   // 내가 지정할 이름
                 )
 
                 api.acceptFollowRequest(followerId = followerId, followRequestId = followRequestId, Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if(response.code() == 201) {
+                        if(response.code() == 201) {    // 성공
                             Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
                         }
-                        else if(response.code() == 401) {
+                        else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
                             Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
                         }
-                        else if(response.code() == 400) {
+                        else if(response.code() == 400) {   // 해당하는 member나 followRequest가 존재하지 않는 경우
                             Toast.makeText(mainActivity, "해당하는 member나 followRequest가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
                         }
 
@@ -103,6 +102,31 @@ class FamilyAcceptFragment : Fragment() {
             }
             mainActivity!!.gotoFamily()
         }
+
+        layout.findViewById<Button>(R.id.refuseBtn).setOnClickListener {    // 요청 거절
+            val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+            val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+
+            api.refuseFollowRequest(followerId = followerId, followRequestId = followRequestId, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if(response.code() == 200) {    // 성공
+                        Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                    }
+                    else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                    }
+                    else if(response.code() == 400) {   // 해당하는 member나 followRequest가 존재하지 않는 경우
+                        Toast.makeText(mainActivity, "해당하는 member나 followRequest가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                }
+            })
+            mainActivity!!.gotoFamily()
+        }
+
 
         return layout
     }
