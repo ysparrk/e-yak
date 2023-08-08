@@ -8,6 +8,8 @@ import lombok.Setter;
 import now.eyak.member.domain.Member;
 import now.eyak.social.Scope;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -24,8 +26,10 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Member follower;
     @ManyToOne
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Member followee;
     private String customName;
     @Enumerated(EnumType.STRING)

@@ -160,6 +160,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Long memberId) {
+        // FK 제약 조건 고려
+
+
         memberRepository.deleteById(memberId);
     }
 
