@@ -677,7 +677,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/tmoney_regular"
                                 android:includeFontPadding="false"
-                                android:text="- 인구통계학적 분석, 알람, 소셜 기능을 이용한 확인된 사용자에 대한 정보 공유 등을 위하여 개인정보를 이용합니다."
+                                android:text="- 인구통계학적 분석, 알람, 소셜 기능을 이용하는 확인된 사용자에 대한 정보 공유 등을 위하여 개인정보를 이용합니다."
                                 android:textColor="#757863"
                                 android:textSize="12sp" />
 
