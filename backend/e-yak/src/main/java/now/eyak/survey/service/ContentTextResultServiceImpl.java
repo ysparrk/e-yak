@@ -92,7 +92,7 @@ public class ContentTextResultServiceImpl implements ContentTextResultService {
     @Override
     public List<ContentTextResultResponseDto> getTextResultsByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
-        Survey survey = surveyRepository.findByDate(date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜의 설문기록이 없습니다."));
+//        Survey survey = surveyRepository.findByDate(date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜의 설문기록이 없습니다."));
 
         QContentTextResult qContentTextResult = QContentTextResult.contentTextResult;
         QSurveyContent qSurveyContent = QSurveyContent.surveyContent;

@@ -46,7 +46,26 @@ public class RoutineController {
     }
 
     /**
-     * 한달 단위 복용 조회
+     * 하루 단위 복용량 조회
+     * @param date
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @GetMapping("/day")
+    public ResponseEntity getDateResultsByDateAndMember(
+            @RequestParam LocalDate date,
+            @AuthenticationPrincipal Long memberId
+            ) throws URISyntaxException {
+
+        MedicineRoutineMonthDateDto dateResultsByDateAndMember = medicineRoutineCheckService.getDateResultsByDateAndMember(date, memberId);
+
+        return ResponseEntity.ok(dateResultsByDateAndMember);
+
+    }
+
+    /**
+     * 한달 단위 복용량 조회
      * @param yearMonth
      * @param memberId
      * @return
@@ -70,7 +89,7 @@ public class RoutineController {
      * @return
      * @throws URISyntaxException
      */
-    @GetMapping("/day")
+    @GetMapping("/day-detail")
     public ResponseEntity getDateDetailResultsByDateAndMember(
             @RequestParam LocalDate date,
             @AuthenticationPrincipal Long memberId

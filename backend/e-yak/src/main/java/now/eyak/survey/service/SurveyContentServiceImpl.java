@@ -33,7 +33,7 @@ public class SurveyContentServiceImpl implements SurveyContentService {
     @Override
     public List<SurveyContentDto> getSurveyResultByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
-        Survey survey = surveyRepository.findByDate(date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜의 설문기록이 없습니다."));
+//        Survey survey = surveyRepository.findByDate(date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜의 설문기록이 없습니다."));
 
         List<ContentEmotionResultResponseDto> emotionResult = contentEmotionResultService.getEmotionResultsByDateAndMember(date, memberId);
         List<ContentStatusResultResponseDto> statusResults = contentStatusResultService.getStatusResultsByDateAndMember(date, memberId);
