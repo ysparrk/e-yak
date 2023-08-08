@@ -8,19 +8,21 @@ import now.eyak.member.domain.Member;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Survey {
+public class ContentChoiceResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(mappedBy = "survey")
-    private List<SurveyContent> surveyContents;
+    @ManyToOne
+    private ContentChoiceItem contentChoiceItem;
+    @ManyToOne
+    private Member member;
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp

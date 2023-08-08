@@ -1,14 +1,20 @@
 package now.eyak.prescription.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import now.eyak.routine.enumeration.Routine;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
-@ToString
 public class MedicineRoutineResponseDto {
     private Long id;
     private Routine routine;

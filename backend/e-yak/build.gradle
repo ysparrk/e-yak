@@ -11,12 +11,10 @@ java {
 	sourceCompatibility = '17'
 }
 
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-
 }
 
 repositories {
@@ -39,12 +37,6 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.31'
-
-	// querydsl
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 
 }

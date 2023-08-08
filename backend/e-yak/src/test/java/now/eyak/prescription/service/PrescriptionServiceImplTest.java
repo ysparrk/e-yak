@@ -6,6 +6,7 @@ import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
+import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -56,6 +58,9 @@ class PrescriptionServiceImplTest {
                 .build();
 
         MEMBER = memberRepository.save(member);
+
+        List<MedicineRoutine> medicineRoutines = Arrays.stream(Routine.values()).map(routine -> MedicineRoutine.builder().routine(routine).build()).toList();
+        medicineRoutineRepository.saveAll(medicineRoutines);
 
         routines = List.of(Routine.BED_BEFORE, Routine.LUNCH_AFTER, Routine.DINNER_BEFORE);
     }
