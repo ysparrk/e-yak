@@ -1,7 +1,12 @@
 package now.eyak.social.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.social.domain.FollowRequest;
 import now.eyak.social.dto.FollowRequestAcceptDto;
 import now.eyak.social.dto.FollowRequestDto;
@@ -24,6 +29,8 @@ public class FollowRequestController {
     private final FollowRequestService followRequestService;
     private final ApiVersionHolder apiVersionHolder;
 
+    @Operation(summary = "Request Follow", description = "사용자(followerId)가 상대(followeeId)에게 팔로우를 요청합니다.")
+    @ApiResponse(responseCode = "201", description = "성공", content = @Content(schema = @Schema(implementation = FollowRequestDto.class)))
     @PostMapping("/members/{followerId}/follow-requests")
     public ResponseEntity insertFollowRequest(@RequestBody FollowRequestDto followRequestDto, @AuthenticationPrincipal Long memberId) throws URISyntaxException {
         FollowRequest followRequest = followRequestService.insertFollowRequest(followRequestDto, memberId);
@@ -31,6 +38,8 @@ public class FollowRequestController {
         return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/members/" + memberId + "/follow-requests/" + followRequest.getId())).build();
     }
 
+    @Operation(summary = "Refuse Follow", description = "상대가(followerId) 요청한 팔로우(followRequestId)를 사용자가 거절합니다./사용자가 상대에게 요청한 팔로우(followRequestId)를 취소합니다.")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = FollowRequestDto.class)))
     @DeleteMapping("/members/{followerId}/follow-requests/{followRequestId}")
     public ResponseEntity deleteFollowRequest(@PathVariable Long followRequestId, @AuthenticationPrincipal Long memberId) {
         followRequestService.declineOrCancelFollowRequest(followRequestId, memberId);
@@ -38,6 +47,8 @@ public class FollowRequestController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Accept Follow", description = "상대가(followerId) 요청한 팔로우(followRequestId)를 사용자가 수락합니다.")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = FollowRequestAcceptDto.class)))
     @PostMapping("/members/{followId}/follow-requests/{followRequestId}")
     public ResponseEntity acceptFollowRequest(@RequestBody FollowRequestAcceptDto followRequestAcceptDto, @PathVariable Long followRequestId, @AuthenticationPrincipal Long memberId) {
         followRequestService.acceptFollowRequest(followRequestAcceptDto, followRequestId, memberId);
@@ -45,6 +56,8 @@ public class FollowRequestController {
         return ResponseEntity.created(null).build();
     }
 
+    @Operation(summary = "Get All Follow Requests", description = "사용자가/에게 요청한/요청된 팔로우 요청을 전체 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = FollowRequestResponseDto.class)))
     @GetMapping("/follow-requests")
     public ResponseEntity getAllFollowRequestByFollowerId(@RequestParam Boolean isGetFollowers, @AuthenticationPrincipal Long memberId) {
         List<FollowRequest> followRequests = null;
