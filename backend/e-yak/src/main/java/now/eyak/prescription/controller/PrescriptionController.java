@@ -1,6 +1,5 @@
 package now.eyak.prescription.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.MedicineRoutineResponseDto;
@@ -15,10 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor

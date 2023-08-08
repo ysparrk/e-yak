@@ -1,6 +1,7 @@
 package now.eyak.routine.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,9 +10,9 @@ import now.eyak.prescription.domain.Prescription;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 @Entity
 @Getter
@@ -22,7 +23,8 @@ public class MedicineRoutineCheck {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;
-    @OneToOne
+
+    @ManyToOne
     private MedicineRoutine medicineRoutine;
     private Boolean took;  // 약 복용 확인
     @ManyToOne
@@ -34,4 +36,14 @@ public class MedicineRoutineCheck {
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    @Builder
+    public MedicineRoutineCheck(LocalDate date, MedicineRoutine medicineRoutine, Boolean took, Member member, Prescription prescription, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.date = date;
+        this.medicineRoutine = medicineRoutine;
+        this.took = took;
+        this.member = member;
+        this.prescription = prescription;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }
