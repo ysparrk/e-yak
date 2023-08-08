@@ -1,10 +1,10 @@
-package now.eyak.routine.dto;
+package now.eyak.routine.dto.request;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.enumeration.Routine;
 
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-public class MedicineRoutineCheckMonthDto {
+public class MedicineRoutineCheckUpdateDto {
     private Long id;
     private LocalDate date;
     private Routine routine;
@@ -20,14 +20,8 @@ public class MedicineRoutineCheckMonthDto {
     private Long memberId;
     private Long prescriptionId;
 
-    @QueryProjection
-    public MedicineRoutineCheckMonthDto(LocalDate date, Boolean took) {
-        this.date = date;
-        this.took = took;
-    }
-
     @Builder
-    public MedicineRoutineCheckMonthDto(Long id, LocalDate date, Routine routine, Boolean took, Long memberId, Long prescriptionId) {
+    public MedicineRoutineCheckUpdateDto(Long id, LocalDate date, Routine routine, Boolean took, Long memberId, Long prescriptionId) {
         this.id = id;
         this.date = date;
         this.routine = routine;
@@ -36,8 +30,10 @@ public class MedicineRoutineCheckMonthDto {
         this.prescriptionId = prescriptionId;
     }
 
-
-    public static boolean isTook(MedicineRoutineCheckMonthDto medicineRoutineCheckMonthDto) {
-        return medicineRoutineCheckMonthDto.getTook();
+    // 복용 기록 업데이트
+    public void update(MedicineRoutineCheck medicineRoutineCheck) {
+        medicineRoutineCheck.setTook(!medicineRoutineCheck.getTook());
     }
+
+
 }

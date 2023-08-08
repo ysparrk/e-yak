@@ -2,10 +2,11 @@ package now.eyak.routine.controller;
 
 import lombok.RequiredArgsConstructor;
 import now.eyak.routine.domain.MedicineRoutineCheck;
-import now.eyak.routine.dto.MedicineRoutineCheckDto;
-import now.eyak.routine.dto.MedicineRoutineCheckUpdateDto;
-import now.eyak.routine.dto.MedicineRoutineDateResponseDto;
-import now.eyak.routine.dto.MedicineRoutineMonthResponseDto;
+import now.eyak.routine.dto.request.MedicineRoutineCheckDto;
+import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
+import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
+import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
+import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.service.MedicineRoutineCheckService;
 import now.eyak.util.ApiVersionHolder;
 import org.springframework.http.ResponseEntity;
@@ -80,6 +81,24 @@ public class RoutineController {
         MedicineRoutineDateResponseDto dateDetailResultsByDateAndMember = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(date, memberId);
 
         return ResponseEntity.ok(dateDetailResultsByDateAndMember);
+    }
+
+    /**
+     * MedicineRoutineCheck의 id 조회
+     * @param medicineRoutineCheckIdDto
+     * @param memberId
+     * @return
+     * @throws URISyntaxException
+     */
+    @GetMapping("{memberId}/medicine-routine-checks/id")
+    public ResponseEntity getMedicineRoutineCheckId(
+            @RequestBody MedicineRoutineCheckIdDto medicineRoutineCheckIdDto,
+            @AuthenticationPrincipal Long memberId
+            ) throws URISyntaxException {
+
+        MedicineRoutineCheckIdDto medicineRoutineCheckId = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, memberId);
+
+        return ResponseEntity.ok(medicineRoutineCheckId);
     }
 
 }

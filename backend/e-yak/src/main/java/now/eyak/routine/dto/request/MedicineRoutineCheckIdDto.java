@@ -1,6 +1,5 @@
-package now.eyak.routine.dto;
+package now.eyak.routine.dto.request;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,14 +11,8 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class MedicineRoutineCheckIdDto {
-    private Long id;
     private LocalDate date;
     private Routine routine;
-    private Long memberId;
     private Long prescriptionId;
 
-    @QueryProjection
-    public MedicineRoutineCheckIdDto(Long id) {
-        this.id = id;
-    }
 }
