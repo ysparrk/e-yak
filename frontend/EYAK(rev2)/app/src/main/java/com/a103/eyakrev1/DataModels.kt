@@ -92,6 +92,7 @@ data class FollowRequestsDataModel(
     var followRequestId: Int,
     var followerId: Int,
     var followeeId: Int,
+    var followerNickname: String,
     var followeeNickname: String,
     var customName: String,
     var scope: String,

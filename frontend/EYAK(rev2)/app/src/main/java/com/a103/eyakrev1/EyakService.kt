@@ -88,6 +88,13 @@ interface EyakService {
         @Path("prescriptionId") prescriptionId: Int,
     ): Call<Void>
 
+    @DELETE("/api/v1/members/{followerId}/follow-requests/{followRequestId}")
+    fun refuseFollowRequest(
+        @Header("Authorization") Authorization: String,
+        @Path("followerId") followerId: Int,
+        @Path("followRequestId") followRequestId: Int,
+    ): Call<Void>
+
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소
 

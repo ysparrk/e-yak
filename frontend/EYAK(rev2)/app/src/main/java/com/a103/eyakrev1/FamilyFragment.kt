@@ -93,6 +93,7 @@ class FamilyFragment : Fragment() {
                                 val requestBundle = Bundle()
                                 requestBundle.putInt("followRequestId", followRequestsList[0].followRequestId)
                                 requestBundle.putInt("followerId", followRequestsList[0].followerId)
+                                requestBundle.putString("followerNickname", followRequestsList[0].followerNickname)
                                 requestBundle.putString("followeeNickname", followRequestsList[0].followeeNickname)
                                 requestBundle.putString("customName", followRequestsList[0].customName)
                                 requestBundle.putString("scope", followRequestsList[0].scope)
