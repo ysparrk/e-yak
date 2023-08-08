@@ -1,5 +1,6 @@
 package now.eyak.social.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ public class FollowerResponseDto {
     private Long followId;
     private Long memberId;
     private String nickname;
+    @JsonProperty("custom_name")
     private String customName;
     private Scope scope;
 
