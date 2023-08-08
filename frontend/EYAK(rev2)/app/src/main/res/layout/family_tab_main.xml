@@ -87,7 +87,6 @@
             android:id="@+id/acceptFamilyBtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:tint="#E6CC72"
             app:srcCompat="@drawable/baseline_lightbulb_24" />
 
         <TextView
