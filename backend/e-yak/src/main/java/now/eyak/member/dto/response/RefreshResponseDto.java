@@ -1,4 +1,4 @@
-package now.eyak.member.dto;
+package now.eyak.member.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -23,14 +23,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(addPrefix(e.getMessage()));
     }
 
-        @ExceptionHandler(CustomException.class)
-        public ResponseEntity customExceptionHandler(CustomException e) {
-            log.info(addPrefix(e.getMessage()));
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity customExceptionHandler(CustomException e) {
+        log.info(addPrefix(e.getMessage()));
 
-            return ResponseEntity.status(e.getStatusCode()).body(addPrefix(e.getMessage()));
-        }
+        return ResponseEntity.status(e.getStatusCode()).body(addPrefix(e.getMessage()));
+    }
 
-        private String addPrefix(String message) {
+    private String addPrefix(String message) {
         return "[Error] " + message;
     }
 }
