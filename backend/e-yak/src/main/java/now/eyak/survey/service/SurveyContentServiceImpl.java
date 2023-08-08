@@ -5,11 +5,14 @@ import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.survey.domain.Survey;
+import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
 import now.eyak.survey.dto.response.ContentStatusResultResponseDto;
 import now.eyak.survey.dto.response.ContentTextResultResponseDto;
 import now.eyak.survey.dto.response.SurveyContentDto;
+import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +27,33 @@ public class SurveyContentServiceImpl implements SurveyContentService {
 
     private final MemberRepository memberRepository;
     private final SurveyRepository surveyRepository;
+    private final SurveyContentRepository surveyContentRepository;
 
     private final ContentEmotionResultService contentEmotionResultService;
     private final ContentStatusResultService contentStatusResultService;
     private final ContentTextResultService contentTextResultService;
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    @Override
+    public void insertSurveyAndSurveyContentPerDay() {
+        Survey survey = Survey.builder()
+                .date(LocalDate.now())
+                .build();
+
+        surveyRepository.save(survey);
+
+        SurveyContent surveyContent = SurveyContent.builder()
+                .build();
+
+        surveyContent.changeSurvey(survey);
+        surveyContentRepository.save(surveyContent);
+    }
+
+    @Override
+    public List<SurveyContent> getSurveyContentByDate(LocalDate date) {
+        return surveyContentRepository.findAllSurveyContentByDate(date);
+    }
 
     @Transactional
     @Override
@@ -51,4 +77,5 @@ public class SurveyContentServiceImpl implements SurveyContentService {
 
         return surveyContentResponseList;
     }
+
 }

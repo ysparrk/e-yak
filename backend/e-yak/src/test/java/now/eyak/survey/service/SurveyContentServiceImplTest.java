@@ -116,4 +116,17 @@ class SurveyContentServiceImplTest {
         Assertions.assertThat(savedContentTextResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.get(0).getContentTextResultResponse().get(0).getMemberId());
 
     }
+
+    @DisplayName("매일 Survey와 SurveyContent를 삽입하는 스케줄링 메서드 테스트")
+    @Test
+    @Transactional
+    void insertSurveyAndSurveyContentPerDay() {
+        //given
+
+        //when
+//        surveyContentService.insertSurveyAndSurveyContentPerDay();
+//
+//        //then
+//        survey
+    }
 }

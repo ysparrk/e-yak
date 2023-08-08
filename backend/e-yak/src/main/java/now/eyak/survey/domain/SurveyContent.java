@@ -34,4 +34,9 @@ public class SurveyContent {
         this.contentStatusResults = contentStatusResults;
         this.contentTextResult = contentTextResult;
     }
+
+    public void changeSurvey(Survey survey) {
+        this.survey = survey;
+        survey.getSurveyContents().add(this);
+    }
 }
