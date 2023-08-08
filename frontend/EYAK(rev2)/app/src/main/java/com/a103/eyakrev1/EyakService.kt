@@ -64,6 +64,13 @@ interface EyakService {
         @Header("Authorization") Authorization: String,
     ): Call<ArrayList<Family>>
 
+    @DELETE("/api/v1/members/{memberId}/follows/{followId}")
+    fun deleteFollower(
+        @Path("memberId") memberId: Int,
+        @Path("followId") followId: Int,
+        @Header("Authorization") Authorization: String,
+    ): Call<Void>
+
     @GET("/api/v1/follow-requests") // 사용자가 요청한/사용자에게 요청된 팔로우 요청 전체 조회
     fun followRequests(
         @Header("Authorization") Authorization: String,

@@ -93,13 +93,13 @@ class FamilyAcceptFragment : Fragment() {
                         else if(response.code() == 400) {   // 해당하는 member나 followRequest가 존재하지 않는 경우
                             Toast.makeText(mainActivity, "해당하는 member나 followRequest가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
                         }
-
                     }
                     override fun onFailure(call: Call<Void>, t: Throwable) {
 
                     }
                 })
             }
+//            Thread.sleep(500)
             mainActivity!!.gotoFamily()
         }
 

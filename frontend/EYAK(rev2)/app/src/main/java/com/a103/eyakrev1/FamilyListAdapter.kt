@@ -43,8 +43,8 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
             view.setBackgroundColor(Color.parseColor("#F8FCF8"))
         }
 
-        familyListNameTextView.text = family.nickname
-        familyListNicknameTextView.text = family.custom_name
+        familyListNameTextView.text = family.custom_name
+        familyListNicknameTextView.text = family.nickname
 
         return view
     }
