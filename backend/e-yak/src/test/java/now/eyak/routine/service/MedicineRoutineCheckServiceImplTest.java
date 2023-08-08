@@ -99,9 +99,9 @@ class MedicineRoutineCheckServiceImplTest {
                 .startDateTime(LocalDateTime.now().minusDays(1))
                 .endDateTime(LocalDateTime.now().plusDays(1))
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         prescription = prescriptionService.insert(prescriptionDto, member.getId());
@@ -118,9 +118,9 @@ class MedicineRoutineCheckServiceImplTest {
                 .startDateTime(LocalDateTime.now().minusDays(1))
                 .endDateTime(LocalDateTime.now().plusDays(1))
                 .iotLocation(3)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         prescription = prescriptionService.insert(prescriptionDto, member.getId());

@@ -1,15 +1,14 @@
 package now.eyak.prescription.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import now.eyak.prescription.domain.Prescription;
+import now.eyak.routine.enumeration.Routine;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
