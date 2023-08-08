@@ -241,11 +241,10 @@ class MedicineRoutineCheckServiceImplTest {
                 .build();
 
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // true 값 하나 만들기
-        MedicineRoutineMonthResponseDto monthResult = medicineRoutineCheckService.getMonthResultsByMonthAndMember(YearMonth.now(), member.getId()); // 데이터 모으기
+        List<MedicineRoutineMonthDateDto> monthResult = medicineRoutineCheckService.getMonthResultsByMonthAndMember(YearMonth.now(), member.getId()); // 데이터 모으기
 
         // then
-        System.out.println("monthResult = " + monthResult);
-        // TODO: Assertion 작성
+        Assertions.assertThat(monthResult).size().isEqualTo(YearMonth.now().lengthOfMonth());
 
     }
 

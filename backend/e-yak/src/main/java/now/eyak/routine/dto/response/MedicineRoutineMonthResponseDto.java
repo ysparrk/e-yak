@@ -14,12 +14,10 @@ import java.util.List;
 @ToString
 public class MedicineRoutineMonthResponseDto {
 
-    private YearMonth yearMonth;
     private List<MedicineRoutineMonthDateDto> dates;
 
     @Builder
-    public MedicineRoutineMonthResponseDto(YearMonth yearMonth, List<MedicineRoutineMonthDateDto> dates) {
-        this.yearMonth = yearMonth;
+    public MedicineRoutineMonthResponseDto(List<MedicineRoutineMonthDateDto> dates) {
         this.dates = dates;
     }
 }

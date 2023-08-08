@@ -107,7 +107,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
 
     /**
-     * 일자에 따른 약 복용량 반환 -> Month
+     * 일자에 따른 약 복용량 반환 -> Day to Month
      * @param date
      * @param memberId
      * @return
@@ -145,14 +145,14 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
     }
 
     /**
-     * 한달 단위 복용 확인
+     * 한달 단위 복용 확인(Month)
      * @param yearMonth
      * @param memberId
      * @return
      */
     @Transactional
     @Override
-    public MedicineRoutineMonthResponseDto getMonthResultsByMonthAndMember(YearMonth yearMonth, Long memberId) {
+    public List<MedicineRoutineMonthDateDto> getMonthResultsByMonthAndMember(YearMonth yearMonth, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
         LocalDate startDate = yearMonth.atDay(1);
@@ -160,18 +160,12 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
         List<MedicineRoutineMonthDateDto> datesResponseList = new ArrayList<>();
 
-
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             List<MedicineRoutineMonthDateDto> dateResponse= Collections.singletonList(getDateResultsByDateAndMember(date, memberId));
             datesResponseList.addAll(dateResponse);
         }
 
-        MedicineRoutineMonthResponseDto responseDto = MedicineRoutineMonthResponseDto.builder()
-                .yearMonth(yearMonth)
-                .dates(datesResponseList)
-                .build();
-
-        return responseDto;
+        return datesResponseList;
 
     }
 

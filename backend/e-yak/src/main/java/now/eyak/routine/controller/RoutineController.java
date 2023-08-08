@@ -7,6 +7,7 @@ import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
 import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
+import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
 import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.service.MedicineRoutineCheckService;
 import now.eyak.util.ApiVersionHolder;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/medicine-routine-checks")
@@ -59,7 +61,7 @@ public class RoutineController {
             @AuthenticationPrincipal Long memberId
         ) throws URISyntaxException {
 
-        MedicineRoutineMonthResponseDto monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId);
+        List<MedicineRoutineMonthDateDto>  monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId);
 
         return ResponseEntity.ok(monthResultsByMonthAndMember);
     }
