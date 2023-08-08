@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -56,11 +57,13 @@ class FamilyFragment : Fragment() {
             override fun onResponse(call: Call<ArrayList<Family>>, response: Response<ArrayList<Family>>) {
                 if(response.code() == 200) {
                     familyList = response.body()!!
-                    Log.d("log", "nickname : ${familyList[0].nickname}")
-                    Log.d("log", "custom_name : ${familyList[0].custom_name}")
 
                     // 마지막 빈 공간을 위해서 더미 데이터 추가
                     familyList.add(Family())
+
+                    if (familyList.size == 1) {
+                        layout.findViewById<LinearLayout>(R.id.emptyFamilyLinearLayout).visibility = View.VISIBLE
+                    }
 
                     val familyListAdapter = FamilyListAdapter(mainActivity, familyList)
                     val familyListView = layout.findViewById<ListView>(R.id.familyListView)
