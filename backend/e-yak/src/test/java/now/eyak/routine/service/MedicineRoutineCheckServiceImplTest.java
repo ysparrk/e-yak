@@ -7,7 +7,11 @@ import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.routine.domain.MedicineRoutineCheck;
-import now.eyak.routine.dto.*;
+import now.eyak.routine.dto.request.MedicineRoutineCheckDto;
+import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
+import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
+import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
+import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -123,6 +127,8 @@ class MedicineRoutineCheckServiceImplTest {
 
         prescription = prescriptionService.insert(prescriptionDto, member.getId());
 
+        medicineRoutineCheckService.scheduleMedicineRoutineCheck();
+
 
     }
 
@@ -133,7 +139,6 @@ class MedicineRoutineCheckServiceImplTest {
         // given
 
         // when
-        medicineRoutineCheckService.scheduleMedicineRoutineCheck();
 
         // then
         List<Prescription> allByMemberIdBetweenDate = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now());
@@ -149,8 +154,6 @@ class MedicineRoutineCheckServiceImplTest {
         // given
 
         // when
-        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
-
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
@@ -177,8 +180,6 @@ class MedicineRoutineCheckServiceImplTest {
         // given
 
         // when
-        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
-
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
@@ -189,7 +190,7 @@ class MedicineRoutineCheckServiceImplTest {
                 .prescriptionId(testPrescription.getId())
                 .build();
 
-        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // true 값 1개 만들기
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // true 값 하나 만들기
 
         MedicineRoutineMonthDateDto dateResults = medicineRoutineCheckService.getDateResultsByDateAndMember(LocalDate.now(), member.getId());
 
@@ -205,8 +206,6 @@ class MedicineRoutineCheckServiceImplTest {
         // given
 
         // when
-        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
-
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
@@ -217,7 +216,7 @@ class MedicineRoutineCheckServiceImplTest {
                 .prescriptionId(testPrescription.getId())
                 .build();
 
-        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // true 값 하나 만들기
         MedicineRoutineMonthResponseDto monthResult = medicineRoutineCheckService.getMonthResultsByMonthAndMember(YearMonth.now(), member.getId()); // 데이터 모으기
 
         // then
@@ -233,8 +232,6 @@ class MedicineRoutineCheckServiceImplTest {
         // given
 
         // when
-        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
-
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
@@ -275,4 +272,5 @@ class MedicineRoutineCheckServiceImplTest {
         System.out.println("detailResult = " + detailResult);
         // TODO: Assertions 작성
     }
+
 }
