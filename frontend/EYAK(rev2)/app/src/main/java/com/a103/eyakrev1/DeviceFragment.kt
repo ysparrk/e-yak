@@ -11,8 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
@@ -56,31 +59,13 @@ class DeviceFragment : Fragment() {
         layout.findViewById<LinearLayout>(R.id.btEditCell4).setOnDragListener(dragListener)
         layout.findViewById<LinearLayout>(R.id.btEditCell5).setOnDragListener(dragListener)
 
+        // 아이템 존재 여부 (임시)
+        layout.findViewById<TextView>(R.id.medicineScrollNonText).visibility = View.GONE
+        layout.findViewById<HorizontalScrollView>(R.id.medicineScroll).visibility = View.VISIBLE
         // 아이템
-        layout.findViewById<ImageView>(R.id.testEditImage1).setOnLongClickListener {
-            val clipText = "This is clip data text 1"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data, dragShadowBuilder, it, 0)
-
-            //it.visibility = View.INVISIBLE
-            true
-        }
-        layout.findViewById<ImageView>(R.id.testEditImage2).setOnLongClickListener {
-            val clipText = "This is clip data text 2"
-            val item = ClipData.Item(clipText)
-            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-            val data = ClipData(clipText, mimeTypes, item)
-
-            val dragShadowBuilder = View.DragShadowBuilder(it)
-            it.startDragAndDrop(data, dragShadowBuilder, it, 0)
-
-//            it.visibility = View.INVISIBLE
-            true
-        }
+        newMedicItem("감기약", 1)
+        newMedicItem("medic's name", 2)
+        newMedicItem("medic's name", 3)
 
         return layout
     }
@@ -90,7 +75,6 @@ class DeviceFragment : Fragment() {
         when(event.action) {
             DragEvent.ACTION_DRAG_STARTED -> { // drag 시작, shadow 얻었을 때.
                 event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
-                true
             }
             DragEvent.ACTION_DRAG_ENTERED -> { // shadow가 listener 뷰에 진입
                 view.background.setTint(Color.parseColor("#FF9B9B"))
@@ -107,8 +91,7 @@ class DeviceFragment : Fragment() {
                 view.background.setTint(Color.parseColor("#AAABAE"))
 
                 val item = event.clipData.getItemAt(0)
-                val dragData = item.text
-                Toast.makeText(requireActivity(), "$dragData", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), "${item.text}", Toast.LENGTH_SHORT).show()
 
                 view.invalidate()
 
@@ -117,16 +100,36 @@ class DeviceFragment : Fragment() {
                 owner.removeView(v)
                 val destination = view as LinearLayout
                 destination.addView(v)
-                v.visibility = View.VISIBLE
+//
+//                v.visibility = View.VISIBLE
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {  // 드래그앤 드롭 종료시 발생. action_drop 후 보장 X.
                 view.invalidate()
-                Toast.makeText(requireActivity(), "dragdrop end", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireActivity(), "dragdrop end", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> false
         }
+    }
+
+    // 드래그 아이템 추가 함수
+    private fun newMedicItem(medicName: String, num: Int) {
+        var medicView = LayoutInflater.from(requireContext()).inflate(R.layout.device_tab_edit_view_item, null)
+        //medicView.findViewById<ImageView>(R.id.deviceMedicImage) // 약 아이콘 이미지 세팅
+        medicView.findViewById<TextView>(R.id.deviceMedicText).text = medicName
+        medicView.setOnLongClickListener {
+            val item = ClipData.Item("${medicName} $num")
+            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+            val data = ClipData(medicName, mimeTypes, item)
+
+            val dragShadowBuilder = View.DragShadowBuilder(it)
+            it.startDragAndDrop(data, dragShadowBuilder, it, 0)
+
+//            it.visibility = View.INVISIBLE
+            true
+        }
+        layout.findViewById<LinearLayout>(R.id.medicineScrollLayout).addView(medicView)
     }
 
 
