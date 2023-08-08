@@ -1,8 +1,18 @@
 package now.eyak.member.exception;
 
-public class InvalidAccessTokenException extends RuntimeException {
+import now.eyak.exception.CustomException;
+import org.springframework.http.HttpStatus;
+
+public class InvalidAccessTokenException extends CustomException {
 
     public InvalidAccessTokenException(String message) {
         super(message);
     }
+
+    @Override
+    public HttpStatus getStatusCode() {
+        return HttpStatus.BAD_REQUEST;
+    }
+
+
 }

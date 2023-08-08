@@ -24,6 +24,7 @@ public class Member {
     private String providerName; // ex) google, naver, kakao
     private String providerId; // "google_" + Google, Naver, Kakao에서 로그인시 전달되는 id
     private String refreshToken;
+    @Column(unique = true)
     private String nickname;
     @Enumerated(EnumType.STRING)
     private Role role;

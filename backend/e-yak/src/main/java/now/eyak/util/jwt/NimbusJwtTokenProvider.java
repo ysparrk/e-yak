@@ -10,8 +10,6 @@ import com.nimbusds.jose.jwk.JWKSelector;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
@@ -23,7 +21,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPublicKey;
@@ -37,9 +34,6 @@ import java.util.List;
 public class NimbusJwtTokenProvider implements JwtTokenProvider {
     private final long ACCESS_TOKEN_EXPIRATION_TIME;
     private final long REFRESH_TOKEN_EXPIRATION_TIME;
-    private final Key KEY = Keys.hmacShaKeyFor(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
-    private static final String HEADER_KEY = "Authorization";
-    private static final String PREFIX = "Bearer ";
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private final MemberRepository memberRepository;
@@ -174,6 +168,7 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
             }
 
             if (jwtClaimsSet.getExpirationTime().before(new Date())) {
+                log.info("만료시각을 검증중... now: {}, exp: {}", new Date(), jwtClaimsSet.getExpirationTime());
                 throw new IllegalArgumentException("idToken이 만료되었습니다.");
             }
         } catch (JOSEException|ParseException e) {

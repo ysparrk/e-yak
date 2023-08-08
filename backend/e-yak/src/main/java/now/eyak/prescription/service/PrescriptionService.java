@@ -1,6 +1,7 @@
 package now.eyak.prescription.service;
 
 import now.eyak.prescription.domain.Prescription;
+import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 
@@ -15,5 +16,5 @@ public interface PrescriptionService {
     Prescription update(Long prescriptionId, PrescriptionDto prescriptionDto, Long memberId);
     void delete(Long prescriptionId, Long memberId);
     List<PrescriptionMedicineRoutine> findPrescriptionMedicineRoutinesById(Long prescriptionId, Long memberId);
-//    List<PrescriptionMedicineRoutine> updatePrescriptionMede
+    List<PrescriptionMedicineRoutine> updatePrescriptionMedicineRoutinesById(MedicineRoutineUpdateDto medicineRoutineUpdateDto, Long prescriptionId, Long memberId);
 }

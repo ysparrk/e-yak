@@ -73,9 +73,9 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         //when
@@ -99,9 +99,9 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         //when
@@ -128,9 +128,9 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -154,23 +154,23 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
 
         //when
         prescriptionDto.setCustomName("두통약");
-        prescriptionDto.setRoutines(List.of(Routine.BED_BEFORE, Routine.BED_AFTER));
+        prescriptionDto.setMedicineRoutines(List.of(Routine.BED_BEFORE, Routine.BED_AFTER));
         prescriptionService.update(inserted.getId(), prescriptionDto, MEMBER.getId());
 
         Prescription prescription = prescriptionService.findById(inserted.getId(), MEMBER.getId());
 
         //then
         assertThat(prescription.getCustomName()).isEqualTo(prescriptionDto.getCustomName());
-        assertThat(prescription.getPrescriptionMedicineRoutines()).hasSize(prescriptionDto.getRoutines().size());
+        assertThat(prescription.getPrescriptionMedicineRoutines()).hasSize(prescriptionDto.getMedicineRoutines().size());
     }
 
     @Transactional
@@ -185,9 +185,9 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -212,9 +212,9 @@ class PrescriptionServiceImplTest {
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now())
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -223,6 +223,6 @@ class PrescriptionServiceImplTest {
         List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = prescriptionService.findPrescriptionMedicineRoutinesById(inserted.getId(), MEMBER.getId());
 
         //then
-        assertThat(prescriptionMedicineRoutines).hasSize(prescriptionDto.getRoutines().size());
+        assertThat(prescriptionMedicineRoutines).hasSize(prescriptionDto.getMedicineRoutines().size());
     }
 }

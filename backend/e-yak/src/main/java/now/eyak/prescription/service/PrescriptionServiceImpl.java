@@ -6,6 +6,7 @@ import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
+import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.domain.MedicineRoutine;
@@ -44,7 +45,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Member member = getMemberOrThrow(memberId);
         prescription.setMember(member);
 
-        prescriptionDto.getRoutines().stream().forEach(routine -> {
+        prescriptionDto.getMedicineRoutines().stream().forEach(routine -> {
             MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .medicineRoutine(medicineRoutine)
@@ -114,7 +115,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         prescriptionDto.update(prescription);
 
         prescription.getPrescriptionMedicineRoutines().clear();
-        prescriptionDto.getRoutines().stream().forEach(routine -> {
+        prescriptionDto.getMedicineRoutines().stream().forEach(routine -> {
             MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .prescription(prescription)
@@ -148,12 +149,33 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @param memberId
      * @return
      */
+    @Transactional
     @Override
     public List<PrescriptionMedicineRoutine> findPrescriptionMedicineRoutinesById(Long prescriptionId, Long memberId) {
         Member member = getMemberOrThrow(memberId);
         Prescription prescription = getPrescriptionByIdAndMemberOrThrow(prescriptionId, member);
 
         return prescriptionMedicineRoutineRepository.findByPrescription(prescription);
+    }
+
+    @Transactional
+    @Override
+    public List<PrescriptionMedicineRoutine> updatePrescriptionMedicineRoutinesById(MedicineRoutineUpdateDto medicineRoutineUpdateDto, Long prescriptionId, Long memberId) {
+        Member member = getMemberOrThrow(memberId);
+        Prescription prescription = getPrescriptionByIdAndMemberOrThrow(prescriptionId, member);
+
+        prescription.getPrescriptionMedicineRoutines().clear();
+        medicineRoutineUpdateDto.getRoutines().stream().forEach(routine -> {
+            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
+            PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
+                    .prescription(prescription)
+                    .medicineRoutine(medicineRoutine)
+                    .build();
+
+            prescription.add(prescriptionMedicineRoutine);
+        });
+
+        return prescriptionRepository.save(prescription).getPrescriptionMedicineRoutines();
     }
 
     private Prescription getPrescriptionAndCheckPermission(Long prescriptionId, Member member) {
