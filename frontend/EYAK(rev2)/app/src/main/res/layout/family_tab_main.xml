@@ -48,7 +48,7 @@
                 android:fontFamily="@font/tmoney_regular"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:text="추가는: 저기약"
+                android:text="추가는 저기:약"
                 android:textColor="#757863"
                 android:textSize="13sp" />
 

@@ -99,7 +99,7 @@ class FamilyAcceptFragment : Fragment() {
                     }
                 })
             }
-//            Thread.sleep(500)
+            Thread.sleep(500)
             mainActivity!!.gotoFamily()
         }
 

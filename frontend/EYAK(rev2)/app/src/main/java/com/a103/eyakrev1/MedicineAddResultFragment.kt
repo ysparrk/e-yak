@@ -38,6 +38,11 @@ class MedicineAddResultFragment : Fragment() {
         setFragmentResultListener("medicineAddData") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
 
             isEdit = bundle.getBoolean("isEdit", false)
+
+            if (isEdit) {
+                view?.findViewById<TextView>(R.id.medicineAddResultTitleTextView)?.text = "복약 정보 수정 확인"
+            }
+
             clickedMedicineId = bundle.getInt("clickedMedicineId", -1)
             iotLocation = bundle.getInt("iotLocation", -1)
 

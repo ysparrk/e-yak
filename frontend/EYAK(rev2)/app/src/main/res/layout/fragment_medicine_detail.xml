@@ -100,7 +100,7 @@
                             android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:includeFontPadding="false"
-                            android:text="질환명 :"
+                            android:text="질환명"
                             android:textColor="#757863"
                             android:textSize="20dp" />
 
@@ -136,9 +136,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="right|center_vertical"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="복용 시작 일시 : "
+                    android:text="복용 시작 일시"
                     android:textColor="#757863"
                     android:textSize="20dp" />
 
@@ -170,9 +170,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="right|center_vertical"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="복용 종료 일시 : "
+                    android:text="복용 종료 일시"
                     android:textColor="#757863"
                     android:textSize="20dp" />
 
@@ -203,9 +203,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="right|center_vertical"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="1회 투여 양 : "
+                    android:text="1회 투여 양"
                     android:textColor="#757863"
                     android:textSize="20dp" />
 
@@ -236,9 +236,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="right|center_vertical"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="1일 투여 횟수 : "
+                    android:text="1일 투여 횟수"
                     android:textColor="#757863"
                     android:textSize="20dp" />
 

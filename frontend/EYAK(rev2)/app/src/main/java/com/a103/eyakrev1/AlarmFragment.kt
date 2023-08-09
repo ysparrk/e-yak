@@ -11,12 +11,12 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import com.a103.eyakrev1.databinding.ActivityMainBinding
 import com.a103.eyakrev1.databinding.AlarmTabMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 
@@ -35,7 +35,17 @@ class AlarmFragment : Fragment() {
     val green: String = "#E3F2C1"
     val gray: String = "#DDE6ED"
 
-    var medicineAlarmList = arrayListOf<MedicineAlarm>()
+    var medicineRoutineList = arrayListOf<MedicineRoutine>()
+
+    lateinit var eatingDuration: LocalTime
+    lateinit var wakeTime: LocalTime
+    lateinit var breakfastTime: LocalTime
+    lateinit var breakfastTimeAfter: LocalTime
+    lateinit var lunchTime: LocalTime
+    lateinit var lunchTimeAfter: LocalTime
+    lateinit var dinnerTime: LocalTime
+    lateinit var dinnerTimeAfter: LocalTime
+    lateinit var bedTime: LocalTime
 
     // https://curryyou.tistory.com/386
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
@@ -50,15 +60,20 @@ class AlarmFragment : Fragment() {
 
         init()
 
-        for (i in 1..10) {
-            // 임시 데이터 넣기
-            val medicineAlarm = MedicineAlarm(medicineIcon = "ic_packagepill_afterglow", medicineTime = "오후 01:30", medicineName = "약이름 $i")
-            medicineAlarmList.add(medicineAlarm)
-        }
+        // 데이터 넣기 (총 8번의 시간에 해당하는)
 
-        val alarmListAdapter = AlarmListAdapter(mainActivity, medicineAlarmList)
-        binding.alramListView.findViewById<ListView>(R.id.alramListView)
-        binding.alramListView.adapter = alarmListAdapter
+        val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+        val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+
+        eatingDuration = LocalTime.parse(pref.getString("eatingDuration", ""))
+        wakeTime = LocalTime.parse(pref.getString("wakeTime", ""))
+        breakfastTime = LocalTime.parse(pref.getString("breakfastTime", ""))
+        breakfastTimeAfter = breakfastTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        lunchTime = LocalTime.parse(pref.getString("lunchTime", ""))
+        lunchTimeAfter = lunchTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        dinnerTime = LocalTime.parse(pref.getString("dinnerTime", ""))
+        dinnerTimeAfter = dinnerTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        bedTime = LocalTime.parse(pref.getString("bedTime", ""))
 
         binding.yesterdayFrameLayout.setOnClickListener {
             updateDay(-1)
@@ -73,8 +88,6 @@ class AlarmFragment : Fragment() {
         }
 
         return binding.root
-
-
     }
     private fun init() {
         targetDay = LocalDate.now()
@@ -92,6 +105,43 @@ class AlarmFragment : Fragment() {
 
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+
+        api.getTargetDayPrescriptions(Authorization = "Bearer ${serverAccessToken}", dateTime = "${targetDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}T12:12:12").enqueue(object: Callback<ArrayList<Medicine>> {
+            override fun onResponse(call: Call<ArrayList<Medicine>>, response: Response<ArrayList<Medicine>>) {
+                if(response.code() == 200) {
+                    // 이제 적절하게 배분해서 넣어주자
+                    val medicineList = response.body()
+                    val eatTimeList = arrayListOf("BED_AFTER", "BREAKFAST_BEFORE", "BREAKFAST_AFTER", "LUNCH_BEFORE", "LUNCH_AFTER", "DINNER_BEFORE", "DINNER_AFTER", "BED_BEFORE")
+
+                    val medicineTimeList = arrayListOf(wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
+                    val medicineNameList = arrayListOf("취침 후", "아침 식사 전", "아침 식사 후", "점심 식사 전", "점심 식사 후", "저녁 식사 전", "저녁 식사 후", "취침 전")
+
+                    for (i in 0..medicineTimeList.size - 1) {
+                        medicineRoutineList.add(MedicineRoutine(routineTime = medicineTimeList[i].toString(), routineName = medicineNameList[i]))
+                    }
+
+                    // 응답 받은 약 별로
+                    for (medicine in medicineList!!) {
+                        // 각 약의 루틴 별로 처리
+                        for (routine in medicine.routines) {
+                            // 해당하는 루틴에 각각 추가
+                            medicineRoutineList[eatTimeList.indexOf(routine)].medicineList.add(medicine)
+                        }
+                    }
+
+                    val alarmListAdapter = AlarmListAdapter(mainActivity, medicineRoutineList)
+                    binding.alramListView.findViewById<ListView>(R.id.alramListView)
+                    binding.alramListView.adapter = alarmListAdapter
+
+                }
+                else if(response.code() == 401) {
+                    Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Medicine>>, t: Throwable) {
+
+            }
+        })
 
         api.todayDoseInfo(Authorization = "Bearer ${serverAccessToken}", date = yesterday.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<TodayDoseInfoBodyModel> {
             override fun onResponse(call: Call<TodayDoseInfoBodyModel>, response: Response<TodayDoseInfoBodyModel>) {

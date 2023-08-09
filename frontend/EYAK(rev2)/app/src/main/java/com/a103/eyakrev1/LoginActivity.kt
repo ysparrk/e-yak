@@ -154,6 +154,12 @@ class LoginActivity : AppCompatActivity() {
                         editor.putString("SERVER_ACCESS_TOKEN", response.body()?.accessToken)
                             .putString("SERVER_REFRESH_TOKEN", response.body()?.refreshToken)
                             .putInt("SERVER_USER_ID", response.body()?.memberDto!!.id)
+                            .putString("wakeTime", response.body()?.memberDto!!.wakeTime)
+                            .putString("breakfastTime", response.body()?.memberDto!!.breakfastTime)
+                            .putString("lunchTime", response.body()?.memberDto!!.lunchTime)
+                            .putString("dinnerTime", response.body()?.memberDto!!.dinnerTime)
+                            .putString("bedTime", response.body()?.memberDto!!.bedTime)
+                            .putString("eatingDuration", response.body()?.memberDto!!.eatingDuration)
                             .apply()
                         ///////////////////////////////
 
