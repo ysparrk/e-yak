@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val firstAlarmIntent = Intent(this, FirstAlarmReceiver::class.java)
-        val firstPendingIntent = PendingIntent.getBroadcast(this, 0, firstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val firstPendingIntent = PendingIntent.getBroadcast(this, 0, firstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
         val secondAlarmIntent = Intent(this, SecondAlarmReceiver::class.java)
-        val secondPendingIntent = PendingIntent.getBroadcast(this, 1, secondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val secondPendingIntent = PendingIntent.getBroadcast(this, 1, secondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
 
         //val alarmTime = LocalTime.of(시간, 분)

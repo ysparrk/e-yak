@@ -17,6 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 
@@ -35,7 +36,7 @@ class AlarmFragment : Fragment() {
     val green: String = "#E3F2C1"
     val gray: String = "#DDE6ED"
 
-    var medicineAlarmList = arrayListOf<MedicineAlarm>()
+    var medicineRoutineList = arrayListOf<MedicineRoutine>()
 
     // https://curryyou.tistory.com/386
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
@@ -50,13 +51,29 @@ class AlarmFragment : Fragment() {
 
         init()
 
+        // 데이터 넣기 (총 8번의 시간에 해당하는)
+
+        val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+        val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+
+        val eatingDuration = LocalTime.parse(pref.getString("eatingDuration", ""))
+
+        val wakeTime = LocalTime.parse(pref.getString("wakeTime", "") )
+        val breakfastTime = LocalTime.parse(pref.getString("breakfastTime", ""))
+        val breakfastTimeAfter = breakfastTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        val lunchTime = LocalTime.parse(pref.getString("lunchTime", ""))
+        val lunchTimeAfter = lunchTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        val dinnerTime = LocalTime.parse(pref.getString("dinnerTime", ""))
+        val dinnerTimeAfter = dinnerTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        val bedTime = LocalTime.parse(pref.getString("bedTime", ""))
+
         for (i in 1..10) {
             // 임시 데이터 넣기
-            val medicineAlarm = MedicineAlarm(medicineIcon = "ic_packagepill_afterglow", medicineTime = "오후 01:30", medicineName = "약이름 $i")
-            medicineAlarmList.add(medicineAlarm)
+            val medicineAlarm = MedicineRoutine()
+            medicineRoutineList.add(medicineAlarm)
         }
 
-        val alarmListAdapter = AlarmListAdapter(mainActivity, medicineAlarmList)
+        val alarmListAdapter = AlarmListAdapter(mainActivity, medicineRoutineList)
         binding.alramListView.findViewById<ListView>(R.id.alramListView)
         binding.alramListView.adapter = alarmListAdapter
 
