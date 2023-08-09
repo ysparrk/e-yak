@@ -8,6 +8,7 @@ import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentTextResultDto;
 import now.eyak.survey.dto.request.ContentTextResultUpdateDto;
 import now.eyak.survey.dto.response.ContentTextResultResponseDto;
+import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.ContentTextResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
@@ -62,21 +63,10 @@ class ContentTextResultServiceImplTest {
                 .build();
         member = memberRepository.save(member);
 
-        survey = Survey.builder()
-                .date(LocalDate.of(2023,8,01))
-                .build();
-
-        survey = surveyRepository.save(survey);
-
-        surveyContent = SurveyContent.builder()
-                .survey(survey)
-                .build();
-
-        surveyContent = surveyContentRepository.save(surveyContent);
+        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당하는 날짜에 TEXT 설문 문항이 존재하지 않습니다."));
 
         contentTextResultDto = ContentTextResultDto.builder()
                 .text("오늘의 컨디션 입력합니다.")
-                .surveyContentId(surveyContent.getId())
                 .build();
     }
 
@@ -86,7 +76,7 @@ class ContentTextResultServiceImplTest {
         // given
 
         // when
-        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());
+        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());
         ContentTextResult findContentTextResult = contentTextResultRepository.findById(savedContentTextResult.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentTextResult가 없습니다."));
 
         // then
@@ -101,19 +91,18 @@ class ContentTextResultServiceImplTest {
     @Transactional
     void updateTextSurveyResult() {
         // given
-        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());  // 원본 값 저장
+        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());  // 원본 값 저장
 
         System.out.println("savedContentTextResult.getText() = " + savedContentTextResult.getText());
 
         ContentTextResultUpdateDto contentTextResultUpdateDto = ContentTextResultUpdateDto.builder()
-                .id(savedContentTextResult.getId())
+                .contentTextResultId(savedContentTextResult.getId())
                 .text("컨디션 수정할게요")
-                .surveyContentId(surveyContent.getId())
                 .build();
 
         // when
-        contentTextResultService.updateTextSurveyResult(contentTextResultUpdateDto, member.getId());
-        ContentTextResult findContentTextResult = contentTextResultRepository.findById(contentTextResultUpdateDto.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentTextResult가 존재하지 않습니다."));
+        contentTextResultService.updateTextSurveyResult(contentTextResultUpdateDto, surveyContent.getId(), member.getId());
+        ContentTextResult findContentTextResult = contentTextResultRepository.findById(contentTextResultUpdateDto.getContentTextResultId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentTextResult가 존재하지 않습니다."));
 
         // then
         Assertions.assertThat(findContentTextResult.getText()).isEqualTo(contentTextResultUpdateDto.getText());
@@ -125,7 +114,7 @@ class ContentTextResultServiceImplTest {
     @Transactional
     void deleteTextSurveyResult() {
         // given
-        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());  // 원본 값 저장
+        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());  // 원본 값 저장
         System.out.println("savedContentTextResult.getText() = " + savedContentTextResult.getText());
 
         // when
@@ -141,7 +130,7 @@ class ContentTextResultServiceImplTest {
     @Transactional
     void getTextResultsByDateAndMember() {
         // given
-        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());  // 원본 값 저장
+        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());  // 원본 값 저장
 
         Member memberA = Member.builder()
                 .providerName("google")
@@ -155,26 +144,16 @@ class ContentTextResultServiceImplTest {
                 .build();
         memberA = memberRepository.save(memberA);
 
-        Survey surveyA = Survey.builder()
-                .date(LocalDate.of(2023,7,01))
-                .build();
-
-        surveyA = surveyRepository.save(surveyA);
-
-        SurveyContent surveyContentA = SurveyContent.builder()
-                .survey(surveyA)
-                .build();
-
-        surveyContentA = surveyContentRepository.save(surveyContentA);
+        Survey surveyA = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 설문이 존재하지 않습니다."));
 
         contentTextResultDto = ContentTextResultDto.builder()
                 .text("드민이 입력한 7월 1일 컨디션입니다.")
-                .surveyContentId(surveyContentA.getId())
                 .build();
 
-        savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, memberA.getId());  // 원본 값 저장
+        savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), memberA.getId());  // 원본 값 저장
         System.out.println("savedContentTextResult = " + savedContentTextResult.getText());
         System.out.println("savedContentTextResult = " + savedContentTextResult.getMember().getNickname());
+
         // when
         List<ContentTextResultResponseDto> findTextResultsByDateAndMember = contentTextResultService.getTextResultsByDateAndMember(surveyA.getDate(), memberA.getId());
 

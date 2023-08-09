@@ -8,8 +8,10 @@ import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.survey.domain.*;
 import now.eyak.survey.dto.request.ContentStatusResultDto;
+import now.eyak.survey.dto.request.ContentStatusResultUpdateDto;
 import now.eyak.survey.dto.response.ContentStatusResultResponseDto;
 import now.eyak.survey.enumeration.ChoiceStatus;
+import now.eyak.survey.exception.DuplicatedContentResultException;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
@@ -41,9 +43,14 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
      */
     @Transactional
     @Override
-    public ContentStatusResult saveStatusSurveyResult(ContentStatusResultDto contentStatusResultDto, Long memberId) {
-        SurveyContent surveyContent = surveyContentRepository.findById(contentStatusResultDto.getSurveyContentId()).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
+    public ContentStatusResult saveStatusSurveyResult(ContentStatusResultDto contentStatusResultDto, Long surveyContentId, Long memberId) {
+        SurveyContent surveyContent = surveyContentRepository.findById(surveyContentId).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+
+        if (contentStatusResultRepository.findBySurveyContentAndMember(surveyContent, member).isPresent()) {
+            throw new DuplicatedContentResultException("하루에 문항당 하나의 응답만 가능합니다.");
+        }
+
         ContentStatusResult contentStatusResult = ContentStatusResult.builder()
                 .surveyContent(surveyContent)
                 .selectedStatusChoices(contentStatusResultDto.getSelectedStatusChoices())
@@ -63,12 +70,12 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
      */
     @Transactional
     @Override
-    public ContentStatusResult updateStatusSurveyResult(ContentStatusResultDto contentStatusResultDto, Long memberId) {
-        SurveyContent surveyContent = surveyContentRepository.findById(contentStatusResultDto.getSurveyContentId()).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
+    public ContentStatusResult updateStatusSurveyResult(ContentStatusResultUpdateDto contentStatusResultUpdateDto, Long surveyContentId, Long memberId) {
+        SurveyContent surveyContent = surveyContentRepository.findById(surveyContentId).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
-        ContentStatusResult contentStatusResult = contentStatusResultRepository.findByIdAndMember(contentStatusResultDto.getId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentStatusResult가 존재하지 않습니다."));
+        ContentStatusResult contentStatusResult = contentStatusResultRepository.findByIdAndMember(contentStatusResultUpdateDto.getContentStatusResultId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentStatusResult가 존재하지 않습니다."));
 
-        contentStatusResult.setSelectedStatusChoices(new ArrayList<>(contentStatusResultDto.getSelectedStatusChoices()));
+        contentStatusResult.setSelectedStatusChoices(new ArrayList<>(contentStatusResultUpdateDto.getSelectedStatusChoices()));
         return contentStatusResultRepository.save(contentStatusResult);
 
     }
@@ -128,7 +135,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
             List<ChoiceStatus> selectedStatusChoices = contentStatusResult.getSelectedStatusChoices();
 
             ContentStatusResultResponseDto result = ContentStatusResultResponseDto.builder()
-                    .id(contentStatusResultId)
+                    .contentStatusResultId(contentStatusResultId)
                     .memberId(memberQueryId)
                     .selectedStatusChoices(selectedStatusChoices)
                     .createdAt(createdAt)

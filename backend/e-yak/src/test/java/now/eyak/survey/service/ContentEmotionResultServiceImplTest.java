@@ -6,8 +6,10 @@ import now.eyak.survey.domain.ContentEmotionResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentEmotionResultDto;
+import now.eyak.survey.dto.request.ContentEmotionResultUpdateDto;
 import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
 import now.eyak.survey.enumeration.ChoiceEmotion;
+import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.ContentEmotionResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
@@ -61,22 +63,21 @@ class ContentEmotionResultServiceImplTest {
                 .build();
         member = memberRepository.save(member);
 
-        survey = Survey.builder()
-                .date(LocalDate.of(2023,8,01))
-                .build();
+//        survey = Survey.builder()
+//                .date(LocalDate.of(2023,8,01))
+//                .build();
+//
+//        survey = surveyRepository.save(survey);
+//
+//        surveyContent = SurveyContent.builder()
+//                .survey(survey)
+//                .build();
 
-        survey = surveyRepository.save(survey);
-
-        surveyContent = SurveyContent.builder()
-                .survey(survey)
-                .build();
-
-        surveyContent = surveyContentRepository.save(surveyContent);
-
+        survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 Survey가 존재하지 않습니다."));
+        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
 
         contentEmotionResultDto = ContentEmotionResultDto.builder()
                 .choiceEmotion(ChoiceEmotion.SOSO)
-                .surveyContentId(surveyContent.getId())
                 .build();
 
     }
@@ -88,7 +89,7 @@ class ContentEmotionResultServiceImplTest {
         // given
 
         // when
-        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());
+        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContent.getId(), member.getId());
         ContentEmotionResult findContentEmotionResult = contentEmotionResultRepository.findById(savedContentEmotionResult.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentEmotionResult가 없습니다."));
 
         // then
@@ -101,21 +102,20 @@ class ContentEmotionResultServiceImplTest {
     @Transactional
     void updateEmotionSurveyResult() {
         // given
-        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId()); // 원본 값 저장
+        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContent.getId(), member.getId()); // 원본 값 저장
         System.out.println("savedContentEmotionResult.getChoiceEmotion() = " + savedContentEmotionResult.getChoiceEmotion());
 
-        ContentEmotionResultDto contentEmotionResultDto = ContentEmotionResultDto.builder()
-                .id(savedContentEmotionResult.getId())
+        ContentEmotionResultUpdateDto contentEmotionResultUpdateDto = ContentEmotionResultUpdateDto.builder()
+                .contentEmotionResultId(savedContentEmotionResult.getId())
                 .choiceEmotion(ChoiceEmotion.GOOD)  // emotion 수정
-                .surveyContentId(surveyContent.getId())
                 .build();
 
         // when
-        contentEmotionResultService.updateEmotionSurveyResult(contentEmotionResultDto, member.getId());
-        ContentEmotionResult findContentEmotionResult = contentEmotionResultRepository.findById(contentEmotionResultDto.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentEmotionResult가 존재하지 않습니다."));
+        contentEmotionResultService.updateEmotionSurveyResult(contentEmotionResultUpdateDto, surveyContent.getId(), member.getId());
+        ContentEmotionResult findContentEmotionResult = contentEmotionResultRepository.findById(contentEmotionResultUpdateDto.getContentEmotionResultId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentEmotionResult가 존재하지 않습니다."));
 
         // then
-        Assertions.assertThat(findContentEmotionResult.getChoiceEmotion()).isEqualTo(contentEmotionResultDto.getChoiceEmotion());
+        Assertions.assertThat(findContentEmotionResult.getChoiceEmotion()).isEqualTo(contentEmotionResultUpdateDto.getChoiceEmotion());
         System.out.println("findContentEmotionResult.getChoiceEmotion() = " + findContentEmotionResult.getChoiceEmotion());
     }
 
@@ -124,7 +124,7 @@ class ContentEmotionResultServiceImplTest {
     @Transactional
     void deleteEmotionSurveyResult() {
         // given
-        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());// 원본 값 저장
+        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContent.getId(), member.getId());// 원본 값 저장
         System.out.println("savedContentEmotionResult.getChoiceEmotion() = " + savedContentEmotionResult.getChoiceEmotion());
 
         // when
@@ -140,7 +140,7 @@ class ContentEmotionResultServiceImplTest {
     @Transactional
     void getEmotionResultsByDateAndMember() {
         // given
-        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());// 원본 값 저장
+        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContent.getId(), member.getId());// 원본 값 저장
 
         // 새로운 사용자 및 설문 응답 추가
         Member memberA = Member.builder()
@@ -155,32 +155,17 @@ class ContentEmotionResultServiceImplTest {
                 .build();
         memberA = memberRepository.save(memberA);
 
-
-        Survey surveyA = Survey.builder()
-                .date(LocalDate.of(2023,7,01))
-                .build();
-
-        surveyA = surveyRepository.save(surveyA);
-
-        SurveyContent surveyContentA = SurveyContent.builder()
-                .survey(surveyA)
-                .build();
-
-        surveyContentA = surveyContentRepository.save(surveyContentA);
-
-
         contentEmotionResultDto = ContentEmotionResultDto.builder()
                 .choiceEmotion(ChoiceEmotion.GOOD)
-                .surveyContentId(surveyContentA.getId())
                 .build();
 
 
-        savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, memberA.getId());// 새로운 값 저장
+        savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContent.getId(), memberA.getId());// 새로운 값 저장
         System.out.println("savedContentEmotionResult.getChoiceEmotion() = " + savedContentEmotionResult.getChoiceEmotion());
         System.out.println("savedContentEmotionResult.getMember().getNickname() = " + savedContentEmotionResult.getMember().getNickname());
 
         // when
-        List<ContentEmotionResultResponseDto> findEmotionResultsByDateAndMember = contentEmotionResultService.getEmotionResultsByDateAndMember(surveyA.getDate(), memberA.getId());
+        List<ContentEmotionResultResponseDto> findEmotionResultsByDateAndMember = contentEmotionResultService.getEmotionResultsByDateAndMember(survey.getDate(), memberA.getId());
 
         // then
         Assertions.assertThat(savedContentEmotionResult.getMember().getId()).isEqualTo(findEmotionResultsByDateAndMember.get(0).getMemberId());

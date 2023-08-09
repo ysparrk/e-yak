@@ -9,6 +9,7 @@ import now.eyak.survey.dto.request.ContentTextResultDto;
 import now.eyak.survey.dto.response.SurveyContentDto;
 import now.eyak.survey.enumeration.ChoiceEmotion;
 import now.eyak.survey.enumeration.ChoiceStatus;
+import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
 import org.assertj.core.api.Assertions;
@@ -25,6 +26,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class SurveyContentServiceImplTest {
@@ -67,31 +70,18 @@ class SurveyContentServiceImplTest {
                 .build();
         member = memberRepository.save(member);
 
-        survey = Survey.builder()
-                .date(LocalDate.of(2023,8,01))
-                .build();
-
-        survey = surveyRepository.save(survey);
-
-        surveyContent = SurveyContent.builder()
-                .survey(survey)
-                .build();
-
-        surveyContent = surveyContentRepository.save(surveyContent);
+        survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 설문이 존재하지 않습니다."));
 
         contentEmotionResultDto = ContentEmotionResultDto.builder()
                 .choiceEmotion(ChoiceEmotion.SOSO)
-                .surveyContentId(surveyContent.getId())
                 .build();
 
         contentStatusResultDto = ContentStatusResultDto.builder()
                 .selectedStatusChoices(Arrays.asList(ChoiceStatus.HEADACHE, ChoiceStatus.NAUSEA, ChoiceStatus.FEVER))
-                .surveyContentId(surveyContent.getId())
                 .build();
 
         contentTextResultDto = ContentTextResultDto.builder()
                 .text("오늘의 컨디션 입력합니다.")
-                .surveyContentId(surveyContent.getId())
                 .build();
 
     }
@@ -102,9 +92,15 @@ class SurveyContentServiceImplTest {
     @Transactional
     void getSurveyResultByDateAndMember() {
         // given
-        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, member.getId());
-        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());
-        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());
+        List<SurveyContent> surveyContents = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now());
+        SurveyContent surveyContentChoiceEmotion = surveyContents.stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
+        SurveyContent surveyContentChoiceStatus = surveyContents.stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_STATUS)).findAny().get();
+        SurveyContent surveyContentChoiceText = surveyContents.stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().get();
+
+
+        ContentEmotionResult savedContentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContentChoiceEmotion.getId(), member.getId());
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContentChoiceStatus.getId(), member.getId());
+        ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentChoiceText.getId(), member.getId());
 
         // when
         List<SurveyContentDto> surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(survey.getDate(), member.getId());

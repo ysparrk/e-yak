@@ -15,15 +15,15 @@ import java.util.List;
 @Builder
 @ToString
 public class ContentStatusResultResponseDto {
-    private Long id;
+    private Long contentStatusResultId;
     private Long memberId;
     private List<ChoiceStatus> selectedStatusChoices;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @QueryProjection
-    public ContentStatusResultResponseDto(Long id, Long memberId, List<ChoiceStatus> selectedStatusChoices, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    public ContentStatusResultResponseDto(Long contentStatusResultId, Long memberId, List<ChoiceStatus> selectedStatusChoices, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.contentStatusResultId = contentStatusResultId;
         this.memberId = memberId;
         this.selectedStatusChoices = selectedStatusChoices;
         this.createdAt = createdAt;

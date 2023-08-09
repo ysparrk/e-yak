@@ -11,7 +11,6 @@ import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
 import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
-import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -19,6 +18,7 @@ import now.eyak.survey.domain.ContentTextResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentTextResultDto;
+import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
 import now.eyak.survey.service.ContentTextResultService;
@@ -276,25 +276,24 @@ class MedicineRoutineCheckServiceImplTest {
 
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
 
-
-        survey = Survey.builder()
-                .date(LocalDate.now())
-                .build();
-
-        survey = surveyRepository.save(survey);
-
-        surveyContent = SurveyContent.builder()
-                .survey(survey)
-                .build();
-
-        surveyContent = surveyContentRepository.save(surveyContent);
+        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
+//        survey = Survey.builder()
+//                .date(LocalDate.now())
+//                .build();
+//
+//        survey = surveyRepository.save(survey);
+//
+//        surveyContent = SurveyContent.builder()
+//                .survey(survey)
+//                .build();
+//
+//        surveyContent = surveyContentRepository.save(surveyContent);
 
         contentTextResultDto = ContentTextResultDto.builder()
                 .text("오늘의 컨디션 입력합니다.")
-                .surveyContentId(surveyContent.getId())
                 .build();
 
-        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, member.getId());
+        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());
 
         MedicineRoutineDateResponseDto detailResult = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(LocalDate.now(), member.getId()); // 결과 불러오기
 

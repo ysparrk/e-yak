@@ -23,7 +23,7 @@ public class FollowerController {
     @GetMapping("/{memberId}/follwers")
     public ResponseEntity getFollowers(@AuthenticationPrincipal Long memberId) {
         List<Follow> followers = followService.findFollowers(memberId);
-        List<FollowerResponseDto> followerResponseDtoList = followers.stream().map(FollowerResponseDto::from).toList();
+        List<FollowerResponseDto> followerResponseDtoList = followers.stream().map(FollowerResponseDto::of).toList();
 
         return ResponseEntity.ok(followerResponseDtoList);
     }
