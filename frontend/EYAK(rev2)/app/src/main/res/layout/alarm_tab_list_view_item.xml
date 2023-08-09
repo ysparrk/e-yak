@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:cardBackgroundColor="#DDE6ED"
         app:cardCornerRadius="20dp"
@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
             android:backgroundTint="#DDE6ED"
             android:orientation="vertical"
@@ -31,14 +31,10 @@
                 android:orientation="horizontal"
                 android:weightSum="14">
 
-                <ImageView
-                    android:id="@+id/medicine_icon"
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:padding="7dp"
-                    android:src="@drawable/eyak_logo"
-                    app:srcCompat="@drawable/ic_packagepill_afterglow" />
+                    android:layout_weight="2" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -85,13 +81,13 @@
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="2" />
 
                 <TextView
                     android:id="@+id/medicine_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="6"
+                    android:layout_weight="7"
                     android:fontFamily="@font/tmoney_bold"
                     android:gravity="center_vertical"
                     android:includeFontPadding="false"
@@ -121,7 +117,7 @@
                     android:fontFamily="@font/tmoney_regular"
                     android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="다음 약 복용까지"
+                    android:text="다음 복용 시간"
                     android:textColor="#757863"
                     android:textSize="16sp" />
 
@@ -155,7 +151,7 @@
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="3" />
 
                 <Button
                     android:id="@+id/medicine_eat_button"
@@ -174,22 +170,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <Button
-                    android:id="@+id/medicine_delay_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:backgroundTint="#FF9B9B"
-                    android:fontFamily="@font/tmoney_regular"
-                    android:includeFontPadding="false"
-                    android:text="미루기"
-                    android:textColor="#757863"
-                    android:textSize="17dp" />
-
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/alarmTabDetailButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_rectangle_24"
+                    android:backgroundTint="#E3F2C1"
+                    android:paddingVertical="10dp"
+                    android:tint="#757863"
+                    app:srcCompat="@drawable/baseline_keyboard_arrow_down_24" />
 
             </LinearLayout>
         </LinearLayout>

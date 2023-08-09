@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <!--  bluetooth 필요 권한  -->
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
@@ -15,6 +16,7 @@
         android:usesPermissionFlags="neverForLocation"
         tools:targetApi="s"/>
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
@@ -29,9 +31,6 @@
         android:theme="@style/Theme.EYAKrev1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".MyCalendarActivity"
-            android:exported="false" />
         <activity
             android:name=".EditMemberActivity"
             android:exported="false" />
