@@ -93,6 +93,8 @@ class AlarmFragment : Fragment() {
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
+
+
         api.todayDoseInfo(Authorization = "Bearer ${serverAccessToken}", date = yesterday.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<TodayDoseInfoBodyModel> {
             override fun onResponse(call: Call<TodayDoseInfoBodyModel>, response: Response<TodayDoseInfoBodyModel>) {
                 if(response.code() == 200) {

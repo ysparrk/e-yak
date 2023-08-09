@@ -89,6 +89,12 @@ interface EyakService {
         @Header("Authorization") Authorization: String,
     ): Call<ArrayList<Medicine>>
 
+    @GET("/api/v1/prescriptions")
+    fun getTargetDayPrescriptions(
+        @Header("Authorization") Authorization: String,
+        @Query("dateTime") dateTime: String,
+    ): Call<ArrayList<Medicine>>
+
     @GET("/api/v1/prescriptions/{prescriptionId}")
     fun getPrescriptionDetail(
         @Header("Authorization") Authorization: String,
