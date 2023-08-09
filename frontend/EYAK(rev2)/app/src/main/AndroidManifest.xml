@@ -51,6 +51,7 @@
             android:name=".MainActivity"
             android:exported="true" />
 
+        <receiver android:name=".AlarmReceiver" />
     </application>
 
 </manifest>

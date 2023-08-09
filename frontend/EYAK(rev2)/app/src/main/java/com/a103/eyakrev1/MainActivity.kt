@@ -36,12 +36,10 @@ class MainActivity : AppCompatActivity() {
         val alarmIntent = Intent(this, AlarmReceiver::class.java)
 
         //val alarmTime = LocalTime.of(12, 21) // 10시 30분
-        val alarmTime = LocalTime.now().plusMinutes(1)
+        val alarmTime = LocalTime.now().plusSeconds(10)
 
 // 현재 날짜와 선택한 시간을 조합하여 LocalDateTime 생성
         val currentDate = LocalDate.now()
-
-        Log.d("ㅁㅁㅁㅁㅁ", "${LocalDateTime.now().toString()}")
 
         val alarmDateTime = LocalDateTime.of(currentDate, alarmTime)
 
@@ -219,6 +217,8 @@ class AlarmReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
 
+        Log.d("ㅁㅁㅁㅁㅁ", "알람이당")
+
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("알람")
             .setContentText("알람이 울렸습니다.")
@@ -229,5 +229,3 @@ class AlarmReceiver : BroadcastReceiver() {
 
     }
 }
-
-
