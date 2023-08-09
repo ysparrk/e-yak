@@ -57,6 +57,8 @@ class FamilyFragment : Fragment() {
             override fun onResponse(call: Call<ArrayList<Family>>, response: Response<ArrayList<Family>>) {
                 if(response.code() == 200) {
                     familyList = response.body()!!
+                    Log.d("log", familyList[0].nickname)
+                    Log.d("log", familyList[0].custom_name)
 
                     // 마지막 빈 공간을 위해서 더미 데이터 추가
                     familyList.add(Family())
