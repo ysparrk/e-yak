@@ -11,7 +11,6 @@ import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
 import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
-import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;

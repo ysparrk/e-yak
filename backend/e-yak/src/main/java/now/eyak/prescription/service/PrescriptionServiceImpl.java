@@ -65,7 +65,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         // 복약 등록하면 MedicineCheck 테이블 생성
         List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(prescription);
 
-        LocalTime now = LocalTime.now(); // 등록 시간
+        LocalDateTime createdAt = savedPrescription.getCreatedAt();
+        LocalTime createdTime = createdAt.toLocalTime(); // 등록 시간
         LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
 
         List<LocalTime> times = new ArrayList<>();
@@ -77,10 +78,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         times.add(member.getDinnerTime());
         times.add(member.getDinnerTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
         times.add(member.getBedTime());
-        times.add(now);
+        times.add(createdTime);
         Collections.sort(times);
 
-        int now_idx = times.indexOf(now);  // 등록 시간의 idx
+        int createdIdx = times.indexOf(createdTime);  // 등록 시간의 idx
 
         // routine 리스트
         List<Routine> routines = new ArrayList<>();
@@ -88,7 +89,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 
         for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
-            if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) <= now_idx) continue;
+            if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) < createdIdx) continue;
 
             MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
                     .date(LocalDate.now())
@@ -112,8 +113,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     /**
-     * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환한다.
-     *
+     * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환한다. 하지만..
+     * 루틴에 대해 리스트업 해서 전달하기
      * @param memberId
      * @param dateTime
      * @return
@@ -122,7 +123,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public List<Prescription> findAllByMemberIdBetweenDate(Long memberId, LocalDateTime dateTime) {
         Member member = getMemberOrThrow(memberId);
 
-        return prescriptionRepository.findAllByMemberAndStartDateTimeLessThanEqualAndEndDateTimeGreaterThanEqual(member, dateTime, dateTime);
+//        List<Prescription> medicineList = prescriptionRepository.findAllByMemberAndStartDateTimeLessThanEqualAndEndDateTimeGreaterThanEqual(member, dateTime, dateTime);
+
+        // 등등
+
+
+       return null;
+//        return prescriptionRepository.findAllByMemberAndStartDateTimeLessThanEqualAndEndDateTimeGreaterThanEqual(member, dateTime, dateTime);
     }
 
     /**
