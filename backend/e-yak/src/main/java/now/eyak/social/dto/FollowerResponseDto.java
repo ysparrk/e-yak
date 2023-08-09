@@ -18,7 +18,7 @@ public class FollowerResponseDto {
     private String customName;
     private Scope scope;
 
-    public static FollowerResponseDto from(Follow follow) {
+    public static FollowerResponseDto of(Follow follow) {
         return FollowerResponseDto.builder()
                 .followId(follow.getId())
                 .memberId(follow.getFollower().getId())

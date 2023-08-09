@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class ContentStatusResultDto {
+public class ContentStatusResultUpdateDto {
+    private Long contentStatusResultId;
     private List<ChoiceStatus> selectedStatusChoices;
 }

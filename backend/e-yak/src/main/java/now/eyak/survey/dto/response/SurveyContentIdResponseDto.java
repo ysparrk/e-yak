@@ -5,21 +5,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import now.eyak.survey.domain.SurveyContent;
+import now.eyak.survey.enumeration.SurveyContentType;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
 public class SurveyContentIdResponseDto {
-    private Long id;
+    private Long surveyContentId;
+    private SurveyContentType surveyContentType;
 
-    @Builder
-    public SurveyContentIdResponseDto(Long id) {
-        this.id = id;
+    public SurveyContentIdResponseDto(Long surveyContentId, SurveyContentType surveyContentType) {
+        this.surveyContentId = surveyContentId;
+        this.surveyContentType = surveyContentType;
     }
 
     public static SurveyContentIdResponseDto from(SurveyContent surveyContent) {
         return SurveyContentIdResponseDto.builder()
-                .id(surveyContent.getId())
+                .surveyContentId(surveyContent.getId())
+                .surveyContentType(surveyContent.getSurveyContentType())
                 .build();
     }
 }

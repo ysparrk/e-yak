@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import now.eyak.survey.domain.ContentEmotionResult;
 import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.ContentTextResult;
-import now.eyak.survey.dto.request.ContentEmotionResultDto;
-import now.eyak.survey.dto.request.ContentStatusResultDto;
-import now.eyak.survey.dto.request.ContentTextResultDto;
-import now.eyak.survey.dto.request.ContentTextResultUpdateDto;
+import now.eyak.survey.dto.request.*;
+import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
+import now.eyak.survey.dto.response.ContentTextResultResponseDto;
 import now.eyak.survey.dto.response.SurveyContentDto;
 import now.eyak.survey.service.ContentEmotionResultService;
 import now.eyak.survey.service.ContentStatusResultService;
@@ -60,33 +59,34 @@ public class SurveyResultController {
      * @return
      * @throws URISyntaxException
      */
-    @PostMapping("/survey-contents/{surveyContentId}/content-text-result")
+    @PostMapping("/survey-contents/{surveyContentId}/content-text-results")
     public ResponseEntity saveTextSurveyResult(
+            @PathVariable Long surveyContentId,
             @RequestBody ContentTextResultDto contentTextResultDto,
             @AuthenticationPrincipal Long memberId
         ) throws URISyntaxException {
 
-        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, memberId);
+        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentId, memberId);
 
         return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-text-results/" + contentTextResult.getId())).build();
     }
 
     /**
-     * Text설문 응답 수정
+     * Text 설문 응답 수정
      * @param contentTextResultUpdateDto
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
-    @PatchMapping("/survey-contents/{surveyContentId}/content-text-result")
+    @PutMapping("/survey-contents/{surveyContentId}/content-text-results")
     public ResponseEntity updateTextSurveyResult(
+            @PathVariable Long surveyContentId,
             @RequestBody ContentTextResultUpdateDto contentTextResultUpdateDto,
             @AuthenticationPrincipal Long memberId
-        ) throws URISyntaxException {
+        ) {
 
-        ContentTextResult contentTextResult = contentTextResultService.updateTextSurveyResult(contentTextResultUpdateDto, memberId);
+        ContentTextResult contentTextResult = contentTextResultService.updateTextSurveyResult(contentTextResultUpdateDto, surveyContentId, memberId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ContentTextResultResponseDto.of(contentTextResult));
     }
 
     /**
@@ -94,13 +94,12 @@ public class SurveyResultController {
      * @param memberId
      * @param contentTextResultId
      * @return
-     * @throws URISyntaxException
      */
-    @DeleteMapping("/survey-contents/{surveyContentId}/content-text-result/{contentTextResultId}")
+    @DeleteMapping("/survey-contents/{surveyContentId}/content-text-results/{contentTextResultId}")
     public ResponseEntity deleteTextSurveyResult(
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentTextResultId
-            ) throws URISyntaxException {
+            ) {
 
         contentTextResultService.deleteTextSurveyResult(contentTextResultId, memberId);
 
@@ -114,33 +113,35 @@ public class SurveyResultController {
      * @return
      * @throws URISyntaxException
      */
-    @PostMapping("/survey-contents/{surveyContentId}/content-emotion-result")
+    @PostMapping("/survey-contents/{surveyContentId}/content-emotion-results")
     public ResponseEntity saveEmotionSurveyResult(
+            @PathVariable Long surveyContentId,
             @RequestBody ContentEmotionResultDto contentEmotionResultDto,
             @AuthenticationPrincipal Long memberId
             ) throws URISyntaxException {
 
-        ContentEmotionResult contentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, memberId);
+        ContentEmotionResult contentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContentId, memberId);
 
         return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-emotion-results/" + contentEmotionResult.getId())).build();
     }
 
     /**
-     * Emotion설문 응답 수정
-     * @param contentEmotionResultDto
+     * Emotion 설문 응답 수정
+     * @param surveyContentId
+     * @param contentEmotionResultUpdateDto
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
-    @PutMapping("/survey-contents/{surveyContentId}/content-emotion-result")
+    @PutMapping("/survey-contents/{surveyContentId}/content-emotion-results")
     public ResponseEntity updateEmotionSurveyResult(
-            @RequestBody ContentEmotionResultDto contentEmotionResultDto,
+            @PathVariable Long surveyContentId,
+            @RequestBody ContentEmotionResultUpdateDto contentEmotionResultUpdateDto,
             @AuthenticationPrincipal Long memberId
-            ) throws URISyntaxException {
+            ) {
 
-        ContentEmotionResult contentEmotionResult = contentEmotionResultService.updateEmotionSurveyResult(contentEmotionResultDto, memberId);
+        ContentEmotionResult contentEmotionResult = contentEmotionResultService.updateEmotionSurveyResult(contentEmotionResultUpdateDto, surveyContentId, memberId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ContentEmotionResultResponseDto.of(contentEmotionResult));
     }
 
     /**
@@ -150,7 +151,7 @@ public class SurveyResultController {
      * @return
      * @throws URISyntaxException
      */
-    @DeleteMapping("/survey-contents/{surveyContentId}/content-emotion-result/{contentEmotionResultId}")
+    @DeleteMapping("/survey-contents/{surveyContentId}/content-emotion-results/{contentEmotionResultId}")
     public ResponseEntity deleteEmotionSurveyResult(
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentEmotionResultId
@@ -168,29 +169,31 @@ public class SurveyResultController {
      * @return
      * @throws URISyntaxException
      */
-    @PostMapping("/survey-contents/{surveyContentId}/content-status-result")
+    @PostMapping("/survey-contents/{surveyContentId}/content-status-results")
     public ResponseEntity saveStatusSurveyResult(
+            @PathVariable Long surveyContentId,
             @RequestBody ContentStatusResultDto contentStatusResultDto,
             @AuthenticationPrincipal Long memberId
             ) throws URISyntaxException {
-        ContentStatusResult contentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, memberId);
+        ContentStatusResult contentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContentId, memberId);
 
         return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-status-results/" + contentStatusResult.getId())).build();
     }
 
     /**
      * Status 설문 응답 수정
-     * @param contentStatusResultDto
+     * @param surveyContentId
+     * @param contentStatusResultUpdateDto
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
-    @PutMapping("/survey-contents/{surveyContentId}/content-status-result")
+    @PutMapping("/survey-contents/{surveyContentId}/content-status-results")
     public ResponseEntity updateStatusSurveyResult(
-            @RequestBody ContentStatusResultDto contentStatusResultDto,
+            @PathVariable Long surveyContentId,
+            @RequestBody ContentStatusResultUpdateDto contentStatusResultUpdateDto,
             @AuthenticationPrincipal Long memberId
-            ) throws URISyntaxException {
-        ContentStatusResult contentStatusResult = contentStatusResultService.updateStatusSurveyResult(contentStatusResultDto, memberId);
+            ) {
+        ContentStatusResult contentStatusResult = contentStatusResultService.updateStatusSurveyResult(contentStatusResultUpdateDto, surveyContentId, memberId);
 
         return ResponseEntity.ok().build();
     }
@@ -200,13 +203,12 @@ public class SurveyResultController {
      * @param memberId
      * @param contentStatusResultId
      * @return
-     * @throws URISyntaxException
      */
-    @DeleteMapping("/survey-contents/{surveyContentId}/content-status-result/{contentStatusResultId}")
+    @DeleteMapping("/survey-contents/{surveyContentId}/content-status-results/{contentStatusResultId}")
     public ResponseEntity deleteStatusSurveyResult(
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentStatusResultId
-            ) throws URISyntaxException {
+            ) {
 
         contentStatusResultService.deleteStatusSurveyResult(contentStatusResultId, memberId);
 

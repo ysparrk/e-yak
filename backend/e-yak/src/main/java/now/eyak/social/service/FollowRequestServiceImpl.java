@@ -50,9 +50,8 @@ public class FollowRequestServiceImpl implements FollowRequestService {
             throw new IllegalArgumentException("자기자신에게 팔로우 요청을 보낼 수 없습니다.");
         }
 
-        if (followRequestRepository.findByFollowerAndFollowee(followee, follower).isPresent()) {
+        if (followRequestRepository.findByFollowerAndFollowee(followee, follower).isPresent() || followRepository.findByFollowerAndFollowee(follower, followee).isPresent()) {
             throw new BiDirectionalFollowRequestException("이미 " + followee.getNickname() + "가 " + follower.getNickname() + "에게 팔로우 요청을 보낸 상태입니다.");
-
         };
 
         if (followRepository.findByFollowerAndFollowee(follower, followee).isPresent()) {

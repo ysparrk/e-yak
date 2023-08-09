@@ -9,13 +9,10 @@ import now.eyak.survey.domain.ContentTextResult;
 @Setter
 @Builder
 public class ContentTextResultUpdateDto {
-    private Long id;
+    private Long contentTextResultId;
     private String text;
-    private Long surveyContentId;  // surveycontent의 id
 
-    public ContentTextResult update(ContentTextResult contentTextResult) {
+    public void update(ContentTextResult contentTextResult) {
         contentTextResult.setText(text);
-
-        return contentTextResult;
     }
 }

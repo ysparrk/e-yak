@@ -6,8 +6,10 @@ import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentStatusResultDto;
+import now.eyak.survey.dto.request.ContentStatusResultUpdateDto;
 import now.eyak.survey.dto.response.ContentStatusResultResponseDto;
 import now.eyak.survey.enumeration.ChoiceStatus;
+import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
@@ -62,22 +64,11 @@ class ContentStatusResultServiceImplTest {
                 .build();
         member = memberRepository.save(member);
 
-        survey = Survey.builder()
-                .date(LocalDate.of(2023,8,1))
-                .build();
-
-        survey = surveyRepository.save(survey);
-
-        surveyContent = SurveyContent.builder()
-                .survey(survey)
-                .build();
-
-        surveyContent = surveyContentRepository.save(surveyContent);
-
+        survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 설문이 존재하지 않습니다."));
+        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_STATUS)).findAny().get();
 
         contentStatusResultDto = ContentStatusResultDto.builder()
                 .selectedStatusChoices(Arrays.asList(ChoiceStatus.HEADACHE, ChoiceStatus.NAUSEA, ChoiceStatus.FEVER))
-                .surveyContentId(surveyContent.getId())
                 .build();
 
     }
@@ -88,7 +79,7 @@ class ContentStatusResultServiceImplTest {
         // given
 
         // when
-        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContent.getId(), member.getId());
         ContentStatusResult findContentStatusResult = contentStatusResultRepository.findById(savedContentStatusResult.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentStatusResult가 없습니다."));
 
         // then
@@ -101,32 +92,30 @@ class ContentStatusResultServiceImplTest {
     @Transactional
     void updateStatusSurveyResult() {
         // given
-        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());  // 원본 값 저장
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContent.getId(), member.getId());  // 원본 값 저장
         System.out.println("savedContentStatusResult = " + savedContentStatusResult.getSelectedStatusChoices());
         System.out.println("savedContentStatusResult.getId() = " + savedContentStatusResult.getId());
 
         // 새로운 값 저장
-        ContentStatusResultDto contentStatusResultDto = ContentStatusResultDto.builder()
-                .id(savedContentStatusResult.getId())
+        ContentStatusResultUpdateDto contentStatusResultUpdateDto = ContentStatusResultUpdateDto.builder()
+                .contentStatusResultId(savedContentStatusResult.getId())
                 .selectedStatusChoices(Arrays.asList(ChoiceStatus.HEADACHE, ChoiceStatus.COUGH, ChoiceStatus.VOMITING, ChoiceStatus.ABDOMINAL_PAIN))  // HEADACHE 제외한 다른 증상으로 변경
-                .surveyContentId(surveyContent.getId())
                 .build();
         // when
-        contentStatusResultService.updateStatusSurveyResult(contentStatusResultDto, member.getId());
-        ContentStatusResult findContentStatusResult = contentStatusResultRepository.findById(contentStatusResultDto.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentStatusResult가 존재하지 않습니다."));
+        contentStatusResultService.updateStatusSurveyResult(contentStatusResultUpdateDto, surveyContent.getId(), member.getId());
+        ContentStatusResult findContentStatusResult = contentStatusResultRepository.findById(savedContentStatusResult.getId()).orElseThrow(() -> new NoSuchElementException("해당하는 contentStatusResult가 존재하지 않습니다."));
 
         // then
         System.out.println("findContentStatusResult = " + findContentStatusResult.getSelectedStatusChoices());
         System.out.println("findContentStatusResult.getId() = " + findContentStatusResult.getId());
-        Assertions.assertThat(findContentStatusResult.getSelectedStatusChoices()).isEqualTo(contentStatusResultDto.getSelectedStatusChoices());
-
+        Assertions.assertThat(findContentStatusResult.getSelectedStatusChoices()).isEqualTo(contentStatusResultUpdateDto.getSelectedStatusChoices());
     }
 
     @Test
     @Transactional
     void deleteStatusSurveyResult() {
         // given
-        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());  // 원본 값 저장
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContent.getId(), member.getId());  // 원본 값 저장
         System.out.println("savedContentStatusResult = " + savedContentStatusResult.getSelectedStatusChoices());
 
         // when
@@ -142,7 +131,7 @@ class ContentStatusResultServiceImplTest {
     @Transactional
     void getStatusResultsByDateAndMember() {
         // given
-        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, member.getId());  // 원본 값 저장
+        ContentStatusResult savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContent.getId(), member.getId());  // 원본 값 저장
 
         // 새로운 사용자 및 설문 응답 추가
         Member memberA = Member.builder()
@@ -157,33 +146,18 @@ class ContentStatusResultServiceImplTest {
                 .build();
         memberA = memberRepository.save(memberA);
 
-
-        Survey surveyA = Survey.builder()
-                .date(LocalDate.of(2023,7,1))
-                .build();
-
-        surveyA = surveyRepository.save(surveyA);
-
-        SurveyContent surveyContentA = SurveyContent.builder()
-                .survey(surveyA)
-                .build();
-
-        surveyContentA = surveyContentRepository.save(surveyContentA);
-
-
         contentStatusResultDto = ContentStatusResultDto.builder()
                 .selectedStatusChoices(Arrays.asList(ChoiceStatus.VOMITING, ChoiceStatus.COUGH))
-                .surveyContentId(surveyContentA.getId())
                 .build();
 
-        savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, memberA.getId());  // 원본 값 저장
+        savedContentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContent.getId(), memberA.getId());  // 원본 값 저장
         System.out.println("savedContentStatusResult = " + savedContentStatusResult.getSelectedStatusChoices());
         System.out.println("savedContentStatusResult = " + savedContentStatusResult.getMember().getNickname());
 
         // when
         System.out.println("survey.getDate() = " + survey.getDate());
         System.out.println("membememememr = " + member.getId());
-        List<ContentStatusResultResponseDto> findStatusResultsByDateAndMember = contentStatusResultService.getStatusResultsByDateAndMember(surveyA.getDate(), memberA.getId());
+        List<ContentStatusResultResponseDto> findStatusResultsByDateAndMember = contentStatusResultService.getStatusResultsByDateAndMember(survey.getDate(), memberA.getId());
 
         // then
         Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(findStatusResultsByDateAndMember.get(0).getMemberId());

@@ -8,7 +8,9 @@ import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.survey.domain.*;
 import now.eyak.survey.dto.request.ContentEmotionResultDto;
+import now.eyak.survey.dto.request.ContentEmotionResultUpdateDto;
 import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
+import now.eyak.survey.exception.DuplicatedContentResultException;
 import now.eyak.survey.repository.ContentEmotionResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import org.springframework.stereotype.Service;
@@ -35,9 +37,14 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
      */
     @Transactional
     @Override
-    public ContentEmotionResult saveEmotionSurveyResult(ContentEmotionResultDto contentEmotionResultDto, Long memberId) {
-        SurveyContent surveyContent = surveyContentRepository.findById(contentEmotionResultDto.getSurveyContentId()).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
+    public ContentEmotionResult saveEmotionSurveyResult(ContentEmotionResultDto contentEmotionResultDto, Long surveyContentId, Long memberId) {
+        SurveyContent surveyContent = surveyContentRepository.findById(surveyContentId).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+
+        if (contentEmotionResultRepository.findBySurveyContentAndMember(surveyContent, member).isPresent()) {
+            throw new DuplicatedContentResultException("하루에 문항당 하나의 응답만 가능합니다.");
+        }
+
         ContentEmotionResult contentEmotionResult = ContentEmotionResult.builder()
                 .surveyContent(surveyContent)
                 .choiceEmotion(contentEmotionResultDto.getChoiceEmotion())
@@ -49,18 +56,18 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
 
     /**
      * Emotion 설문 응답 수정
-     * @param contentEmotionResultDto
+     * @param contentEmotionResultUpdateDto
      * @param memberId
      * @return
      */
     @Transactional
     @Override
-    public ContentEmotionResult updateEmotionSurveyResult(ContentEmotionResultDto contentEmotionResultDto, Long memberId) {
-        SurveyContent surveyContent = surveyContentRepository.findById(contentEmotionResultDto.getSurveyContentId()).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
+    public ContentEmotionResult updateEmotionSurveyResult(ContentEmotionResultUpdateDto contentEmotionResultUpdateDto, Long surveyContentId, Long memberId) {
+        SurveyContent surveyContent = surveyContentRepository.findById(surveyContentId).orElseThrow(() -> new NoSuchElementException("surveyContentId에 해당하는 SurveyContent가 없습니다."));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
-        ContentEmotionResult contentEmotionResult = contentEmotionResultRepository.findByIdAndMember(contentEmotionResultDto.getId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentEmotionResult가 존재하지 않습니다."));
+        ContentEmotionResult contentEmotionResult = contentEmotionResultRepository.findByIdAndMember(contentEmotionResultUpdateDto.getContentEmotionResultId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentEmotionResult가 존재하지 않습니다."));
 
-        contentEmotionResult = contentEmotionResultDto.update(contentEmotionResult);
+        contentEmotionResultUpdateDto.update(contentEmotionResult);
 
         return contentEmotionResultRepository.save(contentEmotionResult);
     }
@@ -96,6 +103,7 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
 
         List<ContentEmotionResultResponseDto> emotionResults = queryFactory
                 .select(Projections.constructor(ContentEmotionResultResponseDto.class,
+                        qContentEmotionResult.id,
                         qContentEmotionResult.member.id,
                         qContentEmotionResult.choiceEmotion,
                         qContentEmotionResult.createdAt,

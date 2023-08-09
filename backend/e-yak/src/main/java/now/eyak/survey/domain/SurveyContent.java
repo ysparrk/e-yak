@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import now.eyak.survey.enumeration.SurveyContentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ public class SurveyContent {
     private Long id;
     @ManyToOne
     private Survey survey;
+    @Enumerated(EnumType.STRING)
+    private SurveyContentType surveyContentType;
 
     @OneToMany(mappedBy = "surveyContent")
     private List<ContentEmotionResult> contentEmotionResults = new ArrayList<>();  // emotion 설문
@@ -28,8 +31,10 @@ public class SurveyContent {
     private List<ContentTextResult> contentTextResult = new ArrayList<>();  // text 설문
 
     @Builder
-    public SurveyContent(Survey survey, List<ContentEmotionResult> contentEmotionResults, List<ContentStatusResult> contentStatusResults, List<ContentTextResult> contentTextResult) {
+    public SurveyContent(Long id, Survey survey, SurveyContentType surveyContentType, List<ContentEmotionResult> contentEmotionResults, List<ContentStatusResult> contentStatusResults, List<ContentTextResult> contentTextResult) {
+        this.id = id;
         this.survey = survey;
+        this.surveyContentType = surveyContentType;
         this.contentEmotionResults = contentEmotionResults;
         this.contentStatusResults = contentStatusResults;
         this.contentTextResult = contentTextResult;

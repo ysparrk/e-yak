@@ -31,7 +31,7 @@ public class FollowerServiceImpl implements FollowService {
     public List<Follow> findFollowers(Long memberId) {
         Member member = getMember(memberId);
 
-        // TODO: fetch join 으로 가져오는지 확인
+        // TODO: findByFollower 로 검색후 customname을 set해야함
         return followRepository.findByFollowee(member);
     }
 
