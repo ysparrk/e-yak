@@ -58,8 +58,6 @@ class AlarmFragment : Fragment() {
     ): View? {
         binding = AlarmTabMainBinding.inflate(inflater, container, false)
 
-        init()
-
         // 데이터 넣기 (총 8번의 시간에 해당하는)
 
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
@@ -74,6 +72,8 @@ class AlarmFragment : Fragment() {
         dinnerTime = LocalTime.parse(pref.getString("dinnerTime", ""))
         dinnerTimeAfter = dinnerTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
         bedTime = LocalTime.parse(pref.getString("bedTime", ""))
+
+        init()
 
         binding.yesterdayFrameLayout.setOnClickListener {
             updateDay(-1)
@@ -106,6 +106,8 @@ class AlarmFragment : Fragment() {
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
+        binding.emptyAlarmLinearLayout.visibility = View.INVISIBLE
+
         api.getTargetDayPrescriptions(Authorization = "Bearer ${serverAccessToken}", dateTime = "${targetDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}T12:12:12").enqueue(object: Callback<ArrayList<Medicine>> {
             override fun onResponse(call: Call<ArrayList<Medicine>>, response: Response<ArrayList<Medicine>>) {
                 if(response.code() == 200) {
@@ -116,23 +118,32 @@ class AlarmFragment : Fragment() {
                     val medicineTimeList = arrayListOf(wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
                     val medicineNameList = arrayListOf("취침 후", "아침 식사 전", "아침 식사 후", "점심 식사 전", "점심 식사 후", "저녁 식사 전", "저녁 식사 후", "취침 전")
 
+                    medicineRoutineList = arrayListOf<MedicineRoutine>() // 초기화
                     for (i in 0..medicineTimeList.size - 1) {
                         medicineRoutineList.add(MedicineRoutine(routineTime = medicineTimeList[i].toString(), routineName = medicineNameList[i]))
                     }
 
+                    // 그날 총 먹어야하는 약이 하나도 없다면 true
+                    var isAlarmEmpty = true
+                    
                     // 응답 받은 약 별로
                     for (medicine in medicineList!!) {
                         // 각 약의 루틴 별로 처리
                         for (routine in medicine.routines) {
                             // 해당하는 루틴에 각각 추가
                             medicineRoutineList[eatTimeList.indexOf(routine)].medicineList.add(medicine)
+                            isAlarmEmpty = false
                         }
+                    }
+                    
+                    // 비어있다는 표시를 띄워주자
+                    if (isAlarmEmpty) {
+                        binding.emptyAlarmLinearLayout.visibility = View.VISIBLE
                     }
 
                     val alarmListAdapter = AlarmListAdapter(mainActivity, medicineRoutineList)
                     binding.alramListView.findViewById<ListView>(R.id.alramListView)
                     binding.alramListView.adapter = alarmListAdapter
-
                 }
                 else if(response.code() == 401) {
                     Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()

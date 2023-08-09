@@ -12,10 +12,19 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import kotlin.concurrent.timer
+import android.os.Handler
+import android.os.Looper
+import java.time.LocalTime
+import kotlin.time.DurationUnit
+import java.time.temporal.ChronoUnit.SECONDS
 
 class AlarmListAdapter (val context: Context, val medicineRoutineList: ArrayList<MedicineRoutine>) : BaseAdapter() {
 
     var mainActivity: MainActivity = context as MainActivity
+
+    private val uiHandler = Handler(Looper.getMainLooper())
 
     // https://blog.yena.io/studynote/2017/12/01/Android-Kotlin-ListView.html
     override fun getCount(): Int {
@@ -44,6 +53,12 @@ class AlarmListAdapter (val context: Context, val medicineRoutineList: ArrayList
 
         /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
         val medicineRoutine = medicineRoutineList[position]
+
+        // 만약 해당 루틴에 먹을 약이 없다면 카드를 띄우지 말자
+        if (medicineRoutine.medicineList.size == 0) {
+            // empty view를 리턴 => 그냥 카드뷰만 GONE으로 하면 다르게 설정한 마진 같은거 때문에 약간의 공간 차지해서
+            return View(context)
+        }
 
         medicineTimeTextView.text = medicineRoutine.routineTime
         medicineNameTextView.text = medicineRoutine.routineName
@@ -112,9 +127,35 @@ class AlarmListAdapter (val context: Context, val medicineRoutineList: ArrayList
             }
         }
 
+        // 타이머 설정해야 함
+        timer(period = 1000) {
+            // 오래 걸리는 작업 수행 부분
+            // 백그라운드로 실행되는 부분, UI 조작 X
+            // 시간 차이를 계산하자
+            val currentTime = LocalTime.now()
+            val targetTime = LocalTime.parse(medicineRoutine.routineTime)
+            var timeDiffInSec = currentTime.until(targetTime, SECONDS)
+            
+            // 넣을 텍스트 초기화
+            var targetText = "" 
+            if (timeDiffInSec < 0) {
+                // 이미 지난 경우
+                targetText = "지났어:약"
+            } else {
+                // 아직 남은 경우
+                var secondDiff = timeDiffInSec % 60
+                timeDiffInSec = timeDiffInSec / 60
+                var minuteDiff = timeDiffInSec % 60
+                var hourDiff = timeDiffInSec / 60
 
-        // 임시 설정 => 나중에 타이머 설정해야 함
-//        medicineTimeLeftTextView.text = "00:31:58"
+                targetText = "${hourDiff.toString().padStart(2, '0')}:${minuteDiff.toString().padStart(2, '0')}:${secondDiff.toString().padStart(2, '0')}"
+            }
+
+            uiHandler.post {
+                // UI 조작 로직
+                medicineTimeLeftTextView.text = targetText
+            }
+        }
 
         return view
     }
