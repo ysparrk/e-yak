@@ -53,10 +53,10 @@ class MainActivity : AppCompatActivity() {
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
         val firstAlarmIntent: Intent = Intent(this, FirstAlarmReceiver::class.java)
-        val firstPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, firstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val firstPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, firstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
-        val secondAlarmIntent: Intent = Intent(this, SecondAlarmReceiver::class.java)
-        val secondPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 1, secondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+//        val secondAlarmIntent: Intent = Intent(this, SecondAlarmReceiver::class.java)
+//        val secondPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 1, secondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
 
         //val alarmTime = LocalTime.of(시간, 분)
@@ -71,10 +71,10 @@ class MainActivity : AppCompatActivity() {
         alarmTime = LocalTime.now().plusSeconds(20)
 
         // 알람 설정
-        val secondDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
-        val secondAlarmMillis = secondDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, secondAlarmMillis, secondPendingIntent)
+//        val secondDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
+//        val secondAlarmMillis = secondDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+//
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, secondAlarmMillis, secondPendingIntent)
 
 
         initPage()
