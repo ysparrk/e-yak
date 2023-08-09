@@ -1,10 +1,27 @@
 package com.a103.eyakrev1
 
+import androidx.core.app.NotificationCompat
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import androidx.core.content.ContextCompat.getSystemService
 import com.a103.eyakrev1.databinding.ActivityMainBinding
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +31,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, AlarmReceiver::class.java)
+
+        //val alarmTime = LocalTime.of(12, 21) // 10시 30분
+        val alarmTime = LocalTime.now().plusMinutes(1)
+
+// 현재 날짜와 선택한 시간을 조합하여 LocalDateTime 생성
+        val currentDate = LocalDate.now()
+
+        Log.d("ㅁㅁㅁㅁㅁ", "${LocalDateTime.now().toString()}")
+
+        val alarmDateTime = LocalDateTime.of(currentDate, alarmTime)
+
+// 알람 시간을 밀리초로 변환
+        val alarmTimeMillis = alarmDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE)
+
+// 알람 설정
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTimeMillis, pendingIntent)
+
 
         initPage()
 
@@ -37,9 +76,6 @@ class MainActivity : AppCompatActivity() {
             deviceTabClick()
         }
 
-//        binding.eyakLogo.setOnClickListener {
-//            alarmTabClick()
-//        }
     }
 
     override fun onBackPressed() {
@@ -169,3 +205,29 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 }
+
+class AlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("알람")
+            .setContentText("알람이 울렸습니다.")
+            .setSmallIcon(R.drawable.baseline_check_box_24) // 알림 아이콘 설정
+            .build()
+
+        notificationManager.notify(1, notification) // 알림 표시
+
+    }
+}
+
+
