@@ -5,12 +5,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import now.eyak.member.dto.response.SignInResponseDto;
 import now.eyak.prescription.domain.Prescription;
-import now.eyak.prescription.dto.MedicineRoutineResponseDto;
-import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
-import now.eyak.prescription.dto.PrescriptionDto;
-import now.eyak.prescription.dto.PrescriptionResponseDto;
+import now.eyak.prescription.dto.*;
 import now.eyak.prescription.service.PrescriptionService;
 import now.eyak.util.ApiVersionHolder;
 import org.springframework.http.ResponseEntity;
@@ -42,33 +38,33 @@ public class PrescriptionController {
     @Operation(summary = "GET All Prescription", description = "복약 정보 전체 조회")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionResponseDto.class)))
     @GetMapping
-    public ResponseEntity getAllByMemberId(@RequestParam(required = false) LocalDateTime dateTime, @AuthenticationPrincipal Long memberId) {
-        List<PrescriptionResponseDto> responseDtoList = null;
-        if (dateTime == null) {
-            responseDtoList = prescriptionService.findAllByMemberId(memberId).stream().map(PrescriptionResponseDto::from).toList();
-        } else {
-            responseDtoList = prescriptionService.findAllByMemberIdBetweenDate(memberId, dateTime).stream().map(PrescriptionResponseDto::from).toList();
-        }
+    public ResponseEntity getAllByMemberId(
+            @RequestParam(required = false) LocalDateTime dateTime,
+            @AuthenticationPrincipal Long memberId) {
 
-        return ResponseEntity.ok(responseDtoList);
+
+        PrescriptionResponseDto allAndSortWithRoutine = prescriptionService.findAllAndSortWithRoutine(memberId, dateTime);
+
+        return ResponseEntity.ok(allAndSortWithRoutine);
     }
 
+
     @Operation(summary = "Get All Prescription per Day", description = "사용자의 해당 date에 복용해야하는 약 전체 목록 반환한다.")
-    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionResponseDto.class)))
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionSubResponseDto.class)))
     @GetMapping("/{prescriptionId}")
     public ResponseEntity getById(@PathVariable Long prescriptionId, @AuthenticationPrincipal Long memberId) {
         Prescription prescription = prescriptionService.findById(prescriptionId, memberId);
 
-        return ResponseEntity.ok(PrescriptionResponseDto.from(prescription));
+        return ResponseEntity.ok(PrescriptionSubResponseDto.from(prescription));
     }
 
     @Operation(summary = "Modify Prescription", description = "사용자의 복약 정보를 수정한다.")
-    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionResponseDto.class)))
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionSubResponseDto.class)))
     @PutMapping("/{prescriptionId}")
     public ResponseEntity put(@PathVariable Long prescriptionId, @RequestBody PrescriptionDto prescriptionDto, @AuthenticationPrincipal Long memberId) {
         Prescription prescription = prescriptionService.update(prescriptionId, prescriptionDto, memberId);
 
-        return ResponseEntity.ok(PrescriptionResponseDto.from(prescription));
+        return ResponseEntity.ok(PrescriptionSubResponseDto.from(prescription));
     }
 
     @Operation(summary = "Delete Prescription", description = "사용자의 처방전 단의 복약 정보를 하나 삭제한다.")

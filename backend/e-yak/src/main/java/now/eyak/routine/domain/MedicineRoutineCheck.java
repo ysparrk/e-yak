@@ -8,6 +8,8 @@ import lombok.Setter;
 import now.eyak.member.domain.Member;
 import now.eyak.prescription.domain.Prescription;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
@@ -30,6 +32,7 @@ public class MedicineRoutineCheck {
     @ManyToOne
     private Member member;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Prescription prescription;
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
