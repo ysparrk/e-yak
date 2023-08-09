@@ -16,6 +16,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, firstAlarmMillis, firstPendingIntent)
 
-        alarmTime = LocalTime.now().plusSeconds(12)
+        alarmTime = LocalTime.now().plusSeconds(20)
 
         // 알람 설정
         val secondDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
@@ -228,6 +229,11 @@ class FirstAlarmReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
 
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
         val vibrator = context.getSystemService(Vibrator::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (vibrator?.hasVibrator() == true) {
@@ -237,6 +243,7 @@ class FirstAlarmReceiver : BroadcastReceiver() {
         }
 
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        Log.d("aaaa", soundUri.toString())
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("첫 번째 알람")
@@ -249,9 +256,6 @@ class FirstAlarmReceiver : BroadcastReceiver() {
     }
 }
 
-
-
-
 class SecondAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         // 두 번째 알람에 대한 동작을 여기에 작성
@@ -263,6 +267,6 @@ class SecondAlarmReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .build()
 
-        notificationManager.notify(1, notification) // 알림 표시
+        notificationManager.notify(2, notification) // 알림 표시
     }
 }
