@@ -8,12 +8,16 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
 import androidx.core.content.ContextCompat.getSystemService
@@ -33,23 +37,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(this, AlarmReceiver::class.java)
 
-        //val alarmTime = LocalTime.of(12, 21) // 10시 30분
-        val alarmTime = LocalTime.now().plusSeconds(10)
+        val firstAlarmIntent = Intent(this, FirstAlarmReceiver::class.java)
+        val firstPendingIntent = PendingIntent.getBroadcast(this, 0, firstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-// 현재 날짜와 선택한 시간을 조합하여 LocalDateTime 생성
-        val currentDate = LocalDate.now()
+        val secondAlarmIntent = Intent(this, SecondAlarmReceiver::class.java)
+        val secondPendingIntent = PendingIntent.getBroadcast(this, 1, secondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val alarmDateTime = LocalDateTime.of(currentDate, alarmTime)
 
-// 알람 시간을 밀리초로 변환
-        val alarmTimeMillis = alarmDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        //val alarmTime = LocalTime.of(시간, 분)
+        var alarmTime = LocalTime.now().plusSeconds(10)
 
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE)
+         // 알람 시간을 밀리초로 변환
+        val firstDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
+        val firstAlarmMillis = firstDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-// 알람 설정
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTimeMillis, pendingIntent)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, firstAlarmMillis, firstPendingIntent)
+
+        alarmTime = LocalTime.now().plusSeconds(12)
+
+        // 알람 설정
+        val secondDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
+        val secondAlarmMillis = secondDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, secondAlarmMillis, secondPendingIntent)
 
 
         initPage()
@@ -204,7 +215,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class AlarmReceiver : BroadcastReceiver() {
+class FirstAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -217,15 +228,41 @@ class AlarmReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        Log.d("ㅁㅁㅁㅁㅁ", "알람이당")
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
-            .setContentTitle("알람")
+            .setContentTitle("첫 번째 알람")
             .setContentText("알람이 울렸습니다.")
-            .setSmallIcon(R.drawable.baseline_check_box_24) // 알림 아이콘 설정
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
             .build()
 
         notificationManager.notify(1, notification) // 알림 표시
+    }
+}
 
+
+
+
+class SecondAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        // 두 번째 알람에 대한 동작을 여기에 작성
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        // ...
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("두 번째 알람")
+            .setContentText("알람이 울렸습니다.")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .build()
+
+        notificationManager.notify(1, notification) // 알림 표시
     }
 }
