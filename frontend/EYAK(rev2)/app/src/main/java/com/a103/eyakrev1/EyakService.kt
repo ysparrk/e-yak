@@ -127,6 +127,12 @@ interface EyakService {
         @Query("date") date: String
     ): Call<TodayDoseInfoBodyModel>
 
+    @GET("/api/v1/prescriptions/{prescriptionId}/routines")
+    fun personalRoutineAlarm(
+        @Path("prescriptionId") perscriptionId: Int,
+        @Header("Authorization") Authorization: String,
+    ): Call<Void>
+
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소
 

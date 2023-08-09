@@ -13,6 +13,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,14 +22,21 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.preference.PreferenceManager
 import com.a103.eyakrev1.databinding.ActivityMainBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 
 class MainActivity : AppCompatActivity() {
+
+    private val api = EyakService.create()
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -37,13 +45,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // 알람 설정
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val firstAlarmIntent = Intent(this, FirstAlarmReceiver::class.java)
-        val firstPendingIntent = PendingIntent.getBroadcast(this, 0, firstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
-        val secondAlarmIntent = Intent(this, SecondAlarmReceiver::class.java)
-        val secondPendingIntent = PendingIntent.getBroadcast(this, 1, secondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        val pref = PreferenceManager.getDefaultSharedPreferences(this)
+        val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+
+        val firstAlarmIntent: Intent = Intent(this, FirstAlarmReceiver::class.java)
+        val firstPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, firstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val secondAlarmIntent: Intent = Intent(this, SecondAlarmReceiver::class.java)
+        val secondPendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 1, secondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
 
         //val alarmTime = LocalTime.of(시간, 분)
@@ -242,8 +255,9 @@ class FirstAlarmReceiver : BroadcastReceiver() {
             }
         }
 
-        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
-        Log.d("aaaa", soundUri.toString())
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("첫 번째 알람")
@@ -252,21 +266,21 @@ class FirstAlarmReceiver : BroadcastReceiver() {
             .setSound(soundUri)
             .build()
 
-        notificationManager.notify(1, notification) // 알림 표시
+        notificationManager.notify(0, notification) // 알림 표시
     }
 }
 
 class SecondAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // 두 번째 알람에 대한 동작을 여기에 작성
+
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        // ...
+
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("두 번째 알람")
             .setContentText("알람이 울렸습니다.")
-            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSmallIcon(R.drawable.baseline_check_box_24) // 알림 아이콘 설정
             .build()
 
-        notificationManager.notify(2, notification) // 알림 표시
+        notificationManager.notify(1, notification) // 알림 표시
     }
 }
