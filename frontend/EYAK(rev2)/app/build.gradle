@@ -61,4 +61,7 @@ dependencies {
     
     // calendar view 라이브러리
     implementation 'com.github.kizitonwose:CalendarView:1.0.4'
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.6.2'
 }

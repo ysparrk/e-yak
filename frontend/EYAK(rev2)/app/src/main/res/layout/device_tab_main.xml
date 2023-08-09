@@ -33,6 +33,67 @@
                 android:textColor="#757863"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/devicePickText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="5dp"
+                android:fontFamily="@font/tmoney_regular"
+                android:includeFontPadding="false"
+                android:text="배치된 약을 클릭해 보세요"
+                android:textAlignment="center"
+                android:textColor="#757863"
+                android:textSize="16sp" />
+
+            <HorizontalScrollView
+                android:id="@+id/devicePickedScroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="5dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/devicePickedLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/devicePickedImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="10dp"
+                        app:srcCompat="@drawable/baseline_access_time_24" />
+
+                    <TextView
+                        android:id="@+id/devicePickedText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/tmoney_bold"
+                        android:text="Medicine Name"
+                        android:textColor="#757863" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/devicePickedDelBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:backgroundTint="#FF9B9B"
+                        android:fontFamily="@font/tmoney_regular"
+                        android:includeFontPadding="false"
+                        android:text="삭제"
+                        android:textColor="#757863" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
             <HorizontalScrollView
                 android:id="@+id/deviceScroll"
                 android:layout_width="wrap_content"

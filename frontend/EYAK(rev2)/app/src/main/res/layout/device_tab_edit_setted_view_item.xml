@@ -5,37 +5,25 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/deviceMedicCard"
+        android:id="@+id/deviceSettedCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         app:cardBackgroundColor="#DDE6ED"
         app:cardCornerRadius="20dp"
         app:contentPadding="10dp">
 
         <LinearLayout
-            android:id="@+id/deviceMedicLayout"
+            android:id="@+id/deviceSettedLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/deviceMedicImage"
+                android:id="@+id/deviceSettedImage"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/baseline_access_time_24" />
-
-            <TextView
-                android:id="@+id/deviceMedicText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:text="TextView"
-                android:textColor="#757863"
-                android:textSize="16sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 </LinearLayout>
