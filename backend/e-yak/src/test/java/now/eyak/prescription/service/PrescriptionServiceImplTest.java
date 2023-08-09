@@ -8,6 +8,7 @@ import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import now.eyak.routine.enumeration.Routine;
+import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,8 @@ class PrescriptionServiceImplTest {
     MedicineRoutineRepository medicineRoutineRepository;
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    MedicineRoutineCheckRepository medicineRoutineCheckRepository;
 
     static Member MEMBER;
 
@@ -47,17 +50,17 @@ class PrescriptionServiceImplTest {
                 .refreshToken("refreshToken")
                 .nickname("박길동")
                 .role(Role.USER)
-                .wakeTime(LocalTime.NOON)
-                .breakfastTime(LocalTime.NOON)
-                .lunchTime(LocalTime.NOON)
-                .dinnerTime(LocalTime.NOON)
-                .bedTime(LocalTime.NOON)
-                .eatingDuration(LocalTime.of(2, 0))
+                .wakeTime(LocalTime.of(7, 0))
+                .breakfastTime(LocalTime.of(8, 0))
+                .lunchTime(LocalTime.of(14, 0))
+                .dinnerTime(LocalTime.of(18, 0))
+                .bedTime(LocalTime.of(22, 0))
+                .eatingDuration(LocalTime.of(0, 30))
                 .build();
 
         MEMBER = memberRepository.save(member);
 
-        routines = List.of(Routine.BED_BEFORE, Routine.LUNCH_AFTER, Routine.DINNER_BEFORE);
+        routines = List.of(Routine.BREAKFAST_AFTER, Routine.LUNCH_AFTER, Routine.DINNER_AFTER);
     }
 
     @Transactional
@@ -80,12 +83,12 @@ class PrescriptionServiceImplTest {
 
         //when
         Prescription prescription = prescriptionService.insert(prescriptionDto, MEMBER.getId());
-
         //then
         Prescription expected = prescriptionDto.toEntity();
 
         // TODO: 테스트 코드 작성에 용이하게 구조 변경
         assertThat(prescription.getCustomName()).isEqualTo(expected.getCustomName());
+        // TODO: 복약 체크 관련 Assertions 작성
     }
 
     @Transactional

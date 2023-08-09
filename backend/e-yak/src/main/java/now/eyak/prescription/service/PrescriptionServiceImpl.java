@@ -10,15 +10,19 @@ import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.domain.MedicineRoutine;
+import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
+import now.eyak.routine.enumeration.Routine;
+import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
 import now.eyak.routine.repository.PrescriptionMedicineRoutineRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.time.LocalTime;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -29,10 +33,11 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private final MemberRepository memberRepository;
     private final MedicineRoutineRepository medicineRoutineRepository;
     private final PrescriptionMedicineRoutineRepository prescriptionMedicineRoutineRepository;
+    private final MedicineRoutineCheckRepository medicineRoutineCheckRepository;
+
 
     /**
      * 복약 정보를 등록한다.
-     *
      * @param prescriptionDto
      * @param memberId
      * @return
@@ -56,6 +61,45 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         });
 
         Prescription savedPrescription = prescriptionRepository.save(prescription);
+
+        // 복약 등록하면 MedicineCheck 테이블 생성
+        List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(prescription);
+
+        LocalTime now = LocalTime.now(); // 등록 시간
+        LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
+
+        List<LocalTime> times = new ArrayList<>();
+        times.add(member.getWakeTime());
+        times.add(member.getBreakfastTime());
+        times.add(member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+        times.add(member.getLunchTime());
+        times.add(member.getLunchTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+        times.add(member.getDinnerTime());
+        times.add(member.getDinnerTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+        times.add(member.getBedTime());
+        times.add(now);
+        Collections.sort(times);
+
+        int now_idx = times.indexOf(now);  // 등록 시간의 idx
+
+        // routine 리스트
+        List<Routine> routines = new ArrayList<>();
+        routines.addAll(Arrays.stream(Routine.values()).toList());
+
+
+        for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
+            if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) <= now_idx) continue;
+
+            MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
+                    .date(LocalDate.now())
+                    .medicineRoutine(prescriptionMedicineRoutine.getMedicineRoutine())
+                    .prescription(prescription)
+                    .took(false) // 초기 값 false
+                    .member(member)
+                    .build();
+            medicineRoutineCheckRepository.save(medicineRoutineCheck);
+
+        }
 
         return savedPrescription;
     }
