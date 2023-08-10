@@ -11,13 +11,13 @@ import lombok.ToString;
 @ToString
 public class SurveyContentDto {
     private ContentEmotionResultResponseDto contentEmotionResultResponse;
-    private ContentStatusResultResponseDto contentStatusResultResponses;
+    private ContentStatusResultResponseDto contentStatusResultResponse;
     private ContentTextResultResponseDto contentTextResultResponse;
 
     @Builder
-    public SurveyContentDto(ContentEmotionResultResponseDto contentEmotionResultResponse, ContentStatusResultResponseDto contentStatusResultResponses, ContentTextResultResponseDto contentTextResultResponse) {
+    public SurveyContentDto(ContentEmotionResultResponseDto contentEmotionResultResponse, ContentStatusResultResponseDto contentStatusResultResponse, ContentTextResultResponseDto contentTextResultResponse) {
         this.contentEmotionResultResponse = contentEmotionResultResponse;
-        this.contentStatusResultResponses = contentStatusResultResponses;
+        this.contentStatusResultResponse = contentStatusResultResponse;
         this.contentTextResultResponse = contentTextResultResponse;
     }
 }
