@@ -6,11 +6,14 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.net.Uri
@@ -23,16 +26,21 @@ import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.preference.PreferenceManager
 import com.a103.eyakrev1.databinding.ActivityMainBinding
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +49,11 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    //=== bluetooth 연결용 var
+    var btPermissionFlag: Boolean? = null
+    var btDeviceSaved: BluetoothDevice? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -76,6 +89,30 @@ class MainActivity : AppCompatActivity() {
 //
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, secondAlarmMillis, secondPendingIntent)
 
+        //=== bluetooth 연결
+        // 권한 체크
+        val permissions = arrayOf(
+            android.Manifest.permission.BLUETOOTH,
+            android.Manifest.permission.BLUETOOTH_ADMIN,
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.BLUETOOTH_SCAN,
+        )
+        btPermissionFlag = checkPermissions(permissions)
+        // pref 불러오기
+        var json = pref.getString("DEVICE_ITSELF", "")
+        btDeviceSaved = Gson().fromJson(json, BluetoothDevice::class.java)
+        if (btPermissionFlag == true) {
+            if (btDeviceSaved == null) {
+                Toast.makeText(this, "device does not exist", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "perm ok", Toast.LENGTH_SHORT).show()
+                connectDevice(btDeviceSaved)
+            }
+        } else {
+            Toast.makeText(this, "perm not", Toast.LENGTH_SHORT).show()
+        }
 
         initPage()
 
@@ -226,6 +263,41 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.mainFragment, MyCalendarFragment())
             .commit()
+    }
+
+    //=== bluetooth 연결 관련 함수들
+    // bluetooth 권한 체크
+    private fun checkPermissions(perms: Array<String>): Boolean {
+        var flag = true
+        for (p in perms) {
+            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
+                flag = false
+                break
+            }
+        }
+        return flag
+    }
+    // connect 용 스레드
+    private fun connectDevice(targetDevice: BluetoothDevice?) {
+        val thread = Thread {
+            var socket: BluetoothSocket? = null
+            var fallbackSocket: BluetoothSocket? = null
+            try {
+                val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+                socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
+                var clazz = socket?.remoteDevice?.javaClass
+                var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
+                var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
+                fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
+                fallbackSocket?.connect()
+            } catch (e: Exception) {
+                try {
+                    socket?.close()
+                    fallbackSocket?.close()
+                } catch (e: IOException) {}
+            }
+        }
+        thread.start()
     }
 }
 

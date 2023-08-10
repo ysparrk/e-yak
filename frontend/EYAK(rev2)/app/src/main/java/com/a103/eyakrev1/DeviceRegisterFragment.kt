@@ -108,7 +108,9 @@ class DeviceRegisterFragment : Fragment() {
         editor = pref?.edit()
         deviceNameSaved = pref?.getString("DEVICE_NAME", "")
         var gson = Gson()
-        var json = pref?.getString("DEVICE_CELL1", "")
+        var json = pref?.getString("DEVICE_ITSELF", "")
+        deviceSaved = gson.fromJson(json, BluetoothDevice::class.java)
+        json = pref?.getString("DEVICE_CELL1", "")
         cell1Data = gson.fromJson(json, Medicine::class.java)
         json = pref?.getString("DEVICE_CELL2", "")
         cell2Data = gson.fromJson(json, Medicine::class.java)
@@ -324,6 +326,8 @@ class DeviceRegisterFragment : Fragment() {
                     if (deviceSaved?.bondState == BluetoothDevice.BOND_BONDED) {
                         // 페어링 승인됨
                         editor?.putString("DEVICE_NAME", deviceNameSaved)?.apply()
+                        val json = Gson().toJson(deviceSaved)
+                        editor?.putString("DEVICE_ITSELF", json)?.apply()
                         layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.GONE
                         layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.VISIBLE
                         layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.VISIBLE
@@ -334,6 +338,8 @@ class DeviceRegisterFragment : Fragment() {
                         // 페어링 승인 중...
                     } else if (deviceSaved?.bondState == BluetoothDevice.BOND_NONE) {
                         // 페어링 거부됨
+                        editor?.remove("DEVICE_NAME")?.commit()
+                        editor?.remove("DEVICE_ITSELF")?.commit()
                         layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.VISIBLE
                         layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.GONE
                         layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.GONE
@@ -486,8 +492,6 @@ class DeviceRegisterFragment : Fragment() {
     private fun bluetoothDelete() {
         try {
             deviceSaved!!::class.java.getMethod("removeBond").invoke(deviceSaved)
-            editor?.remove("DEVICE_NAME")?.commit()
-            deviceNameSaved = ""
         } catch (e: Exception) {
             Toast.makeText(requireActivity(), "삭제 실패", Toast.LENGTH_SHORT).show()
         }
