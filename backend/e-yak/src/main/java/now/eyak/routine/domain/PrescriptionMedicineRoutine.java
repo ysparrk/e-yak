@@ -7,6 +7,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import now.eyak.prescription.domain.Prescription;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @NoArgsConstructor
@@ -14,6 +16,7 @@ public class PrescriptionMedicineRoutine {
     @Id
     @GeneratedValue
     private Long id;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Prescription prescription;
     @ManyToOne
