@@ -124,7 +124,7 @@ data class TodayDoseInfoBodyModel(
 )
 
 data class DailySurveyContentsBodyModel(
-    var surveyContentId: Int,
+    var surveyContentId: Long,
     var surveyContentType: String,
 )
 
@@ -146,4 +146,33 @@ data class medicineRoutineCheckBodyModel(
     val took: Boolean,
     val memberId: Int,
     val prescriptionId: Int,
+)
+
+data class DailySurveyResultBodyModel(
+    var contentTextResultResponse: textResultModel,
+    var contentStatusResultResponse: statusResultModel,
+    var contentEmotionResultResponse: emotionResultModel,
+)
+
+data class textResultModel(
+    var contentTextResultId: Long,
+    var memberId: Long,
+    var text: String,
+    var createdAt: String,
+    var updatedAt: String,
+)
+data class statusResultModel(
+    var contentStatusResultId: Long,
+    var memberId: Long,
+    var selectedStatusChoices: ArrayList<String>,
+    var createdAt: String,
+    var updatedAt: String,
+)
+
+data class emotionResultModel(
+    var contentEmotionResultId: Long,
+    var memberId: Long,
+    var choiceEmotion: String,
+    var createdAt: String,
+    var updatedAt: String,
 )
