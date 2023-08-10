@@ -35,11 +35,22 @@ public class PrescriptionController {
         return ResponseEntity.created((new URI(apiVersionHolder.getVersion() + "/prescriptions/" + prescription.getId()))).build();
     }
 
-    @Operation(summary = "GET All Prescription", description = "복약 정보 전체 조회")
-    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionResponseDto.class)))
+
+    @Operation(summary = "GET All Prescription", description = "복약 정보 전체 조회(날짜x)")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionSubResponseDto.class)))
     @GetMapping
-    public ResponseEntity getAllByMemberId(
-            @RequestParam(required = false) LocalDateTime dateTime,
+    public ResponseEntity getAllByMemberId(@AuthenticationPrincipal Long memberId) {
+        List<PrescriptionSubResponseDto> responseDtoList = prescriptionService.findAllByMemberId(memberId).stream().map(PrescriptionSubResponseDto::from).toList();
+
+        return ResponseEntity.ok(responseDtoList);
+
+    }
+
+    @Operation(summary = "GET All Prescription By Date", description = "날짜별 복약 정보 전체 조회")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionResponseDto.class)))
+    @GetMapping("/sort-by-routine")
+    public ResponseEntity getAllByMemberIdAndDate(
+            @RequestParam LocalDateTime dateTime,
             @AuthenticationPrincipal Long memberId) {
 
 
