@@ -136,8 +136,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="center"
+                    android:gravity="center_vertical|end"
                     android:includeFontPadding="false"
+                    android:paddingRight="20dp"
                     android:text="복용 시작 일시"
                     android:textColor="#757863"
                     android:textSize="20dp" />
@@ -170,8 +171,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="center"
+                    android:gravity="center_vertical|end"
                     android:includeFontPadding="false"
+                    android:paddingRight="20dp"
                     android:text="복용 종료 일시"
                     android:textColor="#757863"
                     android:textSize="20dp" />
@@ -203,8 +205,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="center"
+                    android:gravity="center_vertical|end"
                     android:includeFontPadding="false"
+                    android:paddingRight="20dp"
                     android:text="1회 투여 양"
                     android:textColor="#757863"
                     android:textSize="20dp" />
@@ -236,8 +239,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="5"
                     android:fontFamily="@font/tmoney_regular"
-                    android:gravity="center"
+                    android:gravity="center_vertical|end"
                     android:includeFontPadding="false"
+                    android:paddingRight="20dp"
                     android:text="1일 투여 횟수"
                     android:textColor="#757863"
                     android:textSize="20dp" />
