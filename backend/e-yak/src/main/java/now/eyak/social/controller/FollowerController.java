@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.social.domain.Follow;
 import now.eyak.social.dto.FollowResponseDto;
 import now.eyak.social.dto.FollowUpdateDto;
@@ -29,8 +28,7 @@ public class FollowerController {
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = FollowerResponseDto.class)))
     @GetMapping("/{memberId}/follwers")
     public ResponseEntity getFollowers(@AuthenticationPrincipal Long memberId) {
-        List<Follow> followers = followService.findFollowers(memberId);
-        List<FollowerResponseDto> followerResponseDtoList = followers.stream().map(FollowerResponseDto::of).toList();
+        List<FollowerResponseDto> followerResponseDtoList = followService.findFollowers(memberId);
 
         return ResponseEntity.ok(followerResponseDtoList);
     }

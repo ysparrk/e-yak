@@ -9,7 +9,6 @@ import now.eyak.social.domain.Follow;
 
 @Getter
 @Setter
-@Builder
 public class FollowerResponseDto {
     private Long followId;
     private Long memberId;
@@ -17,6 +16,15 @@ public class FollowerResponseDto {
     @JsonProperty("custom_name")
     private String customName;
     private Scope scope;
+
+    @Builder
+    public FollowerResponseDto(Long followId, Long memberId, String nickname, String customName, Scope scope) {
+        this.followId = followId;
+        this.memberId = memberId;
+        this.nickname = nickname;
+        this.customName = customName;
+        this.scope = scope;
+    }
 
     public static FollowerResponseDto of(Follow follow) {
         return FollowerResponseDto.builder()
