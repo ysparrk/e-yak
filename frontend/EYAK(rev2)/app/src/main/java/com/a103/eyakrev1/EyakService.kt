@@ -133,6 +133,13 @@ interface EyakService {
         @Header("Authorization") Authorization: String,
     ): Call<Void>
 
+    @GET("/api/v1/survey-contents")
+    fun dailySurveyContents(
+        @Header("Authorization") Authorization: String,
+        @Query("date") date: String,
+    ): Call<ArrayList<DailySurveyContentsBodyModel>>
+
+
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소
 

@@ -3,19 +3,33 @@ package com.a103.eyakrev1
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
+import androidx.preference.PreferenceManager
 import com.a103.eyakrev1.databinding.FragmentTodayConditionBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class TodayConditionFragment : Fragment() {
+
+    private lateinit var mainActivity: MainActivity
+
+    private val api = EyakService.create()
+
+    private var targetDate: LocalDate = LocalDate.now()
 
     private val conditionState: Array<Boolean> = arrayOf(false, false, false)
     private val symptom: MutableList<String> = mutableListOf("증상 없음", "속쓰림", "두드러기", "호흡곤란", "구토", "발진", "가려움증", "저림")
     private val symptomState: MutableList<Boolean> = mutableListOf(false, false, false, false, false, false, false, false)
-
-    private lateinit var mainActivity: MainActivity
 
     private val activeColor: String = "#FFC9DBB2"
     private val nonColor: String = "#00000000"
@@ -26,16 +40,53 @@ class TodayConditionFragment : Fragment() {
     private val nonFaceColor: String = "#CFC3B5"
 
     private lateinit var binding: FragmentTodayConditionBinding
-    override fun onCreateView(
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setFragmentResultListener("todayConditionDate") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
+
+            targetDate = LocalDate.parse(
+                bundle.getString("sendDate", ""),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            )
+        }
+    }
+
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentTodayConditionBinding.inflate(inflater, container, false)
 
         init()
+
+        val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+        val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+
+        api.dailySurveyContents(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<ArrayList<DailySurveyContentsBodyModel>> {
+            override fun onResponse(call: Call<ArrayList<DailySurveyContentsBodyModel>>, response: Response<ArrayList<DailySurveyContentsBodyModel>>) {
+                if(response.code() == 200) {    // 성공
+                    Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+
+                    val responseBody = response.body()
+                    if(responseBody != null && responseBody.size > 0) {
+                        Toast.makeText(
+                            mainActivity,
+                            responseBody[0].toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                    Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<DailySurveyContentsBodyModel>>, t: Throwable) {
+
+            }
+        })
 
         binding.badLinearLayout.setOnClickListener {
             conditionState[0] = true

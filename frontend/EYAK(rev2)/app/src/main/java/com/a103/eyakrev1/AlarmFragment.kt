@@ -7,9 +7,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.PreferenceManager
 import com.a103.eyakrev1.databinding.AlarmTabMainBinding
 import retrofit2.Call
@@ -52,6 +57,13 @@ class AlarmFragment : Fragment() {
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +72,6 @@ class AlarmFragment : Fragment() {
         binding = AlarmTabMainBinding.inflate(inflater, container, false)
 
         // 데이터 넣기 (총 8번의 시간에 해당하는)
-
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
@@ -85,8 +96,15 @@ class AlarmFragment : Fragment() {
         }
 
         binding.conditionLinearLayout.setOnClickListener {
+            val resultBundle = Bundle()
+
+            resultBundle.putString("sendDate", targetDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+
+            setFragmentResult("todayConditionDate", resultBundle)
+
             mainActivity!!.gotoTodayCondition()
         }
+
 
         return binding.root
     }
@@ -99,9 +117,21 @@ class AlarmFragment : Fragment() {
     }
 
     private fun updateDay(gap: Long) {
+
         targetDay = targetDay.plusDays(gap)
         yesterday = targetDay.plusDays(-1)
         tomorrow = targetDay.plusDays(1)
+
+        if(LocalDate.now() < targetDay) {
+
+            binding.conditionLinearLayout.visibility = View.GONE
+        }
+        else {
+            if(LocalDate.now() == targetDay) binding.conditionTextView.setText("오늘의 컨디션")
+            else binding.conditionTextView.setText("과거의 컨디션")
+
+            binding.conditionLinearLayout.visibility = View.VISIBLE
+        }
 
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
