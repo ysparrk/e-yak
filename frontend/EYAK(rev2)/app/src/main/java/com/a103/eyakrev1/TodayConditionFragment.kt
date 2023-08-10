@@ -27,12 +27,16 @@ class TodayConditionFragment : Fragment() {
 
     private var targetDate: LocalDate = LocalDate.now()
 
-    private val conditionState: Array<Boolean> = arrayOf(false, false, false)
     private val symptom: MutableList<String> = mutableListOf("증상 없음", "두통", "복통", "구토", "발열", "설사", "소화불량", "기침")
     private val symptomEng: MutableList<String> = mutableListOf("NO_SYMPTOMS", "HEADACHE", "ABDOMINAL_PAIN", "VOMITING", "FEVER", "DIARRHEA", "INDIGESTION", "COUGH")
+    private val symptomMap: Map<String, Int> = mapOf("NO_SYMPTOMS" to 0, "HEADACHE" to 1, "ABDOMINAL_PAIN" to 2, "VOMITING" to 3, "FEVER" to 4, "DIARRHEA" to 5, "INDIGESTION" to 6, "COUGH" to 7)
     private val symptomState: MutableList<Boolean> = mutableListOf(false, false, false, false, false, false, false, false)
 
+    private val conditionState: Array<Boolean> = arrayOf(false, false, false)
+    private val conditionMap: Map<String, Int> = mapOf("BAD" to 0, "SOSO" to 1, "GOOD" to 2)
+
     val todaySurveyContentId: Array<Long> = arrayOf(-1, -1, -1) // 각 문항에 대한 contentId 저장
+    val todaySurveyContentResultId: Array<Long> = arrayOf(-1, -1, -1)   // 설문에 응답한 적이 있다면 resultId가 들어가고 아니라면 -1, [Text, Status, Emotion]
 
     private val activeColor: String = "#FFC9DBB2"
     private val nonColor: String = "#00000000"
@@ -68,79 +72,56 @@ class TodayConditionFragment : Fragment() {
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
-        // 설문 할 준비가 되었는가?
-        api.dailySurveyContents(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<ArrayList<DailySurveyContentsBodyModel>> {
-            override fun onResponse(call: Call<ArrayList<DailySurveyContentsBodyModel>>, response: Response<ArrayList<DailySurveyContentsBodyModel>>) {
+        // 이미 설문 했던게 있는가?
+        api.dailySurveyResult(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<DailySurveyResultBodyModel> {
+            override fun onResponse(call: Call<DailySurveyResultBodyModel>, response: Response<DailySurveyResultBodyModel>) {
                 if(response.code() == 200) {    // 성공
-                    val responseBody = response.body()
-                    if(responseBody != null && responseBody.size > 0) {
-                        // todaySurveyContentId[CHOICE_STATUS, CHOICE_EMOTION, TEXT]
+                    val responseBodyChk = response.body()
+                    if(responseBodyChk != null) {
+                        val contentTextResultResponse = responseBodyChk.contentTextResultResponse
+                        val contentStatusResultResponse = responseBodyChk.contentStatusResultResponse
+                        val contentEmotionResultResponse = responseBodyChk.contentEmotionResultResponse
 
-                        for(i in 0..responseBody.size - 1) {
-                            if(responseBody[i].surveyContentType == "CHOICE_STATUS") todaySurveyContentId[i] = responseBody[i].surveyContentId
-                            else if(responseBody[i].surveyContentType == "CHOICE_EMOTION") todaySurveyContentId[i] = responseBody[i].surveyContentId
-                            else if(responseBody[i].surveyContentType == "TEXT") todaySurveyContentId[i] = responseBody[i].surveyContentId
+                        if(contentTextResultResponse != null) { // Text
+                            todaySurveyContentResultId[0] = contentTextResultResponse.contentTextResultId   // contentResultId 등록
+                            if (contentTextResultResponse.contentTextResultId != (-1).toLong()) {    // TEXT 응답이 있는 경우
+                                binding.etcSymptom.setText(contentTextResultResponse.text)  // 응답으로 값 넣어주기
+                            }
                         }
 
-                        // 이미 설문 했던게 있는가?
-                        api.dailySurveyResult(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<DailySurveyResultBodyModel> {
-                            override fun onResponse(call: Call<DailySurveyResultBodyModel>, response: Response<DailySurveyResultBodyModel>) {
-                                if(response.code() == 200) {    // 성공
-                                    val responseBodyChk = response.body()
-                                    if(responseBodyChk != null) {
-                                        val contentTextResultResponse = responseBodyChk.contentTextResultResponse
-                                        val contentStatusResultResponse = responseBodyChk.contentStatusResultResponse
-                                        val contentEmotionResultResponse = responseBodyChk.contentEmotionResultResponse
+                        if(contentStatusResultResponse != null) {   // Status
+                            todaySurveyContentResultId[1] = contentStatusResultResponse.contentStatusResultId   // contentResultId 등록
+                            if (contentStatusResultResponse.contentStatusResultId != (-1).toLong()) {    // CHOICE_STATUS 응답이 있는 경우
 
-                                        if(contentTextResultResponse != null) {
-                                            if (contentTextResultResponse.contentTextResultId != (-1).toLong()) {    // TEXT 응답이 있는 경우
-                                                binding.etcSymptom.setText(contentTextResultResponse.text)
-                                            }
-                                        }
-
-
-                                        if(contentStatusResultResponse != null) {
-                                            Log.d("asdfa",contentStatusResultResponse.contentStatusResultId.toString() )
-                                            if (contentStatusResultResponse.contentStatusResultId != (-1).toLong()) {    // CHOICE_STATUS 응답이 있는 경우
-                                                for (status in contentStatusResultResponse.selectedStatusChoices) {
-
-                                                }
-                                            }
-                                        }
-
-                                        if(contentEmotionResultResponse != null) {
-
-                                            if (contentEmotionResultResponse.contentEmotionResultId != (-1).toLong()) {  // CHOICE_EMOTION 응답이 있는 경우
-
-                                            }
-                                        }
-
-                                        colorChange()
-                                    }
-
-                                }
-                                else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                                    Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
-                                }
-                                else if(response.code() == 400) {   // 해당하는 Survey가 존재하지 않는 경우
-                                    Toast.makeText(mainActivity, "해당하는 Survey가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                for (status in contentStatusResultResponse.selectedStatusChoices) {
+                                    symptomState[symptomMap[status]!!] = true
                                 }
                             }
-                            override fun onFailure(call: Call<DailySurveyResultBodyModel>, t: Throwable) {
+                        }
 
+                        if(contentEmotionResultResponse != null) {
+                            todaySurveyContentResultId[2] = contentEmotionResultResponse.contentEmotionResultId
+                            if (contentEmotionResultResponse.contentEmotionResultId != (-1).toLong()) {  // CHOICE_EMOTION 응답이 있는 경우
+                                conditionState[conditionMap[contentEmotionResultResponse.choiceEmotion]!!] = true
                             }
-                        })
+                        }
 
+                        colorChange()
                     }
                 }
                 else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
                     Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
                 }
+                else if(response.code() == 400) {   // 해당하는 Survey가 존재하지 않는 경우
+                    Toast.makeText(mainActivity, "해당하는 Survey가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                }
             }
-            override fun onFailure(call: Call<ArrayList<DailySurveyContentsBodyModel>>, t: Throwable) {
+            override fun onFailure(call: Call<DailySurveyResultBodyModel>, t: Throwable) {
 
             }
         })
+
+
 
         binding.badLinearLayout.setOnClickListener {
             conditionState[0] = true
@@ -233,6 +214,132 @@ class TodayConditionFragment : Fragment() {
         }
 
         binding.submitButton.setOnClickListener {
+
+            // 설문 할 준비가 되었는가?
+            api.dailySurveyContents(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<ArrayList<DailySurveyContentsBodyModel>> {
+                override fun onResponse(call: Call<ArrayList<DailySurveyContentsBodyModel>>, response: Response<ArrayList<DailySurveyContentsBodyModel>>) {
+                    if(response.code() == 200) {    // 성공
+                        val responseBody = response.body()
+                        if(responseBody != null && responseBody.size > 0) {
+                            // todaySurveyContentId[CHOICE_STATUS, CHOICE_EMOTION, TEXT]
+
+                            for(i in 0..responseBody.size - 1) {
+                                if(responseBody[i].surveyContentType == "CHOICE_STATUS") todaySurveyContentId[0] = responseBody[i].surveyContentId
+                                else if(responseBody[i].surveyContentType == "CHOICE_EMOTION") todaySurveyContentId[1] = responseBody[i].surveyContentId
+                                else if(responseBody[i].surveyContentType == "TEXT") todaySurveyContentId[2] = responseBody[i].surveyContentId
+                            }
+
+                            // Text 문항 응답 기록 사적
+                            if(todaySurveyContentResultId[0] == (-1).toLong()) {    // 이전 응답이 없는 경우 -> Text 문항 응답 기록
+                                val textData = ContentTextResultsBodyModel(
+                                    text = binding.etcSymptom.text.toString()
+                                )
+
+                                api.contentTextResults(surveyContentId = todaySurveyContentId[2], Authorization = "Bearer ${serverAccessToken}", params = textData).enqueue(object : Callback<Void> {
+                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                        if (response.code() == 201) {    // 성공
+                                            Toast.makeText(mainActivity, "TEXT 생성 성공", Toast.LENGTH_SHORT).show()
+                                        } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                        } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
+                                            Toast.makeText(mainActivity, "해당하는 SurveyContent가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                                    }
+                                })
+                            }
+                            else {  // 이전 응답이 있는 경우 -> Text 문항 응답 수정
+                                val textData = EditContentTextResultsBodyModel(
+                                    contentTextResultId = todaySurveyContentResultId[0],
+                                    text = binding.etcSymptom.text.toString()
+                                )
+
+                                api.editContentTextResults(surveyContentId = todaySurveyContentId[2], Authorization = "Bearer ${serverAccessToken}", params = textData).enqueue(object : Callback<Void> {
+                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                        if (response.code() == 200) {    // 성공
+                                            Toast.makeText(mainActivity, "TEXT 생성 성공", Toast.LENGTH_SHORT).show()
+                                        } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                        } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
+                                            Toast.makeText(mainActivity, "해당하는 SurveyContent가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                                    }
+                                })
+                            }
+                            // Text 문항 응답 기록 끝
+
+                            // Emotion 응답 기록 시작 ======================================================
+                            val emotionData = ContentEmotionResultsBodyModel(
+                                choiceEmotion = if(conditionState[0]) "BAD" else if(conditionState[1]) "SOSO" else if(conditionState[2]) "GOOD" else ""
+                            )
+
+                            api.contentEmotionResults(surveyContentsId = todaySurveyContentId[1], Authorization = "Bearer ${serverAccessToken}", params = emotionData).enqueue(object: Callback<Void> {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                    if(response.code() == 201) {    // 성공
+                                        Toast.makeText(mainActivity, "Emotion 생성 성공", Toast.LENGTH_SHORT).show()
+                                    }
+                                    else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                    }
+                                    else if(response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
+                                        Toast.makeText(mainActivity, "해당하는 SurveyContent가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                                }
+                            })
+                            // Emotion 응답 기록 끝  ======================================================
+
+                            // Status 응답 기록 시작 ======================================================
+                            val statusData = ContentStatusResultsBodyModel(
+                                selectedStatusChoices = arrayListOf()
+                            )
+
+                            // 데이터 동기화 및 넣기
+                            for(i in 0..7) {
+                                if(symptomState[i]) statusData.selectedStatusChoices.add(symptomEng[i])
+                            }
+
+                            api.contentEmotionResults(surveyContentsId = todaySurveyContentId[0], Authorization = "Bearer ${serverAccessToken}", params = emotionData).enqueue(object: Callback<Void> {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                    if(response.code() == 201) {    // 성공
+                                        Toast.makeText(mainActivity, "Status 생성 성공", Toast.LENGTH_SHORT).show()
+                                    }
+                                    else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                    }
+                                    else if(response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
+                                        Toast.makeText(mainActivity, "해당하는 SurveyContent가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                                }
+                            })
+                            // Status 응답 기록 끝 ======================================================
+
+                        }
+                    }
+                    else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<ArrayList<DailySurveyContentsBodyModel>>, t: Throwable) {
+
+                }
+            })
+
+
+
+
+
+
             mainActivity!!.gotoAlarm()
         }
 

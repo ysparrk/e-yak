@@ -176,3 +176,20 @@ data class emotionResultModel(
     var createdAt: String,
     var updatedAt: String,
 )
+
+data class ContentTextResultsBodyModel(
+    var text: String,
+)
+
+data class EditContentTextResultsBodyModel(
+    var contentTextResultId: Long,
+    var text: String,
+)
+
+data class ContentEmotionResultsBodyModel(
+    var choiceEmotion: String,
+)
+
+data class ContentStatusResultsBodyModel(
+    val selectedStatusChoices: ArrayList<String>,
+)
