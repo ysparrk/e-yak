@@ -14,10 +14,7 @@ import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
 import now.eyak.prescription.dto.query.*;
 import now.eyak.prescription.repository.PrescriptionRepository;
-import now.eyak.routine.domain.MedicineRoutine;
-import now.eyak.routine.domain.MedicineRoutineCheck;
-import now.eyak.routine.domain.PrescriptionMedicineRoutine;
-import now.eyak.routine.domain.QMedicineRoutineCheck;
+import now.eyak.routine.domain.*;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -343,6 +340,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
         QPrescription qPrescription = QPrescription.prescription;
         QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
+        QMedicineRoutine qMedicineRoutine = QMedicineRoutine.medicineRoutine;
+
 
         // BedAfter
         List<BedAfterQueryDto> bedAfterQueryDtoList = queryFactory
@@ -354,7 +353,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_AFTER)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
@@ -370,7 +370,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_BEFORE)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
@@ -385,8 +386,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.medicineShape,
                         qMedicineRoutineCheck.took
                 ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .from(qPrescription, qMedicineRoutineCheck, qMedicineRoutine)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_AFTER)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
@@ -402,7 +404,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.LUNCH_BEFORE)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
@@ -418,7 +421,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.LUNCH_AFTER)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
@@ -434,7 +438,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.DINNER_BEFORE)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
@@ -450,7 +455,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.DINNER_AFTER)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
@@ -466,7 +472,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.member.eq(member)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_BEFORE)
+                        .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
                 )
