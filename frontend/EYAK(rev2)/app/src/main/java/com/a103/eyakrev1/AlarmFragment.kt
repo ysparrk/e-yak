@@ -34,8 +34,9 @@ class AlarmFragment : Fragment() {
     val red: String = "#FF9B9B"
     val green: String = "#E3F2C1"
     val gray: String = "#DDE6ED"
+    val yellow: String = "FFFF00"
 
-    var medicineRoutineList = arrayListOf<MedicineRoutine>()
+    var medicineRoutines = MedicineRoutines()
 
     lateinit var eatingDuration: LocalTime
     lateinit var wakeTime: LocalTime
@@ -95,7 +96,6 @@ class AlarmFragment : Fragment() {
         tomorrow = targetDay.plusDays(1)
 
         updateDay(0)
-
     }
 
     private fun updateDay(gap: Long) {
@@ -108,32 +108,38 @@ class AlarmFragment : Fragment() {
 
         binding.emptyAlarmLinearLayout.visibility = View.INVISIBLE
 
-        api.getTargetDayPrescriptions(Authorization = "Bearer ${serverAccessToken}", dateTime = "${targetDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}T12:12:12").enqueue(object: Callback<ArrayList<Medicine>> {
-            override fun onResponse(call: Call<ArrayList<Medicine>>, response: Response<ArrayList<Medicine>>) {
+        api.getTargetDayPrescriptions(Authorization = "Bearer ${serverAccessToken}", dateTime = "${targetDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}T12:12:12").enqueue(object: Callback<MedicineRoutines> {
+            override fun onResponse(call: Call<MedicineRoutines>, response: Response<MedicineRoutines>) {
                 if(response.code() == 200) {
                     // 이제 적절하게 배분해서 넣어주자
-                    val medicineList = response.body()
-                    val eatTimeList = arrayListOf("BED_AFTER", "BREAKFAST_BEFORE", "BREAKFAST_AFTER", "LUNCH_BEFORE", "LUNCH_AFTER", "DINNER_BEFORE", "DINNER_AFTER", "BED_BEFORE")
+                    Log.d("log", response.toString())
+                    medicineRoutines = response.body()!!
+                    Log.d("log", medicineRoutines.bedAfterQueryResponses.toString())
+                    val routineKeys = arrayListOf("bedAfterQueryResponses", "breakfastBeforeQueryResponses", "breakfastAfterQueryResponses", "lunchBeforeQueryResponses", "lunchAfterQueryResponses", "dinnerBeforeQueryResponses", "dinnerAfterQueryResponses", "bedBeforeQueryResponses")
 
                     val medicineTimeList = arrayListOf(wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
                     val medicineNameList = arrayListOf("취침 후", "아침 식사 전", "아침 식사 후", "점심 식사 전", "점심 식사 후", "저녁 식사 전", "저녁 식사 후", "취침 전")
 
-                    medicineRoutineList = arrayListOf<MedicineRoutine>() // 초기화
-                    for (i in 0..medicineTimeList.size - 1) {
-                        medicineRoutineList.add(MedicineRoutine(routineTime = medicineTimeList[i].toString(), routineName = medicineNameList[i]))
-                    }
-
                     // 그날 총 먹어야하는 약이 하나도 없다면 true
                     var isAlarmEmpty = true
                     
-                    // 응답 받은 약 별로
-                    for (medicine in medicineList!!) {
-                        // 각 약의 루틴 별로 처리
-                        for (routine in medicine.routines) {
-                            // 해당하는 루틴에 각각 추가
-                            medicineRoutineList[eatTimeList.indexOf(routine)].medicineList.add(medicine)
-                            isAlarmEmpty = false
-                        }
+                    // 루틴 별로
+                    if (medicineRoutines.bedAfterQueryResponses.size == 0) {
+                        isAlarmEmpty = false
+                    } else if (medicineRoutines.breakfastBeforeQueryResponses.size == 0) {
+                        isAlarmEmpty = false
+                    } else if (medicineRoutines.breakfastAfterQueryResponses.size == 0) {
+                        isAlarmEmpty = false
+                    } else if (medicineRoutines.lunchBeforeQueryResponses.size == 0) {
+                        isAlarmEmpty = false
+                    } else if (medicineRoutines.lunchAfterQueryResponses.size == 0) {
+                        isAlarmEmpty = false
+                    } else if (medicineRoutines.dinnerBeforeQueryResponses.size == 0) {
+                        isAlarmEmpty = false
+                    } else if (medicineRoutines.dinnerAfterQueryResponses.size == 0) {
+                        isAlarmEmpty = false
+                    } else if (medicineRoutines.bedBeforeQueryResponses.size == 0) {
+                        isAlarmEmpty = false
                     }
                     
                     // 비어있다는 표시를 띄워주자
@@ -141,7 +147,7 @@ class AlarmFragment : Fragment() {
                         binding.emptyAlarmLinearLayout.visibility = View.VISIBLE
                     }
 
-                    val alarmListAdapter = AlarmListAdapter(mainActivity, medicineRoutineList)
+                    val alarmListAdapter = AlarmListAdapter(mainActivity, medicineRoutines, medicineTimeList, medicineNameList, targetDay)
                     binding.alramListView.findViewById<ListView>(R.id.alramListView)
                     binding.alramListView.adapter = alarmListAdapter
                 }
@@ -149,7 +155,7 @@ class AlarmFragment : Fragment() {
                     Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
                 }
             }
-            override fun onFailure(call: Call<ArrayList<Medicine>>, t: Throwable) {
+            override fun onFailure(call: Call<MedicineRoutines>, t: Throwable) {
 
             }
         })
@@ -165,6 +171,9 @@ class AlarmFragment : Fragment() {
                     }
                     else if(response.body()?.actualDose == response.body()?.fullDose) {
                         binding.yesterdayState.setColorFilter(Color.parseColor(green))
+                    }
+                    else {
+                        binding.yesterdayState.setColorFilter(Color.parseColor(yellow))
                     }
                 }
                 else if(response.code() == 401) {
@@ -191,6 +200,9 @@ class AlarmFragment : Fragment() {
                     else if(response.body()?.actualDose == response.body()?.fullDose) {
                         binding.todayState.setColorFilter(Color.parseColor(green))
                     }
+                    else {
+                        binding.todayState.setColorFilter(Color.parseColor(yellow))
+                    }
                 }
                 else if(response.code() == 401) {
                     Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
@@ -207,6 +219,7 @@ class AlarmFragment : Fragment() {
         api.todayDoseInfo(Authorization = "Bearer ${serverAccessToken}", date = tomorrow.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<TodayDoseInfoBodyModel> {
             override fun onResponse(call: Call<TodayDoseInfoBodyModel>, response: Response<TodayDoseInfoBodyModel>) {
                 if(response.code() == 200) {
+
                     if(response.body()?.fullDose == 0) {
                         binding.tomorrowState.setColorFilter(Color.parseColor(gray))
                     }
@@ -215,6 +228,9 @@ class AlarmFragment : Fragment() {
                     }
                     else if(response.body()?.actualDose == response.body()?.fullDose) {
                         binding.tomorrowState.setColorFilter(Color.parseColor(green))
+                    }
+                    else {
+                        binding.tomorrowState.setColorFilter(Color.parseColor(yellow))
                     }
                 }
                 else if(response.code() == 401) {

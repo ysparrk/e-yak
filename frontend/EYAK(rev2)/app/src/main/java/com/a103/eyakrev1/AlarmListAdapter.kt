@@ -16,23 +16,43 @@ import androidx.cardview.widget.CardView
 import kotlin.concurrent.timer
 import android.os.Handler
 import android.os.Looper
+import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.time.DurationUnit
 import java.time.temporal.ChronoUnit.SECONDS
 
-class AlarmListAdapter (val context: Context, val medicineRoutineList: ArrayList<MedicineRoutine>) : BaseAdapter() {
+class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRoutines, val medicineTimeList: ArrayList<LocalTime>, val medicineNameList: ArrayList<String>, val targetDay: LocalDate) : BaseAdapter() {
 
     var mainActivity: MainActivity = context as MainActivity
+
+    private val api = EyakService.create()
 
     private val uiHandler = Handler(Looper.getMainLooper())
 
     // https://blog.yena.io/studynote/2017/12/01/Android-Kotlin-ListView.html
     override fun getCount(): Int {
-        return medicineRoutineList.size
+        return 8
     }
 
-    override fun getItem(position: Int): Any {
-        return medicineRoutineList[position]
+    override fun getItem(position: Int): ArrayList<medicineInRoutine> {
+
+        if (position == 0) {
+            return medicineRoutines.bedAfterQueryResponses
+        } else if (position == 1) {
+            return medicineRoutines.breakfastBeforeQueryResponses
+        } else if (position == 2) {
+            return medicineRoutines.breakfastAfterQueryResponses
+        } else if (position == 3) {
+            return medicineRoutines.lunchBeforeQueryResponses
+        } else if (position == 4) {
+            return medicineRoutines.lunchAfterQueryResponses
+        } else if (position == 5) {
+            return medicineRoutines.dinnerBeforeQueryResponses
+        } else if (position == 6) {
+            return medicineRoutines.dinnerAfterQueryResponses
+        } else { // position == 7
+            return medicineRoutines.bedBeforeQueryResponses
+        }
     }
 
     override fun getItemId(position: Int): Long {
@@ -52,16 +72,16 @@ class AlarmListAdapter (val context: Context, val medicineRoutineList: ArrayList
         val alarmTabDetailButton = view.findViewById<ImageButton>(R.id.alarmTabDetailButton)
 
         /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
-        val medicineRoutine = medicineRoutineList[position]
+        val medicineRoutine = getItem(position)
 
         // 만약 해당 루틴에 먹을 약이 없다면 카드를 띄우지 말자
-        if (medicineRoutine.medicineList.size == 0) {
+        if (medicineRoutine.size == 0) {
             // empty view를 리턴 => 그냥 카드뷰만 GONE으로 하면 다르게 설정한 마진 같은거 때문에 약간의 공간 차지해서
             return View(context)
         }
 
-        medicineTimeTextView.text = medicineRoutine.routineTime
-        medicineNameTextView.text = medicineRoutine.routineName
+        medicineTimeTextView.text = medicineTimeList[position].toString()
+        medicineNameTextView.text = medicineNameList[position]
 
         // https://stackoverflow.com/questions/3135112/android-nested-listview
         val prescriptionDetailLayout = view.findViewById<LinearLayout>(R.id.prescriptionDetailLayout)
@@ -69,7 +89,7 @@ class AlarmListAdapter (val context: Context, val medicineRoutineList: ArrayList
         alarmTabDetailButton.setOnClickListener {
             // 처음에 한번만 불러오고 싶었기 때문에, 저기에 자식들이 없다면 한번만 실행, 처음 버튼 누를때만 뷰를 추가하도록
             if (prescriptionDetailLayout.childCount == 0) {
-                for (medicine in medicineRoutine.medicineList) {
+                for (medicine in medicineRoutine) {
                     var detailMedicineView = LayoutInflater.from(context).inflate(R.layout.alarm_tab_routine_detail_item, null)
                     detailMedicineView.findViewById<TextView>(R.id.routine_detail_medicine_name).text = medicine.customName
                     val detailMedicineImageView = detailMedicineView.findViewById<ImageView>(R.id.routine_detail_medicine_icon)
@@ -133,16 +153,23 @@ class AlarmListAdapter (val context: Context, val medicineRoutineList: ArrayList
             // 백그라운드로 실행되는 부분, UI 조작 X
             // 시간 차이를 계산하자
             val currentTime = LocalTime.now()
-            val targetTime = LocalTime.parse(medicineRoutine.routineTime)
+            val targetTime = medicineTimeList[position]
             var timeDiffInSec = currentTime.until(targetTime, SECONDS)
-            
+
+            val today = LocalDate.now()
+            val dayDiff = targetDay.compareTo(today)
+
             // 넣을 텍스트 초기화
             var targetText = "" 
-            if (timeDiffInSec < 0) {
+            if (dayDiff > 0) { // targetDay가 미래라면
+                targetText = "아직 아니:약"
+            } else if (dayDiff < 0) {
+                targetText = "지났어:약"
+            } else if (timeDiffInSec < 0) {
                 // 이미 지난 경우
                 targetText = "지났어:약"
             } else {
-                // 아직 남은 경우
+                // 오늘 날짜이고, 아직 남은 경우
                 var secondDiff = timeDiffInSec % 60
                 timeDiffInSec = timeDiffInSec / 60
                 var minuteDiff = timeDiffInSec % 60

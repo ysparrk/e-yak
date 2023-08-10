@@ -89,11 +89,11 @@ interface EyakService {
         @Header("Authorization") Authorization: String,
     ): Call<ArrayList<Medicine>>
 
-    @GET("/api/v1/prescriptions")
+    @GET("/api/v1/prescriptions/sort-by-routine")
     fun getTargetDayPrescriptions(
         @Header("Authorization") Authorization: String,
         @Query("dateTime") dateTime: String,
-    ): Call<ArrayList<Medicine>>
+    ): Call<MedicineRoutines>
 
     @GET("/api/v1/prescriptions/{prescriptionId}")
     fun getPrescriptionDetail(
