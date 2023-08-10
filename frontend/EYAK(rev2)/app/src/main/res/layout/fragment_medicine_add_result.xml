@@ -18,7 +18,7 @@
             <TextView
                 android:id="@+id/medicineAddResultTitleTextView"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="66.6dp"
                 android:fontFamily="@font/tmoney_bold"
                 android:gravity="center"
                 android:includeFontPadding="false"
