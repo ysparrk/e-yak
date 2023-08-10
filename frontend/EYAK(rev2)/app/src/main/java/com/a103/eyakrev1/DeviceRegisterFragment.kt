@@ -15,6 +15,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock.sleep
 import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -131,6 +132,10 @@ class DeviceRegisterFragment : Fragment() {
             requireActivity().registerReceiver(receiver, filter_finished)
             val filter_bonded = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
             requireActivity().registerReceiver(receiver, filter_bonded)
+            val filter_connect = IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED)
+            requireActivity().registerReceiver(receiver, filter_connect)
+            val filter_disconnect = IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+            requireActivity().registerReceiver(receiver, filter_disconnect)
         } catch (e: Exception) {}
     }
 
@@ -184,6 +189,10 @@ class DeviceRegisterFragment : Fragment() {
                 setPositiveButton("삭제") {_, _ -> bluetoothDelete() }
                 setNegativeButton("취소") {_, _ -> }
             }.show()
+        }
+        // 등록 디바이스 통신 확인
+        layout.findViewById<Button>(R.id.btConnCheckBtn).setOnClickListener {
+            connectDevice(deviceSaved)
         }
 
         // 근처 기기 찾기
@@ -267,6 +276,17 @@ class DeviceRegisterFragment : Fragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val action: String? = intent?.action
             when (action) {
+                BluetoothDevice.ACTION_ACL_CONNECTED -> {
+                    Toast.makeText(requireActivity(), "connect", Toast.LENGTH_SHORT).show()
+//                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#80BA69"))
+//                    layout.findViewById<TextView>(R.id.btConnState).text = "약통과 통신할 수 있습니다."
+//                    try {socket?.close(); fallbackSocket?.close()} catch (e: Exception) {}
+                }
+                BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
+                    Toast.makeText(requireActivity(), "disconnect", Toast.LENGTH_SHORT).show()
+//                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#FF9B9B"))
+//                    layout.findViewById<TextView>(R.id.btConnState).text = "약통이 근처에 없거나 전원이 꺼졌습니다."
+                }
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> { // 근처 기기 탐색 시작
                     layout.findViewById<CardView>(R.id.btListCard).visibility = View.VISIBLE
                     layout.findViewById<LinearLayout>(R.id.btListLayout).removeAllViews()
@@ -343,14 +363,14 @@ class DeviceRegisterFragment : Fragment() {
             if (device.name == deviceNameSaved) {
                 deviceSaved = device
                 devicePairedFlag = true
-                layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#E3F2C1"))
-                layout.findViewById<TextView>(R.id.btConnState).text = "약통과 페어링 되었습니다."
+                layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#80BA69"))
+                layout.findViewById<TextView>(R.id.btConnState).text = "약통이 등록 되었습니다."
                 return@forEach
             }
         }
         if (devicePairedFlag == false) {
             layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#747679"))
-            layout.findViewById<TextView>(R.id.btConnState).text = "약통과 연결이 끊어졌습니다."
+            layout.findViewById<TextView>(R.id.btConnState).text = "약통 등록이 취소되었습니다.\n약통을 삭제하고 다시 등록해 주세요."
         }
         showDeviceUI()
     }
@@ -442,16 +462,18 @@ class DeviceRegisterFragment : Fragment() {
     // 특정 디바이스와 연결 (소켓)
     private fun connectDevice(targetDevice: BluetoothDevice?) {
         val thread = Thread {
-            val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-            socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
-            var clazz = socket?.remoteDevice?.javaClass
-            var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
-            var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
-            fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
             try {
+                val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+                socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
+                var clazz = socket?.remoteDevice?.javaClass
+                var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
+                var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
+                fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
                 fallbackSocket?.connect()
             } catch (e: Exception) {
                 try {
+//                layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#FF9B9B"))
+//                layout.findViewById<TextView>(R.id.btConnState).text = "약통이 근처에 없거나 전원이 꺼졌습니다."
                     socket?.close()
                     fallbackSocket?.close()
                 } catch (e: IOException) {}
