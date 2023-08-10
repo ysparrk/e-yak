@@ -84,7 +84,7 @@ class MedicineDetailFragment : Fragment() {
                             var dosePerDayText = ""
                             for (engTime in medicine!!.routines) {
                                 if (engTime == "BED_AFTER") {
-                                    dosePerDayText = dosePerDayText.plus("○ 취침 후 ○\n")
+                                    dosePerDayText = dosePerDayText.plus("○ 기상 후 ○\n")
                                     timeChk[0] = true
                                 } else if (engTime == "BREAKFAST_BEFORE") {
                                     dosePerDayText = dosePerDayText.plus("○ 아침 식사 전 ○\n")

@@ -107,13 +107,14 @@
                     android:id="@+id/medicine_time_left"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="10"
                     android:fontFamily="@font/tmoney_bold"
                     android:gravity="center_vertical"
                     android:includeFontPadding="false"
                     android:text="00:31:58"
                     android:textColor="#757863"
-                    android:textSize="30dp" />
+                    android:textSize="25dp" />
 
             </LinearLayout>
 

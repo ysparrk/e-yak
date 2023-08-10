@@ -140,6 +140,7 @@ class AlarmFragment : Fragment() {
 
         api.getTargetDayPrescriptions(Authorization = "Bearer ${serverAccessToken}", dateTime = "${targetDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}T12:12:12").enqueue(object: Callback<MedicineRoutines> {
             override fun onResponse(call: Call<MedicineRoutines>, response: Response<MedicineRoutines>) {
+
                 if(response.code() == 200) {
                     // 이제 적절하게 배분해서 넣어주자
                     Log.d("log", response.toString())
@@ -148,27 +149,27 @@ class AlarmFragment : Fragment() {
                     val routineKeys = arrayListOf("bedAfterQueryResponses", "breakfastBeforeQueryResponses", "breakfastAfterQueryResponses", "lunchBeforeQueryResponses", "lunchAfterQueryResponses", "dinnerBeforeQueryResponses", "dinnerAfterQueryResponses", "bedBeforeQueryResponses")
 
                     val medicineTimeList = arrayListOf(wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
-                    val medicineNameList = arrayListOf("취침 후", "아침 식사 전", "아침 식사 후", "점심 식사 전", "점심 식사 후", "저녁 식사 전", "저녁 식사 후", "취침 전")
+                    val medicineNameList = arrayListOf("기상 후", "아침 식사 전", "아침 식사 후", "점심 식사 전", "점심 식사 후", "저녁 식사 전", "저녁 식사 후", "취침 전")
 
                     // 그날 총 먹어야하는 약이 하나도 없다면 true
                     var isAlarmEmpty = true
                     
                     // 루틴 별로
-                    if (medicineRoutines.bedAfterQueryResponses.size == 0) {
+                    if (medicineRoutines.bedAfterQueryResponses.size != 0) {
                         isAlarmEmpty = false
-                    } else if (medicineRoutines.breakfastBeforeQueryResponses.size == 0) {
+                    } else if (medicineRoutines.breakfastBeforeQueryResponses.size != 0) {
                         isAlarmEmpty = false
-                    } else if (medicineRoutines.breakfastAfterQueryResponses.size == 0) {
+                    } else if (medicineRoutines.breakfastAfterQueryResponses.size != 0) {
                         isAlarmEmpty = false
-                    } else if (medicineRoutines.lunchBeforeQueryResponses.size == 0) {
+                    } else if (medicineRoutines.lunchBeforeQueryResponses.size != 0) {
                         isAlarmEmpty = false
-                    } else if (medicineRoutines.lunchAfterQueryResponses.size == 0) {
+                    } else if (medicineRoutines.lunchAfterQueryResponses.size != 0) {
                         isAlarmEmpty = false
-                    } else if (medicineRoutines.dinnerBeforeQueryResponses.size == 0) {
+                    } else if (medicineRoutines.dinnerBeforeQueryResponses.size != 0) {
                         isAlarmEmpty = false
-                    } else if (medicineRoutines.dinnerAfterQueryResponses.size == 0) {
+                    } else if (medicineRoutines.dinnerAfterQueryResponses.size != 0) {
                         isAlarmEmpty = false
-                    } else if (medicineRoutines.bedBeforeQueryResponses.size == 0) {
+                    } else if (medicineRoutines.bedBeforeQueryResponses.size != 0) {
                         isAlarmEmpty = false
                     }
                     

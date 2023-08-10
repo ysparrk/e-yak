@@ -127,3 +127,23 @@ data class DailySurveyContentsBodyModel(
     var surveyContentId: Int,
     var surveyContentType: String,
 )
+
+data class getMedicineRoutineCheckIdBodyModel(
+    var date: String,
+    var routine: String,
+    var prescriptionId: Int,
+)
+
+data class getMedicineRoutineCheckIdResponseBody(
+    var id: Int,
+    var took: Boolean,
+)
+
+data class medicineRoutineCheckBodyModel(
+    val id: Int,
+    val date: String,
+    val routine: String,
+    val took: Boolean,
+    val memberId: Int,
+    val prescriptionId: Int,
+)
