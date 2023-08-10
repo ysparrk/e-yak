@@ -7,6 +7,7 @@ import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.social.domain.Follow;
 import now.eyak.social.dto.FollowUpdateDto;
+import now.eyak.social.dto.FollowerResponseDto;
 import now.eyak.social.repository.FollowRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FollowerServiceImpl implements FollowService {
+public class FollowServiceImpl implements FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
 
@@ -28,11 +29,10 @@ public class FollowerServiceImpl implements FollowService {
      */
     @Transactional
     @Override
-    public List<Follow> findFollowers(Long memberId) {
+    public List<FollowerResponseDto> findFollowers(Long memberId) {
         Member member = getMember(memberId);
 
-        // TODO: findByFollower 로 검색후 customname을 set해야함
-        return followRepository.findByFollowee(member);
+        return followRepository.findFollowByFollowee(member);
     }
 
     /**
