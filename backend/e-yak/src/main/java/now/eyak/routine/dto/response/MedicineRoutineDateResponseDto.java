@@ -16,10 +16,10 @@ import java.util.List;
 public class MedicineRoutineDateResponseDto {
     private LocalDate date;
     private List<MedicineRoutineDateDto> medicineRoutineDateDtos;
-    private List<SurveyContentDto> surveyContentDtos;
+    private SurveyContentDto surveyContentDtos;
 
     @Builder
-    public MedicineRoutineDateResponseDto(LocalDate date, List<MedicineRoutineDateDto> medicineRoutineDateDtos, List<SurveyContentDto> surveyContentDtos) {
+    public MedicineRoutineDateResponseDto(LocalDate date, List<MedicineRoutineDateDto> medicineRoutineDateDtos, SurveyContentDto surveyContentDtos) {
         this.date = date;
         this.medicineRoutineDateDtos = medicineRoutineDateDtos;
         this.surveyContentDtos = surveyContentDtos;

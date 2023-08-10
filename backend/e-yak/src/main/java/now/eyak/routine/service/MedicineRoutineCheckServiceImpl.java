@@ -205,7 +205,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
         // survey
-        List<SurveyContentDto> surveyResults = surveyContentService.getSurveyResultByDateAndMember(date, memberId);
+        SurveyContentDto surveyResults = surveyContentService.getSurveyResultByDateAndMember(date, memberId);
 
 
         // 복용 정보

@@ -103,13 +103,13 @@ class SurveyContentServiceImplTest {
         ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentChoiceText.getId(), member.getId());
 
         // when
-        List<SurveyContentDto> surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(survey.getDate(), member.getId());
+        SurveyContentDto surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(survey.getDate(), member.getId());
 
         // then
         System.out.println("surveyResultByDateAndMember = " + surveyResultByDateAndMember);
-        Assertions.assertThat(savedContentEmotionResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.get(0).getContentEmotionResultResponse().getMemberId());
-        Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.get(0).getContentStatusResultResponses().getMemberId());
-        Assertions.assertThat(savedContentTextResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.get(0).getContentTextResultResponse().getMemberId());
+        Assertions.assertThat(savedContentEmotionResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.getContentEmotionResultResponse().getMemberId());
+        Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.getContentStatusResultResponses().getMemberId());
+        Assertions.assertThat(savedContentTextResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.getContentTextResultResponse().getMemberId());
 
     }
 
