@@ -197,12 +197,18 @@
                                     android:id="@+id/btCell1"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
+                                    android:background="@drawable/baseline_circle_24"
+                                    android:backgroundTint="#DDE6ED"
+                                    android:padding="10dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                                 <ImageView
                                     android:id="@+id/btCell2"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
+                                    android:background="@drawable/baseline_circle_24"
+                                    android:backgroundTint="#DDE6ED"
+                                    android:padding="10dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                             </TableRow>
@@ -215,12 +221,18 @@
                                     android:id="@+id/btCell3"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
+                                    android:background="@drawable/baseline_circle_24"
+                                    android:backgroundTint="#DDE6ED"
+                                    android:padding="10dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                                 <ImageView
                                     android:id="@+id/btCell4"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
+                                    android:background="@drawable/baseline_circle_24"
+                                    android:backgroundTint="#DDE6ED"
+                                    android:padding="10dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                             </TableRow>
@@ -231,17 +243,48 @@
                             android:id="@+id/btCell5"
                             android:layout_width="140dp"
                             android:layout_height="140dp"
+                            android:background="@drawable/baseline_circle_24"
+                            android:backgroundTint="#DDE6ED"
+                            android:padding="36dp"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/btCellText"
+                        android:id="@+id/btCellInfoNotText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Medicine Name"
+                        android:layout_marginVertical="10dp"
+                        android:fontFamily="@font/tmoney_bold"
+                        android:text="약을 클릭해서 약 정보를 확인하세요"
+                        android:textColor="#757863"
                         android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:id="@+id/btCellInfoLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/btCellInfoImage"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/baseline_access_time_24" />
+
+                        <TextView
+                            android:id="@+id/btCellInfoText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/tmoney_bold"
+                            android:text="Medicine Name"
+                            android:textColor="#757863"
+                            android:textSize="16sp" />
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/btDeviceEditBtn"

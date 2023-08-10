@@ -31,6 +31,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
+import com.google.gson.Gson
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -41,6 +42,9 @@ import kotlin.Exception
 import kotlin.concurrent.timer
 
 class DeviceRegisterFragment : Fragment() {
+    val api = EyakService.create()
+    lateinit var mainActivity: MainActivity
+
     // flag & signal
     private val TAG = "myapp"
     private val REQUEST_CODE_ENABLE_BT:Int = 1
@@ -55,6 +59,13 @@ class DeviceRegisterFragment : Fragment() {
     // (임시) 등록된 디바이스 이름 & 디바이스
     private var deviceSaved: BluetoothDevice? = null
     private var deviceNameSaved: String? = null //"ESP32-BT-TEST_2"
+    // 약통 UI 정보
+    private var pickedMedic = 0
+    private var cell1Data: Medicine? = null
+    private var cell2Data: Medicine? = null
+    private var cell3Data: Medicine? = null
+    private var cell4Data: Medicine? = null
+    private var cell5Data: Medicine? = null
 
     // 통신을 위한 var.
     private var socket: BluetoothSocket? = null
@@ -92,9 +103,20 @@ class DeviceRegisterFragment : Fragment() {
 
         }
         // Preference Data 셋업
-        pref = requireContext().applicationContext.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         editor = pref?.edit()
         deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        cell5Data = gson.fromJson(json, Medicine::class.java)
         // 모바일이 블루투스를 지원하는 기기인지 확인
         if (btAdapter == null) {
             Toast.makeText(requireActivity(), "이 기기에서 블루투스를 지원하지 않음", Toast.LENGTH_LONG).show()
@@ -140,11 +162,16 @@ class DeviceRegisterFragment : Fragment() {
         }
 
         // 이미 등록/페어링된 디바이스 유무 확인
-        if (deviceNameSaved == "") {
+        if (deviceNameSaved == "") { // 페어링 안됨
+            layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.VISIBLE
             layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.GONE
-        } else {
+            layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.GONE
+            layout.findViewById<LinearLayout>(R.id.btFindLayout).visibility = View.VISIBLE
+        } else { // 페어링 됨
             layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.GONE
             layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.VISIBLE
+            layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.VISIBLE
+            layout.findViewById<LinearLayout>(R.id.btFindLayout).visibility = View.GONE
             layout.findViewById<TextView>(R.id.btConnName).text = deviceNameSaved
             if (permFlag == true) bluetoothPaired()
         }
@@ -279,13 +306,18 @@ class DeviceRegisterFragment : Fragment() {
                         editor?.putString("DEVICE_NAME", deviceNameSaved)?.apply()
                         layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.GONE
                         layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.VISIBLE
+                        layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.VISIBLE
+                        layout.findViewById<LinearLayout>(R.id.btFindLayout).visibility = View.GONE
                         layout.findViewById<TextView>(R.id.btConnName).text = deviceNameSaved
+                        showDeviceUI()
                     } else if (deviceSaved?.bondState == BluetoothDevice.BOND_BONDING) {
                         // 페어링 승인 중...
                     } else if (deviceSaved?.bondState == BluetoothDevice.BOND_NONE) {
                         // 페어링 거부됨
                         layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.VISIBLE
                         layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.GONE
+                        layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.GONE
+                        layout.findViewById<LinearLayout>(R.id.btFindLayout).visibility = View.VISIBLE
                         deviceSaved = null
                         deviceNameSaved = ""
                     }
@@ -319,6 +351,74 @@ class DeviceRegisterFragment : Fragment() {
         if (devicePairedFlag == false) {
             layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#747679"))
             layout.findViewById<TextView>(R.id.btConnState).text = "약통과 연결이 끊어졌습니다."
+        }
+        showDeviceUI()
+    }
+    // 페어링 약통 존재함에 따른 처리
+    private fun showDeviceUI() {
+        val infoVnot = layout.findViewById<TextView>(R.id.btCellInfoNotText)
+        val infoVlayout = layout.findViewById<LinearLayout>(R.id.btCellInfoLayout)
+        val infoVimg = layout.findViewById<ImageView>(R.id.btCellInfoImage)
+        val infoVtext = layout.findViewById<TextView>(R.id.btCellInfoText)
+        val view1 = layout.findViewById<ImageView>(R.id.btCell1)
+        val view2 = layout.findViewById<ImageView>(R.id.btCell2)
+        val view3 = layout.findViewById<ImageView>(R.id.btCell3)
+        val view4 = layout.findViewById<ImageView>(R.id.btCell4)
+        val view5 = layout.findViewById<ImageView>(R.id.btCell5)
+        val viewLst = arrayOf(view1, view2, view3, view4, view5)
+        val dataLst = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
+        for (i in 0..4) {
+            if (dataLst[i] == null) {
+                viewLst[i].setImageResource(0)
+            } else {
+                iconSetting(viewLst[i], dataLst[i]!!.medicineShape)
+                viewLst[i].setOnClickListener {
+                    infoVnot.visibility = View.GONE
+                    infoVlayout.visibility = View.VISIBLE
+                    iconSetting(infoVimg, dataLst[i]!!.medicineShape)
+                    infoVtext.text = dataLst[i]!!.customName
+                }
+            }
+        }
+    }
+    // 아이콘 배치 함수
+    private fun iconSetting(medicineListIconImageView: ImageView, iconNo: Int) {
+        when(iconNo) {
+            1 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_glacier)
+            2 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_afterglow)
+            3 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_bougainvaillea)
+            4 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_orchidice)
+            5 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_silver)
+            6 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_pinklady)
+            7 -> medicineListIconImageView.setImageResource(R.drawable.ic_pill_fusioncoral)
+            8 -> medicineListIconImageView.setImageResource(R.drawable.ic_roundpill_glacier)
+            9 -> medicineListIconImageView.setImageResource(R.drawable.ic_roundpill_afterglow)
+            10 -> medicineListIconImageView.setImageResource(R.drawable.ic_roundpill_bougainvillea)
+            11 -> medicineListIconImageView.setImageResource(R.drawable.ic_roundpill_orchidice)
+            12 -> medicineListIconImageView.setImageResource(R.drawable.ic_roundpill_silver)
+            13 -> medicineListIconImageView.setImageResource(R.drawable.ic_roundpill_pinklady)
+            14 -> medicineListIconImageView.setImageResource(R.drawable.ic_roundpill_fusioncoral)
+            15 -> medicineListIconImageView.setImageResource(R.drawable.ic_packagepill_glacier)
+            16 -> medicineListIconImageView.setImageResource(R.drawable.ic_packagepill_afterglow)
+            17 -> medicineListIconImageView.setImageResource(R.drawable.ic_packagepill_bougainvillea)
+            18 -> medicineListIconImageView.setImageResource(R.drawable.ic_packagepill_orchidice)
+            19 -> medicineListIconImageView.setImageResource(R.drawable.ic_packagepill_silver)
+            20 -> medicineListIconImageView.setImageResource(R.drawable.ic_packagepill_pinklady)
+            21 -> medicineListIconImageView.setImageResource(R.drawable.ic_packagepill_fusioncoral)
+            22 -> medicineListIconImageView.setImageResource(R.drawable.ic_outpill_glacier)
+            23 -> medicineListIconImageView.setImageResource(R.drawable.ic_outpill_afterglow)
+            24 -> medicineListIconImageView.setImageResource(R.drawable.ic_outpill_bougainvillea)
+            25 -> medicineListIconImageView.setImageResource(R.drawable.ic_outpill_orchidice)
+            26 -> medicineListIconImageView.setImageResource(R.drawable.ic_outpill_silver)
+            27 -> medicineListIconImageView.setImageResource(R.drawable.ic_outpill_pinklady)
+            28 -> medicineListIconImageView.setImageResource(R.drawable.ic_outpill_fusioncoral)
+            29 -> medicineListIconImageView.setImageResource(R.drawable.ic_potion_glacier)
+            30 -> medicineListIconImageView.setImageResource(R.drawable.ic_potion_afterglow)
+            31 -> medicineListIconImageView.setImageResource(R.drawable.ic_potion_bougainvillea)
+            32 -> medicineListIconImageView.setImageResource(R.drawable.ic_potion_orchidice)
+            33 -> medicineListIconImageView.setImageResource(R.drawable.ic_potion_silver)
+            34 -> medicineListIconImageView.setImageResource(R.drawable.ic_potion_pinklady)
+            35 -> medicineListIconImageView.setImageResource(R.drawable.ic_potion_fusioncoral)
         }
     }
 
@@ -376,5 +476,12 @@ class DeviceRegisterFragment : Fragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.mainFragment, DeviceFragment())
             .commit()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        // 2. Context를 액티비티로 형변환해서 할당
+        mainActivity = context as MainActivity
     }
 }

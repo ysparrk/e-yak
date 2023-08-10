@@ -211,7 +211,6 @@ class DeviceFragment : Fragment() {
             }
             DragEvent.ACTION_DRAG_ENDED -> {  // 드래그앤 드롭 종료시 발생. action_drop 후 보장 X.
                 view.invalidate()
-//                Toast.makeText(requireActivity(), "dragdrop end", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> false
