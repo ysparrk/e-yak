@@ -386,7 +386,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.medicineShape,
                         qMedicineRoutineCheck.took
                 ))
-                .from(qPrescription, qMedicineRoutineCheck, qMedicineRoutine)
+                .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_AFTER)
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
