@@ -6,7 +6,6 @@ import now.eyak.survey.dto.request.ContentTextResultUpdateDto;
 import now.eyak.survey.dto.response.ContentTextResultResponseDto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 
 public interface ContentTextResultService {
@@ -14,6 +13,6 @@ public interface ContentTextResultService {
     ContentTextResult updateTextSurveyResult(ContentTextResultUpdateDto contentTextResultUpdateDto, Long surveyContentId, Long memberId);  // 수정
     void deleteTextSurveyResult(Long contentTextResultId, Long memberId); // 삭제
 
-    List<ContentTextResultResponseDto> getTextResultsByDateAndMember(LocalDate date, Long memberId); // 조회
+    ContentTextResultResponseDto getTextResultByDateAndMember(LocalDate date, Long memberId); // 조회
 
 }

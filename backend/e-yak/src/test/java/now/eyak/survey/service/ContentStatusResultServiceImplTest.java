@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @ExtendWith(SpringExtension.class)
@@ -157,10 +156,10 @@ class ContentStatusResultServiceImplTest {
         // when
         System.out.println("survey.getDate() = " + survey.getDate());
         System.out.println("membememememr = " + member.getId());
-        List<ContentStatusResultResponseDto> findStatusResultsByDateAndMember = contentStatusResultService.getStatusResultsByDateAndMember(survey.getDate(), memberA.getId());
+        ContentStatusResultResponseDto findStatusResultsByDateAndMember = contentStatusResultService.getStatusResultByDateAndMember(survey.getDate(), memberA.getId());
 
         // then
-        Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(findStatusResultsByDateAndMember.get(0).getMemberId());
+        Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(findStatusResultsByDateAndMember.getMemberId());
         System.out.println("findStatusResultsByDateAndMember = " + findStatusResultsByDateAndMember);
 
     }

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -104,7 +103,7 @@ public class ContentTextResultServiceImpl implements ContentTextResultService {
      */
     @Transactional
     @Override
-    public List<ContentTextResultResponseDto> getTextResultsByDateAndMember(LocalDate date, Long memberId) {
+    public ContentTextResultResponseDto getTextResultByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 //        Survey survey = surveyRepository.findByDate(date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜의 설문기록이 없습니다."));
 
@@ -112,7 +111,7 @@ public class ContentTextResultServiceImpl implements ContentTextResultService {
         QSurveyContent qSurveyContent = QSurveyContent.surveyContent;
         QSurvey qSurvey = QSurvey.survey;
 
-        List<ContentTextResultResponseDto> textResults = queryFactory
+        ContentTextResultResponseDto textResult = queryFactory
                 .select(Projections.constructor(ContentTextResultResponseDto.class,
                         qContentTextResult.id,
                         qContentTextResult.member.id,
@@ -123,9 +122,16 @@ public class ContentTextResultServiceImpl implements ContentTextResultService {
                 .leftJoin(qContentTextResult.surveyContent, qSurveyContent)
                 .leftJoin(qSurveyContent.survey, qSurvey)
                 .where(qSurvey.date.eq(date).and(qContentTextResult.member.eq(member)))
-                .fetch();
+                .fetchOne();
 
-        return textResults;
+        // 응답 기록이 없는 경우 id := -1로 설정 후 반환
+        if (textResult == null) {
+            return ContentTextResultResponseDto.builder()
+                    .contentTextResultId(-1L)
+                    .build();
+        }
+
+        return textResult;
     }
 
 }
