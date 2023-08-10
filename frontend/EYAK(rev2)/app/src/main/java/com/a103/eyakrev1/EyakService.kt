@@ -149,6 +149,7 @@ interface EyakService {
     @POST("/api/v1/medicine-routine-checks")
     fun medicineRoutineCheck(
         @Header("Authorization") Authorization: String,
+        @Body params: medicineRoutineCheckBodyModel,
     ): Call<Void>
 
     @GET("/api/v1/survey-results")

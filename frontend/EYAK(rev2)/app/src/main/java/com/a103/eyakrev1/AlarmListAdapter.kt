@@ -1,6 +1,7 @@
 package com.a103.eyakrev1
 
 import android.content.Context
+import android.graphics.Color
 import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,8 @@ import kotlin.concurrent.timer
 import android.os.Handler
 import android.os.Looper
 import android.widget.ListView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -151,30 +154,76 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
                 alarmTabDetailButton.setImageResource(R.drawable.baseline_keyboard_arrow_down_24)
             }
         }
-        
+
+        // 해당 약을 다 먹었을 경우 복용 버튼 비활성화 하자
+        // 다 먹었는지 여부
+        var clearThisRoutine = true
+        for (medicine in medicineRoutine) {
+            if (!medicine.took) { // false면, 안 먹은게 있는거
+                clearThisRoutine = false
+            }
+        }
+
         // 미래 시점일 경우, 복용 클릭 불가능, 버튼을 지워버리자
         if (targetDay.compareTo(LocalDate.now()) > 0) {
             medicineEatButton.visibility = View.INVISIBLE
-        } else {
+        }
+        else if (clearThisRoutine) { // 다 먹었으면 복용 버튼 비활성화 + 타이머도 멈추자
+            medicineEatButton.text = "완료"
+            medicineEatButton.setBackgroundColor(ContextCompat.getColor(context, R.color.lightgray))
+        }
+        else {
             medicineEatButton.setOnClickListener {
                 val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
                 val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+                val serverUserId = pref.getInt("SERVER_USER_ID", -1) // 우리 ID
 
                 val routineStrings = arrayListOf("BED_AFTER", "BREAKFAST_BEFORE", "BREAKFAST_AFTER", "LUNCH_BEFORE", "LUNCH_AFTER", "DINNER_BEFORE", "DINNER_AFTER", "BED_BEFORE")
 
-                for (medicine in medicineRoutine) {
+                for (i in 0..medicineRoutine.size - 1) {
+                    val medicine = medicineRoutine[i]
                     val params = getMedicineRoutineCheckIdBodyModel(date = targetDay.toString(), routine = routineStrings[position], prescriptionId = medicine.id,
                     )
                     api.findMedicineRoutineCheckId(Authorization = "Bearer ${serverAccessToken}", params=params).enqueue(object:
                         Callback<getMedicineRoutineCheckIdResponseBody> {
                         override fun onResponse(call: Call<getMedicineRoutineCheckIdResponseBody>, response: Response<getMedicineRoutineCheckIdResponseBody>) {
-                            Log.d("log", response.toString())
-                            Log.d("log", response.body().toString())
+//                            Log.d("log", response.toString())
+//                            Log.d("log", response.body().toString())
+                            val medicineRoutineCheckId = response.body()!!.id
 
                             if (response.code() == 401) {
                                 Log.d("log", "인증되지 않은 사용자입니다")
                             } else if (response.code() == 200) {
+                                val checkParams = medicineRoutineCheckBodyModel(
+                                    id = medicineRoutineCheckId,
+                                    date = targetDay.toString(),
+                                    routine = routineStrings[position],
+                                    took = false,
+                                    memberId = serverUserId,
+                                    prescriptionId = medicine.id,
+                                )
 
+                                api.medicineRoutineCheck(Authorization = "Bearer ${serverAccessToken}", params = checkParams).enqueue(object: Callback<Void> {
+                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                                        Log.d("log", response.toString())
+//                                        Log.d("log", response.body().toString())
+                                        if(response.code() == 200) {    // 복용
+//                                            Toast.makeText(mainActivity, "복용했습니다", Toast.LENGTH_SHORT).show()
+                                            if (i == medicineRoutine.size - 1) {
+                                               mainActivity.gotoAlarm()
+                                            }
+                                        }
+                                        else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
+                                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                        }
+                                        else if(response.code() == 400) {
+                                            Toast.makeText(mainActivity, "해당하는 prescription이 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                                    }
+                                })
                             }
                         }
 
@@ -185,7 +234,6 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
                 }
             }
         }
-
 
 
 
@@ -202,9 +250,11 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
             val dayDiff = targetDay.compareTo(today)
 
             // 넣을 텍스트 초기화
-            var targetText = "" 
+            var targetText = ""
             if (dayDiff > 0) { // targetDay가 미래라면
                 targetText = "아직 아니:약"
+            } else if (clearThisRoutine) {
+                targetText = "복용 완료"
             } else if (dayDiff < 0) {
                 targetText = "지났어:약"
             } else if (timeDiffInSec < 0) {

@@ -116,7 +116,7 @@ class AlarmFragment : Fragment() {
         updateDay(0)
     }
 
-    private fun updateDay(gap: Long) {
+    public fun updateDay(gap: Long) {
 
         targetDay = targetDay.plusDays(gap)
         yesterday = targetDay.plusDays(-1)
