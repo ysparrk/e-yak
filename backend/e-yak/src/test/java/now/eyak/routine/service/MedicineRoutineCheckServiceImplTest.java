@@ -298,7 +298,7 @@ class MedicineRoutineCheckServiceImplTest {
         MedicineRoutineDateResponseDto detailResult = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(LocalDate.now(), member.getId()); // 결과 불러오기
 
         // then
-        Assertions.assertThat(contentTextResult.getText()).isEqualTo(detailResult.getSurveyContentDtos().get(0).getContentTextResultResponse().get(0).getText());
+        Assertions.assertThat(contentTextResult.getText()).isEqualTo(detailResult.getSurveyContentDtos().get(0).getContentTextResultResponse().getText());
         System.out.println("detailResult = " + detailResult.getMedicineRoutineDateDtos());
         System.out.println("detailResult = " + detailResult);
         // TODO: Assertions 작성

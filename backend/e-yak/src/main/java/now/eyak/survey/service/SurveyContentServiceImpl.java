@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -61,13 +60,13 @@ public class SurveyContentServiceImpl implements SurveyContentService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 //        Survey survey = surveyRepository.findByDate(date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜의 설문기록이 없습니다."));
 
-        List<ContentEmotionResultResponseDto> emotionResult = contentEmotionResultService.getEmotionResultsByDateAndMember(date, memberId);
-        List<ContentStatusResultResponseDto> statusResults = contentStatusResultService.getStatusResultsByDateAndMember(date, memberId);
-        List<ContentTextResultResponseDto> textResult = contentTextResultService.getTextResultsByDateAndMember(date, memberId);
+        ContentEmotionResultResponseDto emotionResult = contentEmotionResultService.getEmotionResultsByDateAndMember(date, memberId);
+        ContentStatusResultResponseDto statusResults = contentStatusResultService.getStatusResultByDateAndMember(date, memberId);
+        ContentTextResultResponseDto textResult = contentTextResultService.getTextResultByDateAndMember(date, memberId);
 
         List<SurveyContentDto> surveyContentResponseList = new ArrayList<>();
         SurveyContentDto surveyContentDto = SurveyContentDto.builder()
-                .contentEmotionResultResponses(emotionResult)
+                .contentEmotionResultResponse(emotionResult)
                 .contentStatusResultResponses(statusResults)
                 .contentTextResultResponse(textResult)
                 .build();

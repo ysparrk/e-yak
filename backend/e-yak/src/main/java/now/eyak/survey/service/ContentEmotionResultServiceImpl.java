@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -94,14 +93,14 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
      */
     @Transactional
     @Override
-    public List<ContentEmotionResultResponseDto> getEmotionResultsByDateAndMember(LocalDate date, Long memberId) {
+    public ContentEmotionResultResponseDto getEmotionResultsByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
         QContentEmotionResult qContentEmotionResult = QContentEmotionResult.contentEmotionResult;
         QSurveyContent qSurveyContent = QSurveyContent.surveyContent;
         QSurvey qSurvey = QSurvey.survey;
 
-        List<ContentEmotionResultResponseDto> emotionResults = queryFactory
+        ContentEmotionResultResponseDto emotionResult = queryFactory
                 .select(Projections.constructor(ContentEmotionResultResponseDto.class,
                         qContentEmotionResult.id,
                         qContentEmotionResult.member.id,
@@ -112,9 +111,16 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
                 .leftJoin(qContentEmotionResult.surveyContent, qSurveyContent)
                 .leftJoin(qSurveyContent.survey, qSurvey)
                 .where(qSurvey.date.eq(date).and(qContentEmotionResult.member.eq(member)))
-                .fetch();
+                .fetchOne();
 
-        return emotionResults;
+        // 응답 기록이 없는 경우 id := -1로 설정 후 반환
+        if (emotionResult == null) {
+            return ContentEmotionResultResponseDto.builder()
+                    .contentEmotionResultId(-1L)
+                    .build();
+        }
+
+        return emotionResult;
 
     }
 

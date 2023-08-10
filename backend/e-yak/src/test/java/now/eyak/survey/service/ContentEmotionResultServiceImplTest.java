@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @ExtendWith(SpringExtension.class)
@@ -165,10 +164,10 @@ class ContentEmotionResultServiceImplTest {
         System.out.println("savedContentEmotionResult.getMember().getNickname() = " + savedContentEmotionResult.getMember().getNickname());
 
         // when
-        List<ContentEmotionResultResponseDto> findEmotionResultsByDateAndMember = contentEmotionResultService.getEmotionResultsByDateAndMember(survey.getDate(), memberA.getId());
+        ContentEmotionResultResponseDto findEmotionResultsByDateAndMember = contentEmotionResultService.getEmotionResultsByDateAndMember(survey.getDate(), memberA.getId());
 
         // then
-        Assertions.assertThat(savedContentEmotionResult.getMember().getId()).isEqualTo(findEmotionResultsByDateAndMember.get(0).getMemberId());
+        Assertions.assertThat(savedContentEmotionResult.getMember().getId()).isEqualTo(findEmotionResultsByDateAndMember.getMemberId());
         System.out.println("findEmotionResultsByDateAndMember = " + findEmotionResultsByDateAndMember);
 
     }
