@@ -122,7 +122,7 @@ public class RoutineController {
      */
     @Operation(summary = "Get MedicineRoutineCheck id", description = "MedicineRoutineCheck의 id를 조회합니다.")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = MedicineRoutineCheckIdResponseDto.class)))
-    @GetMapping("/id")
+    @PostMapping("/id")
     public ResponseEntity getMedicineRoutineCheckId(
             @RequestBody MedicineRoutineCheckIdDto medicineRoutineCheckIdDto,
             @AuthenticationPrincipal Long memberId
