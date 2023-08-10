@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -53,7 +55,7 @@ public class PrescriptionController {
             @RequestParam LocalDateTime dateTime,
             @AuthenticationPrincipal Long memberId) {
 
-        LocalDateTime todayDateTime = LocalDateTime.now();
+        ZonedDateTime todayDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
         PrescriptionResponseDto result;
 
