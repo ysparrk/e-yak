@@ -11,13 +11,13 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class EYakApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EYakApplication.class, args);
-    }
-
     @PostConstruct
     public void setTimeZone(){
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(EYakApplication.class, args);
     }
 
 }

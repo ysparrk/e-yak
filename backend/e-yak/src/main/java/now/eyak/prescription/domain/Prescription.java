@@ -39,7 +39,7 @@ public class Prescription {
     private List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = new ArrayList<>();
     @ManyToOne
     private Member member;
-    @CreationTimestamp
+
     private ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     @UpdateTimestamp
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
