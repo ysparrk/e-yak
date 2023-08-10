@@ -122,3 +122,8 @@ data class TodayDoseInfoBodyModel(
     var fullDose: Int,
     var actualDose: Int,
 )
+
+data class DailySurveyContentsBodyModel(
+    var surveyContentId: Int,
+    var surveyContentType: String,
+)
