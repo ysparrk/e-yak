@@ -13,12 +13,14 @@ public class BedAfterQueryDto {
     private String customName;
     private Integer iotLocation; // 약통 칸 번호
     private Integer medicineShape; // 이모지 번호
+    private Boolean took;
 
     @QueryProjection
-    public BedAfterQueryDto(Long id, String customName, Integer iotLocation, Integer medicineShape) {
+    public BedAfterQueryDto(Long id, String customName, Integer iotLocation, Integer medicineShape, Boolean took) {
         this.id = id;
         this.customName = customName;
         this.iotLocation = iotLocation;
         this.medicineShape = medicineShape;
+        this.took = took;
     }
 }

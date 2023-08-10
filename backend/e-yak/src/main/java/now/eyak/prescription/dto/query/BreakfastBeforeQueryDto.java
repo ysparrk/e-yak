@@ -13,12 +13,14 @@ public class BreakfastBeforeQueryDto {
     private String customName;
     private Integer iotLocation;
     private Integer medicineShape;
+    private Boolean took;
 
     @QueryProjection
-    public BreakfastBeforeQueryDto(Long id, String customName, Integer iotLocation, Integer medicineShape) {
+    public BreakfastBeforeQueryDto(Long id, String customName, Integer iotLocation, Integer medicineShape, Boolean took) {
         this.id = id;
         this.customName = customName;
         this.iotLocation = iotLocation;
         this.medicineShape = medicineShape;
+        this.took = took;
     }
 }

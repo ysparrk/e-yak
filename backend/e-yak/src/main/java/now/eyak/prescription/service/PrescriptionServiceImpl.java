@@ -160,7 +160,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                         ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_AFTER)
@@ -179,7 +180,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_BEFORE)
@@ -198,7 +200,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_AFTER)
@@ -217,7 +220,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.LUNCH_BEFORE)
@@ -236,7 +240,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.LUNCH_AFTER)
@@ -255,7 +260,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.DINNER_BEFORE)
@@ -274,7 +280,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.DINNER_AFTER)
@@ -293,7 +300,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qPrescription.id,
                         qPrescription.customName,
                         qPrescription.iotLocation,
-                        qPrescription.medicineShape
+                        qPrescription.medicineShape,
+                        qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_BEFORE)

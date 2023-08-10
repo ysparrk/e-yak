@@ -62,7 +62,7 @@ class PrescriptionServiceImplTest {
 
         MEMBER = memberRepository.save(member);
 
-        routines = List.of(Routine.BREAKFAST_AFTER, Routine.LUNCH_AFTER, Routine.BED_BEFORE);
+        routines = List.of(Routine.BED_AFTER, Routine.LUNCH_AFTER, Routine.BED_BEFORE);
     }
 
     @Transactional
@@ -255,6 +255,6 @@ class PrescriptionServiceImplTest {
         PrescriptionResponseDto allAndSortWithRoutine = prescriptionService.findAllAndSortWithRoutine(MEMBER.getId(), LocalDateTime.now());
 
         // then
-        System.out.println("6666allAndSortWithRoutine = " + allAndSortWithRoutine);
+        // TODO: Assertions 작성
     }
 }

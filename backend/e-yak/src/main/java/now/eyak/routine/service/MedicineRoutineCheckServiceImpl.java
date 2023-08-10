@@ -18,6 +18,7 @@ import now.eyak.routine.dto.query.MedicineRoutineCheckMonthQueryDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
 import now.eyak.routine.dto.response.*;
+import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.PrescriptionMedicineRoutineRepository;
 import now.eyak.survey.dto.response.SurveyContentDto;
@@ -28,11 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -70,8 +69,33 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
             for (Prescription prescription : allPrescriptions) {
 
                 List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(prescription);
+
+                LocalDateTime createdAt = prescription.getCreatedAt();
+                LocalTime createdTime = createdAt.toLocalTime(); // 등록 시간
+                LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
+
+                List<LocalTime> times = new ArrayList<>();
+                times.add(member.getWakeTime());
+                times.add(member.getBreakfastTime());
+                times.add(member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+                times.add(member.getLunchTime());
+                times.add(member.getLunchTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+                times.add(member.getDinnerTime());
+                times.add(member.getDinnerTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+                times.add(member.getBedTime()); // TODO: BED_TIME 12시 이후 일 경우 고려해서 로직 작성
+                times.add(createdTime);
+                Collections.sort(times);
+
+                int createdIdx = times.indexOf(createdTime);  // 등록 시간의 idx
+
+                // routine 리스트
+                List<Routine> routines = new ArrayList<>();
+                routines.addAll(Arrays.stream(Routine.values()).toList());
+
+
                 for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
-                    log.info("medicine routine id: {}", prescriptionMedicineRoutine.getMedicineRoutine().getRoutine());
+                    if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) >= createdIdx) continue;
+
                     MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
                             .date(LocalDate.now())
                             .medicineRoutine(prescriptionMedicineRoutine.getMedicineRoutine())
