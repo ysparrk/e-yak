@@ -16,6 +16,11 @@ import androidx.cardview.widget.CardView
 import kotlin.concurrent.timer
 import android.os.Handler
 import android.os.Looper
+import android.widget.ListView
+import androidx.preference.PreferenceManager
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.time.DurationUnit
@@ -146,6 +151,43 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
                 alarmTabDetailButton.setImageResource(R.drawable.baseline_keyboard_arrow_down_24)
             }
         }
+        
+        // 미래 시점일 경우, 복용 클릭 불가능, 버튼을 지워버리자
+        if (targetDay.compareTo(LocalDate.now()) > 0) {
+            medicineEatButton.visibility = View.INVISIBLE
+        } else {
+            medicineEatButton.setOnClickListener {
+                val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+                val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
+
+                val routineStrings = arrayListOf("BED_AFTER", "BREAKFAST_BEFORE", "BREAKFAST_AFTER", "LUNCH_BEFORE", "LUNCH_AFTER", "DINNER_BEFORE", "DINNER_AFTER", "BED_BEFORE")
+
+                for (medicine in medicineRoutine) {
+                    val params = getMedicineRoutineCheckIdBodyModel(date = targetDay.toString(), routine = routineStrings[position], prescriptionId = medicine.id,
+                    )
+                    api.findMedicineRoutineCheckId(Authorization = "Bearer ${serverAccessToken}", params=params).enqueue(object:
+                        Callback<getMedicineRoutineCheckIdResponseBody> {
+                        override fun onResponse(call: Call<getMedicineRoutineCheckIdResponseBody>, response: Response<getMedicineRoutineCheckIdResponseBody>) {
+                            Log.d("log", response.toString())
+                            Log.d("log", response.body().toString())
+
+                            if (response.code() == 401) {
+                                Log.d("log", "인증되지 않은 사용자입니다")
+                            } else if (response.code() == 200) {
+
+                            }
+                        }
+
+                        override fun onFailure(call: Call<getMedicineRoutineCheckIdResponseBody>, t: Throwable) {
+
+                        }
+                    })
+                }
+            }
+        }
+
+
+
 
         // 타이머 설정해야 함
         timer(period = 1000) {

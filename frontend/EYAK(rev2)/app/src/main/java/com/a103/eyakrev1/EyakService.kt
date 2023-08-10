@@ -140,6 +140,32 @@ interface EyakService {
     ): Call<ArrayList<DailySurveyContentsBodyModel>>
 
 
+    @POST("/api/v1/medicine-routine-checks/id")
+    fun findMedicineRoutineCheckId(
+        @Header("Authorization") Authorization: String,
+        @Body params: getMedicineRoutineCheckIdBodyModel,
+    ): Call<getMedicineRoutineCheckIdResponseBody>
+
+    @POST("/api/v1/medicine-routine-checks")
+    fun medicineRoutineCheck(
+        @Header("Authorization") Authorization: String,
+    ): Call<Void>
+
+    @GET("/api/v1/survey-results")
+    fun dailySurveyResult(
+        @Header("Authorization") Authorization: String,
+        @Query("date") date: String,
+    ): Call<DailySurveyResultBodyModel>
+
+    @POST("/api/v1/survey-contents/{surveyContentId}/content-text-results")
+    fun recodeContentTextResult(
+        @Path("surveyContentId") surveyContentId: Long,
+        @Header("Authorization") Authorization: String,
+        @Body params: String,
+    ): Call<Void>
+
+
+
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소
 
