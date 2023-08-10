@@ -53,10 +53,18 @@ public class PrescriptionController {
             @RequestParam LocalDateTime dateTime,
             @AuthenticationPrincipal Long memberId) {
 
+        LocalDateTime todayDateTime = LocalDateTime.now();
 
-        PrescriptionResponseDto allAndSortWithRoutine = prescriptionService.findAllAndSortWithRoutine(memberId, dateTime);
+        PrescriptionResponseDto result;
 
-        return ResponseEntity.ok(allAndSortWithRoutine);
+        if (dateTime.toLocalDate().isEqual(todayDateTime.toLocalDate()) || dateTime.toLocalDate().isBefore(todayDateTime.toLocalDate())) {
+            result = prescriptionService.findAllAndSortWithRoutine(memberId, dateTime);
+        } else {
+            result = prescriptionService.findAllAndSortWithRoutineFuture(memberId, dateTime);
+        }
+
+        return ResponseEntity.ok(result);
+
     }
 
 

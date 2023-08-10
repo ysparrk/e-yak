@@ -62,7 +62,7 @@ class PrescriptionServiceImplTest {
 
         MEMBER = memberRepository.save(member);
 
-        routines = List.of(Routine.BED_AFTER, Routine.LUNCH_AFTER, Routine.BED_BEFORE);
+        routines = List.of(Routine.BREAKFAST_AFTER, Routine.LUNCH_AFTER, Routine.DINNER_AFTER);
     }
 
     @Transactional
@@ -241,10 +241,11 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.of(2023, 8, 1, 0, 0))
+                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
                 .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
                 .iotLocation(4)
                 .medicineDose(1.5f)
+                .medicineShape(2)
                 .unit("정")
                 .medicineRoutines(routines)
                 .build();
@@ -256,5 +257,6 @@ class PrescriptionServiceImplTest {
 
         // then
         // TODO: Assertions 작성
+        System.out.println("11111allAndSortWithRoutine = " + allAndSortWithRoutine);
     }
 }
