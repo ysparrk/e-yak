@@ -20,6 +20,11 @@ class TodayConditionFragment : Fragment() {
     private val activeColor: String = "#FFC9DBB2"
     private val nonColor: String = "#00000000"
 
+    private val badFaceColor: String = "#AC6077"
+    private val normalFaceColor: String = "#7466B4"
+    private val goodFaceColor: String = "#9ED59B"
+    private val nonFaceColor: String = "#CFC3B5"
+
     private lateinit var binding: FragmentTodayConditionBinding
     override fun onCreateView(
 
@@ -130,9 +135,9 @@ class TodayConditionFragment : Fragment() {
     }
 
     private fun init() {
-        binding.badLinearLayout.setBackgroundColor(Color.parseColor(nonColor))
-        binding.normalLinearLayout.setBackgroundColor(Color.parseColor(nonColor))
-        binding.goodLinearLayout.setBackgroundColor(Color.parseColor(nonColor))
+        binding.badFace.setColorFilter(Color.parseColor(nonFaceColor))
+        binding.normalFace.setColorFilter(Color.parseColor(nonFaceColor))
+        binding.goodFace.setColorFilter(Color.parseColor(nonFaceColor))
 
         conditionState[0] = false
         conditionState[1] = false
@@ -158,9 +163,9 @@ class TodayConditionFragment : Fragment() {
     }
 
     private fun colorChange() {
-        binding.badLinearLayout.setBackgroundColor(Color.parseColor(if(conditionState[0]) activeColor else nonColor))
-        binding.normalLinearLayout.setBackgroundColor(Color.parseColor(if(conditionState[1]) activeColor else nonColor))
-        binding.goodLinearLayout.setBackgroundColor(Color.parseColor(if(conditionState[2]) activeColor else nonColor))
+        binding.badFace.setColorFilter(Color.parseColor(if(conditionState[0]) badFaceColor else nonFaceColor))
+        binding.normalFace.setColorFilter(Color.parseColor(if(conditionState[1]) normalFaceColor else nonFaceColor))
+        binding.goodFace.setColorFilter(Color.parseColor(if(conditionState[2]) goodFaceColor else nonFaceColor))
 
         binding.symptom0.setBackgroundColor(Color.parseColor(if(symptomState[0]) activeColor else nonColor))
         binding.symptom1.setBackgroundColor(Color.parseColor(if(symptomState[1]) activeColor else nonColor))

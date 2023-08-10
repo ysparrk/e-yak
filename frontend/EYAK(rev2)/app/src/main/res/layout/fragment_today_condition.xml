@@ -87,7 +87,7 @@
                             android:weightSum="3">
 
                             <ImageView
-                                android:id="@+id/imageView5"
+                                android:id="@+id/badFace"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="2"
@@ -121,7 +121,7 @@
                             android:weightSum="3">
 
                             <ImageView
-                                android:id="@+id/imageView15"
+                                android:id="@+id/normalFace"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="2"
@@ -154,7 +154,7 @@
                             android:weightSum="3">
 
                             <ImageView
-                                android:id="@+id/imageView17"
+                                android:id="@+id/goodFace"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="2"
