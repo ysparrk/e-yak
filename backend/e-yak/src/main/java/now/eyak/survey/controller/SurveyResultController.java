@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -45,7 +46,7 @@ public class SurveyResultController {
             @AuthenticationPrincipal Long memberId
             ) throws URISyntaxException {
 
-        SurveyContentDto surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(date, memberId);
+        List<SurveyContentDto> surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(date, memberId);
 
         return ResponseEntity.ok(surveyResultByDateAndMember);
     }

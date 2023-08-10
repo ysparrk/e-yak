@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface SurveyContentService {
-    SurveyContentDto getSurveyResultByDateAndMember(LocalDate date, Long memberId); // 전체 조회
+    List<SurveyContentDto> getSurveyResultByDateAndMember(LocalDate date, Long memberId); // 전체 조회
     void insertSurveyAndSurveyContentPerDay();
     List<SurveyContent> getSurveyContentByDate(LocalDate date);
 }

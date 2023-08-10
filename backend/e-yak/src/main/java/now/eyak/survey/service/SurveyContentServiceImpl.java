@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,7 +56,7 @@ public class SurveyContentServiceImpl implements SurveyContentService {
 
     @Transactional
     @Override
-    public SurveyContentDto getSurveyResultByDateAndMember(LocalDate date, Long memberId) {
+    public List<SurveyContentDto> getSurveyResultByDateAndMember(LocalDate date, Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 //        Survey survey = surveyRepository.findByDate(date).orElseThrow(() -> new NoSuchElementException("해당하는 날짜의 설문기록이 없습니다."));
 
@@ -63,11 +64,17 @@ public class SurveyContentServiceImpl implements SurveyContentService {
         ContentStatusResultResponseDto statusResults = contentStatusResultService.getStatusResultByDateAndMember(date, memberId);
         ContentTextResultResponseDto textResult = contentTextResultService.getTextResultByDateAndMember(date, memberId);
 
-        return SurveyContentDto.builder()
+        List<SurveyContentDto> surveyContentResponseList = new ArrayList<>();
+        SurveyContentDto surveyContentDto = SurveyContentDto.builder()
                 .contentEmotionResultResponse(emotionResult)
-                .contentStatusResultResponse(statusResults)
+                .contentStatusResultResponses(statusResults)
                 .contentTextResultResponse(textResult)
                 .build();
+
+        surveyContentResponseList.add(surveyContentDto);
+
+
+        return surveyContentResponseList;
     }
 
 }
