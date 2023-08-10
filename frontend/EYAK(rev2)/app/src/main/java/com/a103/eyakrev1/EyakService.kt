@@ -171,16 +171,23 @@ interface EyakService {
         @Body params: EditContentTextResultsBodyModel,
     ): Call<Void>
 
-    @POST("/api/v1/survey-contents/{surveyContentsId}/content-emotion-results")
+    @POST("/api/v1/survey-contents/{surveyContentId}/content-emotion-results")
     fun contentEmotionResults(
-        @Path("surveyContentsId") surveyContentsId: Long,
+        @Path("surveyContentId") surveyContentId: Long,
         @Header("Authorization") Authorization: String,
         @Body params: ContentEmotionResultsBodyModel,
     ): Call<Void>
 
+    @PUT("/api/v1/survey-contents/{surveyContentId}/content-emotion-results")
+    fun editContentEmotionResults(
+        @Path("surveyContentId") surveyContentId: Long,
+        @Header("Authorization") Authorization: String,
+        @Body params: EditContentEmotionResults,
+    ): Call<Void>
+
     @POST("/api/v1/survey-contents/{surveyContentId}/content-status-results")
     fun contentStatusResults(
-        @Path("surveyContentsId") surveyContentsId: Long,
+        @Path("surveyContentId") surveyContentId: Long,
         @Header("Authorization") Authorization: String,
         @Body params: ContentStatusResultsBodyModel,
     ): Call<Void>

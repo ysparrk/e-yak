@@ -190,6 +190,11 @@ data class ContentEmotionResultsBodyModel(
     var choiceEmotion: String,
 )
 
+data class EditContentEmotionResults(
+    var contentEmotionResultId: Long,
+    var choiceEmotion: String,
+)
+
 data class ContentStatusResultsBodyModel(
     val selectedStatusChoices: ArrayList<String>,
 )
