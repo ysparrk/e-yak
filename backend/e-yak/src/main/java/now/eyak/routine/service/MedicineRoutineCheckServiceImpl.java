@@ -27,10 +27,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
+import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -70,7 +67,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
                 List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(prescription);
 
-                LocalDateTime createdAt = prescription.getCreatedAt();
+                ZonedDateTime createdAt = prescription.getCreatedAt();
                 LocalTime createdTime = createdAt.toLocalTime(); // 등록 시간
                 LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
 

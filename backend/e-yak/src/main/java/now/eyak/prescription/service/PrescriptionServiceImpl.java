@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @Slf4j
@@ -69,7 +70,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         // 복약 등록하면 MedicineCheck 테이블 생성
         List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(prescription);
 
-        LocalDateTime createdAt = savedPrescription.getCreatedAt();
+        ZonedDateTime createdAt = savedPrescription.getCreatedAt();
         LocalTime createdTime = createdAt.toLocalTime(); // 등록 시간
         LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
 
@@ -353,7 +354,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         qMedicineRoutineCheck.took
                 ))
                 .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_AFTER)
+                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_AFTER)
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
                         .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))

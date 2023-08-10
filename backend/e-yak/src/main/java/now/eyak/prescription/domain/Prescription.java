@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +39,9 @@ public class Prescription {
     @ManyToOne
     private Member member;
     @CreationTimestamp
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private ZonedDateTime createdAt = ZonedDateTime.now();
     @UpdateTimestamp
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private ZonedDateTime updatedAt = ZonedDateTime.now();
 
     @Builder
     public Prescription(String customName, String icd, String krName, String engName, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer iotLocation, Float medicineDose, Integer medicineShape, String unit, List<MedicineRoutine> medicineRoutines, Member member) {

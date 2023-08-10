@@ -8,6 +8,7 @@ import now.eyak.prescription.domain.Prescription;
 import now.eyak.routine.enumeration.Routine;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
@@ -27,8 +28,8 @@ public class PrescriptionSubResponseDto {
     private Integer medicineShape; // 이모지 번호
     private Float medicineDose; // 1회 투여 개수
     private String unit; // 투여 단위
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
 
     public static PrescriptionSubResponseDto from(Prescription prescription) {
         return PrescriptionSubResponseDto.builder()
