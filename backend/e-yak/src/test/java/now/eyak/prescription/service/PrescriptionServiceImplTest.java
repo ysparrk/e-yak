@@ -11,6 +11,7 @@ import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -304,5 +305,50 @@ class PrescriptionServiceImplTest {
         // then
         System.out.println("3333sortFuture = " + sortFuture);
 
+    }
+
+    @DisplayName("사용자가 복약 정보를 2개 등록후 날짜로 복약정보 목록 조회")
+    @Transactional
+    @Test
+    void findAllByMemberIdBetweenDate() {
+        //given
+        PrescriptionDto prescriptionDto = PrescriptionDto.builder()
+                .customName("피로회복제")
+                .icd("RS-1203123")
+                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .engName("some english")
+                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 12, 0, 0))
+                .iotLocation(4)
+                .medicineDose(1.5f)
+                .medicineShape(2)
+                .unit("정")
+                .medicineRoutines(routines)
+                .build();
+
+        prescriptionService.insert(prescriptionDto, MEMBER.getId());
+
+        PrescriptionDto prescriptionDto2 = PrescriptionDto.builder()
+                .customName("감기약")
+                .icd("RS-1203123")
+                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .engName("some english")
+                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 14, 0, 0))
+                .iotLocation(4)
+                .medicineDose(1.5f)
+                .medicineShape(2)
+                .unit("정")
+                .medicineRoutines(routines)
+                .build();
+
+        prescriptionService.insert(prescriptionDto2, MEMBER.getId());
+
+        //when
+        List<Prescription> findPrescriptions = prescriptionService.findAllByMemberIdBetweenDate(MEMBER.getId(), LocalDateTime.of(2023, 8, 14, 0, 0));
+
+        //then
+        // 마지막날짜 걸치는 복약 정보는 포함되지 않아야 함
+        Assertions.assertThat(findPrescriptions).hasSize(1);
     }
 }

@@ -67,31 +67,48 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
                 List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(prescription);
 
-                ZonedDateTime createdAt = prescription.getCreatedAt();
+                ZonedDateTime createdAt = prescription.getCreatedAt(); // 생성 시간
+                LocalDateTime endDateTime = prescription.getEndDateTime();  // 끝나는 시간
                 LocalTime createdTime = createdAt.toLocalTime(); // 등록 시간
                 LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
 
-                List<LocalTime> times = new ArrayList<>();
-                times.add(member.getWakeTime());
-                times.add(member.getBreakfastTime());
-                times.add(member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
-                times.add(member.getLunchTime());
-                times.add(member.getLunchTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
-                times.add(member.getDinnerTime());
-                times.add(member.getDinnerTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
-                times.add(member.getBedTime()); // TODO: BED_TIME 12시 이후 일 경우 고려해서 로직 작성
-                times.add(createdTime);
-                Collections.sort(times);
+                // endDate일 경우,
+                if (endDateTime.toLocalDate() == ZonedDateTime.now().toLocalDate()) {
 
-                int createdIdx = times.indexOf(createdTime);  // 등록 시간의 idx
+                    List<LocalTime> times = new ArrayList<>();
+                    times.add(member.getWakeTime());
+                    times.add(member.getBreakfastTime());
+                    times.add(member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+                    times.add(member.getLunchTime());
+                    times.add(member.getLunchTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+                    times.add(member.getDinnerTime());
+                    times.add(member.getDinnerTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+                    times.add(member.getBedTime()); // TODO: BED_TIME 12시 이후 일 경우 고려해서 로직 작성
+                    times.add(createdTime);
+                    Collections.sort(times);
 
-                // routine 리스트
-                List<Routine> routines = new ArrayList<>();
-                routines.addAll(Arrays.stream(Routine.values()).toList());
+                    int createdIdx = times.indexOf(createdTime);  // 등록 시간의 idx
 
+                    // routine 리스트
+                    List<Routine> routines = new ArrayList<>();
+                    routines.addAll(Arrays.stream(Routine.values()).toList());
+
+                    for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
+                        if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) >= createdIdx) continue;
+
+                        MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
+                                .date(LocalDate.now())
+                                .medicineRoutine(prescriptionMedicineRoutine.getMedicineRoutine())
+                                .prescription(prescription)
+                                .took(false) // 초기 값 false
+                                .member(member)
+                                .build();
+
+                        medicineRoutineCheckRepository.save(medicineRoutineCheck);
+                    }
+                }
 
                 for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
-                    if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) >= createdIdx) continue;
 
                     MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
                             .date(LocalDate.now())
@@ -102,6 +119,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
                             .build();
 
                     medicineRoutineCheckRepository.save(medicineRoutineCheck);
+
                 }
             }
         }

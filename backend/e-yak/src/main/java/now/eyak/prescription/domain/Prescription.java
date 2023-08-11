@@ -1,14 +1,13 @@
 package now.eyak.prescription.domain;
 
+import com.querydsl.core.annotations.QueryProjection;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import now.eyak.member.domain.Member;
-import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -48,7 +47,8 @@ public class Prescription {
     private ZonedDateTime updatedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
     @Builder
-    public Prescription(String customName, String icd, String krName, String engName, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer iotLocation, Float medicineDose, Integer medicineShape, String unit, List<MedicineRoutine> medicineRoutines, Member member) {
+    public Prescription(Long id, String customName, String icd, String krName, String engName, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer iotLocation, Integer medicineShape, Float medicineDose, String unit, Member member) {
+        this.id = id;
         this.customName = customName;
         this.icd = icd;
         this.krName = krName;
@@ -60,6 +60,21 @@ public class Prescription {
         this.medicineDose = medicineDose;
         this.unit = unit;
         this.member = member;
+    }
+
+    @QueryProjection
+    public Prescription(String customName, String icd, String krName, String engName, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer iotLocation, Integer medicineShape, Float medicineDose, String unit, List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines) {
+        this.customName = customName;
+        this.icd = icd;
+        this.krName = krName;
+        this.engName = engName;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.iotLocation = iotLocation;
+        this.medicineShape = medicineShape;
+        this.medicineDose = medicineDose;
+        this.unit = unit;
+        this.prescriptionMedicineRoutines = prescriptionMedicineRoutines;
     }
 
     public void add(PrescriptionMedicineRoutine prescriptionMedicineRoutine) {
