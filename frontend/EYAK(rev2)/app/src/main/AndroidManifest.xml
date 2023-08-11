@@ -53,8 +53,14 @@
             android:name=".MainActivity"
             android:exported="true" />
 
+        <receiver android:name=".ZerothAlarmReceiver" />
         <receiver android:name=".FirstAlarmReceiver" />
         <receiver android:name=".SecondAlarmReceiver" />
+        <receiver android:name=".ThirdAlarmReceiver" />
+        <receiver android:name=".FourthAlarmReceiver" />
+        <receiver android:name=".FifthAlarmReceiver" />
+        <receiver android:name=".SixthAlarmReceiver" />
+        <receiver android:name=".SeventhAlarmReceiver" />
     </application>
 
 </manifest>

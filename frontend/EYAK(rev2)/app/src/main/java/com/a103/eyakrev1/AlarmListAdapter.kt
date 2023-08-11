@@ -1,8 +1,16 @@
 package com.a103.eyakrev1
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.media.Image
+import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +25,25 @@ import androidx.cardview.widget.CardView
 import kotlin.concurrent.timer
 import android.os.Handler
 import android.os.Looper
+import android.os.PowerManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.widget.ListView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.preference.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import kotlin.time.DurationUnit
 import java.time.temporal.ChronoUnit.SECONDS
+
 
 class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRoutines, val medicineTimeList: ArrayList<LocalTime>, val medicineNameList: ArrayList<String>, val targetDay: LocalDate) : BaseAdapter() {
 
@@ -41,6 +57,8 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
     override fun getCount(): Int {
         return 8
     }
+
+
 
     override fun getItem(position: Int): ArrayList<medicineInRoutine> {
 
@@ -172,7 +190,66 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
             medicineEatButton.text = "완료"
             medicineEatButton.setBackgroundColor(ContextCompat.getColor(context, R.color.lightgray))
         }
-        else {
+        else { // 먹어야하는 경우
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            // val alarmTime = LocalTime.of(시간, 분)
+            var alarmTime = LocalTime.now().plusSeconds(2 + 2 * position.toLong())
+//            var alarmTime = LocalTime.of(medicineTimeList[position].hour, medicineTimeList[position].minute)
+//            Log.d("이게 되네", medicineTimeList[position].hour.toString())
+//            Log.d("이게 되네", medicineTimeList[position].minute.toString())
+
+            // 알람 시간을 밀리초로 변환
+            val alarmDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
+            val AlarmMillis = alarmDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+            Log.d("asSDAFASDF", position.toString())
+
+            when (position) {
+                0 -> {
+                    val ZerothAlarmIntent = Intent(mainActivity, ZerothAlarmReceiver::class.java)
+                    val ZerothAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ZerothAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, ZerothAlarmPendingIntent)
+                }
+                1 -> {
+                    val FirstAlarmIntent = Intent(mainActivity, FirstAlarmReceiver::class.java)
+                    val FirstAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FirstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FirstAlarmPendingIntent)
+                }
+                2 -> {
+                    val SecondAlarmIntent = Intent(mainActivity, SecondAlarmReceiver::class.java)
+                    val SecondAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SecondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SecondAlarmPendingIntent)
+                }
+                3 -> {
+                    val ThirdAlarmIntent = Intent(mainActivity, ThirdAlarmReceiver::class.java)
+                    val ThirdAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ThirdAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, ThirdAlarmPendingIntent)
+                }
+                4 -> {
+                    val FourthAlarmIntent = Intent(mainActivity, FourthAlarmReceiver::class.java)
+                    val FourthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FourthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FourthAlarmPendingIntent)
+                }
+                5 -> {
+                    val FifthAlarmIntent = Intent(mainActivity, FifthAlarmReceiver::class.java)
+                    val FifthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FifthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FifthAlarmPendingIntent)
+                }
+                6 -> {
+                    val SixthAlarmIntent = Intent(mainActivity, SixthAlarmReceiver::class.java)
+                    val SixthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SixthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SixthAlarmPendingIntent)
+                }
+                7 -> {
+                    val SeventhAlarmIntent = Intent(mainActivity, SeventhAlarmReceiver::class.java)
+                    val SeventhAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SeventhAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SeventhAlarmPendingIntent)
+                }
+            }
+
+            /////////////////////
+
             medicineEatButton.setOnClickListener {
                 val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
                 val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
@@ -198,7 +275,7 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
                                     id = medicineRoutineCheckId,
                                     date = targetDay.toString(),
                                     routine = routineStrings[position],
-                                    took = false,
+                                    took = true,
                                     memberId = serverUserId,
                                     prescriptionId = medicine.id,
                                 )
@@ -234,7 +311,6 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
                 }
             }
         }
-
 
 
         // 타이머 설정해야 함
@@ -299,3 +375,4 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
         }
     }
 }
+

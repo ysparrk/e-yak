@@ -58,10 +58,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // 알람 설정
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
@@ -301,58 +297,59 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class FirstAlarmReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//class FirstAlarmReceiver : BroadcastReceiver() {
+//    override fun onReceive(context: Context, intent: Intent) {
+//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(
+//                "alarm_channel",
+//                "Alarm Channel",
+//                NotificationManager.IMPORTANCE_HIGH
+//            )
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//
+//        // 화면 활성화 및 잠금 화면 해제
+//        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+//        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+//        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+//
+//        val vibrator = context.getSystemService(Vibrator::class.java)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            if (vibrator?.hasVibrator() == true) {
+//                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+//                vibrator.vibrate(vibrationEffect)
+//            }
+//        }
+//
+//        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+//        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+//
+//
+//        val notification = NotificationCompat.Builder(context, "alarm_channel")
+//            .setContentTitle("첫 번째 알람")
+//            .setContentText("알람이 울렸습니다.")
+//            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+//            .setSound(soundUri)
+//            .build()
+//
+//        notificationManager.notify(0, notification) // 알림 표시
+//    }
+//}
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "alarm_channel",
-                "Alarm Channel",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
+//class SecondAlarmReceiver : BroadcastReceiver() {
+//    override fun onReceive(context: Context, intent: Intent) {
+//
+//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//
+//        val notification = NotificationCompat.Builder(context, "alarm_channel")
+//            .setContentTitle("두 번째 알람")
+//            .setContentText("알람이 울렸습니다.")
+//            .setSmallIcon(R.drawable.baseline_check_box_24) // 알림 아이콘 설정
+//            .build()
+//
+//        notificationManager.notify(1, notification) // 알림 표시
+//    }
+//}
 
-        // 화면 활성화 및 잠금 화면 해제
-        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
-        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
-
-        val vibrator = context.getSystemService(Vibrator::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (vibrator?.hasVibrator() == true) {
-                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
-                vibrator.vibrate(vibrationEffect)
-            }
-        }
-
-        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
-        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
-
-
-        val notification = NotificationCompat.Builder(context, "alarm_channel")
-            .setContentTitle("첫 번째 알람")
-            .setContentText("알람이 울렸습니다.")
-            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
-            .setSound(soundUri)
-            .build()
-
-        notificationManager.notify(0, notification) // 알림 표시
-    }
-}
-
-class SecondAlarmReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        val notification = NotificationCompat.Builder(context, "alarm_channel")
-            .setContentTitle("두 번째 알람")
-            .setContentText("알람이 울렸습니다.")
-            .setSmallIcon(R.drawable.baseline_check_box_24) // 알림 아이콘 설정
-            .build()
-
-        notificationManager.notify(1, notification) // 알림 표시
-    }
-}

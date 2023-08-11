@@ -1,8 +1,19 @@
 package com.a103.eyakrev1
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +23,8 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -21,7 +34,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
@@ -42,16 +57,6 @@ class AlarmFragment : Fragment() {
     val yellow: String = "FFFF00"
 
     var medicineRoutines = MedicineRoutines()
-
-    lateinit var eatingDuration: LocalTime
-    lateinit var wakeTime: LocalTime
-    lateinit var breakfastTime: LocalTime
-    lateinit var breakfastTimeAfter: LocalTime
-    lateinit var lunchTime: LocalTime
-    lateinit var lunchTimeAfter: LocalTime
-    lateinit var dinnerTime: LocalTime
-    lateinit var dinnerTimeAfter: LocalTime
-    lateinit var bedTime: LocalTime
 
     // https://curryyou.tistory.com/386
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
@@ -75,24 +80,24 @@ class AlarmFragment : Fragment() {
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
-        eatingDuration = LocalTime.parse(pref.getString("eatingDuration", ""))
-        wakeTime = LocalTime.parse(pref.getString("wakeTime", ""))
-        breakfastTime = LocalTime.parse(pref.getString("breakfastTime", ""))
-        breakfastTimeAfter = breakfastTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
-        lunchTime = LocalTime.parse(pref.getString("lunchTime", ""))
-        lunchTimeAfter = lunchTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
-        dinnerTime = LocalTime.parse(pref.getString("dinnerTime", ""))
-        dinnerTimeAfter = dinnerTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
-        bedTime = LocalTime.parse(pref.getString("bedTime", ""))
+        val eatingDuration = LocalTime.parse(pref.getString("eatingDuration", ""))
+        val wakeTime = LocalTime.parse(pref.getString("wakeTime", ""))
+        val breakfastTime = LocalTime.parse(pref.getString("breakfastTime", ""))
+        val breakfastTimeAfter = breakfastTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        val lunchTime = LocalTime.parse(pref.getString("lunchTime", ""))
+        val lunchTimeAfter = lunchTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        val dinnerTime = LocalTime.parse(pref.getString("dinnerTime", ""))
+        val dinnerTimeAfter = dinnerTime.plusHours(eatingDuration.hour.toLong()).plusMinutes(eatingDuration.minute.toLong()).plusSeconds(eatingDuration.second.toLong())
+        val bedTime = LocalTime.parse(pref.getString("bedTime", ""))
 
-        init()
+        init(eatingDuration, wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
 
         binding.yesterdayFrameLayout.setOnClickListener {
-            updateDay(-1)
+            updateDay(-1, eatingDuration, wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
         }
 
         binding.tomorrowFrameLayout.setOnClickListener {
-            updateDay(1)
+            updateDay(1, eatingDuration, wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
         }
 
         binding.conditionLinearLayout.setOnClickListener {
@@ -108,15 +113,32 @@ class AlarmFragment : Fragment() {
 
         return binding.root
     }
-    private fun init() {
+    private fun init(eatingDuration: LocalTime,
+                     wakeTime: LocalTime,
+                     breakfastTime: LocalTime,
+                     breakfastTimeAfter: LocalTime,
+                     lunchTime: LocalTime,
+                     lunchTimeAfter: LocalTime,
+                     dinnerTime: LocalTime,
+                     dinnerTimeAfter: LocalTime,
+                     bedTime: LocalTime) {
         targetDay = LocalDate.now()
         yesterday = targetDay.plusDays(-1)
         tomorrow = targetDay.plusDays(1)
 
-        updateDay(0)
+        updateDay(0, eatingDuration, wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
     }
 
-    public fun updateDay(gap: Long) {
+    public fun updateDay(gap: Long,
+                         eatingDuration: LocalTime,
+                         wakeTime: LocalTime,
+                         breakfastTime: LocalTime,
+                         breakfastTimeAfter: LocalTime,
+                         lunchTime: LocalTime,
+                         lunchTimeAfter: LocalTime,
+                         dinnerTime: LocalTime,
+                         dinnerTimeAfter: LocalTime,
+                         bedTime: LocalTime) {
 
         targetDay = targetDay.plusDays(gap)
         yesterday = targetDay.plusDays(-1)
@@ -143,9 +165,17 @@ class AlarmFragment : Fragment() {
 
                 if(response.code() == 200) {
                     // 이제 적절하게 배분해서 넣어주자
-                    Log.d("log", response.toString())
+//                    Log.d("log", response.toString())
                     medicineRoutines = response.body()!!
-                    Log.d("log", medicineRoutines.bedAfterQueryResponses.toString())
+//                    Log.d("bedAfterQueryResponses", medicineRoutines.bedAfterQueryResponses.toString())
+//                    Log.d("breakfastBeforeQueryResponses", medicineRoutines.breakfastBeforeQueryResponses.toString())
+//                    Log.d("breakfastAfterQueryResponses", medicineRoutines.breakfastAfterQueryResponses.toString())
+//                    Log.d("lunchBeforeQueryResponses", medicineRoutines.lunchBeforeQueryResponses.toString())
+//                    Log.d("lunchAfterQueryResponses", medicineRoutines.lunchAfterQueryResponses.toString())
+//                    Log.d("dinnerBeforeQueryResponses", medicineRoutines.dinnerBeforeQueryResponses.toString())
+//                    Log.d("dinnerAfterQueryResponses", medicineRoutines.dinnerAfterQueryResponses.toString())
+//                    Log.d("bedBeforeQueryResponses", medicineRoutines.bedBeforeQueryResponses.toString())
+
                     val routineKeys = arrayListOf("bedAfterQueryResponses", "breakfastBeforeQueryResponses", "breakfastAfterQueryResponses", "lunchBeforeQueryResponses", "lunchAfterQueryResponses", "dinnerBeforeQueryResponses", "dinnerAfterQueryResponses", "bedBeforeQueryResponses")
 
                     val medicineTimeList = arrayListOf(wakeTime, breakfastTime, breakfastTimeAfter, lunchTime, lunchTimeAfter, dinnerTime, dinnerTimeAfter, bedTime)
@@ -181,6 +211,11 @@ class AlarmFragment : Fragment() {
                     val alarmListAdapter = AlarmListAdapter(mainActivity, medicineRoutines, medicineTimeList, medicineNameList, targetDay)
                     binding.alramListView.findViewById<ListView>(R.id.alramListView)
                     binding.alramListView.adapter = alarmListAdapter
+
+                    
+                    // 여기에 로직 추가하자
+//                    if (medicineRoutines.bedAfterQueryResponses)
+
                 }
                 else if(response.code() == 401) {
                     Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
@@ -193,6 +228,8 @@ class AlarmFragment : Fragment() {
 
         api.todayDoseInfo(Authorization = "Bearer ${serverAccessToken}", date = yesterday.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<TodayDoseInfoBodyModel> {
             override fun onResponse(call: Call<TodayDoseInfoBodyModel>, response: Response<TodayDoseInfoBodyModel>) {
+//                Log.d("log", response.toString())
+//                Log.d("log", response.body().toString())
                 if(response.code() == 200) {
                     if(response.body()?.fullDose == 0) {
                         binding.yesterdayState.setColorFilter(Color.parseColor(gray))
@@ -204,7 +241,7 @@ class AlarmFragment : Fragment() {
                         binding.yesterdayState.setColorFilter(Color.parseColor(green))
                     }
                     else {
-                        binding.yesterdayState.setColorFilter(Color.parseColor(yellow))
+                        binding.yesterdayState.setColorFilter(Color.parseColor("#FFFFEF00"))
                     }
                 }
                 else if(response.code() == 401) {
@@ -232,7 +269,7 @@ class AlarmFragment : Fragment() {
                         binding.todayState.setColorFilter(Color.parseColor(green))
                     }
                     else {
-                        binding.todayState.setColorFilter(Color.parseColor(yellow))
+                        binding.todayState.setColorFilter(Color.parseColor("#FFFFEF00"))
                     }
                 }
                 else if(response.code() == 401) {
@@ -261,7 +298,7 @@ class AlarmFragment : Fragment() {
                         binding.tomorrowState.setColorFilter(Color.parseColor(green))
                     }
                     else {
-                        binding.tomorrowState.setColorFilter(Color.parseColor(yellow))
+                        binding.tomorrowState.setColorFilter(Color.parseColor("#FFFFEF00"))
                     }
                 }
                 else if(response.code() == 401) {
@@ -286,5 +323,333 @@ class AlarmFragment : Fragment() {
 
         // 2. Context를 액티비티로 형변환해서 할당
         mainActivity = context as MainActivity
+    }
+}
+
+class ZerothAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("기상 후 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(0, notification) // 알림 표시
+    }
+}
+
+class FirstAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("아침 식사 전 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(1, notification) // 알림 표시
+    }
+}
+
+class SecondAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("아침 식사 후 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(2, notification) // 알림 표시
+    }
+}
+
+class ThirdAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("점심 식사 전 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(3, notification) // 알림 표시
+    }
+}
+
+class FourthAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("점심 식사 후 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(4, notification) // 알림 표시
+    }
+}
+
+class FifthAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("저녁 식사 전 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(5, notification) // 알림 표시
+    }
+}
+
+class SixthAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("저녁 식사 후 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(6, notification) // 알림 표시
+    }
+}
+
+class SeventhAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "alarm_channel",
+                "Alarm Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // 화면 활성화 및 잠금 화면 해제
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
+        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
+
+        val vibrator = context.getSystemService(Vibrator::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (vibrator?.hasVibrator() == true) {
+                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
+
+        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
+        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
+
+
+        val notification = NotificationCompat.Builder(context, "alarm_channel")
+            .setContentTitle("지금이:약")
+            .setContentText("취침 전 약 드세요")
+            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(7, notification) // 알림 표시
     }
 }
