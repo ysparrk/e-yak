@@ -35,7 +35,6 @@ public class ContentStatusResult {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @ElementCollection(targetClass = ChoiceStatus.class)
-    @Enumerated(EnumType.STRING)
     private List<ChoiceStatus> selectedStatusChoices = new ArrayList<>();
 
     @Builder

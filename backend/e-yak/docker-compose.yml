@@ -6,3 +6,4 @@ services:
       - "3333:8081"
 
     container_name: springboot
+    env_file: .env
