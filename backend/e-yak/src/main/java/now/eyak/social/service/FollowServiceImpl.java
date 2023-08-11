@@ -47,6 +47,9 @@ public class FollowServiceImpl implements FollowService {
     @Transactional
     @Override
     public void deleteFollowBi(Long followId, Long memberId) {
+        log.info("7777followId" + followId);
+        log.info("7777memberId" + memberId);
+
         Member followee = getMember(memberId);
         Follow follow = followRepository.findByIdAndFollower(followId, followee).orElseThrow(() -> new NoSuchElementException("해당하는 Follow가 존재하지 않습니다."));
 
