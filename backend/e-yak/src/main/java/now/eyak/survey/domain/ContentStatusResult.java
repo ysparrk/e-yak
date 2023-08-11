@@ -8,6 +8,8 @@ import lombok.Setter;
 import now.eyak.member.domain.Member;
 import now.eyak.survey.enumeration.ChoiceStatus;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -24,6 +26,7 @@ public class ContentStatusResult {
 
     @ManyToOne
     private SurveyContent surveyContent;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Member member;
     @CreationTimestamp

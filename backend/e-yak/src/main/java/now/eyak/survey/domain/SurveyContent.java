@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import now.eyak.survey.enumeration.SurveyContentType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class SurveyContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Survey survey;
     @Enumerated(EnumType.STRING)
