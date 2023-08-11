@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace 'com.example.eyakrev1'
+    namespace 'com.a103.eyakrev1'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.eyakrev1"
+        applicationId "com.a103.eyakrev1"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.001"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,6 +41,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -60,4 +61,7 @@ dependencies {
     
     // calendar view 라이브러리
     implementation 'com.github.kizitonwose:CalendarView:1.0.4'
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.6.2'
 }
