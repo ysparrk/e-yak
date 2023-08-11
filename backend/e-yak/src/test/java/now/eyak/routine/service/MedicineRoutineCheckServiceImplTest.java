@@ -167,10 +167,11 @@ class MedicineRoutineCheckServiceImplTest {
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
+                .took(true)
                 .prescriptionId(testPrescription.getId())
                 .build();
 
-        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // toggle
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());
 
         // then
         Assertions.assertThat(true).isEqualTo(medicineRoutineCheckRepository.findByIdAndMemberAndDate(medicineRoutineCheckUpdateDto.getId(), member, LocalDate.now())
@@ -202,6 +203,7 @@ class MedicineRoutineCheckServiceImplTest {
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
+                .took(true)
                 .prescriptionId(testPrescription.getId())
                 .build();
 
@@ -237,6 +239,7 @@ class MedicineRoutineCheckServiceImplTest {
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
+                .took(true)
                 .prescriptionId(testPrescription.getId())
                 .build();
 
@@ -271,23 +274,14 @@ class MedicineRoutineCheckServiceImplTest {
                 .date(LocalDate.now())
                 .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
                 .memberId(member.getId())
+                .took(true)
                 .prescriptionId(testPrescription.getId())
                 .build();
 
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
 
         surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
-//        survey = Survey.builder()
-//                .date(LocalDate.now())
-//                .build();
-//
-//        survey = surveyRepository.save(survey);
-//
-//        surveyContent = SurveyContent.builder()
-//                .survey(survey)
-//                .build();
-//
-//        surveyContent = surveyContentRepository.save(surveyContent);
+
 
         contentTextResultDto = ContentTextResultDto.builder()
                 .text("오늘의 컨디션 입력합니다.")
