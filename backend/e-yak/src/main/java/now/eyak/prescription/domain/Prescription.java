@@ -9,6 +9,8 @@ import now.eyak.member.domain.Member;
 import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -37,6 +39,7 @@ public class Prescription {
     private String unit; // 투여 단위
     @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = new ArrayList<>();
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Member member;
 
