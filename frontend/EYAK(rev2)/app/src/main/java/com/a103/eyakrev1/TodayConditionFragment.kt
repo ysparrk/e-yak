@@ -25,26 +25,30 @@ class TodayConditionFragment : Fragment() {
 
     private val api = EyakService.create()
 
-    private var targetDate: LocalDate = LocalDate.now()
+    private var targetDate: LocalDate = LocalDate.now() // targetDate: 조회 하고자 하는 설문의 날짜 정보
 
-    private val symptom: MutableList<String> = mutableListOf("증상 없음", "두통", "복통", "구토", "발열", "설사", "소화불량", "기침")
-    private val symptomEng: MutableList<String> = mutableListOf("NO_SYMPTOMS", "HEADACHE", "ABDOMINAL_PAIN", "VOMITING", "FEVER", "DIARRHEA", "INDIGESTION", "COUGH")
-    private val symptomMap: Map<String, Int> = mapOf("NO_SYMPTOMS" to 0, "HEADACHE" to 1, "ABDOMINAL_PAIN" to 2, "VOMITING" to 3, "FEVER" to 4, "DIARRHEA" to 5, "INDIGESTION" to 6, "COUGH" to 7)
-    private val symptomState: MutableList<Boolean> = mutableListOf(false, false, false, false, false, false, false, false)
+    // 보유 증상과 관련된 변수 시작
+    private val symptom: ArrayList<String> = arrayListOf("증상 없음", "두통", "복통", "구토", "발열", "설사", "소화불량", "기침")   // symptom: 보유 증상 한글 -> 화면에 출력할 때 이 배열을 사용
+    private val symptomEng: ArrayList<String> = arrayListOf("NO_SYMPTOMS", "HEADACHE", "ABDOMINAL_PAIN", "VOMITING", "FEVER", "DIARRHEA", "INDIGESTION", "COUGH")   // symptomEng: 보유 증상 영어 -> 서버에 보유 증상에 대한 값을 전송할 때 이 배열을 사용
+    private val symptomMap: Map<String, Int> = mapOf("NO_SYMPTOMS" to 0, "HEADACHE" to 1, "ABDOMINAL_PAIN" to 2, "VOMITING" to 3, "FEVER" to 4, "DIARRHEA" to 5, "INDIGESTION" to 6, "COUGH" to 7)  // symptomMap: 서버에서 받은 영어로된 보유 증상을 한글로 변경
+    private var symptomState: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false) // symtomState: 보유 선택
 
-    private val conditionState: Array<Boolean> = arrayOf(false, false, false)
-    private val conditionMap: Map<String, Int> = mapOf("BAD" to 0, "SOSO" to 1, "GOOD" to 2)
-
-    val todaySurveyContentId: Array<Long> = arrayOf(-1, -1, -1) // 각 문항에 대한 contentId 저장 [CHOICE_STATUS, CHOICE_EMOTION, TEXT]
-    val todaySurveyContentResultId: Array<Long> = arrayOf(-1, -1, -1)   // 설문에 응답한 적이 있다면 resultId가 들어가고 아니라면 -1, [Text, Status, Emotion]
-
-    private val activeColor: String = "#FFC9DBB2"
+    private val activeColor: String = "#C9DBB2"
     private val nonColor: String = "#00000000"
+    // 보유 증상과 관련되 변수 끝
+
+    // 컨디션과 관련된 변수
+    private var conditionState: BooleanArray = booleanArrayOf(false, false, false)
+    private val conditionMap: Map<String, Int> = mapOf("BAD" to 0, "SOSO" to 1, "GOOD" to 2)
 
     private val badFaceColor: String = "#AC6077"
     private val normalFaceColor: String = "#7466B4"
     private val goodFaceColor: String = "#9ED59B"
     private val nonFaceColor: String = "#CFC3B5"
+    // 컨디션과 관련된 변수 끝
+
+    var todaySurveyContentId: ArrayList<Long> = arrayListOf(-1, -1, -1) // 각 문항에 대한 contentId 저장 [CHOICE_STATUS, CHOICE_EMOTION, TEXT]
+    var todaySurveyContentResultId: ArrayList<Long> = arrayListOf(-1, -1, -1)   // 설문에 응답한 적이 있다면 resultId가 들어가고 아니라면 -1, [Text, Status, Emotion]
 
     private lateinit var binding: FragmentTodayConditionBinding
 
@@ -92,9 +96,8 @@ class TodayConditionFragment : Fragment() {
                         if(contentStatusResultResponse != null) {   // Status
                             todaySurveyContentResultId[1] = contentStatusResultResponse.contentStatusResultId   // contentResultId 등록
                             if (contentStatusResultResponse.contentStatusResultId != (-1).toLong()) {    // CHOICE_STATUS 응답이 있는 경우
-
                                 for (status in contentStatusResultResponse.selectedStatusChoices) {
-                                    symptomState[symptomMap[status]!!] = true
+                                    symptomState[symptomMap[status]!!] = true   // null이 아님을 명시해 줌
                                 }
                             }
                         }
@@ -102,11 +105,11 @@ class TodayConditionFragment : Fragment() {
                         if(contentEmotionResultResponse != null) {
                             todaySurveyContentResultId[2] = contentEmotionResultResponse.contentEmotionResultId
                             if (contentEmotionResultResponse.contentEmotionResultId != (-1).toLong()) {  // CHOICE_EMOTION 응답이 있는 경우
-                                conditionState[conditionMap[contentEmotionResultResponse.choiceEmotion]!!] = true
+                                conditionState[conditionMap[contentEmotionResultResponse.choiceEmotion]!!] = true   // null이 아님을 명시해 줌
                             }
                         }
 
-                        colorChange()
+                        colorChange()   // 주어진 정보에 맞게 색상을 변경
                     }
                 }
                 else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
@@ -120,8 +123,6 @@ class TodayConditionFragment : Fragment() {
 
             }
         })
-
-
 
         binding.badLinearLayout.setOnClickListener {
             conditionState[0] = true
@@ -153,7 +154,6 @@ class TodayConditionFragment : Fragment() {
             for(i in 1..7) {
                 if(symptomState[i]) symptomState[i] = false
             }
-
             colorChange()
         }
 
@@ -218,8 +218,11 @@ class TodayConditionFragment : Fragment() {
             // 설문 할 준비가 되었는가?
             api.dailySurveyContents(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<ArrayList<DailySurveyContentsBodyModel>> {
                 override fun onResponse(call: Call<ArrayList<DailySurveyContentsBodyModel>>, response: Response<ArrayList<DailySurveyContentsBodyModel>>) {
+                    Log.d("댜ㅐㅈ대ㅓㅑㄹ더ㅑㅐㄷㄹ저ㅐㅑ", response.code().toString())
+                    Log.d("akfdskljasdfjkl;fda;k", todaySurveyContentId.toString())
                     if(response.code() == 200) {    // 성공
                         val responseBody = response.body()
+                        Log.d("akfdskljasdfjkl;fda;k", responseBody?.size.toString())
                         if(responseBody != null && responseBody.size > 0) {
                             // todaySurveyContentId[CHOICE_STATUS, CHOICE_EMOTION, TEXT]
 
@@ -229,8 +232,10 @@ class TodayConditionFragment : Fragment() {
                                 else if(responseBody[i].surveyContentType == "TEXT") todaySurveyContentId[2] = responseBody[i].surveyContentId
                             }
 
+
                             // Text 문항 응답 기록 사적
                             // todaySurveyContentId 2, todaySurveyContentResultId 0
+                            Log.d("댜댜댜댜댜댜댣", todaySurveyContentResultId[0].toString())
                             if(todaySurveyContentResultId[0] == (-1).toLong()) {    // 이전 응답이 없는 경우 -> Text 문항 응답 기록
                                 val textData = ContentTextResultsBodyModel(
                                     text = binding.etcSymptom.text.toString()
@@ -238,6 +243,7 @@ class TodayConditionFragment : Fragment() {
 
                                 api.contentTextResults(surveyContentId = todaySurveyContentId[2], Authorization = "Bearer ${serverAccessToken}", params = textData).enqueue(object : Callback<Void> {
                                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                        Log.d("ㅅㅅㅅㅅㅅㅅㅅㅅㅅㅅ", response.code().toString())
                                         if (response.code() == 201) {    // 성공
                                             Toast.makeText(mainActivity, "TEXT 생성 성공", Toast.LENGTH_SHORT).show()
                                         } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
@@ -366,10 +372,6 @@ class TodayConditionFragment : Fragment() {
             })
 
 
-
-
-
-
             mainActivity!!.gotoAlarm()
         }
 
@@ -381,9 +383,7 @@ class TodayConditionFragment : Fragment() {
         binding.normalFace.setColorFilter(Color.parseColor(nonFaceColor))
         binding.goodFace.setColorFilter(Color.parseColor(nonFaceColor))
 
-        conditionState[0] = false
-        conditionState[1] = false
-        conditionState[2] = false
+        conditionState = booleanArrayOf(false, false, false)
 
         binding.symptom0.text = symptom[0]
         binding.symptom1.text = symptom[1]
@@ -394,14 +394,9 @@ class TodayConditionFragment : Fragment() {
         binding.symptom6.text = symptom[6]
         binding.symptom7.text = symptom[7]
 
-        symptomState[0] = false
-        symptomState[1] = false
-        symptomState[2] = false
-        symptomState[3] = false
-        symptomState[4] = false
-        symptomState[5] = false
-        symptomState[6] = false
-        symptomState[7] = false
+        symptomState = booleanArrayOf(false, false, false, false, false, false, false, false)
+
+        colorChange()
     }
 
     private fun colorChange() {
