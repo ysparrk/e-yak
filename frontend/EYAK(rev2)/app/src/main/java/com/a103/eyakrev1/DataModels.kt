@@ -198,3 +198,8 @@ data class EditContentEmotionResults(
 data class ContentStatusResultsBodyModel(
     val selectedStatusChoices: ArrayList<String>,
 )
+
+data class EditContentStatusBodyModel(
+    var contentStatusResultId: Long,
+    var selectedStatusChoices: ArrayList<String>,
+)

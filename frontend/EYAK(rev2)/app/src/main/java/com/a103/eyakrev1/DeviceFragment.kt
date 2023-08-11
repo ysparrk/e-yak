@@ -92,6 +92,18 @@ class DeviceFragment : Fragment() {
             saveDeviceEdit()
         }
 
+        // 드랍 리스너
+        val view1 = layout.findViewById<LinearLayout>(R.id.btEditCell1)
+        val view2 = layout.findViewById<LinearLayout>(R.id.btEditCell2)
+        val view3 = layout.findViewById<LinearLayout>(R.id.btEditCell3)
+        val view4 = layout.findViewById<LinearLayout>(R.id.btEditCell4)
+        val view5 = layout.findViewById<LinearLayout>(R.id.btEditCell5)
+        val cellViews = arrayOf(view1, view2, view3, view4, view5)
+        val cellData = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
+        for (i in 0..4) {
+            cellViews[i].setOnDragListener(dragListener)
+        }
+
         // 일단 아이템 존재 전제.
         layout.findViewById<TextView>(R.id.medicineScrollNonText).visibility = View.GONE
         layout.findViewById<HorizontalScrollView>(R.id.medicineScroll).visibility = View.VISIBLE
@@ -101,53 +113,27 @@ class DeviceFragment : Fragment() {
         api.getAllPrescriptions(Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<ArrayList<Medicine>> {
             override fun onResponse(call: Call<ArrayList<Medicine>>, response: Response<ArrayList<Medicine>>) {
                 if (response.code() == 401) {
-                    Log.d("log", "인증되지 않은 사용자입니다")
+                    Toast.makeText(requireActivity(), "인증되지 않은 사용자 입니다", Toast.LENGTH_SHORT).show()
                 } else if (response.code() == 200) {
                     medicList = response.body()
                     medicList?.add(Medicine())
-                    for (m in medicList!!) {
-                        if (m.id != -1) {
-                            when(m.id) {
-                                cell1Data?.id -> { newMedicItem(m, 1) }
-                                cell2Data?.id -> { newMedicItem(m, 2) }
-                                cell3Data?.id -> { newMedicItem(m, 3) }
-                                cell4Data?.id -> { newMedicItem(m, 4) }
-                                cell5Data?.id -> { newMedicItem(m, 5) }
-                                else -> { newMedicItem(m, 0) }
-                            }
-//                            var imgView = LayoutInflater.from(requireContext()).inflate(R.layout.device_tab_edit_setted_view_item, null)
-//                            var img = imgView.findViewById<ImageView>(R.id.deviceSettedImage)
-//                            iconSetting(img, m.medicineShape)
-//                            imgView.setOnClickListener {
-//                                layout.findViewById<TextView>(R.id.devicePickText).visibility = View.GONE
-//                                layout.findViewById<LinearLayout>(R.id.devicePickedLayout).visibility = View.VISIBLE
-//                                iconSetting(layout.findViewById<ImageView>(R.id.devicePickedImage), m.medicineShape)
-//                                layout.findViewById<TextView>(R.id.devicePickedText).text = m.customName
-//                                layout.findViewById<Button>(R.id.devicePickedDelBtn).setOnClickListener {
-//                                    when(m.id) {
-//                                        cell1Data?.id -> { layout.findViewById<LinearLayout>(R.id.btEditCell1).removeAllViews(); cell1Data = null }
-//                                        cell2Data?.id -> { layout.findViewById<LinearLayout>(R.id.btEditCell2).removeAllViews(); cell2Data = null }
-//                                        cell3Data?.id -> { layout.findViewById<LinearLayout>(R.id.btEditCell3).removeAllViews(); cell3Data = null }
-//                                        cell4Data?.id -> { layout.findViewById<LinearLayout>(R.id.btEditCell4).removeAllViews(); cell4Data = null }
-//                                        cell5Data?.id -> { layout.findViewById<LinearLayout>(R.id.btEditCell5).removeAllViews(); cell5Data = null }
-//                                    }
-//                                    newMedicItem(m)
-//                                    layout.findViewById<TextView>(R.id.devicePickText).visibility = View.VISIBLE
-//                                    layout.findViewById<LinearLayout>(R.id.devicePickedLayout).visibility = View.GONE
-//                                }
-//                            }
-//                            imgView.setOnLongClickListener {
-//                                var json = Gson().toJson(m)
-//                                val item = ClipData.Item(json)
-//                                val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
-//                                val data = ClipData(m.customName, mimeTypes, item)
-//
-//                                val dragShadowBuilder = View.DragShadowBuilder(it)
-//                                it.startDragAndDrop(data, dragShadowBuilder, it, 0)
-//                                true
-//                            }
+                    for (i in 0..4) { // 각 cell을 loop
+                        if (cellData[i] != null) {
+                            newMedicItem(cellData[i]!!, i+1)
                         }
                     }
+//                    for (m in medicList!!) { // 각 약을 loop
+//                        if (m.id != -1) {
+//                            when(m.id) {
+//                                cell1Data?.id -> { newMedicItem(m, 1) }
+//                                cell2Data?.id -> { newMedicItem(m, 2) }
+//                                cell3Data?.id -> { newMedicItem(m, 3) }
+//                                cell4Data?.id -> { newMedicItem(m, 4) }
+//                                cell5Data?.id -> { newMedicItem(m, 5) }
+//                                else -> { newMedicItem(m, 0) }
+//                            }
+//                        }
+//                    }
                     if (medicList?.size == 1) { // 등록 약 없음
                         layout.findViewById<TextView>(R.id.medicineScrollNonText).visibility = View.VISIBLE
                         layout.findViewById<HorizontalScrollView>(R.id.medicineScroll).visibility = View.GONE
@@ -156,13 +142,6 @@ class DeviceFragment : Fragment() {
             }
             override fun onFailure(call: Call<ArrayList<Medicine>>, t: Throwable) {}
         })
-
-        // 드랍 리스너
-        layout.findViewById<LinearLayout>(R.id.btEditCell1).setOnDragListener(dragListener)
-        layout.findViewById<LinearLayout>(R.id.btEditCell2).setOnDragListener(dragListener)
-        layout.findViewById<LinearLayout>(R.id.btEditCell3).setOnDragListener(dragListener)
-        layout.findViewById<LinearLayout>(R.id.btEditCell4).setOnDragListener(dragListener)
-        layout.findViewById<LinearLayout>(R.id.btEditCell5).setOnDragListener(dragListener)
 
         return layout
     }
