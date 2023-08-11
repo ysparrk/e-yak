@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,17 +23,15 @@ public class Survey {
     private Long id;
     private LocalDate date; // 설문 해당 날짜(생성시간 X)
     @OneToMany(mappedBy = "survey")
-    private List<SurveyContent> surveyContents;
+    private List<SurveyContent> surveyContents = new ArrayList<>();
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @Builder
-    public Survey(LocalDate date, List<SurveyContent> surveyContents, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Survey(Long id, LocalDate date) {
+        this.id = id;
         this.date = date;
-        this.surveyContents = surveyContents;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 }

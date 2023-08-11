@@ -14,7 +14,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 
 @Entity
 @Getter
@@ -29,6 +28,7 @@ public class MedicineRoutineCheck {
     @ManyToOne
     private MedicineRoutine medicineRoutine;
     private Boolean took;  // 약 복용 확인
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Member member;
     @ManyToOne

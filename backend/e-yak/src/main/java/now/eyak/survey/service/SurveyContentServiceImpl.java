@@ -10,6 +10,7 @@ import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
 import now.eyak.survey.dto.response.ContentStatusResultResponseDto;
 import now.eyak.survey.dto.response.ContentTextResultResponseDto;
 import now.eyak.survey.dto.response.SurveyContentDto;
+import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,11 +42,16 @@ public class SurveyContentServiceImpl implements SurveyContentService {
 
         surveyRepository.save(survey);
 
-        SurveyContent surveyContent = SurveyContent.builder()
-                .build();
+        SurveyContentType[] surveyContentTypes = SurveyContentType.values();
 
-        surveyContent.changeSurvey(survey);
-        surveyContentRepository.save(surveyContent);
+        for (int i = 0; i < surveyContentTypes.length; i++) {
+            SurveyContent surveyContent = SurveyContent.builder()
+                    .surveyContentType(surveyContentTypes[i])
+                    .build();
+
+            surveyContent.changeSurvey(survey);
+            surveyContentRepository.save(surveyContent);
+        }
     }
 
     @Override
