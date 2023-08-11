@@ -1,7 +1,6 @@
 package now.eyak.prescription.service;
 
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,10 @@ import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
 import now.eyak.prescription.dto.query.*;
 import now.eyak.prescription.repository.PrescriptionRepository;
-import now.eyak.routine.domain.*;
+import now.eyak.routine.domain.MedicineRoutine;
+import now.eyak.routine.domain.MedicineRoutineCheck;
+import now.eyak.routine.domain.PrescriptionMedicineRoutine;
+import now.eyak.routine.domain.QMedicineRoutineCheck;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -128,7 +130,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     public List<Prescription> findAllByMemberIdBetweenDate(Long memberId, LocalDateTime dateTime) {
         Member member = getMemberOrThrow(memberId);
 
-        return prescriptionRepository.findAllByMemberAndStartDateTimeLessThanEqualAndEndDateTimeGreaterThanEqual(member, dateTime, dateTime);
+        return prescriptionRepository.findAllByMemberAndBetweenStartAndEndDateTime(member, dateTime);
     }
 
 
@@ -169,7 +171,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
@@ -189,7 +191,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
@@ -209,7 +211,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
@@ -229,7 +231,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
@@ -249,7 +251,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
@@ -269,7 +271,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
@@ -289,7 +291,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
@@ -309,7 +311,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
                         .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().plusDays(1).minusMinutes(1)))
+                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
                 )
                 .fetch();
 
