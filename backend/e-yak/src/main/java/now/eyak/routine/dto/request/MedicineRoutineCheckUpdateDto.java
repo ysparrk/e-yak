@@ -32,8 +32,7 @@ public class MedicineRoutineCheckUpdateDto {
 
     // 복용 기록 업데이트
     public void update(MedicineRoutineCheck medicineRoutineCheck) {
-        medicineRoutineCheck.setTook(!medicineRoutineCheck.getTook());
+        medicineRoutineCheck.setTook(took);
     }
-
 
 }
