@@ -210,27 +210,102 @@
                 android:textColor="#757863"
                 android:textSize="20sp" />
 
-            <Switch
-                android:id="@+id/deviceSoundSwitch"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:text="알림 소리"
-                android:textColor="#757863"
-                android:textSize="16sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <Switch
-                android:id="@+id/deviceBuzzSwitch"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="알림 소리"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="끄기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/deviceSoundSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="10dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:textAllCaps="false"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="켜기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:text="알림 진동"
-                android:textColor="#757863"
-                android:textSize="16sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="알림 진동"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="끄기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/deviceBuzzSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="10dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:textAllCaps="false"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="켜기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/deviceEditSaveBtn"

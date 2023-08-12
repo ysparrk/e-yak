@@ -22,6 +22,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -82,7 +83,7 @@ class DeviceFragment : Fragment() {
         cellInitData = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
         cellNowData = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
         soundData = pref?.getBoolean("DEVICE_SOUND", true)
-        buzzData = pref?.getBoolean("DEVICE_BUZZ", true)
+        buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
     }
 
     override fun onCreateView(
@@ -101,6 +102,14 @@ class DeviceFragment : Fragment() {
             saveDeviceEdit()
         }
 
+        // 소리, 진동 설정
+        val soundView = layout.findViewById<Switch>(R.id.deviceSoundSwitch)
+        val buzzView = layout.findViewById<Switch>(R.id.deviceBuzzSwitch)
+        soundView.setChecked(soundData!!)
+        buzzView.setChecked(buzzData!!)
+        soundView.setOnCheckedChangeListener { _, isChecked -> soundData = isChecked }
+        buzzView.setOnCheckedChangeListener { _, isChecked -> buzzData = isChecked }
+
         // 드랍 리스너
         val view0 = layout.findViewById<LinearLayout>(R.id.medicineScrollLayout)
         val viewBack = layout.findViewById<HorizontalScrollView>(R.id.medicineScroll)
@@ -113,12 +122,11 @@ class DeviceFragment : Fragment() {
         for (i in 0..4) {
             cellViews[i].setOnDragListener(dragListener)
         }
-//        view0.setOnDragListener(dragListener)
         viewBack.setOnDragListener(dragListener)
 
         // 일단 아이템 존재 전제.
         layout.findViewById<TextView>(R.id.medicineScrollNonText).visibility = View.GONE
-        layout.findViewById<HorizontalScrollView>(R.id.medicineScroll).visibility = View.VISIBLE
+        viewBack.visibility = View.VISIBLE
 
         // 아이템 가져오기
         medicList = arrayListOf<Medicine>()
