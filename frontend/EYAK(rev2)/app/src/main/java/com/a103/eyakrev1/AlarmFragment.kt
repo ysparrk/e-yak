@@ -39,6 +39,8 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+var iotLocationLists = arrayListOf<ArrayList<Int>>(arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(),
+                                                   arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>())
 
 class AlarmFragment : Fragment() {
 
@@ -211,10 +213,154 @@ class AlarmFragment : Fragment() {
                     val alarmListAdapter = AlarmListAdapter(mainActivity, medicineRoutines, medicineTimeList, medicineNameList, targetDay)
                     binding.alramListView.findViewById<ListView>(R.id.alramListView)
                     binding.alramListView.adapter = alarmListAdapter
-
                     
-                    // 여기에 로직 추가하자
-//                    if (medicineRoutines.bedAfterQueryResponses)
+                    // 초기화
+                    iotLocationLists = arrayListOf<ArrayList<Int>>(arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(),
+                                                                   arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>())
+                    // 오늘인 경우에만 알람을 설정하거나 초기화 (다른 날짜를 조회할 때 충돌하지 않게)
+                    if (targetDay == LocalDate.now()) {
+                        // 알람 로직 => 8개의 시간 별로 수행할거
+                        for (position in 0..7) {
+                            // 알람이 울려야 하는지 아닌지 확인
+                            var isThisAlarmNeeded = true
+
+                            // 이번 루틴에 먹어야할 약들을 추출
+                            var thisRoutineMedicines = arrayListOf<medicineInRoutine>()
+
+                            when (position) {
+                                0 -> thisRoutineMedicines = medicineRoutines.bedAfterQueryResponses
+                                1 -> thisRoutineMedicines = medicineRoutines.breakfastBeforeQueryResponses
+                                2 -> thisRoutineMedicines = medicineRoutines.breakfastAfterQueryResponses
+                                3 -> thisRoutineMedicines = medicineRoutines.lunchBeforeQueryResponses
+                                4 -> thisRoutineMedicines = medicineRoutines.lunchAfterQueryResponses
+                                5 -> thisRoutineMedicines = medicineRoutines.dinnerBeforeQueryResponses
+                                6 -> thisRoutineMedicines = medicineRoutines.dinnerAfterQueryResponses
+                                7 -> thisRoutineMedicines = medicineRoutines.bedBeforeQueryResponses
+                            }
+
+                            // 1. 오늘의 8개 알람 시간 중, 지금보다 과거라면 알람을 설정하지 않아야 한다
+                            // 2. 만약 복용 체크를 했다면, 알람을 설정하지 않아야 한다
+                            if (medicineTimeList[position].compareTo(LocalTime.now()) < 0) {
+                                isThisAlarmNeeded = false
+                            } else {
+                                // 미래 시점이고, 먹을게 없다면
+                                if (thisRoutineMedicines.filter{ !it.took }.isEmpty()) {
+                                    isThisAlarmNeeded = false
+                                }
+                            }
+
+                            val alarmManager = mainActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+                            // isThisAlarmNeeded에 따라 로직을 작성하자
+                            // true면 알람을 설정
+                            // false면 알람을 취소 (기존에 걸려 있던게 있을 수도 있으니)
+                            if (isThisAlarmNeeded) {
+                                // 알람 설정
+                                
+                                // iotLocation의 기본값이 0인듯 => 우리는 인덱싱을 1부터 하자
+                                for (medicine in thisRoutineMedicines) {
+                                    if (medicine.iotLocation > 0) {
+                                        iotLocationLists[position].add(medicine.iotLocation)
+                                    }
+                                }
+
+                                // val alarmTime = LocalTime.of(시간, 분)
+//                                var alarmTime = LocalTime.now().plusSeconds(5 + 2 * position.toLong())
+                                var alarmTime = medicineTimeList[position]
+
+                                // 알람 시간을 밀리초로 변환
+                                val alarmDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
+                                val AlarmMillis = alarmDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+                                when (position) {
+                                    0 -> {
+                                        val ZerothAlarmIntent = Intent(mainActivity, ZerothAlarmReceiver::class.java)
+                                        val ZerothAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ZerothAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, ZerothAlarmPendingIntent)
+                                    }
+                                    1 -> {
+                                        val FirstAlarmIntent = Intent(mainActivity, FirstAlarmReceiver::class.java)
+                                        val FirstAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FirstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FirstAlarmPendingIntent)
+                                    }
+                                    2 -> {
+                                        val SecondAlarmIntent = Intent(mainActivity, SecondAlarmReceiver::class.java)
+                                        val SecondAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SecondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SecondAlarmPendingIntent)
+                                    }
+                                    3 -> {
+                                        val ThirdAlarmIntent = Intent(mainActivity, ThirdAlarmReceiver::class.java)
+                                        val ThirdAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ThirdAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, ThirdAlarmPendingIntent)
+                                    }
+                                    4 -> {
+                                        val FourthAlarmIntent = Intent(mainActivity, FourthAlarmReceiver::class.java)
+                                        val FourthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FourthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FourthAlarmPendingIntent)
+                                    }
+                                    5 -> {
+                                        val FifthAlarmIntent = Intent(mainActivity, FifthAlarmReceiver::class.java)
+                                        val FifthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FifthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FifthAlarmPendingIntent)
+                                    }
+                                    6 -> {
+                                        val SixthAlarmIntent = Intent(mainActivity, SixthAlarmReceiver::class.java)
+                                        val SixthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SixthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SixthAlarmPendingIntent)
+                                    }
+                                    7 -> {
+                                        val SeventhAlarmIntent = Intent(mainActivity, SeventhAlarmReceiver::class.java)
+                                        val SeventhAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SeventhAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SeventhAlarmPendingIntent)
+                                    }
+                                }
+                            } else {
+                                // 알람 취소
+                                when (position) {
+                                    0 -> {
+                                        val ZerothAlarmIntent = Intent(mainActivity, ZerothAlarmReceiver::class.java)
+                                        val ZerothAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ZerothAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(ZerothAlarmPendingIntent)
+                                    }
+                                    1 -> {
+                                        val FirstAlarmIntent = Intent(mainActivity, FirstAlarmReceiver::class.java)
+                                        val FirstAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FirstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(FirstAlarmPendingIntent)
+                                    }
+                                    2 -> {
+                                        val SecondAlarmIntent = Intent(mainActivity, SecondAlarmReceiver::class.java)
+                                        val SecondAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SecondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(SecondAlarmPendingIntent)
+                                    }
+                                    3 -> {
+                                        val ThirdAlarmIntent = Intent(mainActivity, ThirdAlarmReceiver::class.java)
+                                        val ThirdAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ThirdAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(ThirdAlarmPendingIntent)
+                                    }
+                                    4 -> {
+                                        val FourthAlarmIntent = Intent(mainActivity, FourthAlarmReceiver::class.java)
+                                        val FourthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FourthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(FourthAlarmPendingIntent)
+                                    }
+                                    5 -> {
+                                        val FifthAlarmIntent = Intent(mainActivity, FifthAlarmReceiver::class.java)
+                                        val FifthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FifthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(FifthAlarmPendingIntent)
+                                    }
+                                    6 -> {
+                                        val SixthAlarmIntent = Intent(mainActivity, SixthAlarmReceiver::class.java)
+                                        val SixthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SixthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(SixthAlarmPendingIntent)
+                                    }
+                                    7 -> {
+                                        val SeventhAlarmIntent = Intent(mainActivity, SeventhAlarmReceiver::class.java)
+                                        val SeventhAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SeventhAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+                                        alarmManager.cancel(SeventhAlarmPendingIntent)
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                 }
                 else if(response.code() == 401) {
@@ -642,12 +788,16 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, AlarmClickedActivity::class.java)
+        alarmIntent.putIntegerArrayListExtra("IOT_LOCATIONS", iotLocationLists[7])
+        val pendingIntent = PendingIntent.getActivity(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("취침 전 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent) // 알림 클릭 시 PendingIntent 실행
             .build()
 
         notificationManager.notify(7, notification) // 알림 표시

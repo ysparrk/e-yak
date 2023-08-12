@@ -191,65 +191,6 @@ class AlarmListAdapter (val context: Context, val medicineRoutines: MedicineRout
             medicineEatButton.setBackgroundColor(ContextCompat.getColor(context, R.color.lightgray))
         }
         else { // 먹어야하는 경우
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-            // val alarmTime = LocalTime.of(시간, 분)
-            var alarmTime = LocalTime.now().plusSeconds(2 + 2 * position.toLong())
-//            var alarmTime = LocalTime.of(medicineTimeList[position].hour, medicineTimeList[position].minute)
-//            Log.d("이게 되네", medicineTimeList[position].hour.toString())
-//            Log.d("이게 되네", medicineTimeList[position].minute.toString())
-
-            // 알람 시간을 밀리초로 변환
-            val alarmDateTime = LocalDateTime.of(LocalDate.now(), alarmTime)
-            val AlarmMillis = alarmDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-
-            Log.d("asSDAFASDF", position.toString())
-
-            when (position) {
-                0 -> {
-                    val ZerothAlarmIntent = Intent(mainActivity, ZerothAlarmReceiver::class.java)
-                    val ZerothAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ZerothAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, ZerothAlarmPendingIntent)
-                }
-                1 -> {
-                    val FirstAlarmIntent = Intent(mainActivity, FirstAlarmReceiver::class.java)
-                    val FirstAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FirstAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FirstAlarmPendingIntent)
-                }
-                2 -> {
-                    val SecondAlarmIntent = Intent(mainActivity, SecondAlarmReceiver::class.java)
-                    val SecondAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SecondAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SecondAlarmPendingIntent)
-                }
-                3 -> {
-                    val ThirdAlarmIntent = Intent(mainActivity, ThirdAlarmReceiver::class.java)
-                    val ThirdAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, ThirdAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, ThirdAlarmPendingIntent)
-                }
-                4 -> {
-                    val FourthAlarmIntent = Intent(mainActivity, FourthAlarmReceiver::class.java)
-                    val FourthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FourthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FourthAlarmPendingIntent)
-                }
-                5 -> {
-                    val FifthAlarmIntent = Intent(mainActivity, FifthAlarmReceiver::class.java)
-                    val FifthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, FifthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, FifthAlarmPendingIntent)
-                }
-                6 -> {
-                    val SixthAlarmIntent = Intent(mainActivity, SixthAlarmReceiver::class.java)
-                    val SixthAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SixthAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SixthAlarmPendingIntent)
-                }
-                7 -> {
-                    val SeventhAlarmIntent = Intent(mainActivity, SeventhAlarmReceiver::class.java)
-                    val SeventhAlarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(mainActivity, position, SeventhAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, AlarmMillis, SeventhAlarmPendingIntent)
-                }
-            }
-
-            /////////////////////
-
             medicineEatButton.setOnClickListener {
                 val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
                 val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰

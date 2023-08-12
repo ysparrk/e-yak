@@ -126,7 +126,7 @@ class SignupActivity : AppCompatActivity() {
             .putString("KEY_LUNCH_TIME_M", if(lunchTimeM != "") lunchTimeM else "10")
             .putString("KEY_DINNER_TIME_H", if(dinnerTimeH != "") dinnerTimeH else "19")
             .putString("KEY_DINNER_TIME_M", if(dinnerTimeM != "") dinnerTimeM else "20")
-            .putString("KEY_BED_TIME_H", if(bedTimeH != "") bedTimeH else "01")
+            .putString("KEY_BED_TIME_H", if(bedTimeH != "") bedTimeH else "23")
             .putString("KEY_BED_TIME_M", if(bedTimeM != "") bedTimeM else "00")
             .putString("KEY_EATING_TIME_H", if(eatingTimeH != "") eatingTimeH else "00")
             .putString("KEY_EATING_TIME_M", if(eatingTimeM != "") eatingTimeM else "20")
@@ -139,7 +139,7 @@ class SignupActivity : AppCompatActivity() {
                                    breakfastTime = "${pref.getString("KEY_BREAKFAST_TIME_H", "07")}:${pref.getString("KEY_BREAKFAST_TIME_M", "20")}:00",
                                    lunchTime = "${pref.getString("KEY_LUNCH_TIME_H", "11")}:${pref.getString("KEY_LUNCH_TIME_M", "10")}:00",
                                    dinnerTime = "${pref.getString("KEY_DINNER_TIME_H", "19")}:${pref.getString("KEY_DINNER_TIME_M", "20")}:00",
-                                   bedTime = "${pref.getString("KEY_BED_TIME_H", "01")}:${pref.getString("KEY_BED_TIME_M", "00")}:00",
+                                   bedTime = "${pref.getString("KEY_BED_TIME_H", "23")}:${pref.getString("KEY_BED_TIME_M", "00")}:00",
                                    eatingDuration = "${pref.getString("KEY_EATING_TIME_H", "00")}:${pref.getString("KEY_EATING_TIME_M", "20")}:00")
 
         val tempToken = pref.getString("GOOGLE_TOKEN", "")
