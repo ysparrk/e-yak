@@ -143,7 +143,7 @@ class EditMemberActivity : AppCompatActivity() {
         var lunchTimeMFilled = "10"
         var dinnerTimeHFilled = "19"
         var dinnerTimeMFilled = "20"
-        var bedTimeHFilled = "01"
+        var bedTimeHFilled = "23"
         var bedTimeMFilled = "00"
         var eatingTimeHFilled = "00"
         var eatingTimeMFilled = "20"
@@ -252,7 +252,7 @@ class EditMemberActivity : AppCompatActivity() {
                         .putString("KEY_LUNCH_TIME_M", if(lunchTimeMFilled != "") lunchTimeMFilled else "10")
                         .putString("KEY_DINNER_TIME_H", if(dinnerTimeHFilled != "") dinnerTimeHFilled else "19")
                         .putString("KEY_DINNER_TIME_M", if(dinnerTimeMFilled != "") dinnerTimeMFilled else "20")
-                        .putString("KEY_BED_TIME_H", if(bedTimeHFilled != "") bedTimeHFilled else "01")
+                        .putString("KEY_BED_TIME_H", if(bedTimeHFilled != "") bedTimeHFilled else "23")
                         .putString("KEY_BED_TIME_M", if(bedTimeMFilled != "") bedTimeMFilled else "00")
                         .putString("KEY_EATING_TIME_H", if(eatingTimeHFilled != "") eatingTimeHFilled else "00")
                         .putString("KEY_EATING_TIME_M", if(eatingTimeMFilled != "") eatingTimeMFilled else "20")
