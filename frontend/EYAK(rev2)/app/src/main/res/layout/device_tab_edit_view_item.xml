@@ -2,15 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/deviceMedicItem"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/deviceMedicCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:cardBackgroundColor="#DDE6ED"
+        app:cardBackgroundColor="@color/background"
         app:cardCornerRadius="20dp"
         app:contentPadding="10dp">
 

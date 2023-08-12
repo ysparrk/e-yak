@@ -167,7 +167,7 @@ class DeviceFragment : Fragment() {
             DragEvent.ACTION_DRAG_ENTERED -> { // shadow가 listener 뷰에 진입
                 val viewId = view.resources.getResourceEntryName(view.id)
                 if (viewId != "medicineScroll") {
-                    view.background.setTint(Color.parseColor("#FF9B9B"))
+                    view.background.setTint(Color.parseColor("#E3F2C1"))
                     view.invalidate()
                 }
                 true
@@ -176,7 +176,7 @@ class DeviceFragment : Fragment() {
             DragEvent.ACTION_DRAG_EXITED -> { // shadow가 listener 뷰에서 나감
                 val viewId = view.resources.getResourceEntryName(view.id)
                 if (viewId != "medicineScroll") {
-                    view.background.setTint(Color.parseColor("#AAABAE"))
+                    view.background.setTint(Color.parseColor("#D8D8DA"))
                     view.invalidate()
                 }
                 true
@@ -200,7 +200,7 @@ class DeviceFragment : Fragment() {
                         }
                     }
                 } else { // 약통 칸에 드롭됨
-                    view.background.setTint(Color.parseColor("#AAABAE"))
+                    view.background.setTint(Color.parseColor("#D8D8DA"))
                     view.invalidate()
                     val viewIdNo = viewId.last().toString().toInt()
                     var c2cFlag = false
@@ -261,19 +261,6 @@ class DeviceFragment : Fragment() {
             layout.findViewById<HorizontalScrollView>(R.id.devicePickedScroll).visibility = View.VISIBLE
             iconSetting(layout.findViewById<ImageView>(R.id.devicePickedImage), medic.medicineShape)
             layout.findViewById<TextView>(R.id.devicePickedText).text = medic.customName
-            // 삭제 버튼 셋업
-//            layout.findViewById<Button>(R.id.devicePickedDelBtn).setOnClickListener {
-//                when(medic.id) {
-//                    cell1Data?.id -> { views[0].removeAllViews(); newMedicItem(medic, 0, views, view0); cell1Data = null }
-//                    cell2Data?.id -> { views[1].removeAllViews(); newMedicItem(medic, 0, views, view0); cell2Data = null }
-//                    cell3Data?.id -> { views[2].removeAllViews(); newMedicItem(medic, 0, views, view0); cell3Data = null }
-//                    cell4Data?.id -> { views[3].removeAllViews(); newMedicItem(medic, 0, views, view0); cell4Data = null }
-//                    cell5Data?.id -> { views[4].removeAllViews(); newMedicItem(medic, 0, views, view0); cell5Data = null }
-//                }
-//                layout.findViewById<TextView>(R.id.devicePickText).visibility = View.VISIBLE
-//                layout.findViewById<HorizontalScrollView>(R.id.devicePickedScroll).visibility = View.GONE
-//            }
-//            if (setted == 0) layout.findViewById<Button>(R.id.devicePickedDelBtn).visibility = View.GONE
         }
         // 길게 클릭 셋업
         medicView.setOnLongClickListener {
@@ -284,7 +271,6 @@ class DeviceFragment : Fragment() {
 
             val dragShadowBuilder = View.DragShadowBuilder(it)
             it.startDragAndDrop(data, dragShadowBuilder, it, 0)
-            // it.visibility = View.INVISIBLE
             true
         }
         // 약 뷰 배치
