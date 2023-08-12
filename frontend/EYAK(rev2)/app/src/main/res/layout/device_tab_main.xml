@@ -76,21 +76,6 @@
                         android:text="Medicine Name"
                         android:textColor="#757863" />
 
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <Button
-                        android:id="@+id/devicePickedDelBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:backgroundTint="#FF9B9B"
-                        android:fontFamily="@font/tmoney_regular"
-                        android:includeFontPadding="false"
-                        android:text="삭제"
-                        android:textColor="#757863" />
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -196,13 +181,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="5dp">
+                android:layout_marginVertical="5dp"
+                android:background="#DDE6ED"
+                android:paddingHorizontal="10dp">
 
                 <LinearLayout
                     android:id="@+id/medicineScrollLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:orientation="horizontal">
