@@ -68,9 +68,8 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                 .join(qPrescription.prescriptionMedicineRoutines, prescriptionMedicineRoutine)
                 .fetchJoin()
                 .where(qPrescription.member.eq(member)
-                        .and((qPrescription.startDateTime.loe(startDateTime.toLocalDate().atStartOfDay()).and(qPrescription.endDateTime.loe(endDateTime.toLocalDate().atStartOfDay())))
-                        .or(qPrescription.startDateTime.goe(startDateTime.toLocalDate().atStartOfDay()).and(qPrescription.endDateTime.loe(endDateTime.toLocalDate().atStartOfDay())))
-                        .or(qPrescription.startDateTime.goe(startDateTime.toLocalDate().atStartOfDay()).and(qPrescription.endDateTime.goe(endDateTime.toLocalDate().atStartOfDay())))))
+                        .and(qPrescription.startDateTime.loe(endDateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(startDateTime.toLocalDate().atStartOfDay())))
                 .fetch();
 
 
