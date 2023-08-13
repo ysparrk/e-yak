@@ -33,7 +33,7 @@ public class Follow {
     private Member followee;
     private String customName;
     @Enumerated(EnumType.STRING)
-    private Scope followeeScope;
+    private Scope followeeScope; // Followee가 Follower에게 공개할 정보의 범위
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp

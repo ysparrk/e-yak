@@ -1,7 +1,15 @@
 package now.eyak.routine.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.YearMonth;
+import java.util.List;
+import java.util.NoSuchElementException;
+import now.eyak.exception.NoPermissionException;
 import now.eyak.member.domain.Member;
 import now.eyak.member.repository.MemberRepository;
+import now.eyak.member.service.MemberService;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
@@ -14,8 +22,12 @@ import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
+import now.eyak.social.Scope;
+import now.eyak.social.domain.FollowRequest;
+import now.eyak.social.dto.FollowRequestAcceptDto;
+import now.eyak.social.dto.FollowRequestDto;
+import now.eyak.social.service.FollowRequestService;
 import now.eyak.survey.domain.ContentTextResult;
-import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentTextResultDto;
 import now.eyak.survey.enumeration.SurveyContentType;
@@ -32,13 +44,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @EnableScheduling  // 스케줄링 활성화
 @ExtendWith(SpringExtension.class)
@@ -63,6 +68,10 @@ class MedicineRoutineCheckServiceImplTest {
     SurveyRepository surveyRepository;
     @Autowired
     SurveyContentRepository surveyContentRepository;
+    @Autowired
+    MemberService memberService;
+    @Autowired
+    FollowRequestService followRequestService;
 
     Member member;
     Prescription prescription;
@@ -74,7 +83,6 @@ class MedicineRoutineCheckServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
-
         member = Member.builder()
                 .providerName("google")
                 .nickname("박길동")
@@ -246,7 +254,7 @@ class MedicineRoutineCheckServiceImplTest {
                 .build();
 
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId());  // true 값 하나 만들기
-        List<MedicineRoutineMonthDateDto> monthResult = medicineRoutineCheckService.getMonthResultsByMonthAndMember(YearMonth.now(), member.getId()); // 데이터 모으기
+        List<MedicineRoutineMonthDateDto> monthResult = medicineRoutineCheckService.getMonthResultsByMonthAndMember(YearMonth.now(), member.getId(), null); // 데이터 모으기
 
         // then
         Assertions.assertThat(monthResult).size().isEqualTo(YearMonth.now().lengthOfMonth());
@@ -291,13 +299,152 @@ class MedicineRoutineCheckServiceImplTest {
 
         ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());
 
-        MedicineRoutineDateResponseDto detailResult = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(LocalDate.now(), member.getId()); // 결과 불러오기
+        MedicineRoutineDateResponseDto detailResult = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(LocalDate.now(), member.getId(), null); // 결과 불러오기
 
         // then
         Assertions.assertThat(contentTextResult.getText()).isEqualTo(detailResult.getSurveyContentDtos().getContentTextResultResponse().getText());
-        System.out.println("detailResult = " + detailResult.getMedicineRoutineDateDtos());
-        System.out.println("detailResult = " + detailResult);
-        // TODO: Assertions 작성
+    }
+
+    @DisplayName("팔로우 관계인 상대방의 Date Detail 조회 - Scope ALL")
+    @Test
+    @Transactional
+    void getDateDetailResultsByDateAndMemberRequesteeScopeALL() {
+        // given
+        Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
+
+        MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
+                .date(LocalDate.now())
+                .prescriptionId(testPrescription.getId())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .build();
+
+
+        MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
+        MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
+                .id(checkIdResponseDto.getId())
+                .date(LocalDate.now())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .memberId(member.getId())
+                .took(true)
+                .prescriptionId(testPrescription.getId())
+                .build();
+
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
+
+        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
+
+
+        contentTextResultDto = ContentTextResultDto.builder()
+                .text("오늘의 컨디션 입력합니다.")
+                .build();
+
+        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());
+
+        // A와 B를 팔로우 관계 설정
+        Member memberB = Member.builder()
+                .providerName("google")
+                .nickname("도우너")
+                .wakeTime(LocalTime.MIN)
+                .breakfastTime(LocalTime.MIN)
+                .lunchTime(LocalTime.NOON)
+                .dinnerTime(LocalTime.now())
+                .bedTime(LocalTime.MIDNIGHT)
+                .eatingDuration(LocalTime.of(1, 0))
+                .build();
+        memberB = memberRepository.save(memberB);
+        
+        FollowRequestDto followRequestDto = FollowRequestDto.builder()
+                .followeeNickname(member.getNickname())
+                .customName(member.getNickname() +  "에 대한 별칭")
+                .followerScope(Scope.CALENDAR)
+                .build();
+
+        FollowRequest followRequest = followRequestService.insertFollowRequest(followRequestDto, memberB.getId());
+
+        FollowRequestAcceptDto followRequestAcceptDto = FollowRequestAcceptDto.builder()
+                .customName(memberB.getNickname() + "에 대한 별칭")
+                .followeeScope(Scope.ALL)
+                .build();
+
+        followRequestService.acceptFollowRequest(followRequestAcceptDto, followRequest.getId(), member.getId());
+
+        // when
+        MedicineRoutineDateResponseDto detailResult = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(LocalDate.now(), memberB.getId(), member.getId()); // memberB가 member의 하루 복약 상세 정보 조회를 요청
+
+        // then
+        Assertions.assertThat(contentTextResult.getText()).isEqualTo(detailResult.getSurveyContentDtos().getContentTextResultResponse().getText());
+    }
+
+    @DisplayName("팔로우 관계인 상대방의 Date Detail 조회 - Scope CALENDAR")
+    @Test
+    @Transactional
+    void getDateDetailResultsByDateAndMemberRequesteeScopeCalendar() {
+        // given
+        Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
+
+        MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
+                .date(LocalDate.now())
+                .prescriptionId(testPrescription.getId())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .build();
+
+
+        MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
+        MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
+                .id(checkIdResponseDto.getId())
+                .date(LocalDate.now())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(2).getMedicineRoutine().getRoutine())
+                .memberId(member.getId())
+                .took(true)
+                .prescriptionId(testPrescription.getId())
+                .build();
+
+        medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
+
+        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
+
+
+        contentTextResultDto = ContentTextResultDto.builder()
+                .text("오늘의 컨디션 입력합니다.")
+                .build();
+
+        ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());
+
+        // A와 B를 팔로우 관계 설정
+        Member memberB = Member.builder()
+                .providerName("google")
+                .nickname("도우너")
+                .wakeTime(LocalTime.MIN)
+                .breakfastTime(LocalTime.MIN)
+                .lunchTime(LocalTime.NOON)
+                .dinnerTime(LocalTime.now())
+                .bedTime(LocalTime.MIDNIGHT)
+                .eatingDuration(LocalTime.of(1, 0))
+                .build();
+        memberB = memberRepository.save(memberB);
+        Long memberBId = memberB.getId();
+
+        FollowRequestDto followRequestDto = FollowRequestDto.builder()
+                .followeeNickname(member.getNickname())
+                .customName(member.getNickname() +  "에 대한 별칭")
+                .followerScope(Scope.CALENDAR)
+                .build();
+
+        FollowRequest followRequest = followRequestService.insertFollowRequest(followRequestDto, memberB.getId());
+
+        FollowRequestAcceptDto followRequestAcceptDto = FollowRequestAcceptDto.builder()
+                .customName(memberB.getNickname() + "에 대한 별칭")
+                .followeeScope(Scope.CALENDAR)
+                .build();
+
+        followRequestService.acceptFollowRequest(followRequestAcceptDto, followRequest.getId(), member.getId());
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(() -> medicineRoutineCheckService.getDateDetailResultsByDateAndMember(LocalDate.now(), memberBId, member.getId()))
+                .isInstanceOf(NoPermissionException.class); // memberB가 member의 하루 복약 상세 정보 조회를 요청시 Scope이 CALENDAR이므로 예외 발생
     }
 
     @DisplayName("Get MedicineRoutineCheckId")

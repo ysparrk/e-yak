@@ -13,6 +13,6 @@ public class NoPermissionException extends CustomException {
 
     @Override
     public HttpStatus getStatusCode() {
-        return HttpStatus.BAD_REQUEST;
+        return HttpStatus.FORBIDDEN;
     }
 }
