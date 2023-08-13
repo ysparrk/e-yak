@@ -89,7 +89,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
 
             Long fullDose = (long) dateResults.size();
 
-            // 실제 복용 개수 계산
+            // 실제 복용량 계산
             Long actualDose = dateResults.stream()
                     .filter(MedicineRoutineCheckBetweenDatesQueryDto::isTook)
                     .count();
