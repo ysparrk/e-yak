@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -16,6 +18,7 @@ public class ContentStatusResultChoiceStatusEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private ContentStatusResult contentStatusResult;
     @ManyToOne
