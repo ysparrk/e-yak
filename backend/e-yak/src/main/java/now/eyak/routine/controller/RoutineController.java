@@ -5,23 +5,22 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import now.eyak.member.dto.response.SignInResponseDto;
 import now.eyak.routine.domain.MedicineRoutineCheck;
-import now.eyak.routine.dto.request.MedicineRoutineCheckDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
 import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineDateResponseDto;
 import now.eyak.routine.dto.response.MedicineRoutineMonthDateDto;
-import now.eyak.routine.dto.response.MedicineRoutineMonthResponseDto;
+import now.eyak.routine.dto.response.PdfResponseDto;
 import now.eyak.routine.service.MedicineRoutineCheckService;
-import now.eyak.util.ApiVersionHolder;
+import now.eyak.routine.service.PdfService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -31,6 +30,7 @@ import java.util.List;
 public class RoutineController {
 
     private final MedicineRoutineCheckService medicineRoutineCheckService;
+    private final PdfService pdfService;
 
     /**
      * 약 복용 체크 기록 및 수정(true or false)
@@ -131,6 +131,21 @@ public class RoutineController {
         MedicineRoutineCheckIdResponseDto medicineRoutineCheckId = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, memberId);
 
         return ResponseEntity.ok(medicineRoutineCheckId);
+    }
+
+
+    @Operation(summary = "Get PDF Results", description = "요청받은 기간의 복용중인 약과, 설문조사를 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PdfResponseDto.class)))
+    @GetMapping("/pdf")
+    public ResponseEntity getPdfResults(
+            @AuthenticationPrincipal Long memberId,
+            @RequestParam LocalDateTime startDateTime,
+            @RequestParam LocalDateTime endDateTime
+            ) throws URISyntaxException {
+
+        PdfResponseDto pdfResponseByDatesAndMember = pdfService.getPdfResponseByDatesAndMember(memberId, startDateTime, endDateTime);
+
+        return ResponseEntity.ok(pdfResponseByDatesAndMember);
     }
 
 }
