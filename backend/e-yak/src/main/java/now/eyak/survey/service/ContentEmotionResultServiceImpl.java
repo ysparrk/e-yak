@@ -121,7 +121,6 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
         }
 
         return emotionResult;
-
     }
 
 
