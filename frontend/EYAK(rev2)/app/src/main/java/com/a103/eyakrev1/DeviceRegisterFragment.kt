@@ -52,6 +52,7 @@ class DeviceRegisterFragment : Fragment() {
     private var permFlag: Boolean? = null
     private var devicePairedFlag = false
     private var deviceFindFlag = false
+    private var deviceDeleteFlag = false
 
     // Preference
     var pref: SharedPreferences? = null
@@ -108,9 +109,7 @@ class DeviceRegisterFragment : Fragment() {
         editor = pref?.edit()
         deviceNameSaved = pref?.getString("DEVICE_NAME", "")
         var gson = Gson()
-        var json = pref?.getString("DEVICE_ITSELF", "")
-        deviceSaved = gson.fromJson(json, BluetoothDevice::class.java)
-        json = pref?.getString("DEVICE_CELL1", "")
+        var json = pref?.getString("DEVICE_CELL1", "")
         cell1Data = gson.fromJson(json, Medicine::class.java)
         json = pref?.getString("DEVICE_CELL2", "")
         cell2Data = gson.fromJson(json, Medicine::class.java)
@@ -134,10 +133,10 @@ class DeviceRegisterFragment : Fragment() {
             requireActivity().registerReceiver(receiver, filter_finished)
             val filter_bonded = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
             requireActivity().registerReceiver(receiver, filter_bonded)
-            val filter_connect = IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED)
-            requireActivity().registerReceiver(receiver, filter_connect)
-            val filter_disconnect = IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED)
-            requireActivity().registerReceiver(receiver, filter_disconnect)
+//            val filter_connect = IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED)
+//            requireActivity().registerReceiver(receiver, filter_connect)
+//            val filter_disconnect = IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+//            requireActivity().registerReceiver(receiver, filter_disconnect)
         } catch (e: Exception) {}
     }
 
@@ -193,13 +192,19 @@ class DeviceRegisterFragment : Fragment() {
             }.show()
         }
         // 등록 디바이스 통신 확인
-        layout.findViewById<Button>(R.id.btConnCheckBtn).setOnClickListener {
-            connectDevice(deviceSaved)
-        }
+//        layout.findViewById<Button>(R.id.btConnCheckBtn).setOnClickListener {
+//            connectDevice(deviceSaved)
+//        }
 
         // 근처 기기 찾기
         layout.findViewById<Button>(R.id.btFindBtn).setOnClickListener {
-            bluetoothSearch()
+            if (permFlag == false) {
+                Toast.makeText(requireActivity(), "권한 요청이 필요합니다.", Toast.LENGTH_SHORT).show()
+            } else if (btAdapter?.isEnabled == false) {
+                Toast.makeText(requireActivity(), "블루투스를 먼저 켜주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                bluetoothSearch()
+            }
         }
 
         // 등록 기기 편집 창으로 이동
@@ -256,18 +261,23 @@ class DeviceRegisterFragment : Fragment() {
     private fun bluetoothOnOffUI() {
         timer (period = 1000) {
             activity?.runOnUiThread {
+                val btBtn = layout.findViewById<Button>(R.id.btOnOffBtn)
                 if (btAdapter?.isEnabled == true) {
+                    // 블투 아이콘
                     layout.findViewById<ImageView>(R.id.btImage).setImageResource(R.drawable.baseline_bluetooth_24)
-                    var btBtn = layout.findViewById<Button>(R.id.btOnOffBtn)
                     btBtn.isClickable = false
                     btBtn.background.setTint(Color.parseColor("#E0E0E0"))
-                    layout.findViewById<TextView>(R.id.btOnOffBtn).text = "블루투스 켜짐"
+                    btBtn.text = "블루투스 켜짐"
+                    // 약통 연결 상태
                 } else {
+                    // 블투 아이콘
                     layout.findViewById<ImageView>(R.id.btImage).setImageResource(R.drawable.baseline_bluetooth_disabled_24)
-                    var btBtn = layout.findViewById<Button>(R.id.btOnOffBtn)
                     btBtn.isClickable = true
                     btBtn.background.setTint(Color.parseColor("#E3F2C1"))
-                    layout.findViewById<TextView>(R.id.btOnOffBtn).text = "블루투스 켜기"
+                    btBtn.text = "블루투스 켜기"
+                    // 약통 연결 상태
+                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#747679"))
+                    layout.findViewById<TextView>(R.id.btConnState).text = "약통 상태확인을 위해 블루투스를 켜주세요"
                 }
             }
         }
@@ -278,17 +288,17 @@ class DeviceRegisterFragment : Fragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val action: String? = intent?.action
             when (action) {
-                BluetoothDevice.ACTION_ACL_CONNECTED -> {
-                    Toast.makeText(requireActivity(), "connect", Toast.LENGTH_SHORT).show()
-//                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#80BA69"))
-//                    layout.findViewById<TextView>(R.id.btConnState).text = "약통과 통신할 수 있습니다."
-//                    try {socket?.close(); fallbackSocket?.close()} catch (e: Exception) {}
-                }
-                BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-                    Toast.makeText(requireActivity(), "disconnect", Toast.LENGTH_SHORT).show()
-//                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#FF9B9B"))
-//                    layout.findViewById<TextView>(R.id.btConnState).text = "약통이 근처에 없거나 전원이 꺼졌습니다."
-                }
+//                BluetoothDevice.ACTION_ACL_CONNECTED -> {
+//                    Toast.makeText(requireActivity(), "connect", Toast.LENGTH_SHORT).show()
+////                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#80BA69"))
+////                    layout.findViewById<TextView>(R.id.btConnState).text = "약통과 통신할 수 있습니다."
+////                    try {socket?.close(); fallbackSocket?.close()} catch (e: Exception) {}
+//                }
+//                BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
+//                    Toast.makeText(requireActivity(), "disconnect", Toast.LENGTH_SHORT).show()
+////                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#FF9B9B"))
+////                    layout.findViewById<TextView>(R.id.btConnState).text = "약통이 근처에 없거나 전원이 꺼졌습니다."
+//                }
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> { // 근처 기기 탐색 시작
                     layout.findViewById<CardView>(R.id.btListCard).visibility = View.VISIBLE
                     layout.findViewById<LinearLayout>(R.id.btListLayout).removeAllViews()
@@ -326,8 +336,8 @@ class DeviceRegisterFragment : Fragment() {
                     if (deviceSaved?.bondState == BluetoothDevice.BOND_BONDED) {
                         // 페어링 승인됨
                         editor?.putString("DEVICE_NAME", deviceNameSaved)?.apply()
-                        val json = Gson().toJson(deviceSaved)
-                        editor?.putString("DEVICE_ITSELF", json)?.apply()
+                        layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#80BA69"))
+                        layout.findViewById<TextView>(R.id.btConnState).text = "약통이 등록 되었습니다."
                         layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.GONE
                         layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.VISIBLE
                         layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.VISIBLE
@@ -338,12 +348,15 @@ class DeviceRegisterFragment : Fragment() {
                         // 페어링 승인 중...
                     } else if (deviceSaved?.bondState == BluetoothDevice.BOND_NONE) {
                         // 페어링 거부됨
-                        editor?.remove("DEVICE_NAME")?.commit()
-                        editor?.remove("DEVICE_ITSELF")?.commit()
-                        layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.VISIBLE
-                        layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.GONE
-                        layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.GONE
-                        layout.findViewById<LinearLayout>(R.id.btFindLayout).visibility = View.VISIBLE
+                        layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#747679"))
+                        layout.findViewById<TextView>(R.id.btConnState).text = "약통 등록 안됨. 삭제하고 다시 등록해 주세요."
+                        if (deviceDeleteFlag) {
+                            layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.VISIBLE
+                            layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.GONE
+                            layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.GONE
+                            layout.findViewById<LinearLayout>(R.id.btFindLayout).visibility = View.VISIBLE
+                            deviceDeleteFlag = false
+                        }
                         deviceSaved = null
                         deviceNameSaved = ""
                     }
@@ -356,7 +369,9 @@ class DeviceRegisterFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode) {
             REQUEST_CODE_ENABLE_BT ->
-                if (resultCode != Activity.RESULT_OK) {}
+                if (resultCode == Activity.RESULT_OK) {
+                    if (permFlag == true) bluetoothPaired()
+                }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -376,7 +391,7 @@ class DeviceRegisterFragment : Fragment() {
         }
         if (devicePairedFlag == false) {
             layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#747679"))
-            layout.findViewById<TextView>(R.id.btConnState).text = "약통 등록이 취소되었습니다.\n약통을 삭제하고 다시 등록해 주세요."
+            layout.findViewById<TextView>(R.id.btConnState).text = "약통 등록 안됨. 약통을 삭제하고 다시 등록해 주세요."
         }
         showDeviceUI()
     }
@@ -478,11 +493,9 @@ class DeviceRegisterFragment : Fragment() {
                 fallbackSocket?.connect()
             } catch (e: Exception) {
                 try {
-//                layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#FF9B9B"))
-//                layout.findViewById<TextView>(R.id.btConnState).text = "약통이 근처에 없거나 전원이 꺼졌습니다."
                     socket?.close()
                     fallbackSocket?.close()
-                } catch (e: IOException) {}
+                } catch (e: Exception) {}
             }
         }
         thread.start()
@@ -490,10 +503,23 @@ class DeviceRegisterFragment : Fragment() {
 
     // 디바이스 삭제
     private fun bluetoothDelete() {
-        try {
-            deviceSaved!!::class.java.getMethod("removeBond").invoke(deviceSaved)
-        } catch (e: Exception) {
-            Toast.makeText(requireActivity(), "삭제 실패", Toast.LENGTH_SHORT).show()
+        if (btAdapter?.isEnabled == true) {
+            deviceDeleteFlag = true
+            editor?.remove("DEVICE_NAME")?.commit()
+            layout.findViewById<TextView>(R.id.btNotFindText).visibility = View.VISIBLE
+            layout.findViewById<LinearLayout>(R.id.btConnLayout).visibility = View.GONE
+            layout.findViewById<LinearLayout>(R.id.btDeviceUiLayout).visibility = View.GONE
+            layout.findViewById<LinearLayout>(R.id.btFindLayout).visibility = View.VISIBLE
+            try {
+                deviceSaved!!::class.java.getMethod("removeBond").invoke(deviceSaved)
+            } catch (e: Exception) {
+                Toast.makeText(requireActivity(), "삭제 실패, 혹은 이미 제거된 약통입니다.", Toast.LENGTH_SHORT).show()
+            }
+            deviceDeleteFlag = false
+            deviceSaved = null
+            deviceNameSaved = ""
+        } else {
+            Toast.makeText(requireActivity(), "삭제를 위해서 블루투스가 켜져 있어야 합니다.", Toast.LENGTH_SHORT).show()
         }
     }
 

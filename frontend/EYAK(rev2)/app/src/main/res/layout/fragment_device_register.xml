@@ -90,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
-                    android:gravity="center_horizontal|center_vertical"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -112,21 +112,6 @@
                         android:textAlignment="viewStart"
                         android:textColor="#757863"
                         android:textSize="16sp" />
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <Button
-                        android:id="@+id/btConnCheckBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="0"
-                        android:backgroundTint="#E3F2C1"
-                        android:text="통신 확인"
-                        android:textColor="#757863" />
 
                 </LinearLayout>
 
@@ -214,7 +199,7 @@
                                     android:layout_height="70dp"
                                     android:background="@drawable/baseline_circle_24"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="10dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                                 <ImageView
@@ -223,7 +208,7 @@
                                     android:layout_height="70dp"
                                     android:background="@drawable/baseline_circle_24"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="10dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                             </TableRow>
@@ -238,7 +223,7 @@
                                     android:layout_height="70dp"
                                     android:background="@drawable/baseline_circle_24"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="10dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                                 <ImageView
@@ -247,7 +232,7 @@
                                     android:layout_height="70dp"
                                     android:background="@drawable/baseline_circle_24"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="10dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                             </TableRow>
@@ -260,7 +245,7 @@
                             android:layout_height="140dp"
                             android:background="@drawable/baseline_circle_24"
                             android:backgroundTint="#DDE6ED"
-                            android:padding="36dp"
+                            android:padding="44dp"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                     </LinearLayout>
