@@ -6,7 +6,9 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -25,6 +27,8 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -52,7 +56,14 @@ class MainActivity : AppCompatActivity() {
 
     //=== bluetooth 연결용 var
     var btPermissionFlag: Boolean? = null
-    var btDeviceSaved: BluetoothDevice? = null
+    var btConnectFlag = false
+    var deviceNameSaved: String? = null
+    var deviceSaved: BluetoothDevice? = null
+    var socket: BluetoothSocket? = null
+    var fallbackSocket: BluetoothSocket? = null
+    // bluetooth Manager & Adapter
+    private val btManager: BluetoothManager by lazy { this.getSystemService(BluetoothManager::class.java) }
+    private val btAdapter: BluetoothAdapter? by lazy { btManager.getAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +97,10 @@ class MainActivity : AppCompatActivity() {
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, secondAlarmMillis, secondPendingIntent)
 
         //=== bluetooth 연결
+        // 블투 어뎁터 init
+        if (btAdapter == null) {
+            Toast.makeText(this, "이 기기에서 블루투스를 지원하지 않음", Toast.LENGTH_LONG).show()
+        }
         // 권한 체크
         val permissions = arrayOf(
             android.Manifest.permission.BLUETOOTH,
@@ -96,19 +111,24 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.BLUETOOTH_SCAN,
         )
         btPermissionFlag = checkPermissions(permissions)
-        // pref 불러오기
-        var json = pref.getString("DEVICE_ITSELF", "")
-        btDeviceSaved = Gson().fromJson(json, BluetoothDevice::class.java)
-        if (btPermissionFlag == true) {
-            if (btDeviceSaved == null) {
-                Toast.makeText(this, "device does not exist", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "perm ok", Toast.LENGTH_SHORT).show()
-                connectDevice(btDeviceSaved)
+        // pref 저장된 페어링 약통 이름 가져오기
+        deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+        // 권한 상태에 따라 페어링된 약통 불러오기
+        if (deviceNameSaved != "") {
+            if (btPermissionFlag == true && btAdapter != null) {
+                if (btAdapter?.isEnabled == false) {
+                    Toast.makeText(this, "약통과의 통신을 위해 블루투스를 켜주세요.", Toast.LENGTH_SHORT).show()
+                } else if (bluetoothPaired() == false) {
+                    Toast.makeText(this, "약통과 연결이 끊어졌습니다. 약통을 다시 등록해주세요.", Toast.LENGTH_SHORT).show()
+                } else {
+                    connectDevice(deviceSaved) // 권한, 저장된 정보 모두 ok 일시 - 연결 시도.
+                }
+            } else if (btPermissionFlag == false && btAdapter != null) {
+                Toast.makeText(this, "권한이 허용되지 않았습니다. 약통이 정상적으로 동작하지 않을 수 있습니다.", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            Toast.makeText(this, "perm not", Toast.LENGTH_SHORT).show()
         }
+
+
 
         initPage()
 
@@ -273,18 +293,29 @@ class MainActivity : AppCompatActivity() {
         }
         return flag
     }
-    // connect 용 스레드
+    // 페어링된 블루투스 기기 찾기.
+    private fun bluetoothPaired(): Boolean {
+        val pairedDevices: Set<BluetoothDevice>? = btAdapter?.bondedDevices
+        var devicePairedFlag = false
+        pairedDevices?.forEach { device ->
+            if (device.name == deviceNameSaved) {
+                deviceSaved = device
+                devicePairedFlag = true
+                return@forEach
+            }
+        }
+        return devicePairedFlag
+    }
+    // 블루투스 연결용 스레드
     private fun connectDevice(targetDevice: BluetoothDevice?) {
         val thread = Thread {
-            var socket: BluetoothSocket? = null
-            var fallbackSocket: BluetoothSocket? = null
+            val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+            socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
+            var clazz = socket?.remoteDevice?.javaClass
+            var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
+            var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
+            fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
             try {
-                val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-                socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
-                var clazz = socket?.remoteDevice?.javaClass
-                var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
-                var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
-                fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
                 fallbackSocket?.connect()
             } catch (e: Exception) {
                 try {
