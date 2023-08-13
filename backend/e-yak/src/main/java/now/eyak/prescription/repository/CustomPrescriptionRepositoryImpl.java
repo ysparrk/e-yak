@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import now.eyak.member.domain.Member;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.domain.QPrescription;
-import now.eyak.routine.dto.query.MedicineRoutineCheckBetweenDatesQueryDto;
 import now.eyak.prescription.dto.query.PrescriptionListQueryDto;
 import now.eyak.routine.domain.QMedicineRoutineCheck;
+import now.eyak.routine.dto.query.MedicineRoutineCheckBetweenDatesQueryDto;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -107,7 +107,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                     .medicineShape(prescription.getMedicineShape())
                     .medicineDose(prescription.getMedicineDose())
                     .unit(prescription.getUnit())
-                    .prescriptionMedicineRoutines(prescription.getPrescriptionMedicineRoutines())
+                    .medicineRoutines(prescription.getPrescriptionMedicineRoutines().stream().map(prescriptionRoutine -> prescriptionRoutine.getMedicineRoutine().getRoutine()).toList())
                     .fullDose(fullDose)
                     .actualDose(actualDose)
                     .build();
