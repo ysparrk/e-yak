@@ -170,8 +170,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -190,8 +190,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -210,8 +210,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -230,8 +230,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -250,8 +250,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -270,8 +270,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -290,8 +290,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -310,8 +310,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                         .and(qMedicineRoutineCheck.member.eq(member))
                         .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -357,8 +357,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BED_AFTER)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -374,8 +374,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BREAKFAST_BEFORE)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -391,8 +391,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BREAKFAST_AFTER)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -408,8 +408,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.LUNCH_BEFORE)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -425,8 +425,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.LUNCH_AFTER)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -442,8 +442,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.DINNER_BEFORE)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -459,8 +459,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.DINNER_AFTER)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
@@ -476,8 +476,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .from(qPrescription, qMedicineRoutineCheck)
                 .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BED_BEFORE)
                         .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime))
-                        .and(qPrescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay().minusDays(1)))
+                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
+                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
                 )
                 .fetch();
 
