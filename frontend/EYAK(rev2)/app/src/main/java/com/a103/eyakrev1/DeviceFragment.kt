@@ -25,6 +25,7 @@ import android.widget.ScrollView
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
@@ -59,6 +60,7 @@ class DeviceFragment : Fragment() {
     // 약통 설정 처음값, 변경값
     private var cellInitData = Array<Medicine?>(5) { null }
     private var cellNowData = Array<Medicine?>(5) { null }
+    private var alaInitData = Array<Boolean?>(2) { null }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +86,7 @@ class DeviceFragment : Fragment() {
         cellNowData = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
         soundData = pref?.getBoolean("DEVICE_SOUND", true)
         buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+        alaInitData = arrayOf(soundData, buzzData)
     }
 
     override fun onCreateView(
@@ -210,36 +213,34 @@ class DeviceFragment : Fragment() {
                 } else { // 약통 칸에 드롭됨
                     view.background.setTint(Color.parseColor("#D8D8DA"))
                     view.invalidate()
-                    val viewIdNo = viewId.last().toString().toInt()
-                    var c2cFlag = false
-                    if (cellNowData[viewIdNo-1] != null) { // 드롭된 칸에 이미 약이 존재
-                        val destination = view as LinearLayout
-                        val tmpView = destination.findViewById<LinearLayout>(R.id.deviceMedicItem)
-                        tmpView.findViewById<TextView>(R.id.deviceMedicText).visibility = View.VISIBLE
-                        destination.removeView(tmpView)
-                        layout.findViewById<LinearLayout>(R.id.medicineScrollLayout).addView(tmpView)
-                    }
-                    for (i in 0..4) { // 약 칸 -> 약 칸 배치
+                    val viewIdNo = viewId.last().toString().toInt() // 드롭된 칸 번호
+                    var prevNo = 0// 이전 칸 번호 (0 = 리스트, 1-5 = 칸)
+                    for (i in 0..4) {
                         if (cellNowData[i] == itemMedic) {
-                            c2cFlag = true
-                            if (i+1 == viewIdNo) {
-                                Toast.makeText(requireActivity(), "same cell", Toast.LENGTH_SHORT).show()
-                            } else {
-                                cellNowData[i] = null
-                                cellNowData[viewIdNo - 1] = itemMedic
-                                owner.removeView(v)
-                                val destination = view as LinearLayout
-                                destination.addView(v)
-                            }
-                            break
+                            prevNo = i+1
                         }
                     }
-                    if (c2cFlag == false) { // 약 리스트 -> 약 칸 배치
-                        cellNowData[viewIdNo - 1] = itemMedic
-                        v.findViewById<TextView>(R.id.deviceMedicText).visibility = View.GONE
-                        owner.removeView(v)
-                        val destination = view as LinearLayout
-                        destination.addView(v)
+                    if (prevNo != viewIdNo) {
+                        if (cellNowData[viewIdNo-1] != null) { // 드롭된 칸에 이미 약이 존재
+                            val destination = view as LinearLayout
+                            val tmpView = destination.findViewById<LinearLayout>(R.id.deviceMedicItem)
+                            tmpView.findViewById<TextView>(R.id.deviceMedicText).visibility = View.VISIBLE
+                            destination.removeView(tmpView)
+                            layout.findViewById<LinearLayout>(R.id.medicineScrollLayout).addView(tmpView)
+                        }
+                        if (prevNo == 0) { // 리스트에서 온 경우
+                            cellNowData[viewIdNo-1] = itemMedic
+                            v.findViewById<TextView>(R.id.deviceMedicText).visibility = View.GONE
+                            owner.removeView(v)
+                            val destination = view as LinearLayout
+                            destination.addView(v)
+                        } else { // 다른 칸에서 온 경우.
+                            cellNowData[prevNo-1] = null
+                            cellNowData[viewIdNo-1] = itemMedic
+                            owner.removeView(v)
+                            val destination = view as LinearLayout
+                            destination.addView(v)
+                        }
                     }
                 }
                 true
@@ -346,6 +347,8 @@ class DeviceFragment : Fragment() {
                 break
             }
         }
+        if (alaInitData[0] != soundData) changeFlag = true
+        if (alaInitData[1] != buzzData) changeFlag = true
         if (changeFlag) {
             AlertDialog.Builder(getContext()).apply {
                 setTitle("약통 설정")
@@ -357,6 +360,10 @@ class DeviceFragment : Fragment() {
                 }
                 setNegativeButton("취소") { _, _ -> }
             }.show()
+        } else {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragment, DeviceRegisterFragment())
+                .commit()
         }
     }
 
@@ -369,6 +376,8 @@ class DeviceFragment : Fragment() {
                 break
             }
         }
+        if (alaInitData[0] != soundData) changeFlag = true
+        if (alaInitData[1] != buzzData) changeFlag = true
         if (changeFlag) {
             AlertDialog.Builder(getContext()).apply {
                 setTitle("약통 설정 저장")
@@ -385,13 +394,12 @@ class DeviceFragment : Fragment() {
                         .replace(R.id.mainFragment, DeviceRegisterFragment())
                         .commit()
                 }
-                setNeutralButton("보류") {_, _ -> }
-                setNegativeButton("저장하지 않고 나가기") { _, _ ->
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainFragment, DeviceRegisterFragment())
-                        .commit()
-                }
+                setNegativeButton("취소") { _, _ -> }
             }.show()
+        } else {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragment, DeviceRegisterFragment())
+                .commit()
         }
     }
 }
