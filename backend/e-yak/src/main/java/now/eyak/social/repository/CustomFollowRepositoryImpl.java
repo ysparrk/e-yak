@@ -2,12 +2,11 @@ package now.eyak.social.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import now.eyak.member.domain.Member;
 import now.eyak.social.domain.QFollow;
 import now.eyak.social.dto.FollowerResponseDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomFollowRepositoryImpl implements CustomFollowRepository {
