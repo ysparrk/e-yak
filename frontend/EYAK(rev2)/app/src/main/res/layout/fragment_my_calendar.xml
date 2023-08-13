@@ -25,16 +25,11 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/tmoney_bold"
                 android:gravity="center"
-                android:text="내 복약 한눈에 보기"
+                android:text="내 복약 달력"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#757863"
                 android:textSize="30sp" />
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,6 +75,30 @@
             android:layout_weight="15"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal" />
+
+        <LinearLayout
+            android:id="@+id/ForThoseWhoHaveAccessLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="66"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/tv_calendar_day_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/tmoney_bold"
+                android:gravity="center"
+                android:padding="12dp"
+                android:textSize="16sp" />
+
+            <ListView
+                android:id="@+id/medicineInCalendarListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#FFFFFF" />
+        </LinearLayout>
 
     </LinearLayout>
 

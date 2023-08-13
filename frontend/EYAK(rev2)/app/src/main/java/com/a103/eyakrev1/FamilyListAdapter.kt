@@ -2,6 +2,7 @@ package com.a103.eyakrev1
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,13 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.setFragmentResult
 
 class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>): BaseAdapter() {
+
+    var mainActivity: MainActivity = context as MainActivity
+
     override fun getCount(): Int {
         return familyList.size
     }
@@ -45,6 +51,17 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
 
         familyListNameTextView.text = family.custom_name
         familyListNicknameTextView.text = family.nickname
+
+        familyDetailButton.setOnClickListener {
+            val bundle = Bundle()
+
+            bundle.putInt("requeteeId", family.memberId)
+            bundle.putString("customName", family.custom_name)
+
+            (context as FragmentActivity).supportFragmentManager.setFragmentResult("familyMonthlyDose", bundle)
+
+            mainActivity!!.gotoMyCalendar()
+        }
 
         return view
     }

@@ -47,6 +47,50 @@ data class ChangeAccountInfoBodyModel(
     var eatingDuration: String,
 )
 
+data class medicineDetailsInCalendarResponseModel(
+    var date: String,
+    var medicineRoutineDateDtos: ArrayList<MedicineDetailInCalendar>,
+    var surveyContentDtos: surveyContentDtos,
+)
+
+data class MedicineDetailInCalendar(
+    var date: String?,
+    var prescriptionId: Int,
+    var customName: String,
+    var routine: String,
+    var took: Boolean,
+)
+
+data class surveyContentDtos(
+    var contentEmotionResultResponse: contentEmotionResultResponse,
+    var contentStatusResultResponse: contentStatusResultResponse,
+    var contentTextResultResponse: contentTextResultResponse,
+)
+
+data class contentEmotionResultResponse(
+    var contentEmotionResultId: Int,
+    var memberId: Int,
+    var choiceEmotion: String,
+    var createdAt: String,
+    var updatedAt: String
+)
+
+data class contentStatusResultResponse(
+    var contentStatusResultId: Int,
+    var memberId: Int,
+    var selectedStatusChoices: ArrayList<String>,
+    var createdAt: String,
+    var updatedAt: String
+)
+
+data class contentTextResultResponse(
+    var contentTextResultId: Int,
+    var memberId: Int,
+    var text: String,
+    var createdAt: String,
+    var updatedAt: String
+)
+
 data class ChangeAccountInfoResponseModel(
     var id: Int,
     var providerName: String,
@@ -98,8 +142,8 @@ data class PrescriptionEditBodyModel(
 
 data class Dates(
     var date: String,
-    var full_dose: Int,
-    var actual_dose: Int,
+    var fullDose: Int,
+    var actualDose: Int,
 )
 
 data class FollowRequestsDataModel(

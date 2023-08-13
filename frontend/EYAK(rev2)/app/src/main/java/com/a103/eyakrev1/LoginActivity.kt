@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
     private val oneTapResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()){ result ->
         try {
             val credential = oneTapClient?.getSignInCredentialFromIntent(result.data)
-            Log.d("여기 보자", "${credential}")
+//            Log.d("여기 보자", "${credential}")
             val idToken = credential?.googleIdToken
             when {
                 idToken != null -> {
@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
                     // with your backend
                     val msg = "idToken: $idToken"
 //                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE).show()
-                    Log.d("google one tap", msg)
+//                    Log.d("google one tap", msg)
                     
                     // sharedPreference에 저장
                     val pref = PreferenceManager.getDefaultSharedPreferences(this)

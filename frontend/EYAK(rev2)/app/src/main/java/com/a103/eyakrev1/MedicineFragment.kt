@@ -93,6 +93,14 @@ class MedicineFragment : Fragment() {
         }
 
         layout.findViewById<ImageView>(R.id.medicineDetailCalendar).setOnClickListener {
+
+            val bundle = Bundle()
+
+            bundle.putInt("requeteeId", -1)
+            bundle.putString("customName", "")
+
+            setFragmentResult("familyMonthlyDose", bundle)
+
             mainActivity!!.gotoMyCalendar()
         }
 

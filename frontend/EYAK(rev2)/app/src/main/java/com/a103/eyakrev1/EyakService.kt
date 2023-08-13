@@ -121,6 +121,32 @@ interface EyakService {
         @Path("followRequestId") followRequestId: Int,
     ): Call<Void>
 
+    @GET("/api/v1/medicine-routine-checks/month")
+    fun getMyMonthlyDose(
+        @Header("Authorization") Authorization: String,
+        @Query("yearMonth") yearMonth: String
+    ): Call<ArrayList<Dates>>
+
+    @GET("/api/v1/medicine-routine-checks/month")
+    fun getOthersMonthlyDose(
+        @Header("Authorization") Authorization: String,
+        @Query("yearMonth") yearMonth: String,
+        @Query("requeteeId") requeteeId: Int
+    ): Call<ArrayList<Dates>>
+
+    @GET("/api/v1/medicine-routine-checks/day-detail")
+    fun getMyDailyDetailInCalendar(
+        @Header("Authorization") Authorization: String,
+        @Query("date") date: String
+    ): Call<medicineDetailsInCalendarResponseModel>
+
+    @GET("/api/v1/medicine-routine-checks/day-detail")
+    fun getOthersDailyDetailInCalendar(
+        @Header("Authorization") Authorization: String,
+        @Query("date") date: String,
+        @Query("requeteeId") requeteeId: Int
+    ): Call<medicineDetailsInCalendarResponseModel>
+
     @GET("/api/v1/medicine-routine-checks/day")
     fun todayDoseInfo(
         @Header("Authorization") Authorization: String,

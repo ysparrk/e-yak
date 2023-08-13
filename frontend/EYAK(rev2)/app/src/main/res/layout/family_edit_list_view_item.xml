@@ -97,7 +97,8 @@
                     android:includeFontPadding="false"
                     android:text="수정"
                     android:textColor="#757863"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/family_edit_delete_button"
