@@ -33,17 +33,21 @@ public class ContentStatusResult {
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-    @ElementCollection(targetClass = ChoiceStatus.class)
-    private List<ChoiceStatus> selectedStatusChoices = new ArrayList<>();
+    @OneToMany(mappedBy = "contentStatusResult", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ContentStatusResultChoiceStatusEntity> selectedStatusChoices = new ArrayList<>();
 
     @Builder
-    public ContentStatusResult(SurveyContent surveyContent, Member member, LocalDateTime createdAt, LocalDateTime updatedAt, List<ChoiceStatus> selectedStatusChoices) {
+    public ContentStatusResult(Long id, SurveyContent surveyContent, Member member, LocalDateTime createdAt,
+                               LocalDateTime updatedAt) {
+        this.id = id;
         this.surveyContent = surveyContent;
         this.member = member;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.selectedStatusChoices = selectedStatusChoices;
+    }
+
+    public void addChoiceStatusEntity(ContentStatusResultChoiceStatusEntity contentStatusResultChoiceStatusEntity) {
+        selectedStatusChoices.add(contentStatusResultChoiceStatusEntity);
     }
 
     // update

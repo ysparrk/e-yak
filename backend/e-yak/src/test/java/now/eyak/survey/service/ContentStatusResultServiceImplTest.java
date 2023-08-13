@@ -107,7 +107,7 @@ class ContentStatusResultServiceImplTest {
         // then
         System.out.println("findContentStatusResult = " + findContentStatusResult.getSelectedStatusChoices());
         System.out.println("findContentStatusResult.getId() = " + findContentStatusResult.getId());
-        Assertions.assertThat(findContentStatusResult.getSelectedStatusChoices()).isEqualTo(contentStatusResultUpdateDto.getSelectedStatusChoices());
+        Assertions.assertThat(findContentStatusResult.getSelectedStatusChoices().stream().map(contentStatusResultChoiceStatusEntity -> contentStatusResultChoiceStatusEntity.getChoiceStatusEntity().getChoiceStatus())).isEqualTo(contentStatusResultUpdateDto.getSelectedStatusChoices());
     }
 
     @Test

@@ -37,19 +37,17 @@ public class SurveyResultController {
      * @param date
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
     @GetMapping("/survey-results")
     public ResponseEntity getSurveyResult(
             @RequestParam LocalDate date,
             @AuthenticationPrincipal Long memberId
-            ) throws URISyntaxException {
+            ) {
 
         SurveyContentDto surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(date, memberId);
 
         return ResponseEntity.ok(surveyResultByDateAndMember);
     }
-
 
     /**
      * Text설문 응답
