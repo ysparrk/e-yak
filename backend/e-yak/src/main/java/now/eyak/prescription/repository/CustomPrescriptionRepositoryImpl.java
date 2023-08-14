@@ -8,6 +8,8 @@ import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.domain.QPrescription;
 import now.eyak.prescription.dto.query.PrescriptionListQueryDto;
 import now.eyak.prescription.dto.query.PrescriptionRoutineQueryDto;
+import now.eyak.routine.domain.MedicineRoutine;
+import now.eyak.routine.domain.QMedicineRoutine;
 import now.eyak.routine.domain.QMedicineRoutineCheck;
 import now.eyak.routine.dto.query.MedicineRoutineCheckBetweenDatesQueryDto;
 import now.eyak.routine.enumeration.Routine;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static now.eyak.prescription.domain.QPrescription.prescription;
+import static now.eyak.routine.domain.QMedicineRoutine.medicineRoutine;
 import static now.eyak.routine.domain.QMedicineRoutineCheck.medicineRoutineCheck;
 import static now.eyak.routine.domain.QPrescriptionMedicineRoutine.prescriptionMedicineRoutine;
 
@@ -74,6 +77,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                 .where(qPrescription.member.eq(member)
                         .and(qPrescription.startDateTime.loe(endDateTime.toLocalDate().atStartOfDay()))
                         .and(qPrescription.endDateTime.goe(startDateTime.toLocalDate().atStartOfDay())))
+                .orderBy(qPrescription.startDateTime.asc())
                 .fetch();
 
 
@@ -90,6 +94,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                             .and(qMedicineRoutineCheck.prescription.eq(prescription))
                             .and(qMedicineRoutineCheck.date.between(startDateTime.toLocalDate(), endDateTime.toLocalDate())))
                     .fetch();
+
 
             Long fullDose = (long) dateResults.size();
 
@@ -167,7 +172,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
     public List<PrescriptionRoutineQueryDto> findByRoutineForFuture(Routine routine, Member member, LocalDateTime dateTime) {
 
         List<PrescriptionRoutineQueryDto> routineQueryList = queryFactory
-                .select(Projections.constructor(PrescriptionRoutineQueryDto.class,
+                .selectDistinct(Projections.constructor(PrescriptionRoutineQueryDto.class,
                         prescription.id,
                         prescription.customName,
                         prescription.iotLocation,
@@ -176,16 +181,17 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                 ))
                 .from(medicineRoutineCheck)
                 .join(medicineRoutineCheck.prescription, prescription)
-                .where(prescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(routine)
+                .join(prescription.prescriptionMedicineRoutines, prescriptionMedicineRoutine)
+                .join(prescriptionMedicineRoutine.medicineRoutine, medicineRoutine)
+                .where(medicineRoutineCheck.medicineRoutine.routine.eq(routine)
                         .and(prescription.member.eq(member))
                         .and(prescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and((prescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))))
-
-//                                .or((prescription.endDateTime.eq(dateTime.toLocalDate().atStartOfDay()))
-//                                        .and((medicineRoutineCheck.member.eq(member))
-//                                        .and(medicineRoutineCheck.medicineRoutine.routine.ne(routine))
-//                                        .and(medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
-//                                        .and(medicineRoutineCheck.prescription.id.eq(prescription.id))))))
+                        .and((prescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay()))
+                                .or(prescription.endDateTime.eq(dateTime.toLocalDate().atStartOfDay())
+                                        .and((medicineRoutineCheck.member.eq(member))
+                                        .and(medicineRoutineCheck.medicineRoutine.routine.eq(routine))
+                                        .and(medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
+                                        .and(medicineRoutineCheck.prescription.id.eq(prescription.id))))))
                 .fetch();
 
         return routineQueryList;
