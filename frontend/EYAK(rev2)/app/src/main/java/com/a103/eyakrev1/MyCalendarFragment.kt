@@ -6,12 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.PreferenceManager
@@ -232,6 +234,21 @@ class MyCalendarFragment : Fragment() {
                                 val medicineInCalendarListAdapter = MedicineInCalendarListAdapter(mainActivity, medicineDetails)
                                 val medicineInCalendarListView = layout.findViewById<ListView>(R.id.medicineInCalendarListView)
                                 medicineInCalendarListView?.adapter = medicineInCalendarListAdapter
+
+                                val dailySurveyButton = layout.findViewById<Button>(R.id.survey_button_in_calendar)
+                                dailySurveyButton.visibility = View.VISIBLE
+                                dailySurveyButton.setOnClickListener {
+                                    val mDialogView = layoutInflater.inflate(R.layout.dialog_survey_in_calendar, null)
+                                    val mBuilder = AlertDialog.Builder(mainActivity)
+                                        .setView(mDialogView)
+                                        .setPositiveButton("확인") { dialog, _ ->
+                                            // 확인 버튼을 눌렀을 때 수행할 동작
+                                            dialog.dismiss() // 대화상자 닫기
+                                        }
+                                        .create()
+
+                                    val mAlertDialog = mBuilder.show()
+                                }
 
                             }
                             else if(response.code() == 401) {
