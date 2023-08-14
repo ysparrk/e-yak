@@ -1,7 +1,10 @@
 package com.a103.eyakrev1
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.TextUtils.substring
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,7 +13,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.preference.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,6 +36,12 @@ class MedicineSearchFragment : Fragment() {
     var endSearchDate = LocalDate.now()
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val mappingMedicineRoutines: Map<String, String> = mapOf("BED_AFTER" to "기상 후", "BREAKFAST_BEFORE" to "아침 식사 전", "BREAKFAST_AFTER" to "아침 식사 후", "LUNCH_BEFORE" to "점심 식사 전", "LUNCH_AFTER" to "점심 식사 후", "DINNER_BEFORE" to "저녁 식사 전", "DINNER_AFTER" to "저녁 식사 후", "BED_BEFORE" to "잠 자기 전")
+
+    private val mappingSymptom: Map<String, String> = mapOf("NO_SYMPTOMS" to "증상 없음", "HEADACHE" to "두통", "ABDOMINAL_PAIN" to "복통", "VOMITING" to "구토", "FEVER" to "발열", "DIARRHEA" to "설사", "INDIGESTION" to "소화불량", "COUGH" to "기침")
+
+    val evenRowColor: String = "#f0f0f0"
+    val oddRowColor: String = "#ffffff"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,19 +129,197 @@ class MedicineSearchFragment : Fragment() {
                 val searchStartString: String = startSearchDate.format(formatter) + "T00:00:00"
                 val searchEndString: String = endSearchDate.format(formatter) + "T00:00:00"
 
+                val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
+                val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
+
                 api.medicineSearch(Authorization = "Bearer ${serverAccessToken}", startDateTime = searchStartString, endDateTime = searchEndString).enqueue(object: Callback<MedicineSearchResponseBodyModel> {
                     override fun onResponse(call: Call<MedicineSearchResponseBodyModel>, response: Response<MedicineSearchResponseBodyModel>) {
                         if(response.code() == 200) {
+                            // 헤더 설정 시작
+                            val headerRow = TableRow(requireContext())
+
+                            val headerCell1 = TextView(requireContext())
+                            headerCell1.text = "복용 시작일"
+                            headerCell1.setTypeface(null, Typeface.BOLD)
+                            headerCell1.setPadding(8, 8, 8, 8)
+                            headerCell1.setBackgroundColor(Color.parseColor(oddRowColor))
+                            headerRow.addView(headerCell1)
+
+                            val headerCell2 = TextView(requireContext())
+                            headerCell2.text = "복용 종료일"
+                            headerCell2.setTypeface(null, Typeface.BOLD)
+                            headerCell2.setPadding(8, 8, 8, 8)
+                            headerCell2.setBackgroundColor(Color.parseColor(evenRowColor))
+                            headerRow.addView(headerCell2)
+
+                            val headerCell3 = TextView(requireContext())
+                            headerCell3.text = "투여약 이름"
+                            headerCell3.setTypeface(null, Typeface.BOLD)
+                            headerCell3.setPadding(8, 8, 8, 8)
+                            headerCell3.setBackgroundColor(Color.parseColor(oddRowColor))
+                            headerRow.addView(headerCell3)
+
+                            val headerCell4 = TextView(requireContext())
+                            headerCell4.text = "질환 명"
+                            headerCell4.setTypeface(null, Typeface.BOLD)
+                            headerCell4.setPadding(8, 8, 8, 8)
+                            headerCell4.setBackgroundColor(Color.parseColor(evenRowColor))
+                            headerRow.addView(headerCell4)
+
+                            val headerCell5 = TextView(requireContext())
+                            headerCell5.text = "복용 시간"
+                            headerCell5.setTypeface(null, Typeface.BOLD)
+                            headerCell5.setPadding(8, 8, 8, 8)
+                            headerCell5.setBackgroundColor(Color.parseColor(oddRowColor))
+                            headerRow.addView(headerCell5)
+
+                            tableLayout.addView(headerRow)
+                            // 헤더 설정 끝
+
+                            // 내용 추가 시작
+                            val prescriptionList: ArrayList<PrescriptionListModel> = response.body()!!.prescriptionList
+
+                            for(i in 0..prescriptionList.size - 1) {
+                                val row = TableRow(requireContext())
+                                val layoutParams = TableLayout.LayoutParams(
+                                    TableLayout.LayoutParams.MATCH_PARENT,
+                                    TableLayout.LayoutParams.WRAP_CONTENT
+                                )
+                                row.layoutParams = layoutParams
+
+                                val startDateCell = TextView(requireContext())
+                                startDateCell.text = prescriptionList[i].startDateTime.substring(0, 10)
+                                startDateCell.setPadding(8, 8, 8, 8)
+                                startDateCell.setBackgroundColor(Color.parseColor(oddRowColor))
+                                row.addView(startDateCell)
+
+                                val endDateCell = TextView(requireContext())
+                                endDateCell.text = prescriptionList[i].endDateTime.substring(0, 10)
+                                endDateCell.setPadding(8, 8, 8, 8)
+                                endDateCell.setBackgroundColor(Color.parseColor(evenRowColor))
+                                row.addView(endDateCell)
+
+                                val krName = TextView(requireContext())
+                                krName.text = prescriptionList[i].krName
+                                krName.setPadding(8, 8, 8, 8)
+                                krName.setBackgroundColor(Color.parseColor(oddRowColor))
+                                row.addView(krName)
+
+                                val customName = TextView(requireContext())
+                                customName.text = prescriptionList[i].customName
+                                customName.setPadding(8, 8, 8, 8)
+                                customName.setBackgroundColor(Color.parseColor(evenRowColor))
+                                row.addView(customName)
+
+                                val medicineRoutines = TextView(requireContext())
+                                var medicineRoutineString: String = ""
+                                val medicineRoutinesSize: Int = prescriptionList[i].medicineRoutines.size
+
+                                for(j in 0..medicineRoutinesSize - 1) {
+                                    medicineRoutineString += mappingMedicineRoutines[prescriptionList[i].medicineRoutines[j]]
+                                    if(j != medicineRoutinesSize - 1) medicineRoutineString += ", "
+                                }
+                                medicineRoutines.text = medicineRoutineString
+                                medicineRoutines.setPadding(8, 8, 8, 8)
+                                medicineRoutines.setBackgroundColor(Color.parseColor(oddRowColor))
+                                row.addView(medicineRoutines)
+
+                                tableLayout.addView(row)
+                            }
 
 
+
+                            // 헤더 설정 시작
+                            val headerRow2 = TableRow(requireContext())
+
+                            val headerCell21 = TextView(requireContext())
+                            headerCell21.text = "기록일"
+                            headerCell21.setTypeface(null, Typeface.BOLD)
+                            headerCell21.setPadding(8, 8, 8, 8)
+                            headerCell21.setBackgroundColor(Color.parseColor(oddRowColor))
+                            headerRow2.addView(headerCell21)
+
+                            val headerCell22 = TextView(requireContext())
+                            headerCell22.text = "컨디션"
+                            headerCell22.setTypeface(null, Typeface.BOLD)
+                            headerCell22.setPadding(8, 8, 8, 8)
+                            headerCell22.setBackgroundColor(Color.parseColor(evenRowColor))
+                            headerRow2.addView(headerCell22)
+
+                            val headerCell23 = TextView(requireContext())
+                            headerCell23.text = "보유 증상"
+                            headerCell23.setTypeface(null, Typeface.BOLD)
+                            headerCell23.setPadding(8, 8, 8, 8)
+                            headerCell23.setBackgroundColor(Color.parseColor(oddRowColor))
+                            headerRow2.addView(headerCell23)
+
+                            val headerCell24 = TextView(requireContext())
+                            headerCell24.text = "기타 특이 사항"
+                            headerCell24.setTypeface(null, Typeface.BOLD)
+                            headerCell24.setPadding(8, 8, 8, 8)
+                            headerCell24.setBackgroundColor(Color.parseColor(evenRowColor))
+                            headerRow2.addView(headerCell24)
+
+                            tableLayout2.addView(headerRow2)
+                            // 헤더 설정 끝
+
+                            // 내용 추가 시작
+                            val surveyContentList: ArrayList<SurveyContentListModel> = response.body()!!.surveyContentList
+
+                            for(i in 0..surveyContentList.size - 1) {
+                                val row = TableRow(requireContext())
+                                val layoutParams = TableLayout.LayoutParams(
+                                    TableLayout.LayoutParams.MATCH_PARENT,
+                                    TableLayout.LayoutParams.WRAP_CONTENT
+                                )
+                                row.layoutParams = layoutParams
+
+                                val dateCell = TextView(requireContext())
+                                dateCell.text = surveyContentList[i].date.substring(0, 10)
+                                dateCell.setPadding(8, 8, 8, 8)
+                                dateCell.setBackgroundColor(Color.parseColor(oddRowColor))
+                                row.addView(dateCell)
+
+                                val emotionString = surveyContentList[i].contentEmotionResultResponse.choiceEmotion
+                                val emotion = TextView(requireContext())
+
+                                when(emotionString) {
+                                    "GOOD" -> emotion.text = "좋음"
+                                    "SOSO" -> emotion.text = "보통"
+                                    "BAD" -> emotion.text = "나쁨"
+                                    else -> emotion.text = "-"
+                                }
+                                emotion.setPadding(8, 8, 8, 8)
+                                emotion.setBackgroundColor(Color.parseColor(evenRowColor))
+                                row.addView(emotion)
+
+                                val status = TextView(requireContext())
+                                var statusString: String = ""
+
+                                for(j in 0..surveyContentList[i].contentStatusResultResponse.selectedStatusChoices.size - 1) {
+                                    statusString += mappingSymptom[surveyContentList[i].contentStatusResultResponse.selectedStatusChoices[j]]
+                                    if(j != surveyContentList[i].contentStatusResultResponse.selectedStatusChoices.size - 1) statusString += ", "
+                                }
+                                status.text = statusString
+                                status.setPadding(8, 8, 8, 8)
+                                status.setBackgroundColor(Color.parseColor(oddRowColor))
+                                row.addView(status)
+
+                                val text = TextView(requireContext())
+                                text.text = surveyContentList[i].contentTextResultResponse.text
+                                text.setPadding(8, 8, 8, 8)
+                                text.setBackgroundColor(Color.parseColor(evenRowColor))
+                                row.addView(text)
+
+                                tableLayout2.addView(row)
+                            }
                         }
                         else if(response.code() == 401) {
 
                         }
                     }
                     override fun onFailure(call: Call<MedicineSearchResponseBodyModel>, t: Throwable) {
-                        t.printStackTrace()
-                        Log.d("ㅁㅁㅇㄴㄹㄴㅇㅁㄹ",t.toString())
+
                     }
                 })
 
