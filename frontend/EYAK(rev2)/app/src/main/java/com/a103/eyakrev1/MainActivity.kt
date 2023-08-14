@@ -281,6 +281,13 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    public fun gotoMedicineSearch() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragment, MedicineSearchFragment())
+            .commit()
+    }
+
     //=== bluetooth 연결 관련 함수들
     // bluetooth 권한 체크
     private fun checkPermissions(perms: Array<String>): Boolean {

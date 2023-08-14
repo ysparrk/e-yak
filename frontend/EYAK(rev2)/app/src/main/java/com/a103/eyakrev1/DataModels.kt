@@ -247,3 +247,31 @@ data class EditContentStatusBodyModel(
     var contentStatusResultId: Long,
     var selectedStatusChoices: ArrayList<String>,
 )
+
+data class MedicineSearchResponseBodyModel(
+    var prescriptionList: ArrayList<PrescriptionListModel>,
+    var surveyContentList : ArrayList<SurveyContentListModel>,
+)
+
+data class PrescriptionListModel(
+    var customName: String,
+    var icd: Long,
+    var krName: String,
+    var engName: String,
+    var startDateTime: String,
+    var endDateTime: String,
+    var iotLocation: Int,
+    var medicineShape: Int,
+    var medicineDose: Float,
+    var unit: String,
+    var medicineRoutines: ArrayList<String>,
+    var fullDose: Int,
+    var actualDose: Int,
+)
+
+data class SurveyContentListModel(
+    var date: String,
+    var contentEmotionResultResponse: emotionResultModel,
+    var contentStatusResultResponse: statusResultModel,
+    var contentTextResultResponse: textResultModel,
+)

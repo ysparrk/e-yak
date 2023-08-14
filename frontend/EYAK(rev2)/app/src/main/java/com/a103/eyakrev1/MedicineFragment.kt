@@ -92,6 +92,10 @@ class MedicineFragment : Fragment() {
             mainActivity!!.gotoAddMedicine()
         }
 
+        layout.findViewById<ImageView>(R.id.medicineDetailPrint).setOnClickListener {
+            mainActivity!!.gotoMedicineSearch()
+        }
+
         layout.findViewById<ImageView>(R.id.medicineDetailCalendar).setOnClickListener {
 
             val bundle = Bundle()
