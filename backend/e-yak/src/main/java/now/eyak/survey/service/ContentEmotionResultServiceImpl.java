@@ -119,7 +119,7 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
         if (emotionResult == null) {
             return ContentEmotionResultResponseDto.builder()
                     .contentEmotionResultId(-1L)
-                    .choiceEmotion(ChoiceEmotion.BAD)
+                    .choiceEmotion(ChoiceEmotion.SOSO)
                     .memberId(-1L)
                     .createdAt(LocalDateTime.of(2023, 7, 3, 17, 30))
                     .updatedAt(LocalDateTime.of(2023, 7, 3, 17, 30))

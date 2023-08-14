@@ -88,15 +88,20 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
         ContentStatusResult contentStatusResult = contentStatusResultRepository.findByIdAndMember(contentStatusResultUpdateDto.getContentStatusResultId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentStatusResult가 존재하지 않습니다."));
 
+        List<ContentStatusResultChoiceStatusEntity> results = contentStatusResultChoiceStatusEntityRepository.findByContentStatusResult(contentStatusResult);
+        contentStatusResultChoiceStatusEntityRepository.deleteAll(results);
         contentStatusResult.getSelectedStatusChoices().clear();
-        contentStatusResultUpdateDto.getSelectedStatusChoices().stream().forEach(choiceStatus -> {
+
+        contentStatusResultUpdateDto.getSelectedStatusChoices().forEach(choiceStatus -> {
             ChoiceStatusEntity choiceStatusEntity = choiceStatusEntityRepository.findByChoiceStatus(choiceStatus)
                     .orElseThrow(() -> new NoSuchElementException("해당하는 Choice Status는 존재하지 않습니다."));
+
             ContentStatusResultChoiceStatusEntity contentStatusResultChoiceStatusEntity = ContentStatusResultChoiceStatusEntity.createContentStatusResultChoiceStatusEntity(
                     contentStatusResult, choiceStatusEntity);
 
             contentStatusResultChoiceStatusEntityRepository.save(contentStatusResultChoiceStatusEntity);
         });
+
         return contentStatusResultRepository.save(contentStatusResult);
     }
 
