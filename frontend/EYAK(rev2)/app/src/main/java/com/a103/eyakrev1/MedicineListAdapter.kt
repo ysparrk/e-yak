@@ -44,7 +44,7 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         val medicineDetailButton = view.findViewById<Button>(R.id.medicine_detail_button)
 
         /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
-        val medicine = medicineList!![position]
+        val medicine = if(position == medicineList!!.size - 1) medicineList!![medicineList.size - 1] else  medicineList!![medicineList.size - position - 2]
 //        Log.d("log", "$medicine")
 
         when(medicine.medicineShape) {

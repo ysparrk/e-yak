@@ -169,14 +169,14 @@ class AlarmFragment : Fragment() {
                     // 이제 적절하게 배분해서 넣어주자
 //                    Log.d("log", response.toString())
                     medicineRoutines = response.body()!!
-//                    Log.d("bedAfterQueryResponses", medicineRoutines.bedAfterQueryResponses.toString())
-//                    Log.d("breakfastBeforeQueryResponses", medicineRoutines.breakfastBeforeQueryResponses.toString())
-//                    Log.d("breakfastAfterQueryResponses", medicineRoutines.breakfastAfterQueryResponses.toString())
-//                    Log.d("lunchBeforeQueryResponses", medicineRoutines.lunchBeforeQueryResponses.toString())
-//                    Log.d("lunchAfterQueryResponses", medicineRoutines.lunchAfterQueryResponses.toString())
-//                    Log.d("dinnerBeforeQueryResponses", medicineRoutines.dinnerBeforeQueryResponses.toString())
-//                    Log.d("dinnerAfterQueryResponses", medicineRoutines.dinnerAfterQueryResponses.toString())
-//                    Log.d("bedBeforeQueryResponses", medicineRoutines.bedBeforeQueryResponses.toString())
+                    Log.d("bedAfterQueryResponses", medicineRoutines.bedAfterQueryResponses.toString())
+                    Log.d("breakfastBeforeQueryResponses", medicineRoutines.breakfastBeforeQueryResponses.toString())
+                    Log.d("breakfastAfterQueryResponses", medicineRoutines.breakfastAfterQueryResponses.toString())
+                    Log.d("lunchBeforeQueryResponses", medicineRoutines.lunchBeforeQueryResponses.toString())
+                    Log.d("lunchAfterQueryResponses", medicineRoutines.lunchAfterQueryResponses.toString())
+                    Log.d("dinnerBeforeQueryResponses", medicineRoutines.dinnerBeforeQueryResponses.toString())
+                    Log.d("dinnerAfterQueryResponses", medicineRoutines.dinnerAfterQueryResponses.toString())
+                    Log.d("bedBeforeQueryResponses", medicineRoutines.bedBeforeQueryResponses.toString())
 
                     val routineKeys = arrayListOf("bedAfterQueryResponses", "breakfastBeforeQueryResponses", "breakfastAfterQueryResponses", "lunchBeforeQueryResponses", "lunchAfterQueryResponses", "dinnerBeforeQueryResponses", "dinnerAfterQueryResponses", "bedBeforeQueryResponses")
 

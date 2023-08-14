@@ -35,7 +35,7 @@ import retrofit2.Response
 
 class DeviceFragment : Fragment() {
 
-    val api = EyakService.create()
+    private val api = EyakService.create()
     lateinit var mainActivity: MainActivity
 
     // Preference
