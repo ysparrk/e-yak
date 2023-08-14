@@ -55,8 +55,6 @@ class MedicineFragment : Fragment() {
 
         api.getAllPrescriptions(Authorization= "Bearer ${serverAccessToken}").enqueue(object: Callback<ArrayList<Medicine>> {
             override fun onResponse(call: Call<ArrayList<Medicine>>, response: Response<ArrayList<Medicine>>) {
-//                Log.d("log", response.toString())
-//                Log.d("log", response.body().toString())
 
                 if (response.code() == 401) {
                     Log.d("log", "인증되지 않은 사용자입니다")
