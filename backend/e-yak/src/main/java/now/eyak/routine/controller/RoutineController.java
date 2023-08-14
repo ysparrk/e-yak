@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/medicine-routine-checks")
 @RequiredArgsConstructor
@@ -143,6 +145,8 @@ public class RoutineController {
             ) throws URISyntaxException {
 
         PdfResponseDto pdfResponseByDatesAndMember = pdfService.getPdfResponseByDatesAndMember(memberId, startDateTime, endDateTime);
+
+        log.debug("pdfResponseDto = {}", pdfResponseByDatesAndMember);
 
         return ResponseEntity.ok(pdfResponseByDatesAndMember);
     }
