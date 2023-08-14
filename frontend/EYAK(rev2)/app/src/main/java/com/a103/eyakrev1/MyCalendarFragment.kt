@@ -1,6 +1,8 @@
 package com.a103.eyakrev1
 
 import android.content.Context
+import android.graphics.Color
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,6 +30,12 @@ import java.util.Calendar
 class MyCalendarFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
+
+    private val badFaceColor: String = "#AC6077"
+    private val normalFaceColor: String = "#7466B4"
+    private val goodFaceColor: String = "#9ED59B"
+
+    val symptomMap: Map<String, String> = mapOf("NO_SYMPTOMS" to "증상 없음", "HEADACHE" to "두통", "ABDOMINAL_PAIN" to "복통", "VOMITING" to "구토", "FEVER" to "발열", "DIARRHEA" to "설사", "INDIGESTION" to "소화불량", "COUGH" to "기침")
 
     var DayList = arrayListOf<Dates>()
 
@@ -235,10 +243,52 @@ class MyCalendarFragment : Fragment() {
                                 val medicineInCalendarListView = layout.findViewById<ListView>(R.id.medicineInCalendarListView)
                                 medicineInCalendarListView?.adapter = medicineInCalendarListAdapter
 
+                                val surveyDetails = response.body()!!.surveyContentDtos
+
+                                Log.d("log", surveyDetails.contentStatusResultResponse.selectedStatusChoices.toString())
+                                
+                                // survey 팝업에서 띄울 데이터를 추출하자
+                                var surveyResultEmotion = surveyDetails.contentEmotionResultResponse.choiceEmotion
+                                var todayConditionSymptomText = ""
+                                for (i in 0 .. surveyDetails.contentStatusResultResponse.selectedStatusChoices.size - 1) {
+                                    val symptom = surveyDetails.contentStatusResultResponse.selectedStatusChoices[i]
+
+                                    todayConditionSymptomText += symptomMap[symptom]
+
+                                    if (i != surveyDetails.contentStatusResultResponse.selectedStatusChoices.size - 1) {
+                                        todayConditionSymptomText += "\n"
+                                    }
+                                }
+                                var otherIssueText = surveyDetails.contentTextResultResponse.text
+
+//                                Log.d("log", surveyResultEmotion)
+
                                 val dailySurveyButton = layout.findViewById<Button>(R.id.survey_button_in_calendar)
                                 dailySurveyButton.visibility = View.VISIBLE
                                 dailySurveyButton.setOnClickListener {
                                     val mDialogView = layoutInflater.inflate(R.layout.dialog_survey_in_calendar, null)
+
+                                    val todayConditionEmotionImageView = mDialogView.findViewById<ImageView>(R.id.todayConditionEmotionImageView)
+                                    val todayConditionSymptomTextView = mDialogView.findViewById<TextView>(R.id.todayConditionSymptomTextView)
+                                    val otherIssueTextView = mDialogView.findViewById<TextView>(R.id.otherIssueTextView)
+
+                                    if (surveyDetails.contentEmotionResultResponse.contentEmotionResultId != -1) {
+                                        // 아직 설문이 입력되지 않은 경우는 -1이므로 그냥 넘어가자
+                                        if (surveyResultEmotion == "BAD") {
+                                            todayConditionEmotionImageView.setImageResource(R.drawable.baseline_sentiment_very_dissatisfied_24)
+                                            todayConditionEmotionImageView.setColorFilter(Color.parseColor(badFaceColor))
+                                        } else if (surveyResultEmotion == "SOSO") {
+                                            todayConditionEmotionImageView.setImageResource(R.drawable.baseline_sentiment_neutral_24)
+                                            todayConditionEmotionImageView.setColorFilter(Color.parseColor(normalFaceColor))
+                                        } else if (surveyResultEmotion == "GOOD") {
+                                            todayConditionEmotionImageView.setImageResource(R.drawable.baseline_sentiment_satisfied_alt_24)
+                                            todayConditionEmotionImageView.setColorFilter(Color.parseColor(goodFaceColor))
+                                        }
+
+                                        todayConditionSymptomTextView.text = todayConditionSymptomText
+                                        otherIssueTextView.text = otherIssueText
+                                    }
+
                                     val mBuilder = AlertDialog.Builder(mainActivity)
                                         .setView(mDialogView)
                                         .setPositiveButton("확인") { dialog, _ ->

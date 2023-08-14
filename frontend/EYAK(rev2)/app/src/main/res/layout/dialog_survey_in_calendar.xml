@@ -48,8 +48,7 @@
             android:id="@+id/todayConditionEmotionImageView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/baseline_sentiment_neutral_24" />
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,7 +83,6 @@
             android:includeFontPadding="false"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            android:text="컨디션 1\n컨디션 2\n컨디션 3"
             android:textColor="#757863"
             android:textSize="17sp" />
 
@@ -124,7 +122,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/tmoney_regular"
                 android:includeFontPadding="false"
-                android:text="기타 특이사항이 들어갈 자리입니다"
                 android:textColor="#757863"
                 android:textSize="17sp" />
         </LinearLayout>
