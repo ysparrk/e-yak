@@ -1,5 +1,6 @@
 package now.eyak.survey.service;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
@@ -30,6 +31,8 @@ public class SurveyContentServiceImpl implements SurveyContentService {
     private final ContentEmotionResultService contentEmotionResultService;
     private final ContentStatusResultService contentStatusResultService;
     private final ContentTextResultService contentTextResultService;
+
+    private final JPAQueryFactory queryFactory;
 
     @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
@@ -88,6 +91,7 @@ public class SurveyContentServiceImpl implements SurveyContentService {
         ContentEmotionResultResponseDto emotionResult = contentEmotionResultService.getEmotionResultsByDateAndMember(date, memberId);
         ContentStatusResultResponseDto statusResults = contentStatusResultService.getStatusResultByDateAndMember(date, memberId);
         ContentTextResultResponseDto textResult = contentTextResultService.getTextResultByDateAndMember(date, memberId);
+
 
         return SurveyContentPdfResponseDto.builder()
                 .date(date)

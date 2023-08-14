@@ -9,13 +9,13 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Builder
 @ToString
 public class SurveyContentPdfResponseDto {
     private LocalDate date;
     private ContentEmotionResultResponseDto contentEmotionResultResponse;
     private ContentStatusResultResponseDto contentStatusResultResponse;
     private ContentTextResultResponseDto contentTextResultResponse;
+
 
     @Builder
     public SurveyContentPdfResponseDto(LocalDate date, ContentEmotionResultResponseDto contentEmotionResultResponse, ContentStatusResultResponseDto contentStatusResultResponse, ContentTextResultResponseDto contentTextResultResponse) {
@@ -24,4 +24,5 @@ public class SurveyContentPdfResponseDto {
         this.contentStatusResultResponse = contentStatusResultResponse;
         this.contentTextResultResponse = contentTextResultResponse;
     }
+
 }

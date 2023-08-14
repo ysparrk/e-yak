@@ -1,6 +1,5 @@
 package now.eyak.prescription.service;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,16 +7,14 @@ import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
-import now.eyak.prescription.domain.QPrescription;
 import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
 import now.eyak.prescription.dto.PrescriptionDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
-import now.eyak.prescription.dto.query.*;
+import now.eyak.prescription.dto.query.PrescriptionRoutineQueryDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
-import now.eyak.routine.domain.QMedicineRoutineCheck;
 import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
@@ -152,180 +149,23 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
         Member member = getMemberOrThrow(memberId);
 
-        QPrescription qPrescription = QPrescription.prescription;
-        QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
-
-        // BedAfter
-        List<BedAfterQueryDto> bedAfterQueryDtoList = queryFactory
-                .select(Projections.constructor(BedAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                        ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_AFTER)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // BreakfastBefore
-        List<BreakfastBeforeQueryDto> breakfastBeforeQueryDtoList = queryFactory
-                .select(Projections.constructor(BreakfastBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_BEFORE)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // BreakfastAfter
-        List<BreakfastAfterQueryDto> breakfastAfterQueryDtoList = queryFactory
-                .select(Projections.constructor(BreakfastAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BREAKFAST_AFTER)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // LunchBefore
-        List<LunchBeforeQueryDto> lunchBeforeQueryDtoList = queryFactory
-                .select(Projections.constructor(LunchBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.LUNCH_BEFORE)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // LunchAfter
-        List<LunchAfterQueryDto> lunchAfterQueryDtoList = queryFactory
-                .select(Projections.constructor(LunchAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.LUNCH_AFTER)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // DinnerBefore
-        List<DinnerBeforeQueryDto> dinnerBeforeQueryDtoList = queryFactory
-                .select(Projections.constructor(DinnerBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.DINNER_BEFORE)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // DinnerAfter
-        List<DinnerAfterQueryDto> dinnerAfterQueryDtoList = queryFactory
-                .select(Projections.constructor(DinnerAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.DINNER_AFTER)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // BedBefore
-        List<BedBeforeQueryDto> bedBeforeQueryDtoList = queryFactory
-                .select(Projections.constructor(BedBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qMedicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_BEFORE)
-                        .and(qMedicineRoutineCheck.prescription.id.eq(qPrescription.id))
-                        .and(qMedicineRoutineCheck.member.eq(member))
-                        .and(qMedicineRoutineCheck.date.eq(dateTime.toLocalDate()))
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
+        Routine[] routines = Routine.values();
+        List<List<PrescriptionRoutineQueryDto>> prescriptionRoutineQueryDtoList = new ArrayList<>();
+        for (Routine routine : routines) {
+            List<PrescriptionRoutineQueryDto> byRoutine = prescriptionRepository.findByRoutine(routine, member, dateTime);
+            prescriptionRoutineQueryDtoList.add(byRoutine);
+        }
 
         // responseDto에 리스트 넣기
         PrescriptionResponseDto prescriptionResponseDto = PrescriptionResponseDto.builder()
-                .bedAfterQueryResponses(bedAfterQueryDtoList)
-                .breakfastBeforeQueryResponses(breakfastBeforeQueryDtoList)
-                .breakfastAfterQueryResponses(breakfastAfterQueryDtoList)
-                .lunchBeforeQueryResponses(lunchBeforeQueryDtoList)
-                .lunchAfterQueryResponses(lunchAfterQueryDtoList)
-                .dinnerBeforeQueryResponses(dinnerBeforeQueryDtoList)
-                .dinnerAfterQueryResponses(dinnerAfterQueryDtoList)
-                .bedBeforeQueryResponses(bedBeforeQueryDtoList)
+                .bedAfterQueryResponses(prescriptionRoutineQueryDtoList.get(0))
+                .breakfastBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(1))
+                .breakfastAfterQueryResponses(prescriptionRoutineQueryDtoList.get(2))
+                .lunchBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(3))
+                .lunchAfterQueryResponses(prescriptionRoutineQueryDtoList.get(4))
+                .dinnerBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(5))
+                .dinnerAfterQueryResponses(prescriptionRoutineQueryDtoList.get(6))
+                .bedBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(7))
                 .build();
 
         return prescriptionResponseDto;
@@ -334,164 +174,31 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     /**
      * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환(미래 날짜에 대해)
+     * endDate의 경우, 필터링 필요
      * @param memberId
      * @param dateTime
      * @return
-     */ //
+     */
     @Override
     public PrescriptionResponseDto findAllAndSortWithRoutineFuture(Long memberId, LocalDateTime dateTime) {
         Member member = getMemberOrThrow(memberId);
 
-        QPrescription qPrescription = QPrescription.prescription;
-        QMedicineRoutineCheck qMedicineRoutineCheck = QMedicineRoutineCheck.medicineRoutineCheck;
+        Routine[] routines = Routine.values();
+        List<List<PrescriptionRoutineQueryDto>> prescriptionRoutineQueryDtoList = new ArrayList<>();
+        for (Routine routine : routines) {
+            List<PrescriptionRoutineQueryDto> byRoutine = prescriptionRepository.findByRoutineForFuture(routine, member, dateTime);
+            prescriptionRoutineQueryDtoList.add(byRoutine);
+        }
 
-        // BedAfter
-        List<BedAfterQueryDto> bedAfterQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(BedAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BED_AFTER)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // BreakfastBefore
-        List<BreakfastBeforeQueryDto> breakfastBeforeQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(BreakfastBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BREAKFAST_BEFORE)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // BreakfastAfter
-        List<BreakfastAfterQueryDto> breakfastAfterQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(BreakfastAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BREAKFAST_AFTER)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // LunchBefore
-        List<LunchBeforeQueryDto> lunchBeforeQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(LunchBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.LUNCH_BEFORE)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // LunchAfter
-        List<LunchAfterQueryDto> lunchAfterQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(LunchAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.LUNCH_AFTER)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // DinnerBefore
-        List<DinnerBeforeQueryDto> dinnerBeforeQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(DinnerBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.DINNER_BEFORE)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // DinnerAfter
-        List<DinnerAfterQueryDto> dinnerAfterQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(DinnerAfterQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.DINNER_AFTER)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-        // BedBefore
-        List<BedBeforeQueryDto> bedBeforeQueryDtoList = queryFactory
-                .selectDistinct(Projections.constructor(BedBeforeQueryDto.class,
-                        qPrescription.id,
-                        qPrescription.customName,
-                        qPrescription.iotLocation,
-                        qPrescription.medicineShape,
-                        qMedicineRoutineCheck.took
-                ))
-                .from(qPrescription, qMedicineRoutineCheck)
-                .where(qPrescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(Routine.BED_BEFORE)
-                        .and(qPrescription.member.eq(member))
-                        .and(qPrescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and(qPrescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))
-                )
-                .fetch();
-
-
-        // responseDto에 리스트 넣기
         PrescriptionResponseDto prescriptionResponseDto = PrescriptionResponseDto.builder()
-                .bedAfterQueryResponses(bedAfterQueryDtoList)
-                .breakfastBeforeQueryResponses(breakfastBeforeQueryDtoList)
-                .breakfastAfterQueryResponses(breakfastAfterQueryDtoList)
-                .lunchBeforeQueryResponses(lunchBeforeQueryDtoList)
-                .lunchAfterQueryResponses(lunchAfterQueryDtoList)
-                .dinnerBeforeQueryResponses(dinnerBeforeQueryDtoList)
-                .dinnerAfterQueryResponses(dinnerAfterQueryDtoList)
-                .bedBeforeQueryResponses(bedBeforeQueryDtoList)
+                .bedAfterQueryResponses(prescriptionRoutineQueryDtoList.get(0))
+                .breakfastBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(1))
+                .breakfastAfterQueryResponses(prescriptionRoutineQueryDtoList.get(2))
+                .lunchBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(3))
+                .lunchAfterQueryResponses(prescriptionRoutineQueryDtoList.get(4))
+                .dinnerBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(5))
+                .dinnerAfterQueryResponses(prescriptionRoutineQueryDtoList.get(6))
+                .bedBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(7))
                 .build();
 
         return prescriptionResponseDto;
