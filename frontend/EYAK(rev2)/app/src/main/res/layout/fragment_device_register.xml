@@ -197,18 +197,20 @@
                                     android:id="@+id/btCell1"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
-                                    android:background="@drawable/baseline_circle_24"
+                                    android:layout_margin="2.5dp"
+                                    android:background="@drawable/device_ui_circle_top"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="16dp"
+                                    android:padding="20dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                                 <ImageView
                                     android:id="@+id/btCell2"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
-                                    android:background="@drawable/baseline_circle_24"
+                                    android:layout_margin="2.5dp"
+                                    android:background="@drawable/device_ui_rectangle"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="16dp"
+                                    android:padding="20dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                             </TableRow>
@@ -221,18 +223,20 @@
                                     android:id="@+id/btCell3"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
-                                    android:background="@drawable/baseline_circle_24"
+                                    android:layout_margin="2.5dp"
+                                    android:background="@drawable/device_ui_circle_bottom"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="16dp"
+                                    android:padding="20dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                                 <ImageView
                                     android:id="@+id/btCell4"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
-                                    android:background="@drawable/baseline_circle_24"
+                                    android:layout_margin="2.5dp"
+                                    android:background="@drawable/device_ui_rectangle"
                                     android:backgroundTint="#DDE6ED"
-                                    android:padding="16dp"
+                                    android:padding="20dp"
                                     android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                             </TableRow>
@@ -242,10 +246,11 @@
                         <ImageView
                             android:id="@+id/btCell5"
                             android:layout_width="140dp"
-                            android:layout_height="140dp"
-                            android:background="@drawable/baseline_circle_24"
+                            android:layout_height="145dp"
+                            android:layout_marginStart="2.5dp"
+                            android:background="@drawable/device_ui_circle_right"
                             android:backgroundTint="#DDE6ED"
-                            android:padding="44dp"
+                            android:padding="46dp"
                             android:src="@drawable/baseline_check_box_outline_blank_24" />
 
                     </LinearLayout>
