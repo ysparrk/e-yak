@@ -297,7 +297,7 @@ class MyCalendarFragment : Fragment() {
                                         }
                                         .create()
 
-                                    val mAlertDialog = mBuilder.show()
+                                    mBuilder.show()
                                 }
 
                             }
@@ -334,6 +334,63 @@ class MyCalendarFragment : Fragment() {
                                 val medicineInCalendarListAdapter = MedicineInCalendarListAdapter(mainActivity, medicineDetails)
                                 val medicineInCalendarListView = layout.findViewById<ListView>(R.id.medicineInCalendarListView)
                                 medicineInCalendarListView?.adapter = medicineInCalendarListAdapter
+
+                                val surveyDetails = response.body()!!.surveyContentDtos
+
+                                Log.d("log", surveyDetails.contentStatusResultResponse.selectedStatusChoices.toString())
+
+                                // survey 팝업에서 띄울 데이터를 추출하자
+                                var surveyResultEmotion = surveyDetails.contentEmotionResultResponse.choiceEmotion
+                                var todayConditionSymptomText = ""
+                                for (i in 0 .. surveyDetails.contentStatusResultResponse.selectedStatusChoices.size - 1) {
+                                    val symptom = surveyDetails.contentStatusResultResponse.selectedStatusChoices[i]
+
+                                    todayConditionSymptomText += symptomMap[symptom]
+
+                                    if (i != surveyDetails.contentStatusResultResponse.selectedStatusChoices.size - 1) {
+                                        todayConditionSymptomText += "\n"
+                                    }
+                                }
+                                var otherIssueText = surveyDetails.contentTextResultResponse.text
+
+//                                Log.d("log", surveyResultEmotion)
+
+                                val dailySurveyButton = layout.findViewById<Button>(R.id.survey_button_in_calendar)
+                                dailySurveyButton.visibility = View.VISIBLE
+                                dailySurveyButton.setOnClickListener {
+                                    val mDialogView = layoutInflater.inflate(R.layout.dialog_survey_in_calendar, null)
+
+                                    val todayConditionEmotionImageView = mDialogView.findViewById<ImageView>(R.id.todayConditionEmotionImageView)
+                                    val todayConditionSymptomTextView = mDialogView.findViewById<TextView>(R.id.todayConditionSymptomTextView)
+                                    val otherIssueTextView = mDialogView.findViewById<TextView>(R.id.otherIssueTextView)
+
+                                    if (surveyDetails.contentEmotionResultResponse.contentEmotionResultId != -1) {
+                                        // 아직 설문이 입력되지 않은 경우는 -1이므로 그냥 넘어가자
+                                        if (surveyResultEmotion == "BAD") {
+                                            todayConditionEmotionImageView.setImageResource(R.drawable.baseline_sentiment_very_dissatisfied_24)
+                                            todayConditionEmotionImageView.setColorFilter(Color.parseColor(badFaceColor))
+                                        } else if (surveyResultEmotion == "SOSO") {
+                                            todayConditionEmotionImageView.setImageResource(R.drawable.baseline_sentiment_neutral_24)
+                                            todayConditionEmotionImageView.setColorFilter(Color.parseColor(normalFaceColor))
+                                        } else if (surveyResultEmotion == "GOOD") {
+                                            todayConditionEmotionImageView.setImageResource(R.drawable.baseline_sentiment_satisfied_alt_24)
+                                            todayConditionEmotionImageView.setColorFilter(Color.parseColor(goodFaceColor))
+                                        }
+
+                                        todayConditionSymptomTextView.text = todayConditionSymptomText
+                                        otherIssueTextView.text = otherIssueText
+                                    }
+
+                                    val mBuilder = AlertDialog.Builder(mainActivity)
+                                        .setView(mDialogView)
+                                        .setPositiveButton("확인") { dialog, _ ->
+                                            // 확인 버튼을 눌렀을 때 수행할 동작
+                                            dialog.dismiss() // 대화상자 닫기
+                                        }
+                                        .create()
+
+                                    mBuilder.show()
+                                }
 
                             }
                             else if(response.code() == 401) {
