@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface MedicineRoutineCheckRepository extends JpaRepository<MedicineRoutineCheck, Long> {
+public interface MedicineRoutineCheckRepository extends JpaRepository<MedicineRoutineCheck, Long>, CustomMedicineRoutineCheckRepository {
     Optional<MedicineRoutineCheck> findByIdAndMemberAndDate(Long id, Member member, LocalDate date);
-    List<MedicineRoutineCheck> findByMemberAndDate(Member member, LocalDate now);
 }

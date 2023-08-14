@@ -31,11 +31,11 @@ public class PdfServiceImpl implements PdfService{
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
 
-        List<PrescriptionListQueryDto> prescriptionListQueryDtoList = prescriptionRepository.findAllByMemberAndBetweenDates(member, startDateTime, endDateTime);
+        List<PrescriptionListQueryDto> prescriptionList = prescriptionRepository.findAllByMemberAndBetweenDates(member, startDateTime, endDateTime);
         List<SurveyContentPdfResponseDto> surveyContentDtoList = surveyContentService.findAllByMemberAndBetweenDates(member.getId(), startDateTime, endDateTime);
 
         PdfResponseDto pdfResponseDto = PdfResponseDto.builder()
-                .prescriptionListQueryList(prescriptionListQueryDtoList)
+                .prescriptionList(prescriptionList)
                 .surveyContentList(surveyContentDtoList)
                 .build();
 

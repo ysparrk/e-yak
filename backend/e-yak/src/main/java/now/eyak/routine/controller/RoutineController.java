@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import now.eyak.routine.domain.MedicineRoutineCheck;
 import now.eyak.routine.dto.request.MedicineRoutineCheckIdDto;
 import now.eyak.routine.dto.request.MedicineRoutineCheckUpdateDto;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/medicine-routine-checks")
 @RequiredArgsConstructor
@@ -37,15 +39,14 @@ public class RoutineController {
      * @param medicineRoutineCheckUpdateDto
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
     @Operation(summary = "Medicine Check", description = "알람을 들은 후 약 복용을 체크/취소 합니다.")
-    @ApiResponse(responseCode = "201", description = "성공", content = @Content(schema = @Schema(implementation = MedicineRoutineCheckUpdateDto.class)))
+    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = MedicineRoutineCheckUpdateDto.class)))
     @PostMapping
     public ResponseEntity updateMedicineRoutineCheck(
             @RequestBody MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto,
             @AuthenticationPrincipal Long memberId
-        ) throws URISyntaxException {
+        ) {
 
         MedicineRoutineCheck medicineRoutineCheck = medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto, memberId);
 
@@ -57,7 +58,6 @@ public class RoutineController {
      * @param date
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
     @Operation(summary = "Day MedicineCheck", description = "요청받은 날짜의 복용량을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = MedicineRoutineMonthDateDto.class)))
@@ -65,7 +65,7 @@ public class RoutineController {
     public ResponseEntity getDateResultsByDateAndMember(
             @RequestParam LocalDate date,
             @AuthenticationPrincipal Long memberId
-            ) throws URISyntaxException {
+            ) {
 
         MedicineRoutineMonthDateDto dateResultsByDateAndMember = medicineRoutineCheckService.getDateResultsByDateAndMember(date, memberId);
 
@@ -78,17 +78,17 @@ public class RoutineController {
      * @param yearMonth
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
     @Operation(summary = "Get Month MedicineCheck", description = "요청받은 달의 날짜별 복용량을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = MedicineRoutineMonthDateDto.class)))
     @GetMapping("/month")
     public ResponseEntity getMonthResultsByMonthAndMember(
             @RequestParam YearMonth yearMonth,
+            @RequestParam(required = false) Long requeteeId,
             @AuthenticationPrincipal Long memberId
-        ) throws URISyntaxException {
+        ) {
 
-        List<MedicineRoutineMonthDateDto>  monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId);
+        List<MedicineRoutineMonthDateDto>  monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId, requeteeId);
 
         return ResponseEntity.ok(monthResultsByMonthAndMember);
     }
@@ -96,21 +96,23 @@ public class RoutineController {
     /**
      * 하루 단위 복용 상세 조회
      * @param date
-     * @param memberId
+     * @param requesteeId
      * @return
-     * @throws URISyntaxException
      */
     @Operation(summary = "Get Day Detail", description = "요청받은 날짜의 복용 상세와 건강설문을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = MedicineRoutineDateResponseDto.class)))
     @GetMapping("/day-detail")
     public ResponseEntity getDateDetailResultsByDateAndMember(
             @RequestParam LocalDate date,
-            @AuthenticationPrincipal Long memberId
-        ) throws URISyntaxException {
+            @RequestParam(value = "requeteeId", required = false) Long requesteeId,
+            @AuthenticationPrincipal Long requesterId
+        ) {
 
-        MedicineRoutineDateResponseDto dateDetailResultsByDateAndMember = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(date, memberId);
-
+        // 사용자(requesterId)가 본인의 복약 상세 조회를 요청한 경우
+        MedicineRoutineDateResponseDto dateDetailResultsByDateAndMember = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(date, requesterId, requesteeId);
         return ResponseEntity.ok(dateDetailResultsByDateAndMember);
+
+
     }
 
     /**
@@ -118,7 +120,6 @@ public class RoutineController {
      * @param medicineRoutineCheckIdDto
      * @param memberId
      * @return
-     * @throws URISyntaxException
      */
     @Operation(summary = "Get MedicineRoutineCheck id", description = "MedicineRoutineCheck의 id를 조회합니다.")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = MedicineRoutineCheckIdResponseDto.class)))
@@ -126,7 +127,7 @@ public class RoutineController {
     public ResponseEntity getMedicineRoutineCheckId(
             @RequestBody MedicineRoutineCheckIdDto medicineRoutineCheckIdDto,
             @AuthenticationPrincipal Long memberId
-            ) throws URISyntaxException {
+            ) {
 
         MedicineRoutineCheckIdResponseDto medicineRoutineCheckId = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, memberId);
 
@@ -144,6 +145,8 @@ public class RoutineController {
             ) throws URISyntaxException {
 
         PdfResponseDto pdfResponseByDatesAndMember = pdfService.getPdfResponseByDatesAndMember(memberId, startDateTime, endDateTime);
+
+        log.debug("pdfResponseDto = {}", pdfResponseByDatesAndMember);
 
         return ResponseEntity.ok(pdfResponseByDatesAndMember);
     }

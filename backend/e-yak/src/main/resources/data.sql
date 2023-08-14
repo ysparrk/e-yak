@@ -8,6 +8,17 @@ insert into medicine_routine(routine) values
   ('LUNCH_AFTER'),
   ('LUNCH_BEFORE')^;
 
+insert into choice_status_entity(choice_status) values
+    ('NO_SYMPTOMS'),
+    ('HEADACHE'),
+    ('ABDOMINAL_PAIN'),
+    ('NAUSEA'),
+    ('VOMITING'),
+    ('FEVER'),
+    ('DIARRHEA'),
+    ('INDIGESTION'),
+    ('COUGH')^;
+
 create or replace procedure load_survey_contents()
 begin
     declare survey_id bigint;

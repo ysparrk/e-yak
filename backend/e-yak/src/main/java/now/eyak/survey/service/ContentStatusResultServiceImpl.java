@@ -12,9 +12,10 @@ import now.eyak.survey.dto.request.ContentStatusResultUpdateDto;
 import now.eyak.survey.dto.response.ContentStatusResultResponseDto;
 import now.eyak.survey.enumeration.ChoiceStatus;
 import now.eyak.survey.exception.DuplicatedContentResultException;
+import now.eyak.survey.repository.ChoiceStatusEntityRepository;
+import now.eyak.survey.repository.ContentStatusResultChoiceStatusEntityRepository;
 import now.eyak.survey.repository.ContentStatusResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
-import now.eyak.survey.repository.SurveyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +32,10 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
     private final ContentStatusResultRepository contentStatusResultRepository;
     private final SurveyContentRepository surveyContentRepository;
     private final MemberRepository memberRepository;
-    private final SurveyRepository surveyRepository;
 
     private final JPAQueryFactory queryFactory;
+    private final ChoiceStatusEntityRepository choiceStatusEntityRepository;
+    private final ContentStatusResultChoiceStatusEntityRepository contentStatusResultChoiceStatusEntityRepository;
 
     /**
      * Status 설문 응답 저장
@@ -54,11 +56,21 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
 
         ContentStatusResult contentStatusResult = ContentStatusResult.builder()
                 .surveyContent(surveyContent)
-                .selectedStatusChoices(contentStatusResultDto.getSelectedStatusChoices())
                 .member(member)
                 .build();
 
-        return contentStatusResultRepository.save(contentStatusResult);
+        ContentStatusResult savedStatusResult = contentStatusResultRepository.save(contentStatusResult);
+
+        contentStatusResultDto.getSelectedStatusChoices().forEach(choiceStatus -> {
+            ChoiceStatusEntity choiceStatusEntity = choiceStatusEntityRepository.findByChoiceStatus(choiceStatus)
+                    .orElseThrow(() -> new NoSuchElementException("해당하는 Choice Status는 존재하지 않습니다."));
+            ContentStatusResultChoiceStatusEntity contentStatusResultChoiceStatusEntity = ContentStatusResultChoiceStatusEntity.createContentStatusResultChoiceStatusEntity(
+                    contentStatusResult, choiceStatusEntity);
+
+            contentStatusResultChoiceStatusEntityRepository.save(contentStatusResultChoiceStatusEntity);
+        });
+
+        return savedStatusResult;
     }
 
 
@@ -76,9 +88,16 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
         ContentStatusResult contentStatusResult = contentStatusResultRepository.findByIdAndMember(contentStatusResultUpdateDto.getContentStatusResultId(), member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당하는 ContentStatusResult가 존재하지 않습니다."));
 
-        contentStatusResult.setSelectedStatusChoices(new ArrayList<>(contentStatusResultUpdateDto.getSelectedStatusChoices()));
-        return contentStatusResultRepository.save(contentStatusResult);
+        contentStatusResult.getSelectedStatusChoices().clear();
+        contentStatusResultUpdateDto.getSelectedStatusChoices().stream().forEach(choiceStatus -> {
+            ChoiceStatusEntity choiceStatusEntity = choiceStatusEntityRepository.findByChoiceStatus(choiceStatus)
+                    .orElseThrow(() -> new NoSuchElementException("해당하는 Choice Status는 존재하지 않습니다."));
+            ContentStatusResultChoiceStatusEntity contentStatusResultChoiceStatusEntity = ContentStatusResultChoiceStatusEntity.createContentStatusResultChoiceStatusEntity(
+                    contentStatusResult, choiceStatusEntity);
 
+            contentStatusResultChoiceStatusEntityRepository.save(contentStatusResultChoiceStatusEntity);
+        });
+        return contentStatusResultRepository.save(contentStatusResult);
     }
 
     /**
@@ -128,6 +147,10 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
         if (findStatusResult == null) {
             return ContentStatusResultResponseDto.builder()
                     .contentStatusResultId(-1L)
+                    .memberId(-1L)
+                    .selectedStatusChoices(new ArrayList<>())
+                    .createdAt(LocalDateTime.of(2023, 7, 3, 17, 30))
+                    .updatedAt(LocalDateTime.of(2023, 7, 3, 17, 30))
                     .build();
         }
 
@@ -137,7 +160,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
         LocalDateTime updatedAt = findStatusResult.get(qContentStatusResult.updatedAt);
 
         ContentStatusResult contentStatusResult = contentStatusResultRepository.findById(contentStatusResultId).orElseThrow(() -> new NoSuchElementException("해당하는 ContentStatusResult가 없습니다."));
-        List<ChoiceStatus> selectedStatusChoices = contentStatusResult.getSelectedStatusChoices();
+        List<ChoiceStatus> selectedStatusChoices = contentStatusResult.getSelectedStatusChoices().stream().map(contentStatusResultChoiceStatusEntity -> contentStatusResultChoiceStatusEntity.getChoiceStatusEntity().getChoiceStatus()).toList();
 
         ContentStatusResultResponseDto result = ContentStatusResultResponseDto.builder()
                 .contentStatusResultId(contentStatusResultId)

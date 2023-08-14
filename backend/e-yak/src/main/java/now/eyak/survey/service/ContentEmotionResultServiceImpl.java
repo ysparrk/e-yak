@@ -10,6 +10,7 @@ import now.eyak.survey.domain.*;
 import now.eyak.survey.dto.request.ContentEmotionResultDto;
 import now.eyak.survey.dto.request.ContentEmotionResultUpdateDto;
 import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
+import now.eyak.survey.enumeration.ChoiceEmotion;
 import now.eyak.survey.exception.DuplicatedContentResultException;
 import now.eyak.survey.repository.ContentEmotionResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -117,11 +119,14 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
         if (emotionResult == null) {
             return ContentEmotionResultResponseDto.builder()
                     .contentEmotionResultId(-1L)
+                    .choiceEmotion(ChoiceEmotion.BAD)
+                    .memberId(-1L)
+                    .createdAt(LocalDateTime.of(2023, 7, 3, 17, 30))
+                    .updatedAt(LocalDateTime.of(2023, 7, 3, 17, 30))
                     .build();
         }
 
         return emotionResult;
-
     }
 
 
