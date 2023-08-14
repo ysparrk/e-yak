@@ -132,6 +132,9 @@ class MedicineSearchFragment : Fragment() {
                 val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
                 val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
 
+                tableLayout.removeAllViews()
+                tableLayout2.removeAllViews()
+
                 api.medicineSearch(Authorization = "Bearer ${serverAccessToken}", startDateTime = searchStartString, endDateTime = searchEndString).enqueue(object: Callback<MedicineSearchResponseBodyModel> {
                     override fun onResponse(call: Call<MedicineSearchResponseBodyModel>, response: Response<MedicineSearchResponseBodyModel>) {
                         if(response.code() == 200) {
@@ -322,15 +325,12 @@ class MedicineSearchFragment : Fragment() {
 
                     }
                 })
-
-
             }
-
-
-
         }
 
-
+        layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
+            mainActivity!!.gotoMedicine()
+        }
 
 
 

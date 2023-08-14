@@ -274,8 +274,9 @@
                 android:layout_height="10dp" />
 
             <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
 
                 <TableLayout
                     android:id="@+id/searchMedicineTable"
@@ -309,8 +310,9 @@
                 android:layout_height="10dp" />
 
             <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal">
 
                 <TableLayout
                     android:id="@+id/searchRecodeTable"
@@ -324,6 +326,38 @@
 
                 </TableLayout>
             </HorizontalScrollView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+
+                <Button
+                    android:id="@+id/mainBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:backgroundTint="#E3F2C1"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:includeFontPadding="false"
+                    android:text="메인 화면으로"
+                    android:textColor="#757863" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
