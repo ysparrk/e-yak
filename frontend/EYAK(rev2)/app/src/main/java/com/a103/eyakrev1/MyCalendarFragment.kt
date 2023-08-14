@@ -212,16 +212,19 @@ class MyCalendarFragment : Fragment() {
             myCalendarDayImageView.setOnClickListener {
                 forThoseWhoHaveAccessLayout.visibility = View.VISIBLE
 
+                val clickedDate = LocalDate.of(targetYear, targetMonth, dayText.toInt())
+                val clickedDay = clickedDate.dayOfMonth
+
                 if (requeteeId == -1) {
                     // 내 달력일 때
-                    api.getMyDailyDetailInCalendar(Authorization = "Bearer ${serverAccessToken}", date = targetDate.toString()).enqueue(object:
+                    api.getMyDailyDetailInCalendar(Authorization = "Bearer ${serverAccessToken}", date = clickedDate.toString()).enqueue(object:
                         Callback<medicineDetailsInCalendarResponseModel> {
                         override fun onResponse(call: Call<medicineDetailsInCalendarResponseModel>, response: Response<medicineDetailsInCalendarResponseModel>) {
 //                            Log.d("log", response.toString())
 
                             if(response.code() == 200) {
                                 // 성공
-                                detailedTitleTextView.text = "${targetYear}년 ${targetMonth}월 ${targetDay}일"
+                                detailedTitleTextView.text = "${targetYear}년 ${targetMonth}월 ${clickedDay}일"
                                 val medicineDetails = response.body()!!.medicineRoutineDateDtos
 
 //                                Log.d("log", response.body().toString())
@@ -250,17 +253,16 @@ class MyCalendarFragment : Fragment() {
                 }
                 else {
                     // 가족의 달력일 때
-                    api.getOthersDailyDetailInCalendar(Authorization = "Bearer ${serverAccessToken}", date = targetDate.toString(), requeteeId = requeteeId).enqueue(object:
+                    api.getOthersDailyDetailInCalendar(Authorization = "Bearer ${serverAccessToken}", date = clickedDate.toString(), requeteeId = requeteeId).enqueue(object:
                         Callback<medicineDetailsInCalendarResponseModel> {
                         override fun onResponse(call: Call<medicineDetailsInCalendarResponseModel>, response: Response<medicineDetailsInCalendarResponseModel>) {
-//                            Log.d("log", response.toString())
-
                             if(response.code() == 200) {
                                 // 성공
-                                detailedTitleTextView.text = "${targetYear}년 ${targetMonth}월 ${targetDay}일"
+                                detailedTitleTextView.text = "${targetYear}년 ${targetMonth}월 ${clickedDay}일"
                                 val medicineDetails = response.body()!!.medicineRoutineDateDtos
 
 //                                Log.d("log", response.body().toString())
+//                                Log.d("log", response.body()!!.medicineRoutineDateDtos.toString())
 
                                 val medicineInCalendarListAdapter = MedicineInCalendarListAdapter(mainActivity, medicineDetails)
                                 val medicineInCalendarListView = layout.findViewById<ListView>(R.id.medicineInCalendarListView)

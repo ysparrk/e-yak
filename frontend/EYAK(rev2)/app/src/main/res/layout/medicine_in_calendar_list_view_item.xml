@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="auto"
+    android:background="#F8FCF8"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
@@ -27,6 +27,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
+            android:background="#DDE6ED"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
