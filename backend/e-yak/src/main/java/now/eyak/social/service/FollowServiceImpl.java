@@ -54,7 +54,7 @@ public class FollowServiceImpl implements FollowService {
         Follow follow = followRepository.findByIdAndFollowee(followId, followee).orElseThrow(() -> new NoSuchElementException("해당하는 Follow가 존재하지 않습니다."));
 
         Member follower = follow.getFollower();
-        Follow inverseFollow = followRepository.findByFollowerAndFollowee(follower, followee)
+        Follow inverseFollow = followRepository.findByFollowerAndFollowee(followee, follower)
                 .orElseThrow(() -> new NoSuchElementException("해당하는 Follow가 존재하지 않습니다."));
 
         followRepository.delete(inverseFollow);
