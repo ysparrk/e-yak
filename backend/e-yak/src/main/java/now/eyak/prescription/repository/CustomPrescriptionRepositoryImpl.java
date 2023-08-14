@@ -142,7 +142,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                         medicineRoutineCheck.took
                 ))
                 .from(prescription, medicineRoutineCheck)
-                .where(medicineRoutineCheck.medicineRoutine.routine.eq(Routine.BED_AFTER)
+                .where(medicineRoutineCheck.medicineRoutine.routine.eq(routine)
                         .and(medicineRoutineCheck.prescription.id.eq(prescription.id))
                         .and(medicineRoutineCheck.member.eq(member))
                         .and(medicineRoutineCheck.date.eq(dateTime.toLocalDate()))
@@ -179,12 +179,13 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                 .where(prescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(routine)
                         .and(prescription.member.eq(member))
                         .and(prescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and((prescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay()))
-                                .or((prescription.endDateTime.eq(dateTime.toLocalDate().atStartOfDay()))
-                                        .and((medicineRoutineCheck.member.eq(member))
-                                                .and(medicineRoutineCheck.medicineRoutine.routine.ne(routine))
-                                                .and(medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
-                                                .and(medicineRoutineCheck.prescription.id.eq(prescription.id))))))
+                        .and((prescription.endDateTime.goe(dateTime.toLocalDate().atStartOfDay()))))
+
+//                                .or((prescription.endDateTime.eq(dateTime.toLocalDate().atStartOfDay()))
+//                                        .and((medicineRoutineCheck.member.eq(member))
+//                                        .and(medicineRoutineCheck.medicineRoutine.routine.ne(routine))
+//                                        .and(medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
+//                                        .and(medicineRoutineCheck.prescription.id.eq(prescription.id))))))
                 .fetch();
 
         return routineQueryList;
