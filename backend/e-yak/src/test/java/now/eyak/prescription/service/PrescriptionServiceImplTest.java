@@ -63,7 +63,7 @@ class PrescriptionServiceImplTest {
 
         MEMBER = memberRepository.save(member);
 
-        routines = List.of(Routine.BED_AFTER, Routine.LUNCH_AFTER, Routine.DINNER_AFTER);
+        routines = List.of(Routine.BED_AFTER, Routine.LUNCH_AFTER, Routine.BED_BEFORE);
     }
 
     @Transactional
@@ -271,24 +271,24 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
-                .endDateTime(LocalDateTime.of(2023, 8, 12, 0, 0))
+                .startDateTime(LocalDateTime.now().toLocalDate().atStartOfDay())
+                .endDateTime(LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay())
                 .iotLocation(4)
                 .medicineDose(1.5f)
                 .medicineShape(2)
                 .unit("정")
                 .medicineRoutines(routines)
                 .build();
-
-        routines = List.of(Routine.BED_AFTER, Routine.BED_BEFORE, Routine.DINNER_AFTER);
+        // routines = List.of(Routine.BED_AFTER, Routine.LUNCH_AFTER, Routine.BED_BEFORE);  // 약 1
+        routines = List.of(Routine.BED_AFTER, Routine.DINNER_AFTER, Routine.BED_BEFORE);
 
         PrescriptionDto prescriptionDto2 = PrescriptionDto.builder()
-                .customName("감기약")
+                .customName("혈압약")
                 .icd("RS-1203123")
-                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .krName("혈압약")
                 .engName("some english")
-                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
-                .endDateTime(LocalDateTime.of(2023, 8, 12, 0, 0))
+                .startDateTime(LocalDateTime.now().toLocalDate().atStartOfDay())
+                .endDateTime(LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay())
                 .iotLocation(4)
                 .medicineDose(1.5f)
                 .medicineShape(2)
@@ -300,10 +300,11 @@ class PrescriptionServiceImplTest {
         Prescription inserted2 = prescriptionService.insert(prescriptionDto2, MEMBER.getId());
 
         // when
-        PrescriptionResponseDto sortFuture = prescriptionService.findAllAndSortWithRoutineFuture(MEMBER.getId(), LocalDateTime.now().plusDays(2));
+        PrescriptionResponseDto sortFuture = prescriptionService.findAllAndSortWithRoutineFuture(MEMBER.getId(), LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay());
 
         // then
-        System.out.println("3333sortFuture = " + sortFuture);
+        // TODO: Assertions 작성
+        System.out.println("sortFuture = " + sortFuture);
 
     }
 
