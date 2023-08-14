@@ -114,6 +114,8 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
                         medicineRoutineCheckRepository.save(medicineRoutineCheck);
                     }
+
+                    continue;
                 }
 
                 for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
@@ -127,7 +129,6 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
                             .build();
 
                     medicineRoutineCheckRepository.save(medicineRoutineCheck);
-
                 }
             }
         }

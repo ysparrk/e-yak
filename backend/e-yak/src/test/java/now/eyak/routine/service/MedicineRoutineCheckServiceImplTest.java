@@ -1,11 +1,5 @@
 package now.eyak.routine.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
-import java.util.List;
-import java.util.NoSuchElementException;
 import now.eyak.exception.NoPermissionException;
 import now.eyak.member.domain.Member;
 import now.eyak.member.repository.MemberRepository;
@@ -44,6 +38,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.YearMonth;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @EnableScheduling  // 스케줄링 활성화
 @ExtendWith(SpringExtension.class)
@@ -131,36 +132,13 @@ class MedicineRoutineCheckServiceImplTest {
                 .build();
 
         prescription = prescriptionService.insert(prescriptionDto, member.getId());
-
-        medicineRoutineCheckService.scheduleMedicineRoutineCheck(); // 스케줄링
     }
-
-
-//    @DisplayName("Scheduling")
-//    @Test
-//    @Transactional
-//    void scheduleMedicineRoutineCheck() {
-//        // given
-//
-//        // when
-//
-//        // then
-//        List<Prescription> allByMemberIdBetweenDate = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now().plusDays(3));
-//
-//        Integer routinesCnt = allByMemberIdBetweenDate.stream().map(prescription1 -> prescription1.getPrescriptionMedicineRoutines().size()).reduce(0, (a, b) -> a + b);
-//        System.out.println("1111routinesCnt = " + routinesCnt);
-//        System.out.println("1111medicineRoutineCheckRepository.findByMemberAndDate(member, LocalDate.now()).size() = " + medicineRoutineCheckRepository.findByMemberAndDate(member, LocalDate.now()).size());;
-//        Assertions.assertThat(routinesCnt).isEqualTo(medicineRoutineCheckRepository.findByMemberAndDate(member, LocalDate.now()).size());
-//
-//    }
 
     @DisplayName("Routine Check")
     @Test
     @Transactional
     void updateMedicineRoutineCheck() {
         // given
-
-        // when
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
         MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
@@ -171,6 +149,8 @@ class MedicineRoutineCheckServiceImplTest {
 
 
         MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
+        // when
 
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
                 .id(checkIdResponseDto.getId())
@@ -195,8 +175,6 @@ class MedicineRoutineCheckServiceImplTest {
     @Transactional
     void getDateResultsByDateAndMember() {
         // given
-
-        // when
         Prescription testPrescription = prescriptionService.findAllByMemberIdBetweenDate(member.getId(), LocalDateTime.now()).get(1);
 
         MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
@@ -207,6 +185,8 @@ class MedicineRoutineCheckServiceImplTest {
 
 
         MedicineRoutineCheckIdResponseDto checkIdResponseDto = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, member.getId());
+
+        // when
 
         MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto = MedicineRoutineCheckUpdateDto.builder()
                 .id(checkIdResponseDto.getId())
@@ -457,7 +437,7 @@ class MedicineRoutineCheckServiceImplTest {
         MedicineRoutineCheckIdDto medicineRoutineCheckIdDto = MedicineRoutineCheckIdDto.builder()
                 .date(LocalDate.now())
                 .prescriptionId(testPrescription.getId())
-                .routine(testPrescription.getPrescriptionMedicineRoutines().get(0).getMedicineRoutine().getRoutine())
+                .routine(testPrescription.getPrescriptionMedicineRoutines().get(1).getMedicineRoutine().getRoutine())
                 .build();
 
         // when
