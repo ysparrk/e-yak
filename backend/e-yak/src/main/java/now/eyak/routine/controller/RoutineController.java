@@ -102,9 +102,9 @@ public class RoutineController {
     @GetMapping("/day-detail")
     public ResponseEntity getDateDetailResultsByDateAndMember(
             @RequestParam LocalDate date,
-            @RequestParam(required = false) Long requesteeId,
+            @RequestParam(value = "requeteeId", required = false) Long requesteeId,
             @AuthenticationPrincipal Long requesterId
-        ){
+        ) {
 
         // 사용자(requesterId)가 본인의 복약 상세 조회를 요청한 경우
         MedicineRoutineDateResponseDto dateDetailResultsByDateAndMember = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(date, requesterId, requesteeId);
