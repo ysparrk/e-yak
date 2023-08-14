@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -128,6 +129,10 @@ public class ContentTextResultServiceImpl implements ContentTextResultService {
         if (textResult == null) {
             return ContentTextResultResponseDto.builder()
                     .contentTextResultId(-1L)
+                    .memberId(-1L)
+                    .text("")
+                    .createdAt(LocalDateTime.of(2023, 7, 3, 17, 30))
+                    .updatedAt(LocalDateTime.of(2023, 7, 3, 17, 30))
                     .build();
         }
 

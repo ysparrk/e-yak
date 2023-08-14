@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -146,6 +147,10 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
         if (findStatusResult == null) {
             return ContentStatusResultResponseDto.builder()
                     .contentStatusResultId(-1L)
+                    .memberId(-1L)
+                    .selectedStatusChoices(new ArrayList<>())
+                    .createdAt(LocalDateTime.of(2023, 7, 3, 17, 30))
+                    .updatedAt(LocalDateTime.of(2023, 7, 3, 17, 30))
                     .build();
         }
 
