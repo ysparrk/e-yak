@@ -199,6 +199,7 @@ class MedicineAddResultFragment : Fragment() {
                     start_date_time = "${startYear}-${startMonth}-${startDay}T00:00:00",
                     end_date_time = "${endYear}-${endMonth}-${endDay}T00:00:00",
                     medicine_routines = medicineRoutines,
+                    iotLocation = iotLocation,
                     medicine_shape = selectIcon,
                     medicine_dose = layout.findViewById<TextView>(R.id.numberOfOneTimeInputResult).text.toString().toFloat(),
                     unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),

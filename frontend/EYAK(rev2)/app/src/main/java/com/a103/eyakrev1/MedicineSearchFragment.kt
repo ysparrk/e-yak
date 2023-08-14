@@ -116,14 +116,10 @@ class MedicineSearchFragment : Fragment() {
                 val searchStartString: String = startSearchDate.format(formatter) + "T00:00:00"
                 val searchEndString: String = endSearchDate.format(formatter) + "T00:00:00"
 
-                Log.d("ㅁㄴㄹㅇㄴㅁㄹㅁㅇㄴㅁㄹㄴㅇ", searchStartString)
-                Log.d("ㅁㄴㄹㅇㄴㅁㄹㅁㅇㄴㅁㄹㄴㅇ", searchEndString)
                 api.medicineSearch(Authorization = "Bearer ${serverAccessToken}", startDateTime = searchStartString, endDateTime = searchEndString).enqueue(object: Callback<MedicineSearchResponseBodyModel> {
                     override fun onResponse(call: Call<MedicineSearchResponseBodyModel>, response: Response<MedicineSearchResponseBodyModel>) {
-                        Log.d("ㅁㅁㅇㄴㄹㄴㅇㅁㄹ", response.code().toString())
                         if(response.code() == 200) {
-                            Log.d("asdfsadf", response.body().toString())
-                        //Log.d("ㅁㅁㄴㅇㄹㅁㄴㅇㄹ", response.body()!!.prescriptionList[0].customName)
+
 
                         }
                         else if(response.code() == 401) {
@@ -131,7 +127,8 @@ class MedicineSearchFragment : Fragment() {
                         }
                     }
                     override fun onFailure(call: Call<MedicineSearchResponseBodyModel>, t: Throwable) {
-                        Log.d("ㅁㅁㅇㄴㄹㄴㅇㅁㄹ"," Failure")
+                        t.printStackTrace()
+                        Log.d("ㅁㅁㅇㄴㄹㄴㅇㅁㄹ",t.toString())
                     }
                 })
 
