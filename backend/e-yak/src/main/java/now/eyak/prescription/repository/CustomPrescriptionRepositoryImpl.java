@@ -188,10 +188,11 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                         .and(prescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
                         .and((prescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay()))
                                 .or(prescription.endDateTime.eq(dateTime.toLocalDate().atStartOfDay())
-                                        .and((medicineRoutineCheck.member.eq(member))
-                                        .and(medicineRoutineCheck.medicineRoutine.routine.eq(routine))
-                                        .and(medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
-                                        .and(medicineRoutineCheck.prescription.id.eq(prescription.id))))))
+//                                        .and((medicineRoutineCheck.member.eq(member))
+//                                        .and(medicineRoutineCheck.medicineRoutine.routine.ne(routine))
+//                                        .and(medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
+//                                        .and(medicineRoutineCheck.prescription.id.eq(prescription.id))))))
+                                )))
                 .fetch();
 
         return routineQueryList;
