@@ -3,6 +3,7 @@ package com.a103.eyakrev1
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.media.Image
 import android.os.Bundle
 import android.text.TextUtils.substring
 import android.util.Log
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -19,9 +21,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.preference.PreferenceManager
+import com.itextpdf.text.Phrase
+import com.itextpdf.text.pdf.PdfPCell
+import com.itextpdf.text.pdf.PdfPTable
+import com.itextpdf.text.pdf.PdfWriter
+import com.itextpdf.text.Document
+import com.itextpdf.text.pdf.BaseFont
+import com.itextpdf.text.Font
+import com.itextpdf.text.FontFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.FileOutputStream
+import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -32,16 +44,19 @@ class MedicineSearchFragment : Fragment() {
 
     val api = EyakService.create()
 
-    var startSearchDate = LocalDate.now()
-    var endSearchDate = LocalDate.now()
+    private var startSearchDate = LocalDate.now()
+    private var endSearchDate = LocalDate.now()
 
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val mappingMedicineRoutines: Map<String, String> = mapOf("BED_AFTER" to "기상 후", "BREAKFAST_BEFORE" to "아침 식사 전", "BREAKFAST_AFTER" to "아침 식사 후", "LUNCH_BEFORE" to "점심 식사 전", "LUNCH_AFTER" to "점심 식사 후", "DINNER_BEFORE" to "저녁 식사 전", "DINNER_AFTER" to "저녁 식사 후", "BED_BEFORE" to "잠 자기 전")
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val mappingMedicineRoutines: Map<String, String> = mapOf("BED_AFTER" to "기상 후", "BREAKFAST_BEFORE" to "아침 식사 전", "BREAKFAST_AFTER" to "아침 식사 후", "LUNCH_BEFORE" to "점심 식사 전", "LUNCH_AFTER" to "점심 식사 후", "DINNER_BEFORE" to "저녁 식사 전", "DINNER_AFTER" to "저녁 식사 후", "BED_BEFORE" to "잠 자기 전")
 
     private val mappingSymptom: Map<String, String> = mapOf("NO_SYMPTOMS" to "증상 없음", "HEADACHE" to "두통", "ABDOMINAL_PAIN" to "복통", "VOMITING" to "구토", "FEVER" to "발열", "DIARRHEA" to "설사", "INDIGESTION" to "소화불량", "COUGH" to "기침")
 
-    val evenRowColor: String = "#f0f0f0"
-    val oddRowColor: String = "#ffffff"
+    private val evenRowColor: String = "#f0f0f0"
+    private val oddRowColor: String = "#ffffff"
+
+    private var dayChk: Boolean = true
+    private var makePDFChk: Boolean = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +69,10 @@ class MedicineSearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_medicine_search, container, false)
+
+        // 초기화 시작
+        layout.findViewById<ImageView>(R.id.makePDFBtn).visibility = View.GONE
+        // 초기화 끝
 
         // 초기 정보 시작
         layout.findViewById<EditText>(R.id.searchStartYearInput).hint = (startSearchDate.year % 100).toString()
@@ -75,8 +94,6 @@ class MedicineSearchFragment : Fragment() {
             val endYear: Int = if(layout.findViewById<EditText>(R.id.searchEndYearInput).text.toString() == "") 2000 + layout.findViewById<EditText>(R.id.searchEndYearInput).hint.toString().toInt() else 2000 + layout.findViewById<EditText>(R.id.searchEndYearInput).text.toString().toInt()
             val endMonth: Int = if(layout.findViewById<EditText>(R.id.searchEndMonthInput).text.toString() == "") layout.findViewById<EditText>(R.id.searchEndMonthInput).hint.toString().toInt() else layout.findViewById<EditText>(R.id.searchEndMonthInput).text.toString().toInt()
             val endDay: Int = if(layout.findViewById<EditText>(R.id.searchEndDayInput).text.toString() == "") layout.findViewById<EditText>(R.id.searchEndDayInput).hint.toString().toInt() else layout.findViewById<EditText>(R.id.searchEndDayInput).text.toString().toInt()
-
-            var dayChk: Boolean = true;
 
             if(startYear < 2000 || startYear > 2999) {
                 Toast.makeText(mainActivity, "올바른 검색 시작 연도를 입력하세요(00 ~ 99)", Toast.LENGTH_SHORT).show()
@@ -137,6 +154,7 @@ class MedicineSearchFragment : Fragment() {
 
                 api.medicineSearch(Authorization = "Bearer ${serverAccessToken}", startDateTime = searchStartString, endDateTime = searchEndString).enqueue(object: Callback<MedicineSearchResponseBodyModel> {
                     override fun onResponse(call: Call<MedicineSearchResponseBodyModel>, response: Response<MedicineSearchResponseBodyModel>) {
+                        makePDFChk = false
                         if(response.code() == 200) {
                             // 헤더 설정 시작
                             val headerRow = TableRow(requireContext())
@@ -183,6 +201,7 @@ class MedicineSearchFragment : Fragment() {
                             val prescriptionList: ArrayList<PrescriptionListModel> = response.body()!!.prescriptionList
 
                             for(i in 0..prescriptionList.size - 1) {
+                                makePDFChk = true
                                 val row = TableRow(requireContext())
                                 val layoutParams = TableLayout.LayoutParams(
                                     TableLayout.LayoutParams.MATCH_PARENT,
@@ -270,6 +289,7 @@ class MedicineSearchFragment : Fragment() {
                             val surveyContentList: ArrayList<SurveyContentListModel> = response.body()!!.surveyContentList
 
                             for(i in 0..surveyContentList.size - 1) {
+                                makePDFChk = true
                                 val row = TableRow(requireContext())
                                 val layoutParams = TableLayout.LayoutParams(
                                     TableLayout.LayoutParams.MATCH_PARENT,
@@ -316,6 +336,7 @@ class MedicineSearchFragment : Fragment() {
 
                                 tableLayout2.addView(row)
                             }
+                            if(makePDFChk) layout.findViewById<ImageView>(R.id.makePDFBtn).visibility = View.VISIBLE
                         }
                         else if(response.code() == 401) {
 
@@ -328,20 +349,69 @@ class MedicineSearchFragment : Fragment() {
             }
         }
 
+        layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {
+            // 여기 누르면 PDF 만들어짐
+            // PDF 파일 경로 설정
+            val pdfFilePath = requireContext().getExternalFilesDir(null)?.absolutePath + "/myPDF.pdf"
+
+            // PDF 생성 시작
+            val document = Document()
+            PdfWriter.getInstance(document, FileOutputStream(pdfFilePath))
+            document.open()
+
+            // PDF에 추가할 내용 작성
+            val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
+            val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
+
+            addTableToDocument(document, tableLayout, mainActivity)
+            addTableToDocument(document, tableLayout2, mainActivity)
+
+            document.close()
+
+            Toast.makeText(requireContext(), "PDF가 생성되었습니다.", Toast.LENGTH_SHORT).show()
+
+        }
+
         layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
             mainActivity!!.gotoMedicine()
         }
 
-
-
         return layout
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         mainActivity = context as MainActivity
+    }
+    private fun addTableToDocument(document: Document, tableLayout: TableLayout, context: Context) {
+        val table = PdfPTable(tableLayout.childCount)
+        val colWidths = FloatArray(tableLayout.childCount) { 2f } // 각 열의 너비를 동일하게 설정
+
+        // 기본 폰트 설정
+        // 기본 폰트 설정
+        val defaultFont = BaseFont.createFont("res/font/tmoney_regular.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
+
+        for (i in 0 until tableLayout.childCount) {
+            val row = tableLayout.getChildAt(i) as TableRow
+            val rowCells = mutableListOf<PdfPCell>()
+
+            for (j in 0 until row.childCount) {
+                val textView = row.getChildAt(j) as TextView
+                val cell = PdfPCell(Phrase(textView.text.toString(), Font(defaultFont, 12f))) // 폰트 적용
+                cell.setPadding(8f)
+                rowCells.add(cell)
+            }
+
+            // 행의 셀들을 PdfPTable에 추가
+            for (cell in rowCells) {
+                table.addCell(cell)
+            }
+        }
+
+        table.widthPercentage = 100f
+        table.setWidths(colWidths)
+        document.add(table)
     }
 
 }
