@@ -279,7 +279,6 @@ class PrescriptionServiceImplTest {
                 .unit("정")
                 .medicineRoutines(routines)
                 .build();
-        // routines = List.of(Routine.BED_AFTER, Routine.LUNCH_AFTER, Routine.BED_BEFORE);  // 약 1
         routines = List.of(Routine.BED_AFTER, Routine.DINNER_AFTER, Routine.BED_BEFORE);
 
         PrescriptionDto prescriptionDto2 = PrescriptionDto.builder()

@@ -1,6 +1,7 @@
 package now.eyak.prescription.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import now.eyak.member.domain.Member;
@@ -8,8 +9,6 @@ import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.domain.QPrescription;
 import now.eyak.prescription.dto.query.PrescriptionListQueryDto;
 import now.eyak.prescription.dto.query.PrescriptionRoutineQueryDto;
-import now.eyak.routine.domain.MedicineRoutine;
-import now.eyak.routine.domain.QMedicineRoutine;
 import now.eyak.routine.domain.QMedicineRoutineCheck;
 import now.eyak.routine.dto.query.MedicineRoutineCheckBetweenDatesQueryDto;
 import now.eyak.routine.enumeration.Routine;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static now.eyak.prescription.domain.QPrescription.prescription;
-import static now.eyak.routine.domain.QMedicineRoutine.medicineRoutine;
 import static now.eyak.routine.domain.QMedicineRoutineCheck.medicineRoutineCheck;
 import static now.eyak.routine.domain.QPrescriptionMedicineRoutine.prescriptionMedicineRoutine;
 
@@ -179,20 +177,19 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                         prescription.medicineShape,
                         medicineRoutineCheck.took
                 ))
-                .from(medicineRoutineCheck)
-                .join(medicineRoutineCheck.prescription, prescription)
-                .join(prescription.prescriptionMedicineRoutines, prescriptionMedicineRoutine)
-                .join(prescriptionMedicineRoutine.medicineRoutine, medicineRoutine)
-                .where(medicineRoutineCheck.medicineRoutine.routine.eq(routine)
+                .from(prescription, medicineRoutineCheck)
+                .where(prescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(routine)
                         .and(prescription.member.eq(member))
                         .and(prescription.startDateTime.loe(dateTime.toLocalDate().atStartOfDay()))
-                        .and((prescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay()))
+                        .and((prescription.endDateTime.gt(dateTime.toLocalDate().atStartOfDay())
                                 .or(prescription.endDateTime.eq(dateTime.toLocalDate().atStartOfDay())
-//                                        .and((medicineRoutineCheck.member.eq(member))
-//                                        .and(medicineRoutineCheck.medicineRoutine.routine.ne(routine))
-//                                        .and(medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
-//                                        .and(medicineRoutineCheck.prescription.id.eq(prescription.id))))))
-                                )))
+                                        .and(prescription.id.notIn(
+                                                JPAExpressions.select(medicineRoutineCheck.prescription.id)
+                                                        .from(medicineRoutineCheck)
+                                                        .where((medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
+                                                        .and(medicineRoutineCheck.medicineRoutine.routine.eq(routine))
+                                                        .and(medicineRoutineCheck.member.eq(member))
+                                                    )))))))
                 .fetch();
 
         return routineQueryList;
