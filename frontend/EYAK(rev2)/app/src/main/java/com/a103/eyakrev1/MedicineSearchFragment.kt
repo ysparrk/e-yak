@@ -21,6 +21,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
 import com.itextpdf.text.Phrase
 import com.itextpdf.text.pdf.PdfPCell
@@ -58,6 +59,7 @@ class MedicineSearchFragment : Fragment() {
 
     private var dayChk: Boolean = true
     private var makePDFChk: Boolean = false;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -366,8 +368,8 @@ class MedicineSearchFragment : Fragment() {
             val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
             val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
 
-            addTableToDocument(document, tableLayout, mainActivity)
-            addTableToDocument(document, tableLayout2, mainActivity)
+            addTableToDocument(document, tableLayout, mainActivity, 5)
+            addTableToDocument(document, tableLayout2, mainActivity,4)
 
             document.close()
 
@@ -387,34 +389,40 @@ class MedicineSearchFragment : Fragment() {
 
         mainActivity = context as MainActivity
     }
-    private fun addTableToDocument(document: Document, tableLayout: TableLayout, context: Context) {
-        val table = PdfPTable(tableLayout.childCount)
-        val colWidths = FloatArray(tableLayout.childCount) { 2f } // 각 열의 너비를 동일하게 설정
+    private fun addTableToDocument(document: Document, tableLayout: TableLayout, context: Context, numberOfColumns: Int) {
+        val numberOfRows = tableLayout.childCount
 
-        // 기본 폰트 설정
-        val defaultFont = BaseFont.createFont("res/font/tmoney_regular.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
+        val table = PdfPTable(numberOfColumns)
+        val colWidths = FloatArray(numberOfColumns) { 3f }
 
-        for (i in 0 until tableLayout.childCount) {
+        val font = FontFactory.getFont("font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 10f)
+
+        for (i in 0 until numberOfRows) {
             val row = tableLayout.getChildAt(i) as TableRow
             val rowCells = mutableListOf<PdfPCell>()
 
-            for (j in 0 until row.childCount) {
+            for (j in 0 until numberOfColumns) {
                 val textView = row.getChildAt(j) as TextView
-                val cellText = textView.text.toString() // 셀의 내용을 가져옴
-                Log.d("PDF Cell Content", "Cell [$i, $j]: $cellText") // 셀의 내용을 로그로 출력
+                val cellText = textView.text.toString()
 
-                val cell = PdfPCell(Phrase(cellText, Font(defaultFont, 12f))) // 폰트 적용
-                cell.setPadding(8f)
+                val cell = PdfPCell(Phrase(cellText, font))
                 rowCells.add(cell)
+                cell.isNoWrap = false
             }
 
-            // 행의 셀들을 PdfPTable에 추가
             for (cell in rowCells) {
                 table.addCell(cell)
             }
         }
 
         table.widthPercentage = 100f
+
+        val emptyCell = PdfPCell(Phrase(" "))
+        emptyCell.colspan = numberOfColumns
+        emptyCell.border = PdfPCell.NO_BORDER
+        emptyCell.setPadding(10f)
+        table.addCell(emptyCell)
+
         table.setWidths(colWidths)
         document.add(table)
     }
