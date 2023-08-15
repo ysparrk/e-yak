@@ -30,9 +30,9 @@ class MedicineAddResultFragment : Fragment() {
 
     private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
 
-    var isEdit = false
-    var clickedMedicineId = -1
-    var iotLocation = -1
+    private var isEdit = false
+    private var clickedMedicineId = -1
+    private var iotLocation = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +118,6 @@ class MedicineAddResultFragment : Fragment() {
             // 1회 투여양
             view?.findViewById<TextView>(R.id.numberOfOneTimeInputResult)?.text = bundle.getFloat("numberOfOneTime", 0f).toString()
             view?.findViewById<TextView>(R.id.unitTypeInputResult)?.text = bundle.getString("unitType", "-") ?: "-"
-
         }
     }
 
@@ -153,7 +152,6 @@ class MedicineAddResultFragment : Fragment() {
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
             val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
-
             if (isEdit) {
                 // 이게 edit이라면, clickedMedicineId가 -1이 아닐거
                 val data = PrescriptionEditBodyModel(
@@ -170,11 +168,10 @@ class MedicineAddResultFragment : Fragment() {
                     unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),
                 )
 
-                api.editPrescriptionDetail(Authorization = "Bearer ${serverAccessToken}", params = data, prescriptionId = clickedMedicineId).enqueue(object:
-                    Callback<Medicine> {
+                api.editPrescriptionDetail(Authorization = "Bearer ${serverAccessToken}", params = data, prescriptionId = clickedMedicineId).enqueue(object: Callback<Medicine> {
                     override fun onResponse(call: Call<Medicine>, response: Response<Medicine>) {
                         if(response.code() == 200) {
-                            Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "복약 정보 수정 200 OK")
                             // 해당 복약 상세 조회를 띄워주자
                             val bundle = Bundle()
                             bundle.putInt("clickedMedicineId", clickedMedicineId)
@@ -182,13 +179,13 @@ class MedicineAddResultFragment : Fragment() {
                             mainActivity!!.gotoMedicineDetail()
                         }
                         else if(response.code() == 401) {
-                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "복약 정보 수정 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                         } else if(response.code() == 400) {
-                            Toast.makeText(mainActivity, "해당 복약 정보가 존재하지 않습니다", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "복약 정보 수정 400 Bad Request: 해당하는 Prescription이 존재하지 않는 경우")
                         }
                     }
                     override fun onFailure(call: Call<Medicine>, t: Throwable) {
-
+                        Log.d("로그", "복약 정보 수정 onFailure")
                     }
                 })
             } else {
@@ -207,30 +204,29 @@ class MedicineAddResultFragment : Fragment() {
                     unit = layout.findViewById<TextView>(R.id.unitTypeInputResult).text.toString(),
                 )
 
-                api.prescription(Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object:
-                    Callback<Void> {
+                api.prescription(Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if(response.code() == 201) {
-                            Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "복약 정보 등록 201 Created")
                             // 복약 전체조회를 띄워주자
                             mainActivity!!.gotoMedicine()
                         }
                         else if(response.code() == 401) {
-                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "복약 정보 등록 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                         }
                     }
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-
+                        Log.d("로그", "복약 정보 등록 onFailure")
                     }
                 })
             }
         }
 
+        // 스크롤을 가장 아래로 내림
         layout.findViewById<ImageView>(R.id.medicineAddResultScrollViewScrollDown).setOnClickListener {
             layout.findViewById<ScrollView>(R.id.medicineAddResultScrollView).post {
                 layout.findViewById<ScrollView>(R.id.medicineAddResultScrollView).fullScroll(ScrollView.FOCUS_DOWN)
             }
-//            Log.d("!!!!!!!!!", "asdfasdf")
         }
 
         return layout
@@ -256,5 +252,4 @@ class MedicineAddResultFragment : Fragment() {
         super.onDetach()
         callback.remove()
     }
-
 }
