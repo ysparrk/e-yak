@@ -16,7 +16,6 @@ import androidx.fragment.app.setFragmentResult
 class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>): BaseAdapter() {
 
     var mainActivity: MainActivity = context as MainActivity
-
     override fun getCount(): Int {
         return familyList.size
     }
@@ -66,9 +65,6 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         return view
     }
 
-    /**
-     * Extension method to set View's height.
-     */
     fun View.setHeight(value: Int) {
         val lp = layoutParams
         lp?.let {
@@ -77,9 +73,6 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         }
     }
 
-    /**
-     * Extension method to set View's width.
-     */
     fun View.setWidth(value: Int) {
         val lp = layoutParams
         lp?.let {
