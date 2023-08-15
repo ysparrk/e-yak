@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.ScrollView
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -31,6 +32,8 @@ import com.itextpdf.text.Document
 import com.itextpdf.text.pdf.BaseFont
 import com.itextpdf.text.Font
 import com.itextpdf.text.FontFactory
+import com.itextpdf.text.Paragraph
+import com.itextpdf.text.Element
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -353,10 +356,7 @@ class MedicineSearchFragment : Fragment() {
         }
 
         layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {    // pdf 만들기
-            // PDF 파일 경로 설정
             val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
-            Log.d("ㅁㄴㅇㄹㅁㄴㅇㄹ", LocalDate.now().toString())
-
 
             // PDF 생성 시작
             val document = Document()
@@ -367,8 +367,23 @@ class MedicineSearchFragment : Fragment() {
             val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
             val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
 
+            // 복약 정보 타이틀 추가
+            val medicineTitle = Paragraph("복약 정보", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16f, Font.BOLD))
+            medicineTitle.alignment = Element.ALIGN_CENTER   // 가운데 정렬
+            medicineTitle.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
+            document.add(medicineTitle)
+
+            // 복약 정보 테이블 추가
             addTableToDocument(document, tableLayout, mainActivity, 5)
-            addTableToDocument(document, tableLayout2, mainActivity,4)
+
+            // 컨디션 기록 정보 타이틀 추가
+            val conditionTitle = Paragraph("컨디션 기록 정보", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16f, Font.BOLD))
+            conditionTitle.alignment = Element.ALIGN_CENTER // 가운데 정렬
+            conditionTitle.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
+            document.add(conditionTitle)
+
+            // 컨디션 기록 테이블 추가
+            addTableToDocument(document, tableLayout2, mainActivity, 4)
 
             document.close()
 
@@ -378,6 +393,14 @@ class MedicineSearchFragment : Fragment() {
 
         layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
             mainActivity!!.gotoMedicine()
+        }
+
+
+        // 스크롤을 아래로 내리는 버튼
+        layout.findViewById<ImageView>(R.id.medicineSearchScrollDown).setOnClickListener {
+            layout.findViewById<ScrollView>(R.id.medicineSearchScrollView).post {
+                layout.findViewById<ScrollView>(R.id.medicineSearchScrollView).fullScroll(ScrollView.FOCUS_DOWN)
+            }
         }
 
         return layout

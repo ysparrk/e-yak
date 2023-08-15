@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResult
@@ -221,13 +222,14 @@ class MedicineAddResultFragment : Fragment() {
 
                     }
                 })
-//                // 복약 전체조회를 띄워주자 => 성공 시에만 띄워주자
-//                mainActivity!!.gotoMedicine()
             }
+        }
 
-
-
-
+        layout.findViewById<ImageView>(R.id.medicineAddResultScrollViewScrollDown).setOnClickListener {
+            layout.findViewById<ScrollView>(R.id.medicineAddResultScrollView).post {
+                layout.findViewById<ScrollView>(R.id.medicineAddResultScrollView).fullScroll(ScrollView.FOCUS_DOWN)
+            }
+            Log.d("!!!!!!!!!", "asdfasdf")
         }
 
         return layout
