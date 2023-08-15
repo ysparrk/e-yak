@@ -43,6 +43,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     /**
      * 복약 정보를 등록한다.
+     *
      * @param prescriptionDto
      * @param memberId
      * @return
@@ -56,7 +57,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         prescription.setMember(member);
 
         prescriptionDto.getMedicineRoutines().stream().forEach(routine -> {
-            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
+            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine)
+                    .orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .medicineRoutine(medicineRoutine)
                     .prescription(prescription)
@@ -68,16 +70,20 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Prescription savedPrescription = prescriptionRepository.save(prescription);
 
         // 복약 등록하면 MedicineCheck 테이블 생성
-        List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(prescription);
+        List<PrescriptionMedicineRoutine> allRoutines = prescriptionMedicineRoutineRepository.findByPrescription(
+                prescription);
 
+        LocalDate savedStartDate = savedPrescription.getStartDateTime().toLocalDate(); // 약 시작 날짜
         ZonedDateTime createdAt = savedPrescription.getCreatedAt();
         LocalTime createdTime = createdAt.toLocalTime(); // 등록 시간
         LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
+        LocalDate createdDate = createdAt.toLocalDate(); // 등록 날짜
 
         List<LocalTime> times = new ArrayList<>();
         times.add(member.getWakeTime());
         times.add(member.getBreakfastTime());
-        times.add(member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+        times.add(
+                member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
         times.add(member.getLunchTime());
         times.add(member.getLunchTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
         times.add(member.getDinnerTime());
@@ -92,9 +98,60 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         List<Routine> routines = new ArrayList<>();
         routines.addAll(Arrays.stream(Routine.values()).toList());
 
+        if (savedStartDate != createdDate) {
 
+            // 과거 날짜에 대해서
+            for (; savedStartDate.isBefore(createdDate); savedStartDate = savedStartDate.plusDays(1)) {
+
+                for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
+
+                    MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
+                            .date(savedStartDate)
+                            .medicineRoutine(prescriptionMedicineRoutine.getMedicineRoutine())
+                            .prescription(prescription)
+                            .took(true) // 과거의 약 이미 복용표시
+                            .member(member)
+                            .build();
+                    medicineRoutineCheckRepository.save(medicineRoutineCheck);
+
+                }
+            }
+
+            // 현재 날짜
+            for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
+                if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) < createdIdx) {
+
+                    MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
+                            .date(LocalDate.now())
+                            .medicineRoutine(prescriptionMedicineRoutine.getMedicineRoutine())
+                            .prescription(prescription)
+                            .took(true)
+                            .member(member)
+                            .build();
+                    medicineRoutineCheckRepository.save(medicineRoutineCheck);
+
+                    continue;
+                }
+
+                MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
+                        .date(LocalDate.now())
+                        .medicineRoutine(prescriptionMedicineRoutine.getMedicineRoutine())
+                        .prescription(prescription)
+                        .took(false)
+                        .member(member)
+                        .build();
+                medicineRoutineCheckRepository.save(medicineRoutineCheck);
+
+            }
+
+            return savedPrescription;
+        }
+
+        // 등록 날짜가 현재일 경우
         for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
-            if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) < createdIdx) continue;
+            if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) < createdIdx) {
+                continue;
+            }
 
             MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
                     .date(LocalDate.now())
@@ -119,6 +176,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     /**
      * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환한다.
+     *
      * @param memberId
      * @param dateTime
      * @return
@@ -132,8 +190,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 
     /**
-     * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환한다.
-     * 루틴에 대해 리스트업 해서 전달하기
+     * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환한다. 루틴에 대해 리스트업 해서 전달하기
+     *
      * @param memberId
      * @param dateTime
      * @return
@@ -152,7 +210,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Routine[] routines = Routine.values();
         List<List<PrescriptionRoutineQueryDto>> prescriptionRoutineQueryDtoList = new ArrayList<>();
         for (Routine routine : routines) {
-            List<PrescriptionRoutineQueryDto> byRoutine = prescriptionRepository.findByRoutine(routine, member, dateTime);
+            List<PrescriptionRoutineQueryDto> byRoutine = prescriptionRepository.findByRoutine(routine, member,
+                    dateTime);
             prescriptionRoutineQueryDtoList.add(byRoutine);
         }
 
@@ -173,8 +232,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     /**
-     * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환(미래 날짜에 대해)
-     * endDate의 경우, 필터링 필요
+     * 사용자(memberId)의 복약 정보 중 dateTime에 복용해야하는 복약 정보를 반환(미래 날짜에 대해) endDate의 경우, 필터링 필요
+     *
      * @param memberId
      * @param dateTime
      * @return
@@ -186,7 +245,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         Routine[] routines = Routine.values();
         List<List<PrescriptionRoutineQueryDto>> prescriptionRoutineQueryDtoList = new ArrayList<>();
         for (Routine routine : routines) {
-            List<PrescriptionRoutineQueryDto> byRoutine = prescriptionRepository.findByRoutineForFuture(routine, member, dateTime);
+            List<PrescriptionRoutineQueryDto> byRoutine = prescriptionRepository.findByRoutineForFuture(routine, member,
+                    dateTime);
             prescriptionRoutineQueryDtoList.add(byRoutine);
         }
 
@@ -239,7 +299,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
         prescription.getPrescriptionMedicineRoutines().clear();
         prescriptionDto.getMedicineRoutines().stream().forEach(routine -> {
-            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
+            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine)
+                    .orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .prescription(prescription)
                     .medicineRoutine(medicineRoutine)
@@ -283,13 +344,15 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Transactional
     @Override
-    public List<PrescriptionMedicineRoutine> updatePrescriptionMedicineRoutinesById(MedicineRoutineUpdateDto medicineRoutineUpdateDto, Long prescriptionId, Long memberId) {
+    public List<PrescriptionMedicineRoutine> updatePrescriptionMedicineRoutinesById(
+            MedicineRoutineUpdateDto medicineRoutineUpdateDto, Long prescriptionId, Long memberId) {
         Member member = getMemberOrThrow(memberId);
         Prescription prescription = getPrescriptionByIdAndMemberOrThrow(prescriptionId, member);
 
         prescription.getPrescriptionMedicineRoutines().clear();
         medicineRoutineUpdateDto.getRoutines().stream().forEach(routine -> {
-            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine).orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
+            MedicineRoutine medicineRoutine = medicineRoutineRepository.findByRoutine(routine)
+                    .orElseThrow(() -> new NoSuchElementException("해당하는 Routine이 존재하지 않습니다."));
             PrescriptionMedicineRoutine prescriptionMedicineRoutine = PrescriptionMedicineRoutine.builder()
                     .prescription(prescription)
                     .medicineRoutine(medicineRoutine)
@@ -308,12 +371,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     private Prescription getPrescriptionByIdAndMemberOrThrow(Long prescriptionId, Member member) {
-        Prescription prescription = prescriptionRepository.findByIdAndMember(prescriptionId, member).orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당 Prescription은 존재하지 않습니다."));
+        Prescription prescription = prescriptionRepository.findByIdAndMember(prescriptionId, member)
+                .orElseThrow(() -> new NoSuchElementException("회원에 대해서 해당 Prescription은 존재하지 않습니다."));
         return prescription;
     }
 
     private Member getMemberOrThrow(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("회원이 존재하지 않습니다."));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchMemberException("회원이 존재하지 않습니다."));
         return member;
     }
 
