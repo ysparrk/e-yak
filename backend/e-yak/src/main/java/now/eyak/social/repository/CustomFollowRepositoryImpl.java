@@ -29,7 +29,8 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
                 )).from(followA)
                 .join(followB)
                 .on(followA.follower.id.eq(followB.followee.id))
-                .where(followA.followee.id.eq(followee.getId()))
+                .where(followA.followee.id.eq(followee.getId())
+                        .and(followB.follower.id.eq(followA.followee.id)))
                 .fetch();
 
         return followerResponseDtoList;
