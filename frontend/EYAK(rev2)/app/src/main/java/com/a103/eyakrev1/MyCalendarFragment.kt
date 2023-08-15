@@ -36,15 +36,15 @@ class MyCalendarFragment : Fragment() {
     private val normalFaceColor: String = "#7466B4"
     private val goodFaceColor: String = "#9ED59B"
 
-    val symptomMap: Map<String, String> = mapOf("NO_SYMPTOMS" to "증상 없음", "HEADACHE" to "두통", "ABDOMINAL_PAIN" to "복통", "VOMITING" to "구토", "FEVER" to "발열", "DIARRHEA" to "설사", "INDIGESTION" to "소화불량", "COUGH" to "기침")
+    private val symptomMap: Map<String, String> = mapOf("NO_SYMPTOMS" to "증상 없음", "HEADACHE" to "두통", "ABDOMINAL_PAIN" to "복통", "VOMITING" to "구토", "FEVER" to "발열", "DIARRHEA" to "설사", "INDIGESTION" to "소화불량", "COUGH" to "기침")
 
-    var DayList = arrayListOf<Dates>()
+    private var DayList = arrayListOf<Dates>()
 
-    var today: LocalDate = LocalDate.now()
-    var targetDate: LocalDate = LocalDate.now()
-    var targetMonth = targetDate.monthValue
-    var targetYear = targetDate.year
-    var targetDay = targetDate.dayOfMonth
+    private var today: LocalDate = LocalDate.now()
+    private var targetDate: LocalDate = LocalDate.now()
+    private var targetMonth = targetDate.monthValue
+    private var targetYear = targetDate.year
+    private var targetDay = targetDate.dayOfMonth
 
     lateinit var layout: View
 
@@ -53,7 +53,6 @@ class MyCalendarFragment : Fragment() {
     var requeteeId: Int = -1
 
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -118,6 +117,7 @@ class MyCalendarFragment : Fragment() {
                 Callback<ArrayList<Dates>> {
                 override fun onResponse(call: Call<ArrayList<Dates>>, response: Response<ArrayList<Dates>>) {
                     if(response.code() == 200) {
+                        Log.d("로그", "약 복용량 조회(month, 달력 화면) 200 OK")
                         DayList = response.body()!!
 
                         val mySingleRowCalendarRecyclerView = layout.findViewById<RecyclerView>(R.id.mySingleRowCalendar)
@@ -127,22 +127,23 @@ class MyCalendarFragment : Fragment() {
                         mySingleRowCalendarRecyclerView.scrollToPosition(scrollPosition)
                     }
                     else if(response.code() == 401) {
-                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "약 복용량 조회(month, 달력 화면) 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                     }
                     else if(response.code() == 400) {
-                        Toast.makeText(mainActivity, "해당하는 member, date가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "약 복용량 조회(month, 달력 화면) 400 Bad Request: 해당하는 member, date가 존재하지 않은 경우")
                     }
                 }
                 override fun onFailure(call: Call<ArrayList<Dates>>, t: Throwable) {
-
+                    Log.d("로그", "약 복용량 조회(month, 달력 화면) onFailure")
                 }
             })
-        } else {
+        }
+        else {
             // 가족꺼 조회
-            api.getOthersMonthlyDose(Authorization = "Bearer ${serverAccessToken}", yearMonth = targetDate.toString().substring(0 until 7), requeteeId = requeteeId).enqueue(object:
-                Callback<ArrayList<Dates>> {
+            api.getOthersMonthlyDose(Authorization = "Bearer ${serverAccessToken}", yearMonth = targetDate.toString().substring(0 until 7), requeteeId = requeteeId).enqueue(object: Callback<ArrayList<Dates>> {
                 override fun onResponse(call: Call<ArrayList<Dates>>, response: Response<ArrayList<Dates>>) {
                     if(response.code() == 200) {
+                        Log.d("로그", "약 복용량 조회(month, 달력 화면) 200 OK")
                         DayList = response.body()!!
 
                         val mySingleRowCalendarRecyclerView = layout.findViewById<RecyclerView>(R.id.mySingleRowCalendar)
@@ -152,14 +153,14 @@ class MyCalendarFragment : Fragment() {
                         mySingleRowCalendarRecyclerView.scrollToPosition(scrollPosition)
                     }
                     else if(response.code() == 401) {
-                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "약 복용량 조회(month, 달력 화면) 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                     }
                     else if(response.code() == 400) {
-                        Toast.makeText(mainActivity, "해당하는 member, date가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "약 복용량 조회(month, 달력 화면) 400 Bad Request: 해당하는 member, date가 존재하지 않은 경우")
                     }
                 }
                 override fun onFailure(call: Call<ArrayList<Dates>>, t: Throwable) {
-
+                    Log.d("로그", "약 복용량 조회(month, 달력 화면) onFailure")
                 }
             })
         }
@@ -228,17 +229,12 @@ class MyCalendarFragment : Fragment() {
 
                 if (requeteeId == -1) {
                     // 내 달력일 때
-                    api.getMyDailyDetailInCalendar(Authorization = "Bearer ${serverAccessToken}", date = clickedDate.toString()).enqueue(object:
-                        Callback<medicineDetailsInCalendarResponseModel> {
+                    api.getMyDailyDetailInCalendar(Authorization = "Bearer ${serverAccessToken}", date = clickedDate.toString()).enqueue(object: Callback<medicineDetailsInCalendarResponseModel> {
                         override fun onResponse(call: Call<medicineDetailsInCalendarResponseModel>, response: Response<medicineDetailsInCalendarResponseModel>) {
-//                            Log.d("log", response.toString())
-
                             if(response.code() == 200) {
-                                // 성공
+                                Log.d("로그", "약 복용 상세 조회(day) 200 OK")
                                 detailedTitleTextView.text = "${targetYear}년 ${targetMonth}월 ${clickedDay}일"
                                 val medicineDetails = response.body()!!.medicineRoutineDateDtos
-
-//                                Log.d("log", response.body().toString())
 
                                 val medicineInCalendarListAdapter = MedicineInCalendarListAdapter(mainActivity, medicineDetails)
                                 val medicineInCalendarListView = layout.findViewById<ListView>(R.id.medicineInCalendarListView)
@@ -246,8 +242,6 @@ class MyCalendarFragment : Fragment() {
 
                                 val surveyDetails = response.body()!!.surveyContentDtos
 
-                                Log.d("log", surveyDetails.contentStatusResultResponse.selectedStatusChoices.toString())
-                                
                                 // survey 팝업에서 띄울 데이터를 추출하자
                                 var surveyResultEmotion = surveyDetails.contentEmotionResultResponse.choiceEmotion
                                 var todayConditionSymptomText = ""
@@ -303,19 +297,20 @@ class MyCalendarFragment : Fragment() {
 
                             }
                             else if(response.code() == 401) {
-                                Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                Log.d("로그", "약 복용 상세 조회(day) 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                             }
                             else if(response.code() == 400) {
-                                Toast.makeText(mainActivity, "해당하는 member, date가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                Log.d("로그", "약 복용 상세 조회(day) 400 Bad Request: 해당하는 member, date가 존재하지 않은 경우")
                             }
                             else if(response.code() == 403) {
+                                Log.d("로그", "약 복용 상세 조회(day) 403 Forbidden: 상대방의 scope가 ALL이 아닌 경우(상대방이 전체 정보 공개로 설정하지 않은 경우)")
                                 // 여기도 처리해주자
                                 // 상대방의 scope가 ALL이 아닌 경우 (상대방이 전체 정보 공개로 설정하지 않은 경우)
                                 detailedTitleTextView.text = "상대방이 공개하지 않았습니다"
                             }
                         }
                         override fun onFailure(call: Call<medicineDetailsInCalendarResponseModel>, t: Throwable) {
-
+                            Log.d("로그", "약 복용 상세 조회(day) onFailure")
                         }
                     })
                 }
@@ -325,20 +320,15 @@ class MyCalendarFragment : Fragment() {
                         Callback<medicineDetailsInCalendarResponseModel> {
                         override fun onResponse(call: Call<medicineDetailsInCalendarResponseModel>, response: Response<medicineDetailsInCalendarResponseModel>) {
                             if(response.code() == 200) {
-                                // 성공
+                                Log.d("로그", "약 복용 상세 조회(day) 200 OK")
                                 detailedTitleTextView.text = "${targetYear}년 ${targetMonth}월 ${clickedDay}일"
                                 val medicineDetails = response.body()!!.medicineRoutineDateDtos
-
-//                                Log.d("log", response.body().toString())
-//                                Log.d("log", response.body()!!.medicineRoutineDateDtos.toString())
 
                                 val medicineInCalendarListAdapter = MedicineInCalendarListAdapter(mainActivity, medicineDetails)
                                 val medicineInCalendarListView = layout.findViewById<ListView>(R.id.medicineInCalendarListView)
                                 medicineInCalendarListView?.adapter = medicineInCalendarListAdapter
 
                                 val surveyDetails = response.body()!!.surveyContentDtos
-
-                                Log.d("log", surveyDetails.contentStatusResultResponse.selectedStatusChoices.toString())
 
                                 // survey 팝업에서 띄울 데이터를 추출하자
                                 var surveyResultEmotion = surveyDetails.contentEmotionResultResponse.choiceEmotion
@@ -395,23 +385,23 @@ class MyCalendarFragment : Fragment() {
 
                             }
                             else if(response.code() == 401) {
-                                Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                Log.d("로그", "약 복용 상세 조회(day) 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                             }
                             else if(response.code() == 400) {
-                                Toast.makeText(mainActivity, "해당하는 member, date가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                Log.d("로그", "약 복용 상세 조회(day) 400 Bad Request: 해당하는 member, date가 존재하지 않은 경우")
                             }
                             else if(response.code() == 403) {
+                                Log.d("로그", "약 복용 상세 조회(day) 403 Forbidden: 상대방의 scope가 ALL이 아닌 경우(상대방이 전체 정보 공개로 설정하지 않은 경우)")
                                 // 여기도 처리해주자
                                 // 상대방의 scope가 ALL이 아닌 경우 (상대방이 전체 정보 공개로 설정하지 않은 경우)
                                 detailedTitleTextView.text = "상대방이 공개하지 않았습니다"
                             }
                         }
                         override fun onFailure(call: Call<medicineDetailsInCalendarResponseModel>, t: Throwable) {
-
+                            Log.d("로그", "약 복용 상세 조회(day) onFailure")
                         }
                     })
                 }
-
             }
         }
     }
