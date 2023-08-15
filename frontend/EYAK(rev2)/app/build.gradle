@@ -64,7 +64,4 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson:2.6.2'
-
-    // PDF 생성
-    implementation 'com.itextpdf:itextg:5.5.13.1'
 }

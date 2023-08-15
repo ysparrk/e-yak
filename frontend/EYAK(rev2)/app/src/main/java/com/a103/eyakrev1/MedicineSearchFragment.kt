@@ -3,7 +3,6 @@ package com.a103.eyakrev1
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
-import android.media.Image
 import android.os.Bundle
 import android.text.TextUtils.substring
 import android.util.Log
@@ -13,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -34,19 +32,16 @@ class MedicineSearchFragment : Fragment() {
 
     val api = EyakService.create()
 
-    private var startSearchDate = LocalDate.now()
-    private var endSearchDate = LocalDate.now()
+    var startSearchDate = LocalDate.now()
+    var endSearchDate = LocalDate.now()
 
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    private val mappingMedicineRoutines: Map<String, String> = mapOf("BED_AFTER" to "기상 후", "BREAKFAST_BEFORE" to "아침 식사 전", "BREAKFAST_AFTER" to "아침 식사 후", "LUNCH_BEFORE" to "점심 식사 전", "LUNCH_AFTER" to "점심 식사 후", "DINNER_BEFORE" to "저녁 식사 전", "DINNER_AFTER" to "저녁 식사 후", "BED_BEFORE" to "잠 자기 전")
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val mappingMedicineRoutines: Map<String, String> = mapOf("BED_AFTER" to "기상 후", "BREAKFAST_BEFORE" to "아침 식사 전", "BREAKFAST_AFTER" to "아침 식사 후", "LUNCH_BEFORE" to "점심 식사 전", "LUNCH_AFTER" to "점심 식사 후", "DINNER_BEFORE" to "저녁 식사 전", "DINNER_AFTER" to "저녁 식사 후", "BED_BEFORE" to "잠 자기 전")
 
     private val mappingSymptom: Map<String, String> = mapOf("NO_SYMPTOMS" to "증상 없음", "HEADACHE" to "두통", "ABDOMINAL_PAIN" to "복통", "VOMITING" to "구토", "FEVER" to "발열", "DIARRHEA" to "설사", "INDIGESTION" to "소화불량", "COUGH" to "기침")
 
-    private val evenRowColor: String = "#f0f0f0"
-    private val oddRowColor: String = "#ffffff"
-
-    private var dayChk: Boolean = true;
-    private var printChk: Boolean = false;
+    val evenRowColor: String = "#f0f0f0"
+    val oddRowColor: String = "#ffffff"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,10 +54,6 @@ class MedicineSearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val layout = inflater.inflate(R.layout.fragment_medicine_search, container, false)
-
-        // 초기화 시작
-        layout.findViewById<ImageView>(R.id.makeToPDF).visibility = View.GONE
-        // 초기화 끝
 
         // 초기 정보 시작
         layout.findViewById<EditText>(R.id.searchStartYearInput).hint = (startSearchDate.year % 100).toString()
@@ -84,6 +75,8 @@ class MedicineSearchFragment : Fragment() {
             val endYear: Int = if(layout.findViewById<EditText>(R.id.searchEndYearInput).text.toString() == "") 2000 + layout.findViewById<EditText>(R.id.searchEndYearInput).hint.toString().toInt() else 2000 + layout.findViewById<EditText>(R.id.searchEndYearInput).text.toString().toInt()
             val endMonth: Int = if(layout.findViewById<EditText>(R.id.searchEndMonthInput).text.toString() == "") layout.findViewById<EditText>(R.id.searchEndMonthInput).hint.toString().toInt() else layout.findViewById<EditText>(R.id.searchEndMonthInput).text.toString().toInt()
             val endDay: Int = if(layout.findViewById<EditText>(R.id.searchEndDayInput).text.toString() == "") layout.findViewById<EditText>(R.id.searchEndDayInput).hint.toString().toInt() else layout.findViewById<EditText>(R.id.searchEndDayInput).text.toString().toInt()
+
+            var dayChk: Boolean = true;
 
             if(startYear < 2000 || startYear > 2999) {
                 Toast.makeText(mainActivity, "올바른 검색 시작 연도를 입력하세요(00 ~ 99)", Toast.LENGTH_SHORT).show()
@@ -144,7 +137,6 @@ class MedicineSearchFragment : Fragment() {
 
                 api.medicineSearch(Authorization = "Bearer ${serverAccessToken}", startDateTime = searchStartString, endDateTime = searchEndString).enqueue(object: Callback<MedicineSearchResponseBodyModel> {
                     override fun onResponse(call: Call<MedicineSearchResponseBodyModel>, response: Response<MedicineSearchResponseBodyModel>) {
-                        printChk = false
                         if(response.code() == 200) {
                             // 헤더 설정 시작
                             val headerRow = TableRow(requireContext())
@@ -191,7 +183,6 @@ class MedicineSearchFragment : Fragment() {
                             val prescriptionList: ArrayList<PrescriptionListModel> = response.body()!!.prescriptionList
 
                             for(i in 0..prescriptionList.size - 1) {
-                                printChk = true
                                 val row = TableRow(requireContext())
                                 val layoutParams = TableLayout.LayoutParams(
                                     TableLayout.LayoutParams.MATCH_PARENT,
@@ -279,7 +270,6 @@ class MedicineSearchFragment : Fragment() {
                             val surveyContentList: ArrayList<SurveyContentListModel> = response.body()!!.surveyContentList
 
                             for(i in 0..surveyContentList.size - 1) {
-                                printChk = true
                                 val row = TableRow(requireContext())
                                 val layoutParams = TableLayout.LayoutParams(
                                     TableLayout.LayoutParams.MATCH_PARENT,
@@ -325,8 +315,6 @@ class MedicineSearchFragment : Fragment() {
                                 row.addView(text)
 
                                 tableLayout2.addView(row)
-
-                                if(printChk) layout.findViewById<ImageView>(R.id.makeToPDF).visibility = View.VISIBLE   // 출력되는 정보가 있다면 PDF 버튼이 보일 수 있도록
                             }
                         }
                         else if(response.code() == 401) {
@@ -338,10 +326,6 @@ class MedicineSearchFragment : Fragment() {
                     }
                 })
             }
-        }
-
-        layout.findViewById<ImageView>(R.id.makeToPDF).setOnClickListener {
-            // 여기
         }
 
         layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
