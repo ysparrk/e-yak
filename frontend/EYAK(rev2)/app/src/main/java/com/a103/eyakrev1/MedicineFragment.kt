@@ -116,7 +116,7 @@ class MedicineFragment : Fragment() {
                 // Do something
             }
         }
-        
+
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 

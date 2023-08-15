@@ -129,9 +129,6 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         }
     }
 
-    /**
-     * Extension method to set View's height.
-     */
     fun View.setHeight(value: Int) {
         val lp = layoutParams
         lp?.let {
@@ -140,9 +137,6 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         }
     }
 
-    /**
-     * Extension method to set View's width.
-     */
     fun View.setWidth(value: Int) {
         val lp = layoutParams
         lp?.let {

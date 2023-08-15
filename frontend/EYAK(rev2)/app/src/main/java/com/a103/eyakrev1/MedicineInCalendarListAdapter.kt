@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.setFragmentResult
 
 class MedicineInCalendarListAdapter (val context: Context, val medicineList: ArrayList<MedicineDetailInCalendar>): BaseAdapter() {
-
     var mainActivity: MainActivity = context as MainActivity
 
     override fun getCount(): Int {
@@ -60,9 +59,6 @@ class MedicineInCalendarListAdapter (val context: Context, val medicineList: Arr
         return view
     }
 
-    /**
-     * Extension method to set View's height.
-     */
     fun View.setHeight(value: Int) {
         val lp = layoutParams
         lp?.let {
@@ -71,9 +67,6 @@ class MedicineInCalendarListAdapter (val context: Context, val medicineList: Arr
         }
     }
 
-    /**
-     * Extension method to set View's width.
-     */
     fun View.setWidth(value: Int) {
         val lp = layoutParams
         lp?.let {

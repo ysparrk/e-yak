@@ -48,7 +48,7 @@ class MedicineSearchFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
-    val api = EyakService.create()
+    private val api = EyakService.create()
 
     private var startSearchDate = LocalDate.now()
     private var endSearchDate = LocalDate.now()
@@ -64,11 +64,8 @@ class MedicineSearchFragment : Fragment() {
     private var dayChk: Boolean = true
     private var makePDFChk: Boolean = false;
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -163,6 +160,7 @@ class MedicineSearchFragment : Fragment() {
                     override fun onResponse(call: Call<MedicineSearchResponseBodyModel>, response: Response<MedicineSearchResponseBodyModel>) {
                         makePDFChk = false
                         if(response.code() == 200) {
+                            Log.d("로그", "pdf 출력 200 OK")
                             // 헤더 설정 시작
                             val headerRow = TableRow(requireContext())
 
@@ -256,8 +254,6 @@ class MedicineSearchFragment : Fragment() {
                                 tableLayout.addView(row)
                             }
 
-
-
                             // 헤더 설정 시작
                             val headerRow2 = TableRow(requireContext())
 
@@ -346,11 +342,11 @@ class MedicineSearchFragment : Fragment() {
                             if(makePDFChk) layout.findViewById<ImageView>(R.id.makePDFBtn).visibility = View.VISIBLE
                         }
                         else if(response.code() == 401) {
-
+                            Log.d("로그", "pdf 출력 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                         }
                     }
                     override fun onFailure(call: Call<MedicineSearchResponseBodyModel>, t: Throwable) {
-
+                        Log.d("로그", "pdf 출력 onFailure")
                     }
                 })
             }
@@ -388,14 +384,12 @@ class MedicineSearchFragment : Fragment() {
 
             document.close()
 
-            Toast.makeText(requireContext(), "PDF가 [다운로드 폴드]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(requireContext(), "PDF가 [다운로드 폴더]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
         }
 
         layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
             mainActivity!!.gotoMedicine()
         }
-
 
         // 스크롤을 아래로 내리는 버튼
         layout.findViewById<ImageView>(R.id.medicineSearchScrollDown).setOnClickListener {
@@ -466,5 +460,4 @@ class MedicineSearchFragment : Fragment() {
         table.setWidths(colWidths)
         document.add(table)
     }
-
 }
