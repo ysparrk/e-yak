@@ -31,11 +31,11 @@ public class ContentTextResultResponseDto {
 
     public static ContentTextResultResponseDto of(ContentTextResult contentTextResult) {
         return ContentTextResultResponseDto.builder()
-                .contentTextResultId(contentTextResult.getId())
-                .memberId(contentTextResult.getMember().getId())
-                .text(contentTextResult.getText())
-                .createdAt(contentTextResult.getCreatedAt())
-                .updatedAt(contentTextResult.getUpdatedAt())
+                .contentTextResultId(contentTextResult == null ? -1 : contentTextResult.getId())
+                .memberId(contentTextResult == null ? -1 : contentTextResult.getMember().getId())
+                .text(contentTextResult == null ? "" : contentTextResult.getText())
+                .createdAt(contentTextResult == null ? LocalDateTime.MIN : contentTextResult.getCreatedAt())
+                .updatedAt(contentTextResult == null ? LocalDateTime.MIN : contentTextResult.getUpdatedAt())
                 .build();
     }
 }

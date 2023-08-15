@@ -144,6 +144,8 @@ public class RoutineController {
             @RequestParam LocalDateTime endDateTime
             ) throws URISyntaxException {
 
+        log.debug("memberId: {}", memberId);
+
         PdfResponseDto pdfResponseByDatesAndMember = pdfService.getPdfResponseByDatesAndMember(memberId, startDateTime, endDateTime);
 
         log.debug("pdfResponseDto = {}", pdfResponseByDatesAndMember);

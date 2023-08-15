@@ -34,14 +34,16 @@ public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRep
                 )
                 .from(survey)
                 .join(survey.surveyContents, surveyContent)
-                .join(surveyContent.contentEmotionResults, contentEmotionResult)
-                .join(surveyContent.contentStatusResults, contentStatusResult)
-                .join(surveyContent.contentTextResult, contentTextResult)
-                .join(contentStatusResult.selectedStatusChoices, contentStatusResultChoiceStatusEntity)
+                .leftJoin(surveyContent.contentTextResult, contentTextResult)
+                .leftJoin(surveyContent.contentStatusResults, contentStatusResult)
+                .leftJoin(surveyContent.contentEmotionResults, contentEmotionResult)
                 .where(survey.date.between(startDateTime.toLocalDate(), endDateTime.toLocalDate())
-                        .and(contentEmotionResult.member.id.eq(memberId))
-                        .and(contentStatusResult.member.id.eq(memberId))
-                        .and(contentTextResult.member.id.eq(memberId)))
+                        .and(
+                                contentEmotionResult.member.id.eq(memberId)
+                                .or(contentStatusResult.member.id.eq(memberId))
+                                .or(contentTextResult.member.id.eq(memberId))
+                        )
+                )
                 .fetch();
 
         return surveyContentPdfQueryDtoList;

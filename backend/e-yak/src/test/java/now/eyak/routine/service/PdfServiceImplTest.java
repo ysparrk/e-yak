@@ -123,9 +123,9 @@ class PdfServiceImplTest {
 
         // survey
         survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 설문이 존재하지 않습니다."));
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_STATUS)).findAny().get();
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당하는 날짜에 TEXT 설문 문항이 존재하지 않습니다."));
+        SurveyContent surveyContentStatus = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_STATUS)).findAny().get();
+        SurveyContent surveyContentEmotion = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
+        SurveyContent surveyContentText = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당하는 날짜에 TEXT 설문 문항이 존재하지 않습니다."));
 
         contentEmotionResultDto = ContentEmotionResultDto.builder()
                 .choiceEmotion(ChoiceEmotion.SOSO)
@@ -139,9 +139,9 @@ class PdfServiceImplTest {
                 .text("오늘의 컨디션 입력합니다.")
                 .build();
 
-        contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContent.getId(), member.getId());
-        contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContent.getId(), member.getId());
-        contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContent.getId(), member.getId());
+//        contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContentEmotion.getId(), member.getId());
+        contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContentStatus.getId(), member.getId());
+//        contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentText.getId(), member.getId());
     }
 
 

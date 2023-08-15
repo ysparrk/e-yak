@@ -32,11 +32,11 @@ public class ContentEmotionResultResponseDto {
 
     public static ContentEmotionResultResponseDto of(ContentEmotionResult contentEmotionResult) {
         return ContentEmotionResultResponseDto.builder()
-                .contentEmotionResultId(contentEmotionResult.getId())
-                .memberId(contentEmotionResult.getMember().getId())
-                .choiceEmotion(contentEmotionResult.getChoiceEmotion())
-                .createdAt(contentEmotionResult.getCreatedAt())
-                .updatedAt(contentEmotionResult.getUpdatedAt())
+                .contentEmotionResultId(contentEmotionResult == null ? -1 : contentEmotionResult.getId())
+                .memberId(contentEmotionResult == null ? -1 : contentEmotionResult.getMember().getId())
+                .choiceEmotion(contentEmotionResult == null ? ChoiceEmotion.SOSO : contentEmotionResult.getChoiceEmotion())
+                .createdAt(contentEmotionResult == null ? LocalDateTime.MIN : contentEmotionResult.getCreatedAt())
+                .updatedAt(contentEmotionResult == null ? LocalDateTime.MIN : contentEmotionResult.getUpdatedAt())
                 .build();
     }
 }

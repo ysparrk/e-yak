@@ -1,6 +1,7 @@
 package now.eyak.survey.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import java.util.ArrayList;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import now.eyak.survey.enumeration.ChoiceStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.cglib.core.Local;
 
 @Getter
 @Setter
@@ -33,11 +35,12 @@ public class ContentStatusResultResponseDto {
 
     public static ContentStatusResultResponseDto of(ContentStatusResult contentStatusResult) {
         return ContentStatusResultResponseDto.builder()
-                .contentStatusResultId(contentStatusResult.getId())
-                .memberId(contentStatusResult.getId())
-                .selectedStatusChoices(contentStatusResult.getSelectedStatusChoices().stream().map(contentStatusResultChoiceStatusEntity -> contentStatusResultChoiceStatusEntity.getChoiceStatusEntity().getChoiceStatus()).toList())
-                .createdAt(contentStatusResult.getCreatedAt())
-                .updatedAt(contentStatusResult.getUpdatedAt())
+                .contentStatusResultId(contentStatusResult == null ? -1 : contentStatusResult.getId())
+                .memberId(contentStatusResult == null ? -1 : contentStatusResult.getId())
+                .selectedStatusChoices(contentStatusResult == null ? new ArrayList<>() :
+                        contentStatusResult.getSelectedStatusChoices().stream().map(contentStatusResultChoiceStatusEntity -> contentStatusResultChoiceStatusEntity.getChoiceStatusEntity().getChoiceStatus()).toList())
+                .createdAt(contentStatusResult == null ? LocalDateTime.MIN : contentStatusResult.getCreatedAt())
+                .updatedAt(contentStatusResult == null ? LocalDateTime.MIN : contentStatusResult.getUpdatedAt())
                 .build();
     }
 }

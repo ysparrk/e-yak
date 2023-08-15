@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PdfServiceImpl implements PdfService{
+public class PdfServiceImpl implements PdfService {
 
     private final MemberRepository memberRepository;
     private final PrescriptionRepository prescriptionRepository;
@@ -31,18 +31,27 @@ public class PdfServiceImpl implements PdfService{
 
     @Transactional
     @Override
-    public PdfResponseDto getPdfResponseByDatesAndMember(Long memberId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
+    public PdfResponseDto getPdfResponseByDatesAndMember(Long memberId, LocalDateTime startDateTime,
+                                                         LocalDateTime endDateTime) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
+        List<PrescriptionListQueryDto> prescriptionList = prescriptionRepository.findAllByMemberAndBetweenDates(member,
+                startDateTime, endDateTime);
+        List<SurveyContentPdfQueryDto> surveyContentPdfQueryDtoList = surveyContentRepository.findAllByMemberAndBetweenDates(
+                member.getId(), startDateTime, endDateTime);
 
-        List<PrescriptionListQueryDto> prescriptionList = prescriptionRepository.findAllByMemberAndBetweenDates(member, startDateTime, endDateTime);
-        List<SurveyContentPdfQueryDto> surveyContentPdfQueryDtoList = surveyContentRepository.findAllByMemberAndBetweenDates(member.getId(), startDateTime, endDateTime);
-        List<SurveyContentPdfResponseDto> surveyContentDtoList = surveyContentPdfQueryDtoList.stream().map(surveyContentPdfQueryDto -> SurveyContentPdfResponseDto.builder()
-                .date(surveyContentPdfQueryDto.getDate())
-                .contentEmotionResultResponse(ContentEmotionResultResponseDto.of(surveyContentPdfQueryDto.getContentEmotionResult()))
-                .contentStatusResultResponse(ContentStatusResultResponseDto.of(surveyContentPdfQueryDto.getContentStatusResult()))
-                .contentTextResultResponse(ContentTextResultResponseDto.of(surveyContentPdfQueryDto.getContentTextResult()))
-                .build())
+        List<SurveyContentPdfResponseDto> surveyContentDtoList = surveyContentPdfQueryDtoList.stream()
+                .map(surveyContentPdfQueryDto ->
+                        SurveyContentPdfResponseDto.builder()
+                                .date(surveyContentPdfQueryDto.getDate())
+                                .contentEmotionResultResponse(ContentEmotionResultResponseDto.of(
+                                        surveyContentPdfQueryDto.getContentEmotionResult()))
+                                .contentStatusResultResponse(ContentStatusResultResponseDto.of(
+                                        surveyContentPdfQueryDto.getContentStatusResult()))
+                                .contentTextResultResponse(ContentTextResultResponseDto.of(
+                                        surveyContentPdfQueryDto.getContentTextResult()))
+                                .build())
                 .toList();
 
         PdfResponseDto pdfResponseDto = PdfResponseDto.builder()
@@ -50,7 +59,10 @@ public class PdfServiceImpl implements PdfService{
                 .surveyContentList(surveyContentDtoList)
                 .build();
 
-        return pdfResponseDto;
+        log.debug("[log] prescriptionList: {}", prescriptionList);
+        log.debug("[log] surveyContentPdfQueryDtoList.size(): {}", surveyContentPdfQueryDtoList.size());
+        log.debug("[log] surveyContentDtoList: {}", surveyContentDtoList);
 
+        return pdfResponseDto;
     }
 }
