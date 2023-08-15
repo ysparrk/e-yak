@@ -9,7 +9,9 @@ import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.MedicineRoutineUpdateDto;
 import now.eyak.prescription.dto.PrescriptionDto;
+import now.eyak.prescription.dto.PrescriptionFutureResponseDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
+import now.eyak.prescription.dto.query.PrescriptionRoutineFutureQueryDto;
 import now.eyak.prescription.dto.query.PrescriptionRoutineQueryDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.domain.MedicineRoutine;
@@ -79,11 +81,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         LocalTime eatingDuration = member.getEatingDuration();  // 식사 시간
         LocalDate createdDate = createdAt.toLocalDate(); // 등록 날짜
 
+        log.info("savedStartDate = {}", savedStartDate);
+        log.info("createdAt = {}", createdAt);
+        log.info("creatdDate = {}", createdDate);
+
         List<LocalTime> times = new ArrayList<>();
         times.add(member.getWakeTime());
         times.add(member.getBreakfastTime());
-        times.add(
-                member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
+        times.add(member.getBreakfastTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
         times.add(member.getLunchTime());
         times.add(member.getLunchTime().plusHours(eatingDuration.getHour()).plusMinutes(eatingDuration.getMinute()));
         times.add(member.getDinnerTime());
@@ -98,7 +103,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         List<Routine> routines = new ArrayList<>();
         routines.addAll(Arrays.stream(Routine.values()).toList());
 
-        if (savedStartDate != createdDate) {
+        if (!savedStartDate.isEqual(createdDate)) {
 
             // 과거 날짜에 대해서
             for (; savedStartDate.isBefore(createdDate); savedStartDate = savedStartDate.plusDays(1)) {
@@ -145,6 +150,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             }
 
             return savedPrescription;
+
         }
 
         // 등록 날짜가 현재일 경우
@@ -239,18 +245,18 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @return
      */
     @Override
-    public PrescriptionResponseDto findAllAndSortWithRoutineFuture(Long memberId, LocalDateTime dateTime) {
+    public PrescriptionFutureResponseDto findAllAndSortWithRoutineFuture(Long memberId, LocalDateTime dateTime) {
         Member member = getMemberOrThrow(memberId);
 
         Routine[] routines = Routine.values();
-        List<List<PrescriptionRoutineQueryDto>> prescriptionRoutineQueryDtoList = new ArrayList<>();
+        List<List<PrescriptionRoutineFutureQueryDto>> prescriptionRoutineQueryDtoList = new ArrayList<>();
         for (Routine routine : routines) {
-            List<PrescriptionRoutineQueryDto> byRoutine = prescriptionRepository.findByRoutineForFuture(routine, member,
+            List<PrescriptionRoutineFutureQueryDto> byRoutine = prescriptionRepository.findByRoutineForFuture(routine, member,
                     dateTime);
             prescriptionRoutineQueryDtoList.add(byRoutine);
         }
 
-        PrescriptionResponseDto prescriptionResponseDto = PrescriptionResponseDto.builder()
+        PrescriptionFutureResponseDto prescriptionResponseDto = PrescriptionFutureResponseDto.builder()
                 .bedAfterQueryResponses(prescriptionRoutineQueryDtoList.get(0))
                 .breakfastBeforeQueryResponses(prescriptionRoutineQueryDtoList.get(1))
                 .breakfastAfterQueryResponses(prescriptionRoutineQueryDtoList.get(2))

@@ -5,6 +5,7 @@ import now.eyak.member.domain.enumeration.Role;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.PrescriptionDto;
+import now.eyak.prescription.dto.PrescriptionFutureResponseDto;
 import now.eyak.prescription.dto.PrescriptionResponseDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
@@ -299,7 +300,7 @@ class PrescriptionServiceImplTest {
         Prescription inserted2 = prescriptionService.insert(prescriptionDto2, MEMBER.getId());
 
         // when
-        PrescriptionResponseDto sortFuture = prescriptionService.findAllAndSortWithRoutineFuture(MEMBER.getId(), LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay());
+        PrescriptionFutureResponseDto sortFuture = prescriptionService.findAllAndSortWithRoutineFuture(MEMBER.getId(), LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay());
 
         // then
         // TODO: Assertions 작성

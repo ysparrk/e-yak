@@ -57,14 +57,16 @@ public class PrescriptionController {
         ZonedDateTime todayDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
         PrescriptionResponseDto result;
+        PrescriptionFutureResponseDto futureResult;
 
         if (dateTime.toLocalDate().isEqual(todayDateTime.toLocalDate()) || dateTime.toLocalDate().isBefore(todayDateTime.toLocalDate())) {
             result = prescriptionService.findAllAndSortWithRoutine(memberId, dateTime);
-        } else {
-            result = prescriptionService.findAllAndSortWithRoutineFuture(memberId, dateTime);
-        }
+            return ResponseEntity.ok(result);
 
-        return ResponseEntity.ok(result);
+        } else {
+            futureResult = prescriptionService.findAllAndSortWithRoutineFuture(memberId, dateTime);
+            return ResponseEntity.ok(futureResult);
+        }
 
     }
 

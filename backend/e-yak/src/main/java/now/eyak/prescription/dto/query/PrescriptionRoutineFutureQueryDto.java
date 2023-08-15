@@ -8,19 +8,17 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LunchBeforeQueryDto {
+public class PrescriptionRoutineFutureQueryDto {
     private Long id;
     private String customName;
     private Integer iotLocation;
     private Integer medicineShape;
-    private Boolean took;
 
     @QueryProjection
-    public LunchBeforeQueryDto(Long id, String customName, Integer iotLocation, Integer medicineShape, Boolean took) {
+    public PrescriptionRoutineFutureQueryDto(Long id, String customName, Integer iotLocation, Integer medicineShape) {
         this.id = id;
         this.customName = customName;
         this.iotLocation = iotLocation;
         this.medicineShape = medicineShape;
-        this.took = took;
     }
 }

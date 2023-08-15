@@ -8,6 +8,7 @@ import now.eyak.member.domain.Member;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.domain.QPrescription;
 import now.eyak.prescription.dto.query.PrescriptionListQueryDto;
+import now.eyak.prescription.dto.query.PrescriptionRoutineFutureQueryDto;
 import now.eyak.prescription.dto.query.PrescriptionRoutineQueryDto;
 import now.eyak.routine.domain.QMedicineRoutineCheck;
 import now.eyak.routine.dto.query.MedicineRoutineCheckBetweenDatesQueryDto;
@@ -167,15 +168,14 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
      */
     @Transactional
     @Override
-    public List<PrescriptionRoutineQueryDto> findByRoutineForFuture(Routine routine, Member member, LocalDateTime dateTime) {
+    public List<PrescriptionRoutineFutureQueryDto> findByRoutineForFuture(Routine routine, Member member, LocalDateTime dateTime) {
 
-        List<PrescriptionRoutineQueryDto> routineQueryList = queryFactory
-                .selectDistinct(Projections.constructor(PrescriptionRoutineQueryDto.class,
+        List<PrescriptionRoutineFutureQueryDto> routineQueryList = queryFactory
+                .selectDistinct(Projections.constructor(PrescriptionRoutineFutureQueryDto.class,
                         prescription.id,
                         prescription.customName,
                         prescription.iotLocation,
-                        prescription.medicineShape,
-                        medicineRoutineCheck.took
+                        prescription.medicineShape
                 ))
                 .from(prescription, medicineRoutineCheck)
                 .where(prescription.prescriptionMedicineRoutines.any().medicineRoutine.routine.eq(routine)
