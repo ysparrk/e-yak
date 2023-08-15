@@ -30,9 +30,7 @@ class MedicineAddFragment : Fragment() {
     private var selectIcon: Int = 1
 
     private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
-
-    val api = EyakService.create()
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,8 +91,6 @@ class MedicineAddFragment : Fragment() {
                 // 날짜 정보 설정
                 val startDateTime = bundle.getString("startDateTime")
                 val endDateTime = bundle.getString("endDateTime")
-                Log.d("log", startDateTime!!)
-                Log.d("log", endDateTime!!)
 
                 layout.findViewById<EditText>(R.id.startYearInput).setText(startDateTime!!.substring(2 until 4))
                 layout.findViewById<EditText>(R.id.startMonthInput).setText(startDateTime!!.substring(5 until 7))
@@ -277,11 +273,9 @@ class MedicineAddFragment : Fragment() {
 
             if(flag) {
                 setFragmentResult("medicineAddData", resultBundle)
-
                 mainActivity!!.gotoAddMedicineResult()
             }
         }
-
 
         for(iconIdIterator in 1..35) {
             val iconId: String = "medicineIcon${iconIdIterator}"
