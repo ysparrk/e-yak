@@ -148,18 +148,19 @@ class TodayConditionFragment : Fragment() {
             }
 
             binding.symptom0.setOnClickListener {
-                symptomState[0] = true
+                symptomState[0] = !symptomState[0]
 
                 for(i in 1..7) {
                     if(symptomState[i]) symptomState[i] = false
                 }
+
                 colorChange()
             }
 
             binding.symptom1.setOnClickListener {
                 if(symptomState[0]) symptomState[0] = false
 
-                symptomState[1] = true
+                symptomState[1] = !symptomState[1]
 
                 colorChange()
             }
@@ -167,7 +168,7 @@ class TodayConditionFragment : Fragment() {
             binding.symptom2.setOnClickListener {
                 if(symptomState[0]) symptomState[0] = false
 
-                symptomState[2] = true
+                symptomState[2] = !symptomState[2]
 
                 colorChange()
             }
@@ -175,7 +176,7 @@ class TodayConditionFragment : Fragment() {
             binding.symptom3.setOnClickListener {
                 if(symptomState[0]) symptomState[0] = false
 
-                symptomState[3] = true
+                symptomState[3] = !symptomState[3]
 
                 colorChange()
             }
@@ -183,7 +184,7 @@ class TodayConditionFragment : Fragment() {
             binding.symptom4.setOnClickListener {
                 if(symptomState[0]) symptomState[0] = false
 
-                symptomState[4] = true
+                symptomState[4] = !symptomState[4]
 
                 colorChange()
             }
@@ -191,7 +192,7 @@ class TodayConditionFragment : Fragment() {
             binding.symptom5.setOnClickListener {
                 if(symptomState[0]) symptomState[0] = false
 
-                symptomState[5] = true
+                symptomState[5] = !symptomState[5]
 
                 colorChange()
             }
@@ -199,7 +200,7 @@ class TodayConditionFragment : Fragment() {
             binding.symptom6.setOnClickListener {
                 if(symptomState[0]) symptomState[0] = false
 
-                symptomState[6] = true
+                symptomState[6] = !symptomState[6]
 
                 colorChange()
             }
@@ -207,7 +208,7 @@ class TodayConditionFragment : Fragment() {
             binding.symptom7.setOnClickListener {
                 if(symptomState[0]) symptomState[0] = false
 
-                symptomState[7] = true
+                symptomState[7] = !symptomState[7]
 
                 colorChange()
             }
