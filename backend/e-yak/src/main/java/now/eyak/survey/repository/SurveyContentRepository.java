@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface SurveyContentRepository extends JpaRepository<SurveyContent, Long> {
+public interface SurveyContentRepository extends JpaRepository<SurveyContent, Long>, CustomSurveyContentRepository {
     @Query("select sc from SurveyContent as sc join sc.survey as s on s.date = :date")
     List<SurveyContent> findAllSurveyContentByDate(LocalDate date);
 }

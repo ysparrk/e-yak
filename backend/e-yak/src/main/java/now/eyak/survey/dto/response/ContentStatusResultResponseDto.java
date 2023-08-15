@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.enumeration.ChoiceStatus;
 
 import java.time.LocalDateTime;
@@ -28,5 +29,15 @@ public class ContentStatusResultResponseDto {
         this.selectedStatusChoices = selectedStatusChoices;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public static ContentStatusResultResponseDto of(ContentStatusResult contentStatusResult) {
+        return ContentStatusResultResponseDto.builder()
+                .contentStatusResultId(contentStatusResult.getId())
+                .memberId(contentStatusResult.getId())
+                .selectedStatusChoices(contentStatusResult.getSelectedStatusChoices().stream().map(contentStatusResultChoiceStatusEntity -> contentStatusResultChoiceStatusEntity.getChoiceStatusEntity().getChoiceStatus()).toList())
+                .createdAt(contentStatusResult.getCreatedAt())
+                .updatedAt(contentStatusResult.getUpdatedAt())
+                .build();
     }
 }

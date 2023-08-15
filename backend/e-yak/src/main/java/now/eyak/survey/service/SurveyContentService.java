@@ -12,7 +12,4 @@ public interface SurveyContentService {
     SurveyContentDto getSurveyResultByDateAndMember(LocalDate date, Long memberId); // 전체 조회
     void insertSurveyAndSurveyContentPerDay();
     List<SurveyContent> getSurveyContentByDate(LocalDate date);
-    SurveyContentPdfResponseDto getSurveyResultByDateAndMemberAddDate(LocalDate date, Long memberId); // 전체조회 + 날짜 추가
-    List<SurveyContentPdfResponseDto> findAllByMemberAndBetweenDates(Long memberId, LocalDateTime startDateTime, LocalDateTime endDateTime); // 요청받은 기간에 설문한 내역 조회
-
 }
