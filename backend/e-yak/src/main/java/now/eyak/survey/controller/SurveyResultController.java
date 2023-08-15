@@ -50,7 +50,7 @@ public class SurveyResultController {
     }
 
     /**
-     * Text설문 응답
+     * Text설문 응답2
      * @param contentTextResultDto
      * @param memberId
      * @return
