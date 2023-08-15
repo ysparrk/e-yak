@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.PreferenceManager
 import retrofit2.Call
@@ -136,9 +137,24 @@ class FamilyAddFragment : Fragment() {
         return layout
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+                mainActivity.gotoEditFamily()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }

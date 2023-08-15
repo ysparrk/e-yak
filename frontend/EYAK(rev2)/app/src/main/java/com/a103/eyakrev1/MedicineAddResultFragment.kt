@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.PreferenceManager
@@ -229,16 +230,31 @@ class MedicineAddResultFragment : Fragment() {
             layout.findViewById<ScrollView>(R.id.medicineAddResultScrollView).post {
                 layout.findViewById<ScrollView>(R.id.medicineAddResultScrollView).fullScroll(ScrollView.FOCUS_DOWN)
             }
-            Log.d("!!!!!!!!!", "asdfasdf")
+//            Log.d("!!!!!!!!!", "asdfasdf")
         }
 
         return layout
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+                mainActivity.gotoMedicine()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
 }

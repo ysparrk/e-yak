@@ -21,6 +21,7 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
@@ -406,11 +407,27 @@ class MedicineSearchFragment : Fragment() {
         return layout
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+                mainActivity.gotoMedicine()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
     private fun addTableToDocument(document: Document, tableLayout: TableLayout, context: Context, numberOfColumns: Int) {
         val numberOfRows = tableLayout.childCount
 

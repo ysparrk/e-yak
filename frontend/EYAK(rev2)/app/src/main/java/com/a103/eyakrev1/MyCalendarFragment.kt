@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -425,9 +426,30 @@ class MyCalendarFragment : Fragment() {
         }
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+                if (requeteeId == -1) {
+                    mainActivity.gotoMedicine()
+                } else {
+                    mainActivity.gotoFamily()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
+
 }

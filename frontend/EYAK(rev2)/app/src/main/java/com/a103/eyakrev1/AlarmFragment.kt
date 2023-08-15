@@ -1,16 +1,24 @@
 package com.a103.eyakrev1
 
 import android.app.AlarmManager
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -23,7 +31,9 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -33,16 +43,25 @@ import com.a103.eyakrev1.databinding.AlarmTabMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.lang.Exception
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 var iotLocationLists = arrayListOf<ArrayList<Int>>(arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(),
                                                    arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>())
 
+lateinit var mainActivity: MainActivity
+
 class AlarmFragment : Fragment() {
+
+
 
     private lateinit var binding: AlarmTabMainBinding
 
@@ -62,12 +81,9 @@ class AlarmFragment : Fragment() {
 
     // https://curryyou.tistory.com/386
     // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
-    lateinit var mainActivity: MainActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
 
@@ -111,7 +127,6 @@ class AlarmFragment : Fragment() {
 
             mainActivity!!.gotoTodayCondition()
         }
-
 
         return binding.root
     }
@@ -169,14 +184,14 @@ class AlarmFragment : Fragment() {
                     // 이제 적절하게 배분해서 넣어주자
 //                    Log.d("log", response.toString())
                     medicineRoutines = response.body()!!
-                    Log.d("bedAfterQueryResponses", medicineRoutines.bedAfterQueryResponses.toString())
-                    Log.d("breakfastBeforeQueryResponses", medicineRoutines.breakfastBeforeQueryResponses.toString())
-                    Log.d("breakfastAfterQueryResponses", medicineRoutines.breakfastAfterQueryResponses.toString())
-                    Log.d("lunchBeforeQueryResponses", medicineRoutines.lunchBeforeQueryResponses.toString())
-                    Log.d("lunchAfterQueryResponses", medicineRoutines.lunchAfterQueryResponses.toString())
-                    Log.d("dinnerBeforeQueryResponses", medicineRoutines.dinnerBeforeQueryResponses.toString())
-                    Log.d("dinnerAfterQueryResponses", medicineRoutines.dinnerAfterQueryResponses.toString())
-                    Log.d("bedBeforeQueryResponses", medicineRoutines.bedBeforeQueryResponses.toString())
+//                    Log.d("bedAfterQueryResponses", medicineRoutines.bedAfterQueryResponses.toString())
+//                    Log.d("breakfastBeforeQueryResponses", medicineRoutines.breakfastBeforeQueryResponses.toString())
+//                    Log.d("breakfastAfterQueryResponses", medicineRoutines.breakfastAfterQueryResponses.toString())
+//                    Log.d("lunchBeforeQueryResponses", medicineRoutines.lunchBeforeQueryResponses.toString())
+//                    Log.d("lunchAfterQueryResponses", medicineRoutines.lunchAfterQueryResponses.toString())
+//                    Log.d("dinnerBeforeQueryResponses", medicineRoutines.dinnerBeforeQueryResponses.toString())
+//                    Log.d("dinnerAfterQueryResponses", medicineRoutines.dinnerAfterQueryResponses.toString())
+//                    Log.d("bedBeforeQueryResponses", medicineRoutines.bedBeforeQueryResponses.toString())
 
                     val routineKeys = arrayListOf("bedAfterQueryResponses", "breakfastBeforeQueryResponses", "breakfastAfterQueryResponses", "lunchBeforeQueryResponses", "lunchAfterQueryResponses", "dinnerBeforeQueryResponses", "dinnerAfterQueryResponses", "bedBeforeQueryResponses")
 
@@ -464,12 +479,29 @@ class AlarmFragment : Fragment() {
         binding.tomorrowDate.text = "${tomorrow.monthValue.toString()} / ${tomorrow.dayOfMonth.toString()}"
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         // 2. Context를 액티비티로 형변환해서 할당
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
+
 }
 
 class ZerothAlarmReceiver : BroadcastReceiver() {
@@ -510,6 +542,8 @@ class ZerothAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(0, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
 
@@ -551,6 +585,8 @@ class FirstAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(1, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
 
@@ -592,6 +628,8 @@ class SecondAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(2, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
 
@@ -633,6 +671,8 @@ class ThirdAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(3, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
 
@@ -674,6 +714,8 @@ class FourthAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(4, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
 
@@ -715,6 +757,8 @@ class FifthAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(5, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
 
@@ -756,6 +800,8 @@ class SixthAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(6, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
 
@@ -801,5 +847,7 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(7, notification) // 알림 표시
+
+//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }

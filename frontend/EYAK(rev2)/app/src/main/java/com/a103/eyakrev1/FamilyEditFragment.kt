@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.preference.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -64,10 +65,24 @@ class FamilyEditFragment : Fragment() {
         return layout
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+                mainActivity.gotoFamily()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
 }

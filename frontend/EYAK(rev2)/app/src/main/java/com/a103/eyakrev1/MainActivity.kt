@@ -6,6 +6,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -22,6 +23,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -30,6 +32,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -154,9 +157,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-//        super.onBackPressed()
-    }
+//    override fun onBackPressed() {
+////        super.onBackPressed()
+//    }
 
     private fun initPage() {
         alarmTabClick()
@@ -314,7 +317,7 @@ class MainActivity : AppCompatActivity() {
         return devicePairedFlag
     }
     // 블루투스 연결용 스레드
-    private fun connectDevice(targetDevice: BluetoothDevice?) {
+    fun connectDevice(targetDevice: BluetoothDevice?) {
         val thread = Thread {
             val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
             socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
@@ -333,61 +336,37 @@ class MainActivity : AppCompatActivity() {
         }
         thread.start()
     }
+
+    public fun sendAlarmToDevice(message: String) {
+        Log.d("log", "${socket} ${fallbackSocket}")
+        val inStream = fallbackSocket?.inputStream
+        val outStream = fallbackSocket?.outputStream
+        Log.d("myapp", "${inStream} ${outStream}")
+        Thread {
+            try {
+                val sending = message
+                outStream?.write(sending.toByteArray())
+                Log.d("myapp", "sending...")
+            } catch (e: IOException) {
+                Log.d("myapp", "onCreate: error sending data")
+            }
+        }.start()
+        Thread {
+            while (!Thread.currentThread().isInterrupted) {
+                try {
+                    val inBytes = inStream?.available()
+                    if (inBytes != null) {
+                        if (inBytes > 0) {
+                            val packetBytes = ByteArray(inBytes)
+                            inStream?.read(packetBytes)
+                        }
+                    }
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }.start()
+    }
+
+
 }
-
-//class FirstAlarmReceiver : BroadcastReceiver() {
-//    override fun onReceive(context: Context, intent: Intent) {
-//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channel = NotificationChannel(
-//                "alarm_channel",
-//                "Alarm Channel",
-//                NotificationManager.IMPORTANCE_HIGH
-//            )
-//            notificationManager.createNotificationChannel(channel)
-//        }
-//
-//        // 화면 활성화 및 잠금 화면 해제
-//        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-//        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
-//        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
-//
-//        val vibrator = context.getSystemService(Vibrator::class.java)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            if (vibrator?.hasVibrator() == true) {
-//                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
-//                vibrator.vibrate(vibrationEffect)
-//            }
-//        }
-//
-//        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
-//        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
-//
-//
-//        val notification = NotificationCompat.Builder(context, "alarm_channel")
-//            .setContentTitle("첫 번째 알람")
-//            .setContentText("알람이 울렸습니다.")
-//            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
-//            .setSound(soundUri)
-//            .build()
-//
-//        notificationManager.notify(0, notification) // 알림 표시
-//    }
-//}
-
-//class SecondAlarmReceiver : BroadcastReceiver() {
-//    override fun onReceive(context: Context, intent: Intent) {
-//
-//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//
-//        val notification = NotificationCompat.Builder(context, "alarm_channel")
-//            .setContentTitle("두 번째 알람")
-//            .setContentText("알람이 울렸습니다.")
-//            .setSmallIcon(R.drawable.baseline_check_box_24) // 알림 아이콘 설정
-//            .build()
-//
-//        notificationManager.notify(1, notification) // 알림 표시
-//    }
-//}
-
