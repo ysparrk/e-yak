@@ -26,8 +26,8 @@ class FamilyAddFragment : Fragment() {
 
     private val api = EyakService.create()
 
-    var nickNameChk: Boolean = false    // nickNameChk: 팔로우 하려는 사용자가 있는지 확인하기 위한 flag
-    var scope: Int = 0  // scope: 공개 범위 수준 -> 0: 선택되지 않음, 1: 전체 공개, 2: 달력 공개
+    private var nickNameChk: Boolean = false    // nickNameChk: 팔로우 하려는 사용자가 있는지 확인하기 위한 flag
+    private var scope: Int = 0  // scope: 공개 범위 수준 -> 0: 선택되지 않음, 1: 전체 공개, 2: 달력 공개
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +39,7 @@ class FamilyAddFragment : Fragment() {
             api.checkDuplicate(layout.findViewById<EditText>(R.id.nicknameInput).text.toString()).enqueue(object: Callback<Boolean> {
                 override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                     if(response.code() == 200) {    // 잘 보내 졌습니다
+                        Log.d("로그", "사용자 닉네임 중복 검사 200 OK")
                         if(response.body() == true) {  // 중복된 닉네임이 있음 -> 가족 추가 가능
                             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
 
@@ -56,7 +57,7 @@ class FamilyAddFragment : Fragment() {
                     }
                 }
                 override fun onFailure(call: Call<Boolean>, t: Throwable) {
-
+                    Log.d("로그", "사용자 닉네임 중복 검사 onFailure")
                 }
             })
         }
@@ -101,21 +102,23 @@ class FamilyAddFragment : Fragment() {
                             api.followRequest(followerId = serverUserId, Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if(response.code() == 201) {    // 201 Created: 요청이 성공적으로 서버에 생성된 경우
+                                        Log.d("로그", "팔로우 요청 201 Created: 요청이 성공적으로 서버에 생성된 경우")
                                         Toast.makeText(mainActivity, "가족 추가 성공", Toast.LENGTH_SHORT).show()
                                         mainActivity!!.gotoEditFamily()
                                     }
                                     else if(response.code() == 200) {   // 200 OK: A → B 에게 팔로우 요청을 보낸 상태에서 B ← A 에게 팔로우 요청을 보낸 경우 무시, A 와 B 사이가 이미 팔로우 상태인 경우에도 무시
+                                        Log.d("로그", "팔로우 요청 200 OK: A → B 에게 팔로우 요청을 보낸 상태에서 B ← A 에게 팔로우 요청을 보낸 경우 무시됩니다., A 와 B 사이가 이미 팔로우 상태인 경우에도 무시됩니다.")
                                         Toast.makeText(mainActivity, "이미 가족이거나 같은 요청이 있어요", Toast.LENGTH_SHORT).show()
                                     }
                                     else if(response.code() == 401) {   // 401 Unauthorized: AccessToken이 유효하지 않은 경우
-                                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                                        Log.d("로그", "팔로우 요청 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                                     }
                                     else if(response.code() == 400) {   // 400 Bad Request: 해당하는 member가 존재하지 않는 경우, 자기자신에게 팔로우 요청을 보내는 경우
-                                        Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                                        Log.d("로그", "팔로우 요청 400 Bad Request: - 해당하는 member가 존재하지 않는 경우, 자기자신에게 팔로우 요청을 보내는 경우, 중복으로 요청한 경우")
                                     }
                                 }
                                 override fun onFailure(call: Call<Void>, t: Throwable) {
-
+                                    Log.d("로그", "팔로우 요청 onFailure")
                                 }
                             })
                         }
