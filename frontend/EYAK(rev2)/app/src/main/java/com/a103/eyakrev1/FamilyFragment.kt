@@ -31,7 +31,7 @@ class FamilyFragment : Fragment() {
     private val lightOn: Int = Color.parseColor("#FFF6FA70")
     private val lightOff: Int = Color.parseColor("#FF9BABB8")
 
-    var familyList = arrayListOf<Family>()
+    private var familyList = arrayListOf<Family>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,10 +41,8 @@ class FamilyFragment : Fragment() {
         val layout = inflater.inflate(R.layout.family_tab_main, container, false)
 
         // 기본 정보 초기화
-
         layout.findViewById<ImageView>(R.id.acceptFamilyBtn).visibility = View.INVISIBLE
         layout.findViewById<TextView>(R.id.acceptFamilyCnt).visibility = View.INVISIBLE
-
         // 기본 정보 초기화 끝
 
         // 나에게 팔로워 요청한 사람 전체 정보 -> isGetFollowers: true
@@ -56,6 +54,7 @@ class FamilyFragment : Fragment() {
         api.getAllFollowers(memberId = memberId, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<ArrayList<Family>> {
             override fun onResponse(call: Call<ArrayList<Family>>, response: Response<ArrayList<Family>>) {
                 if(response.code() == 200) {
+                    Log.d("로그", "사용자의 팔로워 전체 조회 200 OK")
                     familyList = response.body()!!
 
                     // 마지막 빈 공간을 위해서 더미 데이터 추가
@@ -70,24 +69,23 @@ class FamilyFragment : Fragment() {
                     familyListView?.adapter = familyListAdapter
                 }
                 else if(response.code() == 401) {
-                    Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "사용자의 팔로워 전체 조회 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                 }
                 else if(response.code() == 400) {
-                    Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "사용자의 팔로워 전체 조회 400 Bad Request: 해당하는 이 member가 존재하지 않는 경우")
                 }
             }
             override fun onFailure(call: Call<ArrayList<Family>>, t: Throwable) {
-
+                Log.d("로그", "사용자의 팔로워 전체 조회 onFailure")
             }
         })
 
         api.followRequests(Authorization = "Bearer ${serverAccessToken}", isGetFollowers = true).enqueue(object: Callback<MutableList<FollowRequestsDataModel>> {
             override fun onResponse(call: Call<MutableList<FollowRequestsDataModel>>, response: Response<MutableList<FollowRequestsDataModel>>) {
-
                 val followRequestsList: MutableList<FollowRequestsDataModel>? = response.body()
                followRequestCnt = followRequestsList?.size
-
                 if(response.code() == 200) {
+                    Log.d("로그", "사용자가 요청한/사용자에게 요청된 팔로우 요청 전체 조회 200 OK")
                     if (followRequestCnt == 0) {
                         layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setColorFilter(lightOff)
                         layout.findViewById<ImageView>(R.id.acceptFamilyBtn).visibility = View.VISIBLE
@@ -100,10 +98,8 @@ class FamilyFragment : Fragment() {
                     }
 
                     layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setOnClickListener {
-
                         if (followRequestCnt != 0) {
                             if (followRequestsList?.isNotEmpty() == true) {
-
                                 val requestBundle = Bundle()
                                 requestBundle.putInt("followRequestId", followRequestsList[0].followRequestId)
                                 requestBundle.putInt("followerId", followRequestsList[0].followerId)
@@ -116,25 +112,22 @@ class FamilyFragment : Fragment() {
 
                                 mainActivity!!.gotoAcceptFamily()
                             }
-
                         }
                     }
                 }
                 else if(response.code() == 401) {
-                    Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "사용자가 요청한/사용자에게 요청된 팔로우 요청 전체 조회 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                 }
                 else if(response.code() == 400) {
-                    Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "사용자가 요청한/사용자에게 요청된 팔로우 요청 전체 조회 400 Bad Request: 해당하는 이 member가 존재하지 않는 경우")
                 }
             }
             override fun onFailure(call: Call<MutableList<FollowRequestsDataModel>>, t: Throwable) {
-
+                Log.d("로그", "사용자가 요청한/사용자에게 요청된 팔로우 요청 전체 조회 onFailure")
             }
         })
-        //
 
         layout.findViewById<ImageView>(R.id.acceptFamilyBtn).setOnClickListener {
-
             mainActivity!!.gotoAcceptFamily()
         }
 
