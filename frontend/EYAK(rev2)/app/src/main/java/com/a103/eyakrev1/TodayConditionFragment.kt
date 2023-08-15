@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
@@ -384,6 +385,12 @@ class TodayConditionFragment : Fragment() {
 
         }
 
+        // 스크롤뷰 아래로 내리기
+        binding.todayConditionScrollDown.setOnClickListener {
+            binding.todayConditionScrollView.post {
+                binding.todayConditionScrollView.fullScroll(ScrollView.FOCUS_DOWN)
+            }
+        }
 
         return binding.root
     }
