@@ -26,14 +26,13 @@ class MedicineDetailFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
-    val api = EyakService.create()
-    var medicine: Medicine? = Medicine()
-    var clickedMedicineId = -1
+    private val api = EyakService.create()
+    private var medicine: Medicine? = Medicine()
+    private var clickedMedicineId = -1
 
     private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
 
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,17 +61,15 @@ class MedicineDetailFragment : Fragment() {
                 val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
                 val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
 
-                api.getPrescriptionDetail(Authorization= "Bearer ${serverAccessToken}", prescriptionId=clickedMedicineId).enqueue(object:
-                    Callback<Medicine> {
+                api.getPrescriptionDetail(Authorization= "Bearer ${serverAccessToken}", prescriptionId=clickedMedicineId).enqueue(object: Callback<Medicine> {
                     override fun onResponse(call: Call<Medicine>, response: Response<Medicine>) {
-                        Log.d("log", response.toString())
-                        Log.d("log", response.body().toString())
-
                         if (response.code() == 401) {
-                            Log.d("log", "인증되지 않은 사용자입니다")
+                            Log.d("로그", "복약 정보 상세 조회 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                         } else if (response.code() == 400) {
-                            Log.d("log", "없는 약입니다")
+                            Log.d("로그", "복약 정보 상세 조회 400 Bad Request: 해당하는 Prescription이 존재하지 않는 경우")
                         } else if (response.code() == 200) {
+                            Log.d("로그", "복약 정보 상세 조회 200 OK")
+
                             medicine = response.body()
 
                             medicineDetailNameTextView.text = medicine?.customName
@@ -156,7 +153,7 @@ class MedicineDetailFragment : Fragment() {
                     }
 
                     override fun onFailure(call: Call<Medicine>, t: Throwable) {
-
+                        Log.d("로그", "복약 정보 상세 조회 onFailure")
                     }
                 })
             }
@@ -167,24 +164,20 @@ class MedicineDetailFragment : Fragment() {
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
             val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
 
-            api.deletePrescription(Authorization= "Bearer ${serverAccessToken}", prescriptionId=medicine!!.id).enqueue(object:
-                Callback<Void> {
+            api.deletePrescription(Authorization= "Bearer ${serverAccessToken}", prescriptionId=medicine!!.id).enqueue(object: Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                    Log.d("log", response.toString())
-//                    Log.d("log", response.body().toString())
-
                     if (response.code() == 401) {
-//                        Log.d("log", "인증되지 않은 사용자입니다")
+                        Log.d("로그", "복약 정보 삭제 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                     } else if (response.code() == 400) {
-//                        Log.d("log", "없는 약입니다")
+                        Log.d("로그", "복약 정보 삭제 400 Bad Request: 해당하는 Prescription이 존재하지 않는 경우")
                     } else if (response.code() == 200) {
+                        Log.d("로그", "복약 정보 삭제 200 OK")
                         // 삭제 완료 후 복약 탭으로 이동
-                        Toast.makeText(mainActivity,"성공적으로 삭제되었습니다", Toast.LENGTH_LONG).show()
                         mainActivity!!.gotoMedicine()
                     }
                 }
                 override fun onFailure(call: Call<Void>, t: Throwable) {
-
+                    Log.d("로그", "복약 정보 삭제 onFailure")
                 }
             })
         }
@@ -223,7 +216,6 @@ class MedicineDetailFragment : Fragment() {
 
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                // Do something
                 mainActivity.gotoMedicine()
             }
         }
@@ -234,5 +226,4 @@ class MedicineDetailFragment : Fragment() {
         super.onDetach()
         callback.remove()
     }
-
 }
