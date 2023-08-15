@@ -352,11 +352,10 @@ class MedicineSearchFragment : Fragment() {
             }
         }
 
-        layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {
-            // 여기 누르면 PDF 만들어짐
+        layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {    // pdf 만들기
             // PDF 파일 경로 설정
-            //val pdfFilePath = requireContext().getExternalFilesDir(null)?.absolutePath + "/myPDF.pdf"
-            val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/fileName.pdf"
+            val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
+            Log.d("ㅁㄴㅇㄹㅁㄴㅇㄹ", LocalDate.now().toString())
 
 
             // PDF 생성 시작
@@ -373,7 +372,7 @@ class MedicineSearchFragment : Fragment() {
 
             document.close()
 
-            Toast.makeText(requireContext(), "PDF가 생성되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "PDF가 [다운로드 폴드]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
 
         }
 
@@ -395,7 +394,7 @@ class MedicineSearchFragment : Fragment() {
         val table = PdfPTable(numberOfColumns)
         val colWidths = FloatArray(numberOfColumns) { 3f }
 
-        val font = FontFactory.getFont("font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 10f)
+        val font = FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 10f)
 
         for (i in 0 until numberOfRows) {
             val row = tableLayout.getChildAt(i) as TableRow
@@ -407,6 +406,7 @@ class MedicineSearchFragment : Fragment() {
 
                 val cell = PdfPCell(Phrase(cellText, font))
                 rowCells.add(cell)
+                cell.setPadding(5f)
                 cell.isNoWrap = false
             }
 
