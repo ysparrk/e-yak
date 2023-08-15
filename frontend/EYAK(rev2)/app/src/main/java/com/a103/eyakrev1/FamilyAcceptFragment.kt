@@ -24,16 +24,15 @@ class FamilyAcceptFragment : Fragment() {
 
     private val api = EyakService.create()
 
-    var scope: Int = 0  // scope: 공개 범위 -> 0 선택되지 않음, 1 전체 공개, 2: 달력 공개
+    private var scope: Int = 0  // scope: 공개 범위 -> 0 선택되지 않음, 1 전체 공개, 2: 달력 공개
 
-    var followerId: Int = 0 // floowerId: 팔로워 아이디
-    var followRequestId: Int = 0    // followerRequetId: 팔로워 요청 아이디
+    private var followerId: Int = 0 // floowerId: 팔로워 아이디
+    private var followRequestId: Int = 0    // followerRequetId: 팔로워 요청 아이디
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setFragmentResultListener("followRequestData") { _, bundle -> // setFragmentResultListener("보낸 데이터 묶음 이름") {requestKey, bundle ->
-
             // 상대 닉네임
             view?.findViewById<TextView>(R.id.nicknameRequestSideInput)?.text = bundle.getString("followerNickname", "")
 
@@ -85,17 +84,17 @@ class FamilyAcceptFragment : Fragment() {
                 api.acceptFollowRequest(followerId = followerId, followRequestId = followRequestId, Authorization = "Bearer ${serverAccessToken}", params = data).enqueue(object: Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if(response.code() == 201) {    // 성공
-                            Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "팔로우 수락 201 Created")
                         }
                         else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                            Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "팔로우 수락 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                         }
                         else if(response.code() == 400) {   // 해당하는 member나 followRequest가 존재하지 않는 경우
-                            Toast.makeText(mainActivity, "해당하는 member나 followRequest가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "팔로우 수락 400  Bad Request: 해당하는 member나 followRequest가 존재하지 않는 경우")
                         }
                     }
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-
+                        Log.d("로그", "팔로우 수락 onFailure")
                     }
                 })
             }
@@ -110,23 +109,22 @@ class FamilyAcceptFragment : Fragment() {
             api.refuseFollowRequest(followerId = followerId, followRequestId = followRequestId, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if(response.code() == 200) {    // 성공
-                        Toast.makeText(mainActivity, "성공", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "팔로우 요청 거절 및 취소 200 OK")
                     }
                     else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                        Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "팔로우 요청 거절 및 취소 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                     }
                     else if(response.code() == 400) {   // 해당하는 member나 followRequest가 존재하지 않는 경우
-                        Toast.makeText(mainActivity, "해당하는 member나 followRequest가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                        Log.d("로그", "팔로우 요청 거절 및 취소 400 Bad Request: 해당하는 member나 followRequest가 존재하지 않는 경우")
                     }
 
                 }
                 override fun onFailure(call: Call<Void>, t: Throwable) {
-
+                    Log.d("로그", "팔로우 요청 거절 및 취소 onFailure")
                 }
             })
             mainActivity!!.gotoFamily()
         }
-
 
         return layout
     }
