@@ -21,11 +21,9 @@ import retrofit2.Response
 
 class MedicineFragment : Fragment() {
 
-    val api = EyakService.create()
-
-    // https://curryyou.tistory.com/386
-    // 1. Context를 할당할 변수를 프로퍼티로 선언(어디서든 사용할 수 있게)
     lateinit var mainActivity: MainActivity
+
+    private val api = EyakService.create()
 
     private lateinit var viewModel: MedicineListAdapter.MedicineClickedViewModel
 
@@ -36,7 +34,6 @@ class MedicineFragment : Fragment() {
     ): View? {
 
         val layout = inflater.inflate(R.layout.medicine_tab_main, container, false)
-
 
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")
@@ -56,10 +53,10 @@ class MedicineFragment : Fragment() {
 
         api.getAllPrescriptions(Authorization= "Bearer ${serverAccessToken}").enqueue(object: Callback<ArrayList<Medicine>> {
             override fun onResponse(call: Call<ArrayList<Medicine>>, response: Response<ArrayList<Medicine>>) {
-
                 if (response.code() == 401) {
-                    Log.d("log", "인증되지 않은 사용자입니다")
+                    Log.d("로그", "복약 정보 전체 조회 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                 } else if (response.code() == 200) {
+                    Log.d("로그", "복약 정보 전체 조회 200 OK")
                     medicineList = response.body()
 
                     medicineList?.add(Medicine())
@@ -77,13 +74,11 @@ class MedicineFragment : Fragment() {
                         emptyLinearLayout.visibility = View.VISIBLE
                         medicineListView.visibility = View.GONE
                     }
-
-
                 }
             }
 
             override fun onFailure(call: Call<ArrayList<Medicine>>, t: Throwable) {
-
+                Log.d("로그", "복약 정보 전체 조회 onFailure")
             }
         })
 
@@ -96,7 +91,6 @@ class MedicineFragment : Fragment() {
         }
 
         layout.findViewById<ImageView>(R.id.medicineDetailCalendar).setOnClickListener {
-
             val bundle = Bundle()
 
             bundle.putInt("requeteeId", -1)
@@ -114,16 +108,15 @@ class MedicineFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         // 2. Context를 액티비티로 형변환해서 할당
         mainActivity = context as MainActivity
 
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 // Do something
-
             }
         }
+        
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
