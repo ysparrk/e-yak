@@ -34,13 +34,10 @@ class SignupActivity : AppCompatActivity() {
 
             api.checkDuplicate(nickname = binding.nickNameInput.text.toString()).enqueue(object: Callback<Boolean> {
                 override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    Log.d("log",response.toString())
-                    Log.d("log", response.body().toString())
 
                     // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
-                    if (response.code() == 400) {
-                        Log.d("log","중복체크 실패")
-                    } else if (response.code() == 200) {
+                    if (response.code() == 200) {
+                        Log.d("로그", "사용자 닉네임 중복 검사 200 OK")
                         if (response.body() == true) { // if true => 중복인거
                             Toast.makeText(getApplicationContext(), "이미 사용중인 닉네임입니다", Toast.LENGTH_SHORT).show()
                         } else { // if false
@@ -51,13 +48,10 @@ class SignupActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    // 실패
-                    Log.d("log",t.message.toString())
-                    Log.d("log","fail")
+                    Log.d("로그", "사용자 닉네임 중복 검사 onFailure")
                 }
             })
         }
-
 
         val nickNameInputView = binding.nickNameInput
         nickNameInputView.addTextChangedListener(object : TextWatcher {
@@ -73,7 +67,6 @@ class SignupActivity : AppCompatActivity() {
 
         binding.signup.setOnClickListener {
             if (binding.nickNameInput.text.isNotBlank()) {
-
                 // 닉네임 중복 검사를 진행하지 않았을 경우
                 if (!isDuplicateChecked) {
                     Toast.makeText(getApplicationContext(), "닉네임 중복 검사를 해주세요!", Toast.LENGTH_SHORT).show()
@@ -96,16 +89,11 @@ class SignupActivity : AppCompatActivity() {
                         binding.eatingTimeH.text.toString(),
                         binding.eatingTimeM.text.toString(),
                     )
-
-//                    val intent = Intent(this, MainActivity::class.java)
-//                    startActivity(intent)
                 }
             }
             else { // 닉네임이 빈 문자열이면 저장하면 안된다
                 Toast.makeText(getApplicationContext(), "사용하실 닉네임을 입력해주세요!", Toast.LENGTH_SHORT).show()
             }
-
-
         }
 
     }
@@ -146,24 +134,20 @@ class SignupActivity : AppCompatActivity() {
 
         api.signUp(data).enqueue(object: Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                Log.d("log",response.toString())
-                Log.d("log", response.body().toString())
 
                 // 통신에 성공하더라도, statusCode 기반으로 할 행동을 정의하자
                 if (response.code() == 400) {
-                    Log.d("log","회원가입 실패")
+                    Log.d("로그", "회원가입 400 Bad Request: 해당하는 이 member가 존재하지 않는 경우, AccessToken이 유효하지 않은 경우")
                     Toast.makeText(getApplicationContext(), "이미 가입하셨거나, 유효하지 않은 토큰입니다", Toast.LENGTH_SHORT).show()
                 } else if (response.code() == 201) {
+                    Log.d("로그", "회원가입 201 Created")
                     // 회원 가입에 성공했으니 Login Activity로 이동 => sharedPreference 이미 있으니, 자동 로그인 시도할거 => 자동 로그인에 성공하면, Main Activity로 이동할테니
                     val intent = Intent(getApplicationContext(), LoginActivity::class.java)
                     startActivity(intent)
                 }
             }
-
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                // 실패
-//                Log.d("log",t.message.toString())
-//                Log.d("log","fail")
+                Log.d("로그", "회원가입 onFailure")
             }
         })
     }
