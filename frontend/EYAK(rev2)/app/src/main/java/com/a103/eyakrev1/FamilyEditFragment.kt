@@ -2,6 +2,7 @@ package com.a103.eyakrev1
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +20,8 @@ class FamilyEditFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
-    var familyList = arrayListOf<Family>()
-    val api = EyakService.create()
+    private var familyList = arrayListOf<Family>()
+    private val api = EyakService.create()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +39,7 @@ class FamilyEditFragment : Fragment() {
             Callback<ArrayList<Family>> {
             override fun onResponse(call: Call<ArrayList<Family>>, response: Response<ArrayList<Family>>) {
                 if(response.code() == 200) {
+                    Log.d("로그", "사용자의 팔로워 전체 조회 200 OK")
                     familyList = response.body()!!
 
                     // 마지막 빈 공간을 위해서 더미 데이터 추가
@@ -48,14 +50,14 @@ class FamilyEditFragment : Fragment() {
                     familyEditListView?.adapter = familyEditListAdapter
                 }
                 else if(response.code() == 401) {
-                    Toast.makeText(mainActivity, "AccessToken이 유효하지 않은 경우", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "사용자의 팔로워 전체 조회 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                 }
                 else if(response.code() == 400) {
-                    Toast.makeText(mainActivity, "해당하는 member가 존재하지 않는 경우", Toast.LENGTH_SHORT).show()
+                    Log.d("로그", "사용자의 팔로워 전체 조회 400 Bad Request: 해당하는 이 member가 존재하지 않는 경우")
                 }
             }
             override fun onFailure(call: Call<ArrayList<Family>>, t: Throwable) {
-
+                Log.d("로그", "사용자의 팔로워 전체 조회 onFailure")
             }
         })
 
