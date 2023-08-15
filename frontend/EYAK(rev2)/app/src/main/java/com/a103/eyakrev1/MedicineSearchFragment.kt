@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.media.Image
 import android.os.Bundle
+import android.os.Environment
 import android.text.TextUtils.substring
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -352,7 +353,9 @@ class MedicineSearchFragment : Fragment() {
         layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {
             // 여기 누르면 PDF 만들어짐
             // PDF 파일 경로 설정
-            val pdfFilePath = requireContext().getExternalFilesDir(null)?.absolutePath + "/myPDF.pdf"
+            //val pdfFilePath = requireContext().getExternalFilesDir(null)?.absolutePath + "/myPDF.pdf"
+            val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/fileName.pdf"
+
 
             // PDF 생성 시작
             val document = Document()
@@ -389,7 +392,6 @@ class MedicineSearchFragment : Fragment() {
         val colWidths = FloatArray(tableLayout.childCount) { 2f } // 각 열의 너비를 동일하게 설정
 
         // 기본 폰트 설정
-        // 기본 폰트 설정
         val defaultFont = BaseFont.createFont("res/font/tmoney_regular.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
 
         for (i in 0 until tableLayout.childCount) {
@@ -398,7 +400,10 @@ class MedicineSearchFragment : Fragment() {
 
             for (j in 0 until row.childCount) {
                 val textView = row.getChildAt(j) as TextView
-                val cell = PdfPCell(Phrase(textView.text.toString(), Font(defaultFont, 12f))) // 폰트 적용
+                val cellText = textView.text.toString() // 셀의 내용을 가져옴
+                Log.d("PDF Cell Content", "Cell [$i, $j]: $cellText") // 셀의 내용을 로그로 출력
+
+                val cell = PdfPCell(Phrase(cellText, Font(defaultFont, 12f))) // 폰트 적용
                 cell.setPadding(8f)
                 rowCells.add(cell)
             }
