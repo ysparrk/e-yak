@@ -126,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d("로그", "로그인 200 OK")
 
                         // 서버로부터 받은 토큰을 저장하자
-                        Toast.makeText(applicationContext, "[${response.body()?.memberDto?.nickname}]님 안녕하세요", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "[ ${response.body()?.memberDto?.nickname} ]님 안녕하세요", Toast.LENGTH_SHORT).show()
 
                         val pref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                         val editor = pref.edit()
