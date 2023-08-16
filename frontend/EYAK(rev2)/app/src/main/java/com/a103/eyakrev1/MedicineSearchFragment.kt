@@ -1,9 +1,12 @@
 package com.a103.eyakrev1
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
-import android.media.Image
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils.substring
@@ -25,6 +28,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
+import com.itextpdf.text.BaseColor
 import com.itextpdf.text.Phrase
 import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
@@ -35,13 +39,16 @@ import com.itextpdf.text.Font
 import com.itextpdf.text.FontFactory
 import com.itextpdf.text.Paragraph
 import com.itextpdf.text.Element
+import com.itextpdf.text.Image
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 class MedicineSearchFragment : Fragment() {
@@ -364,6 +371,44 @@ class MedicineSearchFragment : Fragment() {
             val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
             val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
 
+            // 로고
+            val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+            val desiredWidth = (screenWidth * 0.7).toFloat()
+
+            // 로고 이미지 리소스 가져오기
+            val logoDrawable = ResourcesCompat.getDrawable(mainActivity.resources, R.drawable.eyak_logo_01, null)
+            val logoBitmap = (logoDrawable as BitmapDrawable).bitmap
+
+            // 제목 생성
+            val titleParagraph = Paragraph("지금이:약 복약 정보 및 컨디션 기록", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 20f, Font.BOLD))
+            titleParagraph.alignment = Element.ALIGN_CENTER
+
+            // 이미지와 제목을 같은 줄에 배치하기 위한 컨테이너
+            val container = PdfPTable(2)
+            container.totalWidth = desiredWidth
+            container.setWidths(floatArrayOf(0.2f, 0.8f)) // 로고 너비와 제목 너비 조절
+
+            val logoCell = PdfPCell(Image.getInstance(BitmapImageHelper.getCompressedBitmapBytes(logoBitmap)), true)
+            logoCell.borderWidth = 0f
+            logoCell.setPadding(5f)
+            logoCell.verticalAlignment = Element.ALIGN_MIDDLE
+            container.addCell(logoCell)
+
+            val titleCell = PdfPCell(titleParagraph)
+            titleCell.borderWidth = 0f
+            logoCell.setPadding(5f)
+            titleCell.verticalAlignment = Element.ALIGN_MIDDLE
+            container.addCell(titleCell)
+
+            container.spacingAfter = 10f // 컨테이너 아래 여백 설정
+            document.add(container)
+
+            // 출력 날짜 및 시간
+            val printDateTime = Paragraph("${LocalDate.now()}   ${LocalDateTime.now().hour}:${LocalDateTime.now().minute}", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 10f))
+            printDateTime.alignment = Element.ALIGN_CENTER   // 가운데 정렬
+            printDateTime.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
+            document.add(printDateTime)
+
             // 복약 정보 타이틀 추가
             val medicineTitle = Paragraph("복약 정보", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16f, Font.BOLD))
             medicineTitle.alignment = Element.ALIGN_CENTER   // 가운데 정렬
@@ -399,6 +444,14 @@ class MedicineSearchFragment : Fragment() {
         }
 
         return layout
+    }
+
+    object BitmapImageHelper {
+        fun getCompressedBitmapBytes(bitmap: Bitmap): ByteArray {
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream) // 압축률을 조정할 수 있습니다.
+            return stream.toByteArray()
+        }
     }
 
     private lateinit var callback: OnBackPressedCallback
