@@ -141,7 +141,7 @@ class PdfServiceImplTest {
 
 //        contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContentEmotion.getId(), member.getId());
         contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContentStatus.getId(), member.getId());
-//        contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentText.getId(), member.getId());
+        contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentText.getId(), member.getId());
     }
 
 
@@ -150,8 +150,8 @@ class PdfServiceImplTest {
     @Transactional
     void getPdfResponseByDatesAndMember() {
         // given
-        LocalDateTime startDateTime = LocalDateTime.now().toLocalDate().atStartOfDay();
-        LocalDateTime endDateTime = LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(2);
+        LocalDateTime startDateTime = LocalDateTime.now().toLocalDate().atStartOfDay().minusDays(2);
+        LocalDateTime endDateTime = LocalDateTime.now().toLocalDate().atStartOfDay();
 
 
         // when

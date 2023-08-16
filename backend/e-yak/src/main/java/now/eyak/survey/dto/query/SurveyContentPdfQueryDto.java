@@ -1,6 +1,7 @@
 package now.eyak.survey.dto.query;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import now.eyak.survey.domain.ContentEmotionResult;
@@ -17,6 +18,7 @@ public class SurveyContentPdfQueryDto {
     private ContentStatusResult contentStatusResult;
     private ContentTextResult contentTextResult;
 
+    @Builder
     @QueryProjection
     public SurveyContentPdfQueryDto(LocalDate date, ContentEmotionResult contentEmotionResult, ContentStatusResult contentStatusResult, ContentTextResult contentTextResult) {
         this.date = date;
