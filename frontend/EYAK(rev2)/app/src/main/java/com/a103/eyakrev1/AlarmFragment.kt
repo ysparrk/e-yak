@@ -40,6 +40,9 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.PreferenceManager
 import com.a103.eyakrev1.databinding.AlarmTabMainBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,7 +64,8 @@ lateinit var mainActivity: MainActivity
 
 class AlarmFragment : Fragment() {
 
-
+    private var backPressedOnce = false
+    private val doubleClickInterval: Long = 1000 // 1초
 
     private lateinit var binding: AlarmTabMainBinding
 
@@ -490,6 +494,17 @@ class AlarmFragment : Fragment() {
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 // Do something
+
+                if (backPressedOnce) {
+                    requireActivity().finishAffinity()
+                    return
+                }
+                backPressedOnce = true
+
+                GlobalScope.launch {
+                    delay(doubleClickInterval)
+                    backPressedOnce = false
+                }
 
             }
         }

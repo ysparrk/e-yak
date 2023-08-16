@@ -30,11 +30,17 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DeviceFragment : Fragment() {
+
+    private var backPressedOnce = false
+    private val doubleClickInterval: Long = 1000 // 1초
 
     private val api = EyakService.create()
     lateinit var mainActivity: MainActivity
@@ -344,6 +350,16 @@ class DeviceFragment : Fragment() {
             override fun handleOnBackPressed() {
                 // Do something
 
+                if (backPressedOnce) {
+                    requireActivity().finishAffinity()
+                    return
+                }
+                backPressedOnce = true
+
+                GlobalScope.launch {
+                    delay(doubleClickInterval)
+                    backPressedOnce = false
+                }
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
