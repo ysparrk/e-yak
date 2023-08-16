@@ -10,7 +10,6 @@ import java.util.List;
 
 import static now.eyak.survey.domain.QContentEmotionResult.contentEmotionResult;
 import static now.eyak.survey.domain.QContentStatusResult.contentStatusResult;
-import static now.eyak.survey.domain.QContentStatusResultChoiceStatusEntity.contentStatusResultChoiceStatusEntity;
 import static now.eyak.survey.domain.QContentTextResult.contentTextResult;
 import static now.eyak.survey.domain.QSurvey.survey;
 import static now.eyak.survey.domain.QSurveyContent.surveyContent;
@@ -33,14 +32,14 @@ public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRep
                         )
                 )
                 .from(survey)
-                .join(survey.surveyContents, surveyContent)
+                .leftJoin(survey.surveyContents, surveyContent)
                 .leftJoin(surveyContent.contentTextResult, contentTextResult)
                 .leftJoin(surveyContent.contentStatusResults, contentStatusResult)
                 .leftJoin(surveyContent.contentEmotionResults, contentEmotionResult)
                 .where(survey.date.between(startDateTime.toLocalDate(), endDateTime.toLocalDate())
                         .and(
                                 contentEmotionResult.member.id.eq(memberId)
-                                .or(contentStatusResult.member.id.eq(memberId))
+                                .or (contentStatusResult.member.id.eq(memberId))
                                 .or(contentTextResult.member.id.eq(memberId))
                         )
                 )
