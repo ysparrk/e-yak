@@ -104,7 +104,6 @@ class FamilyAddFragment : Fragment() {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if(response.code() == 201) {    // 201 Created: 요청이 성공적으로 서버에 생성된 경우
                                         Log.d("로그", "팔로우 요청 201 Created: 요청이 성공적으로 서버에 생성된 경우")
-                                        Toast.makeText(mainActivity, "가족 추가 성공", Toast.LENGTH_SHORT).show()
                                         mainActivity!!.gotoEditFamily()
                                     }
                                     else if(response.code() == 200) {   // 200 OK: A → B 에게 팔로우 요청을 보낸 상태에서 B ← A 에게 팔로우 요청을 보낸 경우 무시, A 와 B 사이가 이미 팔로우 상태인 경우에도 무시

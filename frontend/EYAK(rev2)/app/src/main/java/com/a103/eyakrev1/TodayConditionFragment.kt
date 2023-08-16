@@ -49,8 +49,8 @@ class TodayConditionFragment : Fragment() {
     private val nonFaceColor: String = "#CFC3B5"
     // 컨디션과 관련된 변수 끝
 
-    var todaySurveyContentId: ArrayList<Long> = arrayListOf(-1, -1, -1) // 각 문항에 대한 contentId 저장 [CHOICE_STATUS, CHOICE_EMOTION, TEXT]
-    var todaySurveyContentResultId: ArrayList<Long> = arrayListOf(-1, -1, -1)   // 설문에 응답한 적이 있다면 resultId가 들어가고 아니라면 -1, [Text, Status, Emotion]
+    private var todaySurveyContentId: ArrayList<Long> = arrayListOf(-1, -1, -1) // 각 문항에 대한 contentId 저장 [CHOICE_STATUS, CHOICE_EMOTION, TEXT]
+    private var todaySurveyContentResultId: ArrayList<Long> = arrayListOf(-1, -1, -1)   // 설문에 응답한 적이 있다면 resultId가 들어가고 아니라면 -1, [Text, Status, Emotion]
 
     private lateinit var binding: FragmentTodayConditionBinding
 
@@ -79,8 +79,8 @@ class TodayConditionFragment : Fragment() {
             api.dailySurveyResult(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<DailySurveyResultBodyModel> {
                 override fun onResponse(call: Call<DailySurveyResultBodyModel>, response: Response<DailySurveyResultBodyModel>) {
                     if(response.code() == 200) {    // 성공
+                        Log.d("로그", "설문 응답 조회 200 OK")
                         val responseBodyChk = response.body()
-                        Log.d("ㅁㄴㅇㄹㅁㄴㅇㄹ", response.toString())
                         if(responseBodyChk != null) {
                             val contentTextResultResponse = responseBodyChk.contentTextResultResponse
                             val contentStatusResultResponse = responseBodyChk.contentStatusResultResponse
@@ -113,14 +113,14 @@ class TodayConditionFragment : Fragment() {
                         }
                     }
                     else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                        Log.d("로그", "설문 응답 조회: response code = ${response.code()}")
+                        Log.d("로그", "설문 응답 조회 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                     }
                     else if(response.code() == 400) {   // 해당하는 Survey가 존재하지 않는 경우
-                        Log.d("로그", "설문 응답 조회: response code = ${response.code()}")
+                        Log.d("로그", "설문 응답 조회 400 Bad Request: 해당하는 Survey, SurveyContent가 존재하지 않는 경우")
                     }
                 }
                 override fun onFailure(call: Call<DailySurveyResultBodyModel>, t: Throwable) {
-                    Log.d("로그", "설문 응답 조회 Failure")
+                    Log.d("로그", "설문 응답 조회 onFailure")
                 }
             })
 
@@ -220,6 +220,7 @@ class TodayConditionFragment : Fragment() {
                 api.dailySurveyContents(Authorization = "Bearer ${serverAccessToken}", date = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).enqueue(object: Callback<ArrayList<DailySurveyContentsBodyModel>> {
                     override fun onResponse(call: Call<ArrayList<DailySurveyContentsBodyModel>>, response: Response<ArrayList<DailySurveyContentsBodyModel>>) {
                         if(response.code() == 200) {    // 성공
+                            Log.d("로그", "Survey Content 날짜별 조회 200 OK")
                             val responseBody = response.body()
                             if(responseBody != null && responseBody.size > 0) {
 
@@ -240,14 +241,15 @@ class TodayConditionFragment : Fragment() {
                                     api.contentTextResults(surveyContentId = todaySurveyContentId[2], Authorization = "Bearer ${serverAccessToken}", params = textData).enqueue(object : Callback<Void> {
                                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                             if (response.code() == 201) {    // 성공
+                                                Log.d("로그", "Text 문항 응답 기록 201 Created")
                                             } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                                                Log.d("로그", "Text 문항 응답 기록: response code = ${response.code()}")
+                                                Log.d("로그", "Text 문항 응답 기록 401 Unauthroized: AccessToken이 유효하지 않은 경우")
                                             } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
-                                                Log.d("로그", "Text 문항 응답 기록: response code = ${response.code()}")
+                                                Log.d("로그", "Text 문항 응답 기록 400 Bad Request: 해당하는 SurveyContent가 존재하지 않는 경우")
                                             }
                                         }
                                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                                            Log.d("로그", "Text 문항 응답 기록 Failure")
+                                            Log.d("로그", "Text 문항 응답 기록 onFailure")
                                         }
                                     })
                                 }
@@ -260,14 +262,15 @@ class TodayConditionFragment : Fragment() {
                                     api.editContentTextResults(surveyContentId = todaySurveyContentId[2], Authorization = "Bearer ${serverAccessToken}", params = textData).enqueue(object : Callback<Void> {
                                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                             if (response.code() == 200) {    // 성공
+                                                Log.d("로그", "Text 문항 응답 수정 200 OK")
                                             } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                                                Log.d("로그", "Text 문항 응답 수정: response code = ${response.code()}")
+                                                Log.d("로그", "Text 문항 응답 수정 401 Unauthroized: AccessToken이 유효하지 않은 경우")
                                             } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
-                                                Log.d("로그", "Text 문항 응답 수정: response code = ${response.code()}")
+                                                Log.d("로그", "Text 문항 응답 수정 400 Bad Request: 해당하는 ContentTextResult가 존재하지 않는 경우")
                                             }
                                         }
                                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                                            Log.d("로그", "Text 문항 응답 수정 Failure")
+                                            Log.d("로그", "Text 문항 응답 수정 onFailure")
                                         }
                                     })
                                 }
@@ -283,15 +286,16 @@ class TodayConditionFragment : Fragment() {
                                     api.contentEmotionResults(surveyContentId = todaySurveyContentId[1], Authorization = "Bearer ${serverAccessToken}", params = emotionData).enqueue(object : Callback<Void> {
                                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                             if (response.code() == 201) {    // 성공
+                                                Log.d("로그", "Emotion 응답 기록 201 Created")
                                             } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                                                Log.d("로그", "Emotion 응답 기록: response code = ${response.code()}")
+                                                Log.d("로그", "Emotion 응답 기록 401 Unauthroized: AccessToken이 유효하지 않은 경우")
                                             } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
-                                                Log.d("로그", "Emotion 응답 기록: response code = ${response.code()}")
+                                                Log.d("로그", "Emotion 응답 기록 400 Bad Request: 해당하는 SurveyContent가 존재하지 않는 경우")
                                             }
                                         }
 
                                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                                            Log.d("로그", "Emotion 응답 기록 Failure")
+                                            Log.d("로그", "Emotion 응답 기록 onFailure")
                                         }
                                     })
                                 }
@@ -304,15 +308,16 @@ class TodayConditionFragment : Fragment() {
                                     api.editContentEmotionResults(surveyContentId = todaySurveyContentId[1], Authorization = "Bearer ${serverAccessToken}", params = emotionData).enqueue(object : Callback<Void> {
                                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                             if (response.code() == 200) {    // 성공
+                                                Log.d("로그", "Emotion 응답 수정 200 OK")
                                             } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                                                Log.d("로그", "Emotion 응답 수정: response code = ${response.code()}")
+                                                Log.d("로그", "Emotion 응답 수정 401 Unauthroized: AccessToken이 유효하지 않은 경우")
                                             } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
-                                                Log.d("로그", "Emotion 응답 수정: response code = ${response.code()}")
+                                                Log.d("로그", "Emotion 응답 수정 400 Bad Request: 해당하는 ContentEmotionResult가 존재하지 않는 경우")
                                             }
                                         }
 
                                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                                            Log.d("로그", "Emotion 응답 수정 Failure")
+                                            Log.d("로그", "Emotion 응답 수정 onFailure")
                                         }
                                     })
                                 }
@@ -333,14 +338,15 @@ class TodayConditionFragment : Fragment() {
                                     api.contentStatusResults(surveyContentId = todaySurveyContentId[0], Authorization = "Bearer ${serverAccessToken}", params = statusData).enqueue(object : Callback<Void> {
                                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                             if (response.code() == 201) {    // 성공
+                                                Log.d("로그", "Status 응답 등록 201 Created")
                                             } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                                                Log.d("로그", "Status 응답 등록: response code = ${response.code()}")
+                                                Log.d("로그", "Status 응답 등록 401 Unauthroized: AccessToken이 유효하지 않은 경우")
                                             } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
-                                                Log.d("로그", "Status 응답 등록: response code = ${response.code()}")
+                                                Log.d("로그", "Status 응답 등록 400 Bad Request: 해당하는 SurveyContent가 존재하지 않는 경우")
                                             }
                                         }
                                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                                            Log.d("로그", "Status 응답 등록 Failure")
+                                            Log.d("로그", "Status 응답 등록 onFailure")
                                         }
                                     })
                                 }
@@ -358,14 +364,15 @@ class TodayConditionFragment : Fragment() {
                                     api.editContentStatusResults(surveyContentId = todaySurveyContentId[0], Authorization = "Bearer ${serverAccessToken}", params = statusData).enqueue(object : Callback<Void> {
                                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                             if (response.code() == 200) {    // 성공
+                                                Log.d("로그", "Status 응답 수정 200 OK")
                                             } else if (response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                                                Log.d("로그", "Status 응답 수정: response code = ${response.code()}")
+                                                Log.d("로그", "Status 응답 수정 401 Unauthroized: AccessToken이 유효하지 않은 경우")
                                             } else if (response.code() == 400) {   // 해당하는 SurveyContent가 존재하지 않는 경우
-                                                Log.d("로그", "Status 응답 수정: response code = ${response.code()}")
+                                                Log.d("로그", "Status 응답 수정 400 Bad Request: 해당하는 ContentStatusResult가 존재하지 않는 경우")
                                             }
                                         }
                                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                                            Log.d("로그", "Status 응답 수정 Failure")
+                                            Log.d("로그", "Status 응답 수정 onFailure")
                                         }
                                     })
                                 }
@@ -373,16 +380,15 @@ class TodayConditionFragment : Fragment() {
                             }
                         }
                         else if(response.code() == 401) {   // AccessToken이 유효하지 않은 경우
-                            Log.d("로그", "Survey Content 날짜별 조회: response code = ${response.code()}")
+                            Log.d("로그", "Survey Content 날짜별 조회 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                         }
                     }
                     override fun onFailure(call: Call<ArrayList<DailySurveyContentsBodyModel>>, t: Throwable) {
-                        Log.d("로그", "Survey Content 날짜별 조회 Failure")
+                        Log.d("로그", "Survey Content 날짜별 조회 onFailure")
                     }
                 })
                 mainActivity!!.gotoAlarm()
             }
-
         }
 
         // 스크롤뷰 아래로 내리기
