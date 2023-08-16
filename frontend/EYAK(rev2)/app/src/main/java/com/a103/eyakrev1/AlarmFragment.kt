@@ -40,6 +40,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.preference.PreferenceManager
 import com.a103.eyakrev1.databinding.AlarmTabMainBinding
+import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,8 +58,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
-var iotLocationLists = arrayListOf<ArrayList<Int>>(arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(),
-                                                   arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>())
+var medicineIdLists: ArrayList<ArrayList<String>> = arrayListOf<ArrayList<String>>(arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf())
 
 lateinit var mainActivity: MainActivity
 
@@ -177,6 +177,7 @@ class AlarmFragment : Fragment() {
         }
 
         val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+        val editor = pref.edit()
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
         binding.emptyAlarmLinearLayout.visibility = View.INVISIBLE
@@ -234,8 +235,8 @@ class AlarmFragment : Fragment() {
                     binding.alramListView.adapter = alarmListAdapter
                     
                     // 초기화
-                    iotLocationLists = arrayListOf<ArrayList<Int>>(arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(),
-                                                                   arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>(), arrayListOf<Int>())
+                    medicineIdLists = arrayListOf<ArrayList<String>>(arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf(), arrayListOf())
+
                     // 오늘인 경우에만 알람을 설정하거나 초기화 (다른 날짜를 조회할 때 충돌하지 않게)
                     if (targetDay == LocalDate.now()) {
                         // 알람 로직 => 8개의 시간 별로 수행할거
@@ -278,10 +279,10 @@ class AlarmFragment : Fragment() {
                                 
                                 // iotLocation의 기본값이 0인듯 => 우리는 인덱싱을 1부터 하자
                                 for (medicine in thisRoutineMedicines) {
-                                    if (medicine.iotLocation > 0) {
-                                        iotLocationLists[position].add(medicine.iotLocation)
-                                    }
+                                    medicineIdLists[position].add(medicine.id.toString())
                                 }
+                                val json = Gson().toJson(medicineIdLists[position])
+                                editor?.putString("medicineIdList_${position}", json)?.apply()
 
                                 // val alarmTime = LocalTime.of(시간, 분)
 //                                var alarmTime = LocalTime.now().plusSeconds(5 + 2 * position.toLong())
@@ -850,7 +851,6 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
         val alarmIntent = Intent(context, AlarmClickedActivity::class.java)
-        alarmIntent.putIntegerArrayListExtra("IOT_LOCATIONS", iotLocationLists[7])
         val pendingIntent = PendingIntent.getActivity(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
@@ -863,13 +863,44 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(7, notification) // 알림 표시
 
+
+
         // pref
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_7", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
         val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", "010110101")
+        intent.putExtra("SEND_KEY", codeToSend)
         intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
         context.startForegroundService(intent)
-//        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
