@@ -12,6 +12,7 @@ import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.ContentTextResultRepository;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
+import org.aspectj.asm.IElementHandleProvider;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,9 +42,10 @@ class ContentTextResultServiceImplTest {
     SurveyContentRepository surveyContentRepository;
     @Autowired
     SurveyRepository surveyRepository;
+    @Autowired
+    SurveyContentService surveyContentService;
 
     Member member;
-    Survey survey;
     SurveyContent surveyContent;
     ContentTextResultDto contentTextResultDto;
     ContentTextResultResponseDto contentTextResultResponseDto;
@@ -62,7 +64,7 @@ class ContentTextResultServiceImplTest {
                 .build();
         member = memberRepository.save(member);
 
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당하는 날짜에 TEXT 설문 문항이 존재하지 않습니다."));
+        surveyContent = surveyContentService.getSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().get();
 
         contentTextResultDto = ContentTextResultDto.builder()
                 .text("오늘의 컨디션 입력합니다.")

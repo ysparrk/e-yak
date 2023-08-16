@@ -26,7 +26,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -49,8 +48,6 @@ class SurveyContentServiceImplTest {
 
 
     Member member;
-    Survey survey;
-    SurveyContent surveyContent;
     ContentTextResultDto contentTextResultDto;
     ContentStatusResultDto contentStatusResultDto;
     ContentEmotionResultDto contentEmotionResultDto;
@@ -69,8 +66,6 @@ class SurveyContentServiceImplTest {
                 .eatingDuration(LocalTime.of(2, 0))
                 .build();
         member = memberRepository.save(member);
-
-        survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 설문이 존재하지 않습니다."));
 
         contentEmotionResultDto = ContentEmotionResultDto.builder()
                 .choiceEmotion(ChoiceEmotion.SOSO)
@@ -92,7 +87,8 @@ class SurveyContentServiceImplTest {
     @Transactional
     void getSurveyResultByDateAndMember() {
         // given
-        List<SurveyContent> surveyContents = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now());
+        final LocalDate date = LocalDate.now();
+        List<SurveyContent> surveyContents = surveyContentService.getSurveyContentByDate(date);
         SurveyContent surveyContentChoiceEmotion = surveyContents.stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
         SurveyContent surveyContentChoiceStatus = surveyContents.stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_STATUS)).findAny().get();
         SurveyContent surveyContentChoiceText = surveyContents.stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().get();
@@ -103,7 +99,7 @@ class SurveyContentServiceImplTest {
         ContentTextResult savedContentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentChoiceText.getId(), member.getId());
 
         // when
-        SurveyContentDto surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(survey.getDate(), member.getId());
+        SurveyContentDto surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(date, member.getId());
 
         // then
         System.out.println("surveyResultByDateAndMember = " + surveyResultByDateAndMember);
@@ -111,18 +107,5 @@ class SurveyContentServiceImplTest {
         Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.getContentStatusResultResponse().getMemberId());
         Assertions.assertThat(savedContentTextResult.getMember().getId()).isEqualTo(surveyResultByDateAndMember.getContentTextResultResponse().getMemberId());
 
-    }
-
-    @DisplayName("매일 Survey와 SurveyContent를 삽입하는 스케줄링 메서드 테스트")
-    @Test
-    @Transactional
-    void insertSurveyAndSurveyContentPerDay() {
-        //given
-
-        //when
-//        surveyContentService.insertSurveyAndSurveyContentPerDay();
-//
-//        //then
-//        survey
     }
 }

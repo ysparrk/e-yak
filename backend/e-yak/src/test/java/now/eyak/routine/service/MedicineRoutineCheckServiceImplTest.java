@@ -28,6 +28,7 @@ import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
 import now.eyak.survey.service.ContentTextResultService;
+import now.eyak.survey.service.SurveyContentService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -73,6 +74,8 @@ class MedicineRoutineCheckServiceImplTest {
     MemberService memberService;
     @Autowired
     FollowRequestService followRequestService;
+    @Autowired
+    SurveyContentService surveyContentService;
 
     Member member;
     Prescription prescription;
@@ -268,7 +271,7 @@ class MedicineRoutineCheckServiceImplTest {
 
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
 
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
+        surveyContent = surveyContentService.getSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
 
 
         contentTextResultDto = ContentTextResultDto.builder()
@@ -310,7 +313,7 @@ class MedicineRoutineCheckServiceImplTest {
 
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
 
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
+        surveyContent = surveyContentService.getSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
 
 
         contentTextResultDto = ContentTextResultDto.builder()
@@ -381,7 +384,7 @@ class MedicineRoutineCheckServiceImplTest {
 
         medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto,member.getId()); // true까지 표시
 
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
+        surveyContent = surveyContentService.getSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당날짜에 TEXT 문항 설문이 존재하지 않습니다."));
 
 
         contentTextResultDto = ContentTextResultDto.builder()

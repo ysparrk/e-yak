@@ -42,12 +42,12 @@ class ContentStatusResultServiceImplTest {
     SurveyContentRepository surveyContentRepository;
     @Autowired
     SurveyRepository surveyRepository;
+    @Autowired
+    SurveyContentService surveyContentService;
 
     Member member;
-    Survey survey;
     SurveyContent surveyContent;
     ContentStatusResultDto contentStatusResultDto;
-    ContentStatusResultResponseDto contentStatusResultResponseDto;
 
     @BeforeEach
     void beforeEach() {
@@ -63,7 +63,7 @@ class ContentStatusResultServiceImplTest {
                 .build();
         member = memberRepository.save(member);
 
-        survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 설문이 존재하지 않습니다."));
+        surveyContentService.getSurveyContentByDate(LocalDate.now());
         surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_STATUS)).findAny().get();
 
         contentStatusResultDto = ContentStatusResultDto.builder()
@@ -154,13 +154,9 @@ class ContentStatusResultServiceImplTest {
         System.out.println("savedContentStatusResult = " + savedContentStatusResult.getMember().getNickname());
 
         // when
-        System.out.println("survey.getDate() = " + survey.getDate());
-        System.out.println("membememememr = " + member.getId());
-        ContentStatusResultResponseDto findStatusResultsByDateAndMember = contentStatusResultService.getStatusResultByDateAndMember(survey.getDate(), memberA.getId());
+        ContentStatusResultResponseDto findStatusResultsByDateAndMember = contentStatusResultService.getStatusResultByDateAndMember(LocalDate.now(), memberA.getId());
 
         // then
         Assertions.assertThat(savedContentStatusResult.getMember().getId()).isEqualTo(findStatusResultsByDateAndMember.getMemberId());
-        System.out.println("findStatusResultsByDateAndMember = " + findStatusResultsByDateAndMember);
-
     }
 }

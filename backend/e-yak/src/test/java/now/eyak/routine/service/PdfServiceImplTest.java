@@ -21,6 +21,7 @@ import now.eyak.survey.repository.SurveyRepository;
 import now.eyak.survey.service.ContentEmotionResultService;
 import now.eyak.survey.service.ContentStatusResultService;
 import now.eyak.survey.service.ContentTextResultService;
+import now.eyak.survey.service.SurveyContentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,11 +57,12 @@ class PdfServiceImplTest {
     ContentStatusResultService contentStatusResultService;
     @Autowired
     ContentEmotionResultService contentEmotionResultService;
+    @Autowired
+    SurveyContentService surveyContentService;
 
     static Member member;
     static List<Routine> routines;
     Survey survey;
-    SurveyContent surveyContent;
     ContentEmotionResultDto contentEmotionResultDto;
     ContentTextResultDto contentTextResultDto;
     ContentStatusResultDto contentStatusResultDto;
@@ -122,7 +124,7 @@ class PdfServiceImplTest {
         Prescription inserted2 = prescriptionService.insert(prescriptionDto2, member.getId());
 
         // survey
-        survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 설문이 존재하지 않습니다."));
+        surveyContentService.getSurveyContentByDate(LocalDate.now());
         SurveyContent surveyContentStatus = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_STATUS)).findAny().get();
         SurveyContent surveyContentEmotion = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
         SurveyContent surveyContentText = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.TEXT)).findAny().orElseThrow(() -> new NoSuchElementException("해당하는 날짜에 TEXT 설문 문항이 존재하지 않습니다."));

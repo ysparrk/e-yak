@@ -41,9 +41,10 @@ class ContentEmotionResultServiceImplTest {
     SurveyContentRepository surveyContentRepository;
     @Autowired
     SurveyRepository surveyRepository;
+    @Autowired
+    SurveyContentService surveyContentService;
 
     Member member;
-    Survey survey;
     SurveyContent surveyContent;
     ContentEmotionResultDto contentEmotionResultDto;
 
@@ -62,18 +63,7 @@ class ContentEmotionResultServiceImplTest {
                 .build();
         member = memberRepository.save(member);
 
-//        survey = Survey.builder()
-//                .date(LocalDate.of(2023,8,01))
-//                .build();
-//
-//        survey = surveyRepository.save(survey);
-//
-//        surveyContent = SurveyContent.builder()
-//                .survey(survey)
-//                .build();
-
-        survey = surveyRepository.findByDate(LocalDate.now()).orElseThrow(() -> new NoSuchElementException("해당 날짜에 Survey가 존재하지 않습니다."));
-        surveyContent = surveyContentRepository.findAllSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
+        surveyContent = surveyContentService.getSurveyContentByDate(LocalDate.now()).stream().filter(element -> element.getSurveyContentType().equals(SurveyContentType.CHOICE_EMOTION)).findAny().get();
 
         contentEmotionResultDto = ContentEmotionResultDto.builder()
                 .choiceEmotion(ChoiceEmotion.SOSO)
@@ -164,11 +154,10 @@ class ContentEmotionResultServiceImplTest {
         System.out.println("savedContentEmotionResult.getMember().getNickname() = " + savedContentEmotionResult.getMember().getNickname());
 
         // when
-        ContentEmotionResultResponseDto findEmotionResultsByDateAndMember = contentEmotionResultService.getEmotionResultsByDateAndMember(survey.getDate(), memberA.getId());
+        ContentEmotionResultResponseDto findEmotionResultsByDateAndMember = contentEmotionResultService.getEmotionResultsByDateAndMember(LocalDate.now(), memberA.getId());
 
         // then
         Assertions.assertThat(savedContentEmotionResult.getMember().getId()).isEqualTo(findEmotionResultsByDateAndMember.getMemberId());
         System.out.println("findEmotionResultsByDateAndMember = " + findEmotionResultsByDateAndMember);
-
     }
 }
