@@ -863,6 +863,10 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(7, notification) // 알림 표시
 
+
+        val intent = Intent(mainActivity, ForeService::class.java)
+        intent.putExtra("SEND_KEY", "010110101")
+        mainActivity.startForegroundService(intent)
 //        mainActivity!!.sendAlarmToDevice("010100000")
     }
 }
