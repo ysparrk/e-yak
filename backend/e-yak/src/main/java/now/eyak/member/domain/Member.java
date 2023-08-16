@@ -33,18 +33,14 @@ public class Member {
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-//    private String phoneNumber; // TODO: 수집 정보 결정
-//    private String baseAddress;
-//    private String detailAddress;
     private LocalTime wakeTime;
     private LocalTime breakfastTime;
     private LocalTime lunchTime;
     private LocalTime dinnerTime;
     private LocalTime bedTime;
     private LocalTime eatingDuration;
-//    private String specifics; // 특이사항 줄 글로
-//    private String supplements; // 영양제등을 줄 글로
+    private Boolean agreement = true;
+
     @OneToMany(mappedBy = "member")
     private List<Prescription> prescriptions = new ArrayList<>();
 
