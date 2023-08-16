@@ -66,21 +66,20 @@ class ForeService : Service() {
             android.Manifest.permission.BLUETOOTH_SCAN,
         )
         btPermissionFlag = checkPermissions(permissions)
+        // 필요정보 가져오기
         deviceNameSaved = intent?.getStringExtra("DEVICE_NAME_KEY")
+        sendString = intent?.getStringExtra("SEND_KEY")
+        // 리시버 등록
+        val filter_connect = IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED)
+        registerReceiver(receiver, filter_connect)
+        val filter_disconnect = IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+        registerReceiver(receiver, filter_disconnect)
         // 권한 상태에 따라 페어링된 약통 불러오기
         if (btPermissionFlag == true && btAdapter != null && deviceNameSaved != "") {
             if (bluetoothPaired()) {
                 connectDevice(deviceSaved) // 권한, 저장된 정보 모두 ok 일시 - 연결 시도.
             }
         }
-        // 리시버 등록
-        val filter_connect = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-        registerReceiver(receiver, filter_connect)
-        val filter_disconnect = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        registerReceiver(receiver, filter_disconnect)
-        // 전달할 내용
-        sendString = intent?.getStringExtra("SEND_KEY")
-        Log.d("log", "$sendString")
 
         startForeground(1, notification)
         return START_NOT_STICKY
@@ -148,7 +147,28 @@ class ForeService : Service() {
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
                     inStream = fallbackSocket?.inputStream
                     outStream = fallbackSocket?.outputStream
-                    outStream?.write(sendString?.toByteArray())
+                    Log.d("log", "${socket} ${fallbackSocket}")
+                    Log.d("log", "${inStream} ${outStream}")
+                    Thread {
+                        try {
+                            Thread.sleep(1_000)
+                            outStream?.write(sendString?.toByteArray())
+                        } catch (e: IOException) {}
+                    }.start()
+                    Thread {
+                        while (!Thread.currentThread().isInterrupted) {
+                            try {
+                                val inBytes = inStream?.available()
+                                if (inBytes != null) {
+                                    if (inBytes > 0) {
+                                        val packetBytes = ByteArray(inBytes)
+                                        inStream?.read(packetBytes)
+                                        Log.d("log", "${packetBytes.toString(Charsets.UTF_8)}")
+                                    }
+                                }
+                            } catch (e: java.lang.Exception) {}
+                        }
+                    }.start()
                 }
                 BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
                 }
