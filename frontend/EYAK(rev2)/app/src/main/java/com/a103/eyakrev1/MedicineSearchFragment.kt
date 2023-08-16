@@ -376,11 +376,11 @@ class MedicineSearchFragment : Fragment() {
             val desiredWidth = (screenWidth * 0.7).toFloat()
 
             // 로고 이미지 리소스 가져오기
-            val logoDrawable = ResourcesCompat.getDrawable(mainActivity.resources, R.drawable.eyak_logo_01, null)
+            val logoDrawable = ResourcesCompat.getDrawable(mainActivity.resources, R.drawable.eyak_logo_pdf, null)
             val logoBitmap = (logoDrawable as BitmapDrawable).bitmap
 
             // 제목 생성
-            val titleParagraph = Paragraph("지금이:약 복약 정보 및 컨디션 기록", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 20f, Font.BOLD))
+            val titleParagraph = Paragraph("  지금이:약 복약 정보 및 컨디션 기록", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 20f, Font.BOLD))
             titleParagraph.alignment = Element.ALIGN_CENTER
 
             // 이미지와 제목을 같은 줄에 배치하기 위한 컨테이너
