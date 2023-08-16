@@ -1,6 +1,5 @@
 package now.eyak.survey.service;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import now.eyak.member.domain.Member;
 import now.eyak.member.exception.NoSuchMemberException;
@@ -14,11 +13,11 @@ import now.eyak.survey.dto.response.SurveyContentDto;
 import now.eyak.survey.enumeration.SurveyContentType;
 import now.eyak.survey.repository.SurveyContentRepository;
 import now.eyak.survey.repository.SurveyRepository;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,33 +32,46 @@ public class SurveyContentServiceImpl implements SurveyContentService {
     private final ContentStatusResultService contentStatusResultService;
     private final ContentTextResultService contentTextResultService;
 
-    private final JPAQueryFactory queryFactory;
-
-    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     @Override
-    public void insertSurveyAndSurveyContentPerDay() {
+    public List<SurveyContent> insertSurveyAndSurveyContentPerDay(LocalDate date) {
         Survey survey = Survey.builder()
-                .date(LocalDate.now())
+                .date(date)
                 .build();
 
         surveyRepository.save(survey);
 
+        List<SurveyContent> surveyContents = new ArrayList<>();
         SurveyContentType[] surveyContentTypes = SurveyContentType.values();
-
         for (int i = 0; i < surveyContentTypes.length; i++) {
             SurveyContent surveyContent = SurveyContent.builder()
                     .surveyContentType(surveyContentTypes[i])
                     .build();
 
             surveyContent.changeSurvey(survey);
-            surveyContentRepository.save(surveyContent);
+            surveyContents.add(surveyContentRepository.save(surveyContent));
         }
+
+        return surveyContents;
     }
 
+    /**
+     * date 날짜의 SurveyContent 리스트를 반환한다.
+     * 만약 존재하지 않는다면, 생성하여 반환한다.
+     *
+     * @param date
+     * @return
+     */
+    @Transactional
     @Override
     public List<SurveyContent> getSurveyContentByDate(LocalDate date) {
-        return surveyContentRepository.findAllSurveyContentByDate(date);
+        List<SurveyContent> surveyContents = surveyContentRepository.findAllSurveyContentByDate(date);
+
+        if (surveyContents.isEmpty()) {
+            return insertSurveyAndSurveyContentPerDay(date);
+        }
+
+        return surveyContents;
     }
 
     @Transactional
