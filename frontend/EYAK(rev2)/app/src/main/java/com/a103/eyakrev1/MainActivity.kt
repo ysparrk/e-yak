@@ -57,17 +57,6 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    //=== bluetooth 연결용 var
-    var btPermissionFlag: Boolean? = null
-    var btConnectFlag = false
-    var deviceNameSaved: String? = null
-    var deviceSaved: BluetoothDevice? = null
-    var socket: BluetoothSocket? = null
-    var fallbackSocket: BluetoothSocket? = null
-    // bluetooth Manager & Adapter
-    private val btManager: BluetoothManager by lazy { this.getSystemService(BluetoothManager::class.java) }
-    private val btAdapter: BluetoothAdapter? by lazy { btManager.getAdapter() }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -98,38 +87,6 @@ class MainActivity : AppCompatActivity() {
 //        val secondAlarmMillis = secondDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 //
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, secondAlarmMillis, secondPendingIntent)
-
-        //=== bluetooth 연결
-        // 블투 어뎁터 init
-        if (btAdapter == null) {
-            Toast.makeText(this, "이 기기에서 블루투스를 지원하지 않음", Toast.LENGTH_LONG).show()
-        }
-        // 권한 체크
-        val permissions = arrayOf(
-            android.Manifest.permission.BLUETOOTH,
-            android.Manifest.permission.BLUETOOTH_ADMIN,
-            android.Manifest.permission.BLUETOOTH_CONNECT,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.BLUETOOTH_SCAN,
-        )
-        btPermissionFlag = checkPermissions(permissions)
-        // pref 저장된 페어링 약통 이름 가져오기
-        deviceNameSaved = pref?.getString("DEVICE_NAME", "")
-        // 권한 상태에 따라 페어링된 약통 불러오기
-        if (deviceNameSaved != "") {
-            if (btPermissionFlag == true && btAdapter != null) {
-                if (btAdapter?.isEnabled == false) {
-                    Toast.makeText(this, "약통과의 통신을 위해 블루투스를 켜주세요.", Toast.LENGTH_SHORT).show()
-                } else if (bluetoothPaired() == false) {
-                    Toast.makeText(this, "약통과 연결이 끊어졌습니다. 약통을 다시 등록해주세요.", Toast.LENGTH_SHORT).show()
-                } else {
-                    connectDevice(deviceSaved) // 권한, 저장된 정보 모두 ok 일시 - 연결 시도.
-                }
-            } else if (btPermissionFlag == false && btAdapter != null) {
-                Toast.makeText(this, "권한이 허용되지 않았습니다. 약통이 정상적으로 동작하지 않을 수 있습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
 
 
 
@@ -290,83 +247,4 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.mainFragment, MedicineSearchFragment())
             .commit()
     }
-
-    //=== bluetooth 연결 관련 함수들
-    // bluetooth 권한 체크
-    private fun checkPermissions(perms: Array<String>): Boolean {
-        var flag = true
-        for (p in perms) {
-            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
-                flag = false
-                break
-            }
-        }
-        return flag
-    }
-    // 페어링된 블루투스 기기 찾기.
-    private fun bluetoothPaired(): Boolean {
-        val pairedDevices: Set<BluetoothDevice>? = btAdapter?.bondedDevices
-        var devicePairedFlag = false
-        pairedDevices?.forEach { device ->
-            if (device.name == deviceNameSaved) {
-                deviceSaved = device
-                devicePairedFlag = true
-                return@forEach
-            }
-        }
-        return devicePairedFlag
-    }
-    // 블루투스 연결용 스레드
-    fun connectDevice(targetDevice: BluetoothDevice?) {
-        val thread = Thread {
-            val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-            socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
-            var clazz = socket?.remoteDevice?.javaClass
-            var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
-            var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
-            fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
-            try {
-                fallbackSocket?.connect()
-            } catch (e: Exception) {
-                try {
-                    socket?.close()
-                    fallbackSocket?.close()
-                } catch (e: IOException) {}
-            }
-        }
-        thread.start()
-    }
-
-    public fun sendAlarmToDevice(message: String) {
-        Log.d("log", "${socket} ${fallbackSocket}")
-        val inStream = fallbackSocket?.inputStream
-        val outStream = fallbackSocket?.outputStream
-        Log.d("myapp", "${inStream} ${outStream}")
-        Thread {
-            try {
-                val sending = message
-                outStream?.write(sending.toByteArray())
-                Log.d("myapp", "sending...")
-            } catch (e: IOException) {
-                Log.d("myapp", "onCreate: error sending data")
-            }
-        }.start()
-        Thread {
-            while (!Thread.currentThread().isInterrupted) {
-                try {
-                    val inBytes = inStream?.available()
-                    if (inBytes != null) {
-                        if (inBytes > 0) {
-                            val packetBytes = ByteArray(inBytes)
-                            inStream?.read(packetBytes)
-                        }
-                    }
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }.start()
-    }
-
-
 }
