@@ -141,7 +141,7 @@ class PdfServiceImplTest {
                 .text("오늘의 컨디션 입력합니다.")
                 .build();
 
-//        contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContentEmotion.getId(), member.getId());
+        contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContentEmotion.getId(), member.getId());
         contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContentStatus.getId(), member.getId());
         contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentText.getId(), member.getId());
     }

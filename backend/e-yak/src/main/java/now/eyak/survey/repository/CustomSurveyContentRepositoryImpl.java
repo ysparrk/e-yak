@@ -1,16 +1,10 @@
 package now.eyak.survey.repository;
 
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import now.eyak.survey.domain.ContentEmotionResult;
 import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.ContentTextResult;
-import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.query.SurveyContentPdfQueryDto;
 import now.eyak.survey.enumeration.SurveyContentType;
 
@@ -42,7 +36,7 @@ public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRep
                         .and(contentEmotionResult.member.id.eq(memberId).or(contentEmotionResult.id.isNull()))
                         .and(surveyContent.surveyContentType.eq(SurveyContentType.CHOICE_EMOTION))
                 )
-                .orderBy(survey.date.desc())
+                .orderBy(survey.date.asc())
                 .fetch();
 
         List<ContentStatusResult> statusResults = queryFactory
@@ -54,7 +48,7 @@ public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRep
                         .and(contentStatusResult.member.id.eq(memberId).or(contentStatusResult.id.isNull()))
                         .and(surveyContent.surveyContentType.eq(SurveyContentType.CHOICE_STATUS))
                 )
-                .orderBy(survey.date.desc())
+                .orderBy(survey.date.asc())
                 .fetch();
 
         List<ContentTextResult> textResults = queryFactory
@@ -66,20 +60,17 @@ public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRep
                         .and(contentTextResult.member.id.eq(memberId).or(contentTextResult.id.isNull()))
                         .and(surveyContent.surveyContentType.eq(SurveyContentType.TEXT))
                 )
-                .orderBy(survey.date.desc())
+                .orderBy(survey.date.asc())
                 .fetch();
 
         List<LocalDate> dateList = queryFactory
                 .selectDistinct(survey.date)
                 .from(surveyContent)
                 .join(surveyContent.survey, survey)
-                .orderBy(survey.date.desc())
+                .where(survey.date.between(startDateTime.toLocalDate(), endDateTime.toLocalDate()))
+                .orderBy(survey.date.asc())
                 .fetch();
 
-        List<SurveyContent> surveyContents = queryFactory
-                .select(surveyContent)
-                .from(surveyContent)
-                .fetch();
 
         List<SurveyContentPdfQueryDto> surveyContentPdfQueryDtoList = new ArrayList<>();
         for (int idx = 0; idx < dateList.size(); idx++) {
