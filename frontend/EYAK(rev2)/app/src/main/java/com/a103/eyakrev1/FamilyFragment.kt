@@ -146,7 +146,7 @@ class FamilyFragment : Fragment() {
         }
 
         layout.findViewById<LinearLayout>(R.id.emptyFamilyLinearLayout).setOnClickListener {
-            mainActivity!!.gotoEditFamily()
+            mainActivity!!.gotoAddFamily()
         }
 
         return layout
