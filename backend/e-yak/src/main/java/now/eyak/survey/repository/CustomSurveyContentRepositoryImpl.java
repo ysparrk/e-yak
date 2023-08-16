@@ -31,8 +31,8 @@ public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRep
                                 contentTextResult
                         )
                 )
-                .from(survey)
-                .leftJoin(survey.surveyContents, surveyContent)
+                .from(surveyContent)
+                .leftJoin(surveyContent.survey, survey)
                 .leftJoin(surveyContent.contentTextResult, contentTextResult)
                 .leftJoin(surveyContent.contentStatusResults, contentStatusResult)
                 .leftJoin(surveyContent.contentEmotionResults, contentEmotionResult)
