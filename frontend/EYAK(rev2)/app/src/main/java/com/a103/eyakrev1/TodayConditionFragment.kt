@@ -72,6 +72,8 @@ class TodayConditionFragment : Fragment() {
             )
             init()
 
+
+
             val pref = PreferenceManager.getDefaultSharedPreferences(mainActivity)
             val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
@@ -402,6 +404,13 @@ class TodayConditionFragment : Fragment() {
     }
 
     private fun init() {    // 초기화
+
+        if (targetDate < LocalDate.now()) {
+            binding.todayConditionTitle.text = "${targetDate.monthValue}월 ${targetDate.dayOfMonth}일 어떠셨나요??"
+            binding.todayConditionSubtitle.text = "${targetDate.monthValue}월 ${targetDate.dayOfMonth}일의 컨디션"
+
+        }
+
         binding.badFace.setColorFilter(Color.parseColor(nonFaceColor))
         binding.normalFace.setColorFilter(Color.parseColor(nonFaceColor))
         binding.goodFace.setColorFilter(Color.parseColor(nonFaceColor))

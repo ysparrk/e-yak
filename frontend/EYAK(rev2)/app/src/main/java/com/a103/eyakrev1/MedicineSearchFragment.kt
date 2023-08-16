@@ -1,12 +1,14 @@
 package com.a103.eyakrev1
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils.substring
@@ -26,6 +28,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
 import com.itextpdf.text.BaseColor
@@ -71,6 +74,10 @@ class MedicineSearchFragment : Fragment() {
     private var dayChk: Boolean = true
     private var makePDFChk: Boolean = false;
 
+    lateinit var layout : View
+    private val WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1 // 아무 정수 값이나 사용 가능
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -79,7 +86,7 @@ class MedicineSearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val layout = inflater.inflate(R.layout.fragment_medicine_search, container, false)
+        layout = inflater.inflate(R.layout.fragment_medicine_search, container, false)
 
         // 초기화 시작
         layout.findViewById<ImageView>(R.id.makePDFBtn).visibility = View.GONE
@@ -359,77 +366,18 @@ class MedicineSearchFragment : Fragment() {
             }
         }
 
-        layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {    // pdf 만들기
-            val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
-
-            // PDF 생성 시작
-            val document = Document()
-            PdfWriter.getInstance(document, FileOutputStream(pdfFilePath))
-            document.open()
-
-            // PDF에 추가할 내용 작성
-            val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
-            val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
-
-            // 로고
-            val screenWidth = Resources.getSystem().displayMetrics.widthPixels
-            val desiredWidth = (screenWidth * 0.7).toFloat()
-
-            // 로고 이미지 리소스 가져오기
-            val logoDrawable = ResourcesCompat.getDrawable(mainActivity.resources, R.drawable.eyak_logo_pdf, null)
-            val logoBitmap = (logoDrawable as BitmapDrawable).bitmap
-
-            // 제목 생성
-            val titleParagraph = Paragraph("  지금이:약 복약 정보 및 컨디션 기록", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 20f, Font.BOLD))
-            titleParagraph.alignment = Element.ALIGN_CENTER
-
-            // 이미지와 제목을 같은 줄에 배치하기 위한 컨테이너
-            val container = PdfPTable(2)
-            container.totalWidth = desiredWidth
-            container.setWidths(floatArrayOf(0.2f, 0.8f)) // 로고 너비와 제목 너비 조절
-
-            val logoCell = PdfPCell(Image.getInstance(BitmapImageHelper.getCompressedBitmapBytes(logoBitmap)), true)
-            logoCell.borderWidth = 0f
-            logoCell.setPadding(5f)
-            logoCell.verticalAlignment = Element.ALIGN_MIDDLE
-            container.addCell(logoCell)
-
-            val titleCell = PdfPCell(titleParagraph)
-            titleCell.borderWidth = 0f
-            logoCell.setPadding(5f)
-            titleCell.verticalAlignment = Element.ALIGN_MIDDLE
-            container.addCell(titleCell)
-
-            container.spacingAfter = 10f // 컨테이너 아래 여백 설정
-            document.add(container)
-
-            // 출력 날짜 및 시간
-            val printDateTime = Paragraph("${LocalDate.now()}   ${LocalDateTime.now().hour}:${LocalDateTime.now().minute}", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 10f))
-            printDateTime.alignment = Element.ALIGN_CENTER   // 가운데 정렬
-            printDateTime.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
-            document.add(printDateTime)
-
-            // 복약 정보 타이틀 추가
-            val medicineTitle = Paragraph("복약 정보", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16f, Font.BOLD))
-            medicineTitle.alignment = Element.ALIGN_CENTER   // 가운데 정렬
-            medicineTitle.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
-            document.add(medicineTitle)
-
-            // 복약 정보 테이블 추가
-            addTableToDocument(document, tableLayout, mainActivity, 5)
-
-            // 컨디션 기록 정보 타이틀 추가
-            val conditionTitle = Paragraph("컨디션 기록 정보", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16f, Font.BOLD))
-            conditionTitle.alignment = Element.ALIGN_CENTER // 가운데 정렬
-            conditionTitle.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
-            document.add(conditionTitle)
-
-            // 컨디션 기록 테이블 추가
-            addTableToDocument(document, tableLayout2, mainActivity, 4)
-
-            document.close()
-
-            Toast.makeText(requireContext(), "PDF가 [다운로드 폴더]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
+        layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE)
+                } else {
+                    // 권한이 이미 허용되었을 때의 처리
+                    createPDF() // PDF 생성 처리를 별도의 함수로 빼서 호출
+                }
+            } else {
+                // Android 6.0 미만 버전에서는 권한 요청 없이 바로 처리
+                createPDF()
+            }
         }
 
         layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
@@ -473,6 +421,91 @@ class MedicineSearchFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback.remove()
+    }
+
+    private fun createPDF() {
+        val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
+
+        // PDF 생성 시작
+        val document = Document()
+        PdfWriter.getInstance(document, FileOutputStream(pdfFilePath))
+        document.open()
+
+        // PDF에 추가할 내용 작성
+        val tableLayout = layout.findViewById<TableLayout>(R.id.searchMedicineTable)
+        val tableLayout2 = layout.findViewById<TableLayout>(R.id.searchRecodeTable)
+
+        // 로고
+        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+        val desiredWidth = (screenWidth * 0.7).toFloat()
+
+        // 로고 이미지 리소스 가져오기
+        val logoDrawable = ResourcesCompat.getDrawable(mainActivity.resources, R.drawable.eyak_logo_pdf, null)
+        val logoBitmap = (logoDrawable as BitmapDrawable).bitmap
+
+        // 제목 생성
+        val titleParagraph = Paragraph("  지금이:약 복약 정보 및 컨디션 기록", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 20f, Font.BOLD))
+        titleParagraph.alignment = Element.ALIGN_CENTER
+
+        // 이미지와 제목을 같은 줄에 배치하기 위한 컨테이너
+        val container = PdfPTable(2)
+        container.totalWidth = desiredWidth
+        container.setWidths(floatArrayOf(0.2f, 0.8f)) // 로고 너비와 제목 너비 조절
+
+        val logoCell = PdfPCell(Image.getInstance(BitmapImageHelper.getCompressedBitmapBytes(logoBitmap)), true)
+        logoCell.borderWidth = 0f
+        logoCell.setPadding(5f)
+        logoCell.verticalAlignment = Element.ALIGN_MIDDLE
+        container.addCell(logoCell)
+
+        val titleCell = PdfPCell(titleParagraph)
+        titleCell.borderWidth = 0f
+        logoCell.setPadding(5f)
+        titleCell.verticalAlignment = Element.ALIGN_MIDDLE
+        container.addCell(titleCell)
+
+        container.spacingAfter = 10f // 컨테이너 아래 여백 설정
+        document.add(container)
+
+        // 출력 날짜 및 시간
+        val printDateTime = Paragraph("${LocalDate.now()}   ${LocalDateTime.now().hour}:${LocalDateTime.now().minute}", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 10f))
+        printDateTime.alignment = Element.ALIGN_CENTER   // 가운데 정렬
+        printDateTime.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
+        document.add(printDateTime)
+
+        // 복약 정보 타이틀 추가
+        val medicineTitle = Paragraph("복약 정보", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16f, Font.BOLD))
+        medicineTitle.alignment = Element.ALIGN_CENTER   // 가운데 정렬
+        medicineTitle.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
+        document.add(medicineTitle)
+
+        // 복약 정보 테이블 추가
+        addTableToDocument(document, tableLayout, mainActivity, 5)
+
+        // 컨디션 기록 정보 타이틀 추가
+        val conditionTitle = Paragraph("컨디션 기록 정보", FontFactory.getFont("/res/font/nanum_gothic.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16f, Font.BOLD))
+        conditionTitle.alignment = Element.ALIGN_CENTER // 가운데 정렬
+        conditionTitle.spacingAfter = 10f // 아래쪽 여백 설정 (10f는 적당한 값이며 필요에 따라 조절 가능)
+        document.add(conditionTitle)
+
+        // 컨디션 기록 테이블 추가
+        addTableToDocument(document, tableLayout2, mainActivity, 4)
+
+        document.close()
+
+        Toast.makeText(requireContext(), "PDF가 [다운로드 폴더]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용되었을 때의 처리
+                createPDF()
+            } else {
+                // 권한이 거부되었을 때의 처리
+                Toast.makeText(requireContext(), "저장소 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun addTableToDocument(document: Document, tableLayout: TableLayout, context: Context, numberOfColumns: Int) {

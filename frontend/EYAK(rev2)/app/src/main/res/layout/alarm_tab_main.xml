@@ -164,7 +164,7 @@
                 android:includeFontPadding="false"
                 android:text="오늘의 컨디션"
                 android:textColor="#757863"
-                android:textSize="32sp" />
+                android:textSize="26sp" />
         </LinearLayout>
     </LinearLayout>
 

@@ -79,7 +79,7 @@ class AlarmFragment : Fragment() {
     val red: String = "#FF9B9B"
     val green: String = "#E3F2C1"
     val gray: String = "#DDE6ED"
-    val yellow: String = "FFFF00"
+    val yellow: String = "FFFFEF00"
 
     var medicineRoutines = MedicineRoutines()
 
@@ -165,13 +165,15 @@ class AlarmFragment : Fragment() {
         yesterday = targetDay.plusDays(-1)
         tomorrow = targetDay.plusDays(1)
 
+
+
         // 미래에 대한 컨디션 입력은 불가능 하도록
         if(LocalDate.now() < targetDay) {
             binding.conditionLinearLayout.visibility = View.GONE
         }
         else {
             if(LocalDate.now() == targetDay) binding.conditionTextView.setText("오늘의 컨디션")
-            else binding.conditionTextView.setText("과거의 컨디션")
+            else binding.conditionTextView.setText("${targetDay.monthValue}월 ${targetDay.dayOfMonth}일의 컨디션")
 
             binding.conditionLinearLayout.visibility = View.VISIBLE
         }
@@ -227,6 +229,7 @@ class AlarmFragment : Fragment() {
                     
                     // 비어있다는 표시를 띄워주자
                     if (isAlarmEmpty) {
+                        binding.emptyAlarmTextView.text = "${targetDay.monthValue}월 ${targetDay.dayOfMonth}일에\n먹을 약이 없어:약"
                         binding.emptyAlarmLinearLayout.visibility = View.VISIBLE
                     }
 
@@ -407,7 +410,7 @@ class AlarmFragment : Fragment() {
                         binding.yesterdayState.setColorFilter(Color.parseColor(green))
                     }
                     else {
-                        binding.yesterdayState.setColorFilter(Color.parseColor("#FFFFEF00"))
+                        binding.yesterdayState.setColorFilter(Color.parseColor(yellow))
                     }
                 }
                 else if(response.code() == 401) {
@@ -549,12 +552,15 @@ class ZerothAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 10, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("기상 후 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(0, notification) // 알림 표시
@@ -628,12 +634,17 @@ class FirstAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 11, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("아침 식사 전 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(1, notification) // 알림 표시
@@ -707,12 +718,17 @@ class SecondAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 12, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("아침 식사 후 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(2, notification) // 알림 표시
@@ -786,12 +802,17 @@ class ThirdAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 13, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("점심 식사 전 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(3, notification) // 알림 표시
@@ -865,12 +886,17 @@ class FourthAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 14, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("점심 식사 후 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(4, notification) // 알림 표시
@@ -944,12 +970,17 @@ class FifthAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 15, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("저녁 식사 전 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(5, notification) // 알림 표시
@@ -1023,12 +1054,17 @@ class SixthAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 16, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+
+
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
             .setContentText("저녁 식사 후 약 드세요")
             .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
             .setSound(soundUri)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.notify(6, notification) // 알림 표시
@@ -1102,8 +1138,8 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
         //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
         val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
 
-        val alarmIntent = Intent(context, AlarmClickedActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        val alarmIntent = Intent(context, LoginActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 17, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
         val notification = NotificationCompat.Builder(context, "alarm_channel")
             .setContentTitle("지금이:약")
