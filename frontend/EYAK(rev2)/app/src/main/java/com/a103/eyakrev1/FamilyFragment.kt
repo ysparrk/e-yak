@@ -70,6 +70,9 @@ class FamilyFragment : Fragment() {
                     if (familyList.size == 1) {
                         layout.findViewById<LinearLayout>(R.id.emptyFamilyLinearLayout).visibility = View.VISIBLE
                     }
+                    else {
+                        layout.findViewById<LinearLayout>(R.id.emptyFamilyLinearLayout).visibility = View.GONE
+                    }
 
                     val familyListAdapter = FamilyListAdapter(mainActivity, familyList)
                     val familyListView = layout.findViewById<ListView>(R.id.familyListView)
@@ -139,6 +142,10 @@ class FamilyFragment : Fragment() {
         }
 
         layout.findViewById<ImageView>(R.id.editFamily).setOnClickListener {
+            mainActivity!!.gotoEditFamily()
+        }
+
+        layout.findViewById<LinearLayout>(R.id.emptyFamilyLinearLayout).setOnClickListener {
             mainActivity!!.gotoEditFamily()
         }
 

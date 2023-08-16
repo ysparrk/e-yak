@@ -92,6 +92,10 @@ class MedicineFragment : Fragment() {
             mainActivity!!.gotoAddMedicine()
         }
 
+        layout.findViewById<LinearLayout>(R.id.emptyMedicineLinearLayout).setOnClickListener {
+            mainActivity!!.gotoAddMedicine()
+        }
+
         layout.findViewById<ImageView>(R.id.medicineDetailPrint).setOnClickListener {
             mainActivity!!.gotoMedicineSearch()
         }

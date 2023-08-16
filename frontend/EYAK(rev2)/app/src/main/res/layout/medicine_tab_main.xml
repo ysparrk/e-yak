@@ -18,11 +18,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:tint="#D3D3D3"
-            app:srcCompat="@drawable/ic_pill" />
+            android:id="@+id/imageView5"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/no_medicine" />
 
         <TextView
             android:id="@+id/textView41"
@@ -32,7 +31,7 @@
             android:fontFamily="@font/tmoney_regular"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:text="아무것도 없어:약"
+            android:text="등록된 약이 없어:약"
             android:textColor="#757863"
             android:textSize="26sp" />
     </LinearLayout>
