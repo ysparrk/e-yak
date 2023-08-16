@@ -2,6 +2,7 @@ package now.eyak.survey.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import now.eyak.survey.domain.ContentEmotionResult;
 import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.domain.ContentTextResult;
@@ -19,6 +20,7 @@ import static now.eyak.survey.domain.QContentTextResult.contentTextResult;
 import static now.eyak.survey.domain.QSurvey.survey;
 import static now.eyak.survey.domain.QSurveyContent.surveyContent;
 
+@Slf4j
 @RequiredArgsConstructor
 public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRepository {
 
@@ -71,6 +73,9 @@ public class CustomSurveyContentRepositoryImpl implements CustomSurveyContentRep
                 .orderBy(survey.date.asc())
                 .fetch();
 
+        log.debug("emotionResults.size(): {}", emotionResults.size());
+        log.debug("statusResults.size(): {}", statusResults.size());
+        log.debug("textResults.size(): {}", textResults.size());
 
         List<SurveyContentPdfQueryDto> surveyContentPdfQueryDtoList = new ArrayList<>();
         for (int idx = 0; idx < dateList.size(); idx++) {
