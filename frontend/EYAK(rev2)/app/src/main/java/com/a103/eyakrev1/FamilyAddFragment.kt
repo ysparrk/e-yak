@@ -114,7 +114,7 @@ class FamilyAddFragment : Fragment() {
                                         Log.d("로그", "팔로우 요청 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                                     }
                                     else if(response.code() == 400) {   // 400 Bad Request: 해당하는 member가 존재하지 않는 경우, 자기자신에게 팔로우 요청을 보내는 경우
-                                        Log.d("로그", "팔로우 요청 400 Bad Request: - 해당하는 member가 존재하지 않는 경우, 자기자신에게 팔로우 요청을 보내는 경우, 중복으로 요청한 경우")
+                                        Log.d("로그", "팔로우 요청 400 Bad Request: 해당하는 member가 존재하지 않는 경우, 자기자신에게 팔로우 요청을 보내는 경우, 중복으로 요청한 경우")
                                     }
                                 }
                                 override fun onFailure(call: Call<Void>, t: Throwable) {
