@@ -559,7 +559,43 @@ class ZerothAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(0, notification) // 알림 표시
 
-//        mainActivity!!.sendAlarmToDevice("010100000")
+        // pref
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_0", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
+        val intent = Intent(context, ForeService::class.java)
+        intent.putExtra("SEND_KEY", codeToSend)
+        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+        context.startForegroundService(intent)
     }
 }
 
@@ -602,7 +638,43 @@ class FirstAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(1, notification) // 알림 표시
 
-//        mainActivity!!.sendAlarmToDevice("010100000")
+        // pref
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_1", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
+        val intent = Intent(context, ForeService::class.java)
+        intent.putExtra("SEND_KEY", codeToSend)
+        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+        context.startForegroundService(intent)
     }
 }
 
@@ -645,7 +717,43 @@ class SecondAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(2, notification) // 알림 표시
 
-//        mainActivity!!.sendAlarmToDevice("010100000")
+        // pref
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_2", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
+        val intent = Intent(context, ForeService::class.java)
+        intent.putExtra("SEND_KEY", codeToSend)
+        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+        context.startForegroundService(intent)
     }
 }
 
@@ -688,7 +796,43 @@ class ThirdAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(3, notification) // 알림 표시
 
-//        mainActivity!!.sendAlarmToDevice("010100000")
+        // pref
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_3", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
+        val intent = Intent(context, ForeService::class.java)
+        intent.putExtra("SEND_KEY", codeToSend)
+        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+        context.startForegroundService(intent)
     }
 }
 
@@ -731,7 +875,43 @@ class FourthAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(4, notification) // 알림 표시
 
-//        mainActivity!!.sendAlarmToDevice("010100000")
+        // pref
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_4", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
+        val intent = Intent(context, ForeService::class.java)
+        intent.putExtra("SEND_KEY", codeToSend)
+        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+        context.startForegroundService(intent)
     }
 }
 
@@ -774,7 +954,43 @@ class FifthAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(5, notification) // 알림 표시
 
-//        mainActivity!!.sendAlarmToDevice("010100000")
+        // pref
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_5", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
+        val intent = Intent(context, ForeService::class.java)
+        intent.putExtra("SEND_KEY", codeToSend)
+        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+        context.startForegroundService(intent)
     }
 }
 
@@ -817,7 +1033,43 @@ class SixthAlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(6, notification) // 알림 표시
 
-//        mainActivity!!.sendAlarmToDevice("010100000")
+        // pref
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val deviceNameSaved = pref?.getString("DEVICE_NAME", "")
+
+        val soundData = pref?.getBoolean("DEVICE_SOUND", true)
+        val buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+
+        var gson = Gson()
+        var json = pref?.getString("DEVICE_CELL1", "")
+        val cell1Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL2", "")
+        val cell2Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL3", "")
+        val cell3Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL4", "")
+        val cell4Data = gson.fromJson(json, Medicine::class.java)
+        json = pref?.getString("DEVICE_CELL5", "")
+        val cell5Data = gson.fromJson(json, Medicine::class.java)
+
+        // 보낼 코드를 이어붙이자
+        var codeToSend = "01"
+        codeToSend += if (soundData!!) "1" else "0"
+        codeToSend += if (buzzData!!) "1" else "0"
+
+        json = pref?.getString("medicineIdList_6", "")
+        val thisRoutineMedicineIdList = gson.fromJson(json, ArrayList<String>()::class.java)
+
+        codeToSend += if (cell1Data != null && cell1Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell2Data != null && cell2Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell3Data != null && cell3Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+        codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
+
+        val intent = Intent(context, ForeService::class.java)
+        intent.putExtra("SEND_KEY", codeToSend)
+        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+        context.startForegroundService(intent)
     }
 }
 
@@ -862,8 +1114,6 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
             .build()
 
         notificationManager.notify(7, notification) // 알림 표시
-
-
 
         // pref
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
