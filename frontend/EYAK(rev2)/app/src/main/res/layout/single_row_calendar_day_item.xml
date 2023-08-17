@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/myCalendarDayTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:fontFamily="@font/tmoney_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="21"
+            android:textColor="#757863"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/myCalendarDayImageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="80"
+            android:tint="#F8FCF8"
+            app:srcCompat="@drawable/round_rectangle_24" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

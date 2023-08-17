@@ -4,6 +4,25 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
+    <!--  bluetooth 필요 권한  -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s"/>
+
+    <!-- 알람 필요 권한 -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,9 +34,6 @@
         android:theme="@style/Theme.EYAKrev1"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".MyCalendarActivity"
-            android:exported="false" />
         <activity
             android:name=".EditMemberActivity"
             android:exported="false" />
@@ -36,6 +52,15 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
+        <receiver android:name=".ZerothAlarmReceiver" />
+        <receiver android:name=".FirstAlarmReceiver" />
+        <receiver android:name=".SecondAlarmReceiver" />
+        <receiver android:name=".ThirdAlarmReceiver" />
+        <receiver android:name=".FourthAlarmReceiver" />
+        <receiver android:name=".FifthAlarmReceiver" />
+        <receiver android:name=".SixthAlarmReceiver" />
+        <receiver android:name=".SeventhAlarmReceiver" />
     </application>
 
 </manifest>

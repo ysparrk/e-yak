@@ -28,6 +28,7 @@
                 android:text="지금이:약"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="#757863" />
+
         </LinearLayout>
 
     </FrameLayout>
@@ -92,7 +93,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainFragment"
-        android:name="com.example.eyakrev1.AlarmFragment"
+        android:name="com.a103.eyakrev1.AlarmFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/BottomLinearLayout"

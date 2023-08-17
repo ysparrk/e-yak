@@ -20,9 +20,9 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView30"
+                android:id="@+id/medicineAddTitleTextView"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="66.6dp"
                 android:fontFamily="@font/tmoney_bold"
                 android:gravity="center"
                 android:includeFontPadding="false"
@@ -126,9 +126,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="10"
+                        android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:hint="질환 명 입력"
-                        android:inputType="text" />
+                        android:includeFontPadding="false"
+                        android:inputType="text"
+                        android:textColor="#757863" />
                 </FrameLayout>
 
                 <Space
@@ -177,7 +180,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:weightSum="22">
+                        android:weightSum="28">
 
                         <Space
                             android:layout_width="0dp"
@@ -188,10 +191,13 @@
                             android:id="@+id/startYearInput"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:hint="연"
-                            android:inputType="number" />
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textColor="#757863" />
 
                         <TextView
                             android:id="@+id/textView42"
@@ -206,10 +212,13 @@
                             android:id="@+id/startMonthInput"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:hint="월"
-                            android:inputType="number" />
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textColor="#757863" />
 
                         <TextView
                             android:id="@+id/textView43"
@@ -224,10 +233,13 @@
                             android:id="@+id/startDayInput"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:hint="일"
-                            android:inputType="number" />
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textColor="#757863" />
 
                         <TextView
                             android:id="@+id/textView44"
@@ -242,10 +254,13 @@
                             android:id="@+id/endYearInput"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:hint="연"
-                            android:inputType="number" />
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textColor="#757863" />
 
                         <TextView
                             android:id="@+id/textView45"
@@ -260,10 +275,13 @@
                             android:id="@+id/endMonthInput"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:hint="월"
-                            android:inputType="number" />
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textColor="#757863" />
 
                         <TextView
                             android:id="@+id/textView46"
@@ -278,10 +296,13 @@
                             android:id="@+id/endDayInput"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
                             android:hint="일"
-                            android:inputType="number" />
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:textColor="#757863" />
 
                         <Space
                             android:layout_width="0dp"
@@ -1036,9 +1057,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:background="#DDE6ED"
+                        android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:hint="용량"
-                        android:inputType="number|numberDecimal" />
+                        android:includeFontPadding="false"
+                        android:inputType="number|numberDecimal"
+                        android:textColor="#757863" />
 
                     <Space
                         android:layout_width="0dp"
@@ -1051,9 +1075,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:background="#DDE6ED"
+                        android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
                         android:hint="단위"
-                        android:inputType="text" />
+                        android:includeFontPadding="false"
+                        android:inputType="text"
+                        android:textColor="#757863" />
 
                     <Space
                         android:layout_width="0dp"
