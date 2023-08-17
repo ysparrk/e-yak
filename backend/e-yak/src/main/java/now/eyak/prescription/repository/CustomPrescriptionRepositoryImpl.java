@@ -25,12 +25,13 @@ import static now.eyak.routine.domain.QMedicineRoutineCheck.medicineRoutineCheck
 import static now.eyak.routine.domain.QPrescriptionMedicineRoutine.prescriptionMedicineRoutine;
 
 @RequiredArgsConstructor
-public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepository{
+public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepository {
 
     private final JPAQueryFactory queryFactory;
 
     /**
      * 요청받은 date에 복용하는 약 확인
+     *
      * @param member
      * @param dateTime
      * @return
@@ -55,6 +56,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
 
     /**
      * 요청받은 날짜 사이에 복용중인 약 리스트 반환
+     *
      * @param member
      * @param startDateTime
      * @param endDateTime
@@ -129,6 +131,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
 
     /**
      * 요청받은 member, routine, date에 복용하는 약 리스트 반환(현재)
+     *
      * @param routine
      * @param member
      * @param dateTime
@@ -162,6 +165,7 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
 
     /**
      * 요청받은 member, routine, date에 복용하는 약 리스트 반환(미래)
+     *
      * @param routine
      * @param member
      * @param dateTime
@@ -188,9 +192,9 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                                                 JPAExpressions.select(medicineRoutineCheck.prescription.id)
                                                         .from(medicineRoutineCheck)
                                                         .where((medicineRoutineCheck.prescription.startDateTime.eq(prescription.startDateTime))
-                                                        .and(medicineRoutineCheck.medicineRoutine.routine.eq(routine))
-                                                        .and(medicineRoutineCheck.member.eq(member))
-                                                    )))))))
+                                                                .and(medicineRoutineCheck.medicineRoutine.routine.eq(routine))
+                                                                .and(medicineRoutineCheck.member.eq(member))
+                                                        )))))))
                 .fetch();
 
         return routineQueryList;

@@ -11,6 +11,7 @@ public interface ContentStatusResultRepository extends JpaRepository<ContentStat
     Optional<ContentStatusResult> findByIdAndMember(Long id, Member member); // update
 
     Optional<ContentStatusResult> findBySurveyContentAndMember(SurveyContent surveyContent, Member member);
+
     void deleteByIdAndMember(Long contentStatusResultId, Member member); // delete
 }
 

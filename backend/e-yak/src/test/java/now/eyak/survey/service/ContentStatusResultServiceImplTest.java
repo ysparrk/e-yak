@@ -3,7 +3,6 @@ package now.eyak.survey.service;
 import now.eyak.member.domain.Member;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.survey.domain.ContentStatusResult;
-import now.eyak.survey.domain.Survey;
 import now.eyak.survey.domain.SurveyContent;
 import now.eyak.survey.dto.request.ContentStatusResultDto;
 import now.eyak.survey.dto.request.ContentStatusResultUpdateDto;

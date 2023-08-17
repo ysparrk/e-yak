@@ -19,7 +19,7 @@ public class EYakApplication {
     private final RedisTemplate redisTemplate;
 
     @PostConstruct
-    public void setTimeZone(){
+    public void setTimeZone() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
         redisTemplate.getConnectionFactory().getConnection().flushAll();
     }

@@ -100,7 +100,7 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
     public Object parseAccessToken(String token) {
         SignedJWT signedJWT = null;
         try {
-             signedJWT = SignedJWT.parse(token);
+            signedJWT = SignedJWT.parse(token);
             JWSVerifier verifier = new MACVerifier(sharedSecret);
 
             if (!signedJWT.verify(verifier)) {
@@ -111,7 +111,7 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
                 throw new IllegalArgumentException("Access 토큰이 만료되었습니다.");
             }
 
-        } catch (ParseException|JOSEException e) {
+        } catch (ParseException | JOSEException e) {
             throw new IllegalArgumentException("Refresh 토큰이 유효하지 않습니다.");
         }
 
@@ -132,7 +132,7 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
             if (signedJWT.getJWTClaimsSet().getExpirationTime().before(new Date())) {
                 throw new IllegalArgumentException("Refresh 토큰이 만료되었습니다.");
             }
-        } catch (ParseException|JOSEException e) {
+        } catch (ParseException | JOSEException e) {
             throw new IllegalArgumentException("Refresh 토큰이 유효하지 않습니다. " + e.getMessage());
         }
 
@@ -171,7 +171,7 @@ public class NimbusJwtTokenProvider implements JwtTokenProvider {
                 log.info("만료시각을 검증중... now: {}, exp: {}", new Date(), jwtClaimsSet.getExpirationTime());
                 throw new IllegalArgumentException("idToken이 만료되었습니다.");
             }
-        } catch (JOSEException|ParseException e) {
+        } catch (JOSEException | ParseException e) {
             throw new IllegalArgumentException("id Token이 유효하지 않습니다. " + e.getMessage());
         }
 

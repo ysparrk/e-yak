@@ -35,6 +35,7 @@ public class RoutineController {
 
     /**
      * 약 복용 체크 기록 및 수정(true or false)
+     *
      * @param medicineRoutineCheckUpdateDto
      * @param memberId
      * @return
@@ -45,7 +46,7 @@ public class RoutineController {
     public ResponseEntity updateMedicineRoutineCheck(
             @RequestBody MedicineRoutineCheckUpdateDto medicineRoutineCheckUpdateDto,
             @AuthenticationPrincipal Long memberId
-        ) {
+    ) {
 
         MedicineRoutineCheck medicineRoutineCheck = medicineRoutineCheckService.updateMedicineRoutineCheck(medicineRoutineCheckUpdateDto, memberId);
 
@@ -54,6 +55,7 @@ public class RoutineController {
 
     /**
      * 하루 단위 복용량 조회
+     *
      * @param date
      * @param memberId
      * @return
@@ -64,7 +66,7 @@ public class RoutineController {
     public ResponseEntity getDateResultsByDateAndMember(
             @RequestParam LocalDate date,
             @AuthenticationPrincipal Long memberId
-            ) {
+    ) {
 
         MedicineRoutineMonthDateDto dateResultsByDateAndMember = medicineRoutineCheckService.getDateResultsByDateAndMember(date, memberId);
 
@@ -74,6 +76,7 @@ public class RoutineController {
 
     /**
      * 한달 단위 복용량 조회
+     *
      * @param yearMonth
      * @param memberId
      * @return
@@ -85,15 +88,16 @@ public class RoutineController {
             @RequestParam YearMonth yearMonth,
             @RequestParam(required = false) Long requeteeId,
             @AuthenticationPrincipal Long memberId
-        ) {
+    ) {
 
-        List<MedicineRoutineMonthDateDto>  monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId, requeteeId);
+        List<MedicineRoutineMonthDateDto> monthResultsByMonthAndMember = medicineRoutineCheckService.getMonthResultsByMonthAndMember(yearMonth, memberId, requeteeId);
 
         return ResponseEntity.ok(monthResultsByMonthAndMember);
     }
 
     /**
      * 하루 단위 복용 상세 조회
+     *
      * @param date
      * @param requesteeId
      * @return
@@ -105,7 +109,7 @@ public class RoutineController {
             @RequestParam LocalDate date,
             @RequestParam(value = "requeteeId", required = false) Long requesteeId,
             @AuthenticationPrincipal Long requesterId
-        ) {
+    ) {
 
         // 사용자(requesterId)가 본인의 복약 상세 조회를 요청한 경우
         MedicineRoutineDateResponseDto dateDetailResultsByDateAndMember = medicineRoutineCheckService.getDateDetailResultsByDateAndMember(date, requesterId, requesteeId);
@@ -116,6 +120,7 @@ public class RoutineController {
 
     /**
      * MedicineRoutineCheck의 id 조회
+     *
      * @param medicineRoutineCheckIdDto
      * @param memberId
      * @return
@@ -126,7 +131,7 @@ public class RoutineController {
     public ResponseEntity getMedicineRoutineCheckId(
             @RequestBody MedicineRoutineCheckIdDto medicineRoutineCheckIdDto,
             @AuthenticationPrincipal Long memberId
-            ) {
+    ) {
 
         MedicineRoutineCheckIdResponseDto medicineRoutineCheckId = medicineRoutineCheckService.getMedicineRoutineCheckId(medicineRoutineCheckIdDto, memberId);
 
@@ -141,7 +146,7 @@ public class RoutineController {
             @AuthenticationPrincipal Long memberId,
             @RequestParam LocalDateTime startDateTime,
             @RequestParam LocalDateTime endDateTime
-            ) {
+    ) {
 
         log.debug("memberId: {}", memberId);
 

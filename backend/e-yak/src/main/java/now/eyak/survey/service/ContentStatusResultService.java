@@ -9,7 +9,9 @@ import java.time.LocalDate;
 
 public interface ContentStatusResultService {
     ContentStatusResult saveStatusSurveyResult(ContentStatusResultDto contentStatusResultDto, Long surveyContentId, Long memberId); // 저장 바보
+
     ContentStatusResult updateStatusSurveyResult(ContentStatusResultUpdateDto contentStatusResultUpdateDto, Long surveyContentId, Long memberId); // 수정
+
     void deleteStatusSurveyResult(Long contentStatusResultId, Long memberId); // 삭제
 
     ContentStatusResultResponseDto getStatusResultByDateAndMember(LocalDate date, Long memberId); // 조회

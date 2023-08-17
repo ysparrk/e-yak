@@ -52,7 +52,8 @@ public class FollowRequestServiceImpl implements FollowRequestService {
 
         if (followRequestRepository.findByFollowerAndFollowee(followee, follower).isPresent() || followRepository.findByFollowerAndFollowee(follower, followee).isPresent()) {
             throw new BiDirectionalFollowRequestException("이미 " + followee.getNickname() + "가 " + follower.getNickname() + "에게 팔로우 요청을 보낸 상태입니다.");
-        };
+        }
+        ;
 
         if (followRepository.findByFollowerAndFollowee(follower, followee).isPresent()) {
             throw new AlreadyFollowedException("이미 팔로우 된 사이입니다.");
@@ -74,8 +75,9 @@ public class FollowRequestServiceImpl implements FollowRequestService {
 
     /**
      * 팔로우 요청을 요청자(requester)가 취소하거나 피팔로우 사용자(followee)가 팔로우 요청을 거절한다.
+     *
      * @param followRequestId
-     * @param memberId 요청자 ID(requesterId)
+     * @param memberId        요청자 ID(requesterId)
      */
     @Transactional
     @Override
@@ -96,9 +98,9 @@ public class FollowRequestServiceImpl implements FollowRequestService {
     /**
      * 피팔로우 사용자(followeeId)가 팔로우 요청(followRequestId)를 수락한다.
      * 피팔로우 사용자는 자신의 정보 공개 범위를 scope 변수를 통해 설정한다.
-     *
+     * <p>
      * A 가 B 의 요청을 수락하면, Follow 테이블에 2개의 row를 삽입한다.
-     *
+     * <p>
      * follower followee followeeScope
      * A        B       B_scope
      * B        A       A_scope

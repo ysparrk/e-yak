@@ -1,7 +1,6 @@
 package now.eyak.survey.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
-import java.util.ArrayList;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +9,8 @@ import now.eyak.survey.domain.ContentStatusResult;
 import now.eyak.survey.enumeration.ChoiceStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.cglib.core.Local;
 
 @Getter
 @Setter

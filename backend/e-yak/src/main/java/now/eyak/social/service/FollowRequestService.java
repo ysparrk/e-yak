@@ -9,8 +9,12 @@ import java.util.List;
 
 public interface FollowRequestService {
     FollowRequest insertFollowRequest(FollowRequestDto followRequestDto, Long followerId);
+
     void declineOrCancelFollowRequest(Long followRequestId, Long memberId);
+
     Follow acceptFollowRequest(FollowRequestAcceptDto followRequestAcceptDto, Long followRequestId, Long followeeId);
+
     List<FollowRequest> retrieveAllFollowRequestByFollowerId(Long followerId);
+
     List<FollowRequest> retrieveAllFollowRequestByFolloweeId(Long followeeId);
 }

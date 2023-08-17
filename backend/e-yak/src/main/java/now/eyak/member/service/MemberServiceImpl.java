@@ -136,7 +136,7 @@ public class MemberServiceImpl implements MemberService {
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
                     .build();
-        } catch (ParseException|JOSEException e) {
+        } catch (ParseException | JOSEException e) {
             throw new InvalidRefreshTokenException("유효하지 않은 Refresh Token 입니다. " + e.getMessage());
         }
     }

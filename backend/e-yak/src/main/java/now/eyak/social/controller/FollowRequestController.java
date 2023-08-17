@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import now.eyak.routine.dto.response.MedicineRoutineCheckIdResponseDto;
 import now.eyak.social.domain.FollowRequest;
 import now.eyak.social.dto.FollowRequestAcceptDto;
 import now.eyak.social.dto.FollowRequestDto;

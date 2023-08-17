@@ -24,6 +24,7 @@ public class FollowServiceImpl implements FollowService {
 
     /**
      * 사용자(memberId)의 팔로워들을 전체 조회한다.
+     *
      * @param memberId
      * @return
      */
@@ -37,10 +38,11 @@ public class FollowServiceImpl implements FollowService {
 
     /**
      * 팔로우(followId)를 취소한다.
-     *
+     * <p>
      * A -> B 를 취소한다고 하면
      * A -> B
      * B <- A 두 개의 팔로우 row가 삭제된다.
+     *
      * @param followId
      * @param memberId
      */

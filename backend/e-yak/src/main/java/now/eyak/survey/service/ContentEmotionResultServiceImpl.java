@@ -30,8 +30,10 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
     private final MemberRepository memberRepository;
 
     private final JPAQueryFactory queryFactory;
+
     /**
      * Emotion 설문 응답 저장
+     *
      * @param contentEmotionResultDto
      * @param memberId
      * @return
@@ -57,6 +59,7 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
 
     /**
      * Emotion 설문 응답 수정
+     *
      * @param contentEmotionResultUpdateDto
      * @param memberId
      * @return
@@ -75,6 +78,7 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
 
     /**
      * Emotion 설문 응답 삭제
+     *
      * @param contentEmotionResultId
      * @param memberId
      */
@@ -89,6 +93,7 @@ public class ContentEmotionResultServiceImpl implements ContentEmotionResultServ
     /**
      * Emotion 설문 조회
      * 요청받은 date, 요청한 memberId
+     *
      * @param date
      * @param memberId
      * @return

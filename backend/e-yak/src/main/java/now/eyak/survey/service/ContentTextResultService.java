@@ -10,7 +10,9 @@ import java.time.LocalDate;
 
 public interface ContentTextResultService {
     ContentTextResult saveTextSurveyResult(ContentTextResultDto contentTextResultDto, Long surveyContentId, Long memberId); // 저장
+
     ContentTextResult updateTextSurveyResult(ContentTextResultUpdateDto contentTextResultUpdateDto, Long surveyContentId, Long memberId);  // 수정
+
     void deleteTextSurveyResult(Long contentTextResultId, Long memberId); // 삭제
 
     ContentTextResultResponseDto getTextResultByDateAndMember(LocalDate date, Long memberId); // 조회

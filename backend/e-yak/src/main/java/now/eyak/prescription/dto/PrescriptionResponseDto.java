@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import now.eyak.prescription.dto.query.*;
+import now.eyak.prescription.dto.query.PrescriptionRoutineQueryDto;
 
 import java.util.List;
 

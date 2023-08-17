@@ -3,8 +3,7 @@ package now.eyak.member.exception;
 import now.eyak.exception.CustomException;
 import org.springframework.http.HttpStatus;
 
-public class DuplicatedNicknameException extends CustomException
-{
+public class DuplicatedNicknameException extends CustomException {
     public DuplicatedNicknameException() {
     }
 

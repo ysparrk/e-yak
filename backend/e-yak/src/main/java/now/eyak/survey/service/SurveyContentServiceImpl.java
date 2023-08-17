@@ -90,6 +90,7 @@ public class SurveyContentServiceImpl implements SurveyContentService {
 
     /**
      * 요청받은 날짜에 대한 설문 조회 -> builder에 date추가
+     *
      * @param date
      * @param memberId
      * @return
@@ -113,6 +114,7 @@ public class SurveyContentServiceImpl implements SurveyContentService {
 
     /**
      * 요청받은 기간의 설문 내역 조회
+     *
      * @param memberId
      * @param startDateTime
      * @param endDateTime

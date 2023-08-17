@@ -10,7 +10,6 @@ import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.dto.response.PdfResponseDto;
 import now.eyak.survey.dto.response.SurveyContentPdfResponseDto;
 import now.eyak.survey.service.SurveyContentService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

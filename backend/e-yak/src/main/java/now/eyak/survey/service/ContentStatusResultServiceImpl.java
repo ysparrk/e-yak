@@ -147,7 +147,7 @@ public class ContentStatusResultServiceImpl implements ContentStatusResultServic
                 .leftJoin(qSurveyContent.survey, qSurvey)
                 .where(qSurvey.date.eq(date).and(qContentStatusResult.member.eq(member)))
                 .fetchOne();
-        
+
         // 응답 기록이 없는 경우 id := -1로 설정 후 반환
         if (findStatusResult == null) {
             return ContentStatusResultResponseDto.builder()

@@ -12,6 +12,7 @@ import now.eyak.survey.enumeration.ChoiceEmotion;
 public class ContentEmotionResultUpdateDto {
     private Long contentEmotionResultId;
     private ChoiceEmotion choiceEmotion;
+
     public void update(ContentEmotionResult contentEmotionResult) {
         contentEmotionResult.setChoiceEmotion(choiceEmotion);
     }

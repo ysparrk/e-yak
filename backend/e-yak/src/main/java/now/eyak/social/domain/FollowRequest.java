@@ -23,10 +23,10 @@ public class FollowRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member follower;
     @ManyToOne
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member followee;
     private String customName;
     @Enumerated(EnumType.STRING)

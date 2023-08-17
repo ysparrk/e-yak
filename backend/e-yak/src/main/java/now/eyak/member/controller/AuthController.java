@@ -46,7 +46,7 @@ public class AuthController {
         log.debug("signUp()");
         Member savedMember = memberService.signUp(signUpDto);
 
-        return ResponseEntity.created( new URI(apiVersionHolder.getVersion() + "/members/" + savedMember.getId())).build();
+        return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/members/" + savedMember.getId())).build();
     }
 
     @Operation(summary = "Reissue", description = "Sign In 의 응답값인 Refresh Token을 사용하여 Access Token과 Refresh Token을 재발급 한다. 사용한 Refresh Token은 폐기되며 유효기간은 28일이다.")

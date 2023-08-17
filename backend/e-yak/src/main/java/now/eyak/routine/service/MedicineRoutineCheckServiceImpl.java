@@ -102,7 +102,8 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
                     routines.addAll(Arrays.stream(Routine.values()).toList());
 
                     for (PrescriptionMedicineRoutine prescriptionMedicineRoutine : allRoutines) {
-                        if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) >= createdIdx) continue;
+                        if (routines.indexOf(prescriptionMedicineRoutine.getMedicineRoutine().getRoutine()) >= createdIdx)
+                            continue;
 
                         MedicineRoutineCheck medicineRoutineCheck = MedicineRoutineCheck.builder()
                                 .date(LocalDate.now())
@@ -137,6 +138,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
     /**
      * 약 복용 체크 기록 및 수정(true or false)
+     *
      * @param medicineRoutineCheckUpdateDto
      * @param memberId
      * @return
@@ -156,6 +158,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
     /**
      * 일자에 따른 약 복용량 반환 -> Day to Month
+     *
      * @param date
      * @param memberId
      * @return
@@ -194,6 +197,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
     /**
      * 한달 단위 복용 확인(Month)
+     *
      * @param yearMonth
      * @param requesteeId
      * @return
@@ -222,7 +226,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
         List<MedicineRoutineMonthDateDto> datesResponseList = new ArrayList<>();
 
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            List<MedicineRoutineMonthDateDto> dateResponse= Collections.singletonList(getDateResultsByDateAndMember(date, memberId));
+            List<MedicineRoutineMonthDateDto> dateResponse = Collections.singletonList(getDateResultsByDateAndMember(date, memberId));
             datesResponseList.addAll(dateResponse);
         }
         return datesResponseList;
@@ -230,6 +234,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
     /**
      * 하루 단위 복용 상세 조회(약 하나에 따른 복용 내용 + 설문조사)
+     *
      * @param date
      * @param requesterId
      * @return
@@ -255,6 +260,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
     /**
      * MedicineRoutineCheck의 id 조회(요청한 date, member, routine, prescription으로 조회)
+     *
      * @param medicineRoutineCheckIdDto
      * @param memberId
      * @return
@@ -311,7 +317,7 @@ public class MedicineRoutineCheckServiceImpl implements MedicineRoutineCheckServ
 
     /**
      * 요청자(requester)가 피요청자(requesterId)의 복약 상세 정보를 조회할 권한이 있는지 검증한다.
-     *
+     * <p>
      * follower   followee  scope
      * 요청자      피요청자    ALL        -> 권한 있음
      * 요청자      피요청자    CALENDAR   -> 권한 없음

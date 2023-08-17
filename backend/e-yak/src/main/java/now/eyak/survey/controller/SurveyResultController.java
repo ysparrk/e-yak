@@ -34,6 +34,7 @@ public class SurveyResultController {
 
     /**
      * daily 설문 조회
+     *
      * @param date
      * @param memberId
      * @return
@@ -42,7 +43,7 @@ public class SurveyResultController {
     public ResponseEntity getSurveyResult(
             @RequestParam LocalDate date,
             @AuthenticationPrincipal Long memberId
-            ) {
+    ) {
 
         SurveyContentDto surveyResultByDateAndMember = surveyContentService.getSurveyResultByDateAndMember(date, memberId);
 
@@ -51,6 +52,7 @@ public class SurveyResultController {
 
     /**
      * Text설문 응답2
+     *
      * @param contentTextResultDto
      * @param memberId
      * @return
@@ -61,7 +63,7 @@ public class SurveyResultController {
             @PathVariable Long surveyContentId,
             @RequestBody ContentTextResultDto contentTextResultDto,
             @AuthenticationPrincipal Long memberId
-        ) throws URISyntaxException {
+    ) throws URISyntaxException {
 
         ContentTextResult contentTextResult = contentTextResultService.saveTextSurveyResult(contentTextResultDto, surveyContentId, memberId);
 
@@ -70,6 +72,7 @@ public class SurveyResultController {
 
     /**
      * Text 설문 응답 수정
+     *
      * @param contentTextResultUpdateDto
      * @param memberId
      * @return
@@ -79,7 +82,7 @@ public class SurveyResultController {
             @PathVariable Long surveyContentId,
             @RequestBody ContentTextResultUpdateDto contentTextResultUpdateDto,
             @AuthenticationPrincipal Long memberId
-        ) {
+    ) {
 
         ContentTextResult contentTextResult = contentTextResultService.updateTextSurveyResult(contentTextResultUpdateDto, surveyContentId, memberId);
 
@@ -88,6 +91,7 @@ public class SurveyResultController {
 
     /**
      * Text 설문 응답 삭제
+     *
      * @param memberId
      * @param contentTextResultId
      * @return
@@ -96,7 +100,7 @@ public class SurveyResultController {
     public ResponseEntity deleteTextSurveyResult(
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentTextResultId
-            ) {
+    ) {
 
         contentTextResultService.deleteTextSurveyResult(contentTextResultId, memberId);
 
@@ -105,6 +109,7 @@ public class SurveyResultController {
 
     /**
      * Emotion설문 응답
+     *
      * @param contentEmotionResultDto
      * @param memberId
      * @return
@@ -115,7 +120,7 @@ public class SurveyResultController {
             @PathVariable Long surveyContentId,
             @RequestBody ContentEmotionResultDto contentEmotionResultDto,
             @AuthenticationPrincipal Long memberId
-            ) throws URISyntaxException {
+    ) throws URISyntaxException {
 
         ContentEmotionResult contentEmotionResult = contentEmotionResultService.saveEmotionSurveyResult(contentEmotionResultDto, surveyContentId, memberId);
 
@@ -124,6 +129,7 @@ public class SurveyResultController {
 
     /**
      * Emotion 설문 응답 수정
+     *
      * @param surveyContentId
      * @param contentEmotionResultUpdateDto
      * @param memberId
@@ -134,7 +140,7 @@ public class SurveyResultController {
             @PathVariable Long surveyContentId,
             @RequestBody ContentEmotionResultUpdateDto contentEmotionResultUpdateDto,
             @AuthenticationPrincipal Long memberId
-            ) {
+    ) {
 
         ContentEmotionResult contentEmotionResult = contentEmotionResultService.updateEmotionSurveyResult(contentEmotionResultUpdateDto, surveyContentId, memberId);
 
@@ -143,6 +149,7 @@ public class SurveyResultController {
 
     /**
      * Emotion설문 응답 삭제
+     *
      * @param memberId
      * @param contentEmotionResultId
      * @return
@@ -152,7 +159,7 @@ public class SurveyResultController {
     public ResponseEntity deleteEmotionSurveyResult(
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentEmotionResultId
-            ) throws URISyntaxException {
+    ) throws URISyntaxException {
 
         contentEmotionResultService.deleteEmotionSurveyResult(contentEmotionResultId, memberId);
 
@@ -161,6 +168,7 @@ public class SurveyResultController {
 
     /**
      * Status 설문 응답 저장
+     *
      * @param contentStatusResultDto
      * @param memberId
      * @return
@@ -171,7 +179,7 @@ public class SurveyResultController {
             @PathVariable Long surveyContentId,
             @RequestBody ContentStatusResultDto contentStatusResultDto,
             @AuthenticationPrincipal Long memberId
-            ) throws URISyntaxException {
+    ) throws URISyntaxException {
         ContentStatusResult contentStatusResult = contentStatusResultService.saveStatusSurveyResult(contentStatusResultDto, surveyContentId, memberId);
 
         return ResponseEntity.created(new URI(apiVersionHolder.getVersion() + "/content-status-results/" + contentStatusResult.getId())).build();
@@ -179,6 +187,7 @@ public class SurveyResultController {
 
     /**
      * Status 설문 응답 수정
+     *
      * @param surveyContentId
      * @param contentStatusResultUpdateDto
      * @param memberId
@@ -189,7 +198,7 @@ public class SurveyResultController {
             @PathVariable Long surveyContentId,
             @RequestBody ContentStatusResultUpdateDto contentStatusResultUpdateDto,
             @AuthenticationPrincipal Long memberId
-            ) {
+    ) {
         ContentStatusResult contentStatusResult = contentStatusResultService.updateStatusSurveyResult(contentStatusResultUpdateDto, surveyContentId, memberId);
 
         return ResponseEntity.ok().build();
@@ -197,6 +206,7 @@ public class SurveyResultController {
 
     /**
      * Status 설문 응답 삭제
+     *
      * @param memberId
      * @param contentStatusResultId
      * @return
@@ -205,7 +215,7 @@ public class SurveyResultController {
     public ResponseEntity deleteStatusSurveyResult(
             @AuthenticationPrincipal Long memberId,
             @PathVariable Long contentStatusResultId
-            ) {
+    ) {
 
         contentStatusResultService.deleteStatusSurveyResult(contentStatusResultId, memberId);
 

@@ -3,7 +3,6 @@ package now.eyak.member.repository;
 import now.eyak.member.domain.OAuthProvider;
 import now.eyak.member.exception.UnsupportedProviderException;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
