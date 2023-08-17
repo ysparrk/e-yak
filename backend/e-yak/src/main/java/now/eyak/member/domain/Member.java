@@ -1,6 +1,7 @@
 package now.eyak.member.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import now.eyak.member.domain.enumeration.Role;
 import now.eyak.prescription.domain.Prescription;
@@ -21,10 +22,12 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 20)
     private String providerName; // ex) google, naver, kakao
     private String providerId; // "google_" + Google, Naver, Kakao에서 로그인시 전달되는 id
     private String refreshToken;
-    @Column(unique = true)
+    @NotNull
+    @Column(unique = true, length = 20)
     private String nickname;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -33,11 +36,17 @@ public class Member {
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
     private LocalDateTime updatedAt = LocalDateTime.now();
+    @NotNull
     private LocalTime wakeTime;
+    @NotNull
     private LocalTime breakfastTime;
+    @NotNull
     private LocalTime lunchTime;
+    @NotNull
     private LocalTime dinnerTime;
+    @NotNull
     private LocalTime bedTime;
+    @NotNull
     private LocalTime eatingDuration;
     private Boolean agreement = true;
 

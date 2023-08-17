@@ -2,6 +2,7 @@ package now.eyak.prescription.domain;
 
 import com.querydsl.core.annotations.QueryProjection;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,11 +27,17 @@ public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    @Column(length = 20)
     private String customName;
     private String icd;
+    @NotNull
+    @Column(length = 40)
     private String krName;
     private String engName;
+    @NotNull
     private LocalDateTime startDateTime;
+    @NotNull
     private LocalDateTime endDateTime;
     private Integer iotLocation; // 약통 칸 번호
     private Integer medicineShape; // 이모지 번호
