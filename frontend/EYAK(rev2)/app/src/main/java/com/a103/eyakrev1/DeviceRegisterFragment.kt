@@ -68,7 +68,7 @@ class DeviceRegisterFragment : Fragment() {
 
     // (임시) 등록된 디바이스 이름 & 디바이스
     private var deviceSaved: BluetoothDevice? = null
-    private var deviceNameSaved: String? = null //"ESP32-BT-TEST_2"
+    private var deviceNameSaved: String? = null
     // 약통 UI 정보
     private var pickedMedic = 0
     private var cell1Data: Medicine? = null
@@ -82,7 +82,6 @@ class DeviceRegisterFragment : Fragment() {
     private var fallbackSocket: BluetoothSocket? = null
     private var outStream: OutputStream? = null
     private var inStream: InputStream? = null
-    private var buffer: ByteArray = ByteArray(1024)
 
     // 권한 리스트
     private val PERMISSION = arrayOf(
@@ -141,10 +140,6 @@ class DeviceRegisterFragment : Fragment() {
             requireActivity().registerReceiver(receiver, filter_finished)
             val filter_bonded = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
             requireActivity().registerReceiver(receiver, filter_bonded)
-//            val filter_connect = IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED)
-//            requireActivity().registerReceiver(receiver, filter_connect)
-//            val filter_disconnect = IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED)
-//            requireActivity().registerReceiver(receiver, filter_disconnect)
         } catch (e: Exception) {}
     }
 
@@ -169,9 +164,9 @@ class DeviceRegisterFragment : Fragment() {
         }
         // 사용법 페이지 이동
         layout.findViewById<ImageView>(R.id.howtoImage).setOnClickListener {
-//            requireActivity().supportFragmentManager.beginTransaction()
-//                .replace(R.id.mainFragment, DeviceFragment())
-//                .commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragment, DeviceInfoFragment())
+                .commit()
         }
 
         // 블루투스 On/Off view
@@ -205,10 +200,6 @@ class DeviceRegisterFragment : Fragment() {
                 setNegativeButton("취소") {_, _ -> }
             }.show()
         }
-        // 등록 디바이스 통신 확인
-//        layout.findViewById<Button>(R.id.btConnCheckBtn).setOnClickListener {
-//            connectDevice(deviceSaved)
-//        }
 
         // 근처 기기 찾기
         layout.findViewById<Button>(R.id.btFindBtn).setOnClickListener {
@@ -486,25 +477,25 @@ class DeviceRegisterFragment : Fragment() {
         }
     }
     // 특정 디바이스와 연결 (소켓)
-    private fun connectDevice(targetDevice: BluetoothDevice?) {
-        val thread = Thread {
-            try {
-                val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-                socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
-                var clazz = socket?.remoteDevice?.javaClass
-                var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
-                var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
-                fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
-                fallbackSocket?.connect()
-            } catch (e: Exception) {
-                try {
-                    socket?.close()
-                    fallbackSocket?.close()
-                } catch (e: Exception) {}
-            }
-        }
-        thread.start()
-    }
+//    private fun connectDevice(targetDevice: BluetoothDevice?) {
+//        val thread = Thread {
+//            try {
+//                val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+//                socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
+//                var clazz = socket?.remoteDevice?.javaClass
+//                var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
+//                var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
+//                fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
+//                fallbackSocket?.connect()
+//            } catch (e: Exception) {
+//                try {
+//                    socket?.close()
+//                    fallbackSocket?.close()
+//                } catch (e: Exception) {}
+//            }
+//        }
+//        thread.start()
+//    }
 
     // 디바이스 삭제
     private fun bluetoothDelete() {
