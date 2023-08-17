@@ -6,7 +6,7 @@ values ('BED_AFTER'),
        ('DINNER_AFTER'),
        ('DINNER_BEFORE'),
        ('LUNCH_AFTER'),
-       ('LUNCH_BEFORE') ^;
+       ('LUNCH_BEFORE');
 
 insert into choice_status_entity(choice_status)
 values ('NO_SYMPTOMS'),
@@ -17,4 +17,4 @@ values ('NO_SYMPTOMS'),
        ('FEVER'),
        ('DIARRHEA'),
        ('INDIGESTION'),
-       ('COUGH') ^;
+       ('COUGH');
