@@ -61,6 +61,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        binding.howtoImageInToolBar.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://shelled-challenge-6e0.notion.site/ecdbd3ff7565436dbdb7f49fc22de70f"))
+            startActivity(intent)
+        }
+
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
 
