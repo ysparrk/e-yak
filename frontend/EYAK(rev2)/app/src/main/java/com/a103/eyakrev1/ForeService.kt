@@ -77,7 +77,12 @@ class ForeService : Service() {
         // 권한 상태에 따라 페어링된 약통 불러오기
         if (btPermissionFlag == true && btAdapter != null && deviceNameSaved != "") {
             if (bluetoothPaired()) {
-                connectDevice(deviceSaved) // 권한, 저장된 정보 모두 ok 일시 - 연결 시도.
+                if (btConnectFlag == false) {
+                    connectDevice(deviceSaved) // 권한, 저장된 정보 모두 ok 일시 - 연결 시도.
+                } else {
+                    Thread.sleep(1_000)
+                    outStream?.write(sendString?.toByteArray())
+                }
             }
         }
 
@@ -147,8 +152,7 @@ class ForeService : Service() {
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
                     inStream = fallbackSocket?.inputStream
                     outStream = fallbackSocket?.outputStream
-                    Log.d("log", "${socket} ${fallbackSocket}")
-                    Log.d("log", "${inStream} ${outStream}")
+                    btConnectFlag = true
                     Thread {
                         try {
                             Thread.sleep(1_000)
@@ -163,7 +167,19 @@ class ForeService : Service() {
                                     if (inBytes > 0) {
                                         val packetBytes = ByteArray(inBytes)
                                         inStream?.read(packetBytes)
-                                        Log.d("log", "${packetBytes.toString(Charsets.UTF_8)}")
+                                        recvString = packetBytes.toString(Charsets.UTF_8)
+                                        // 수신 string 분석
+                                        if (recvString!!.substring(0,2) == "ok") {
+                                            socket!!.close()
+                                            fallbackSocket!!.close()
+                                            stopForeground(true)
+                                            stopSelf()
+                                        } else if (recvString!!.substring(0,2) == "no") {
+                                            socket!!.close()
+                                            fallbackSocket!!.close()
+                                            stopForeground(true)
+                                            stopSelf()
+                                        }
                                     }
                                 }
                             } catch (e: java.lang.Exception) {}
@@ -171,6 +187,8 @@ class ForeService : Service() {
                     }.start()
                 }
                 BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
+                    btConnectFlag = false
+
                 }
             }
         }
