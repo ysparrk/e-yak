@@ -18,7 +18,14 @@
                 android:id="@+id/backDeviceEditBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="뒤로" />
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:backgroundTint="#E3F2C1"
+                android:fontFamily="@font/tmoney_regular"
+                android:includeFontPadding="false"
+                android:text="뒤로 가기"
+                android:textColor="#757863"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/deviceEditTitleText"

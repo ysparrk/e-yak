@@ -49,6 +49,38 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:fontFamily="@font/tmoney_regular"
+                    android:includeFontPadding="false"
+                    android:text="약통 사용 방법"
+                    android:textColor="#757863"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/howtoImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/baseline_info_24"
+                    android:tint="#757863" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/btLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -19,8 +19,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -44,6 +49,9 @@ class ForeService : Service() {
     var inStream: InputStream? = null
     var sendString: String? = null
     var recvString: String? = null
+    // pref
+    val pref = PreferenceManager.getDefaultSharedPreferences(this)
+    val editor = pref?.edit()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotificationChannel()

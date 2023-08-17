@@ -167,6 +167,12 @@ class DeviceRegisterFragment : Fragment() {
         layout.findViewById<Button>(R.id.permBtn).setOnClickListener {
             requestPermissionLauncher.launch(PERMISSION)
         }
+        // 사용법 페이지 이동
+        layout.findViewById<ImageView>(R.id.howtoImage).setOnClickListener {
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.mainFragment, DeviceFragment())
+//                .commit()
+        }
 
         // 블루투스 On/Off view
         bluetoothOnOffUI()
@@ -296,17 +302,6 @@ class DeviceRegisterFragment : Fragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val action: String? = intent?.action
             when (action) {
-//                BluetoothDevice.ACTION_ACL_CONNECTED -> {
-//                    Toast.makeText(requireActivity(), "connect", Toast.LENGTH_SHORT).show()
-////                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#80BA69"))
-////                    layout.findViewById<TextView>(R.id.btConnState).text = "약통과 통신할 수 있습니다."
-////                    try {socket?.close(); fallbackSocket?.close()} catch (e: Exception) {}
-//                }
-//                BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-//                    Toast.makeText(requireActivity(), "disconnect", Toast.LENGTH_SHORT).show()
-////                    layout.findViewById<ImageView>(R.id.btConnImage).setColorFilter(Color.parseColor("#FF9B9B"))
-////                    layout.findViewById<TextView>(R.id.btConnState).text = "약통이 근처에 없거나 전원이 꺼졌습니다."
-//                }
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> { // 근처 기기 탐색 시작
                     layout.findViewById<CardView>(R.id.btListCard).visibility = View.VISIBLE
                     layout.findViewById<LinearLayout>(R.id.btListLayout).removeAllViews()
