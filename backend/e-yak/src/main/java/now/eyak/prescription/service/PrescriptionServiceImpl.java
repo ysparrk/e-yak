@@ -21,6 +21,9 @@ import now.eyak.routine.enumeration.Routine;
 import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
 import now.eyak.routine.repository.PrescriptionMedicineRoutineRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +53,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @param memberId
      * @return
      */
+    @CacheEvict(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId")
     @Transactional
     @Override
     public Prescription insert(PrescriptionDto prescriptionDto, Long memberId) {
@@ -173,6 +177,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return savedPrescription;
     }
 
+    @Cacheable(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId")
     @Transactional
     @Override
     public List<Prescription> findAllByMemberId(Long memberId) {
@@ -277,6 +282,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @param memberId
      * @return
      */
+    @Cacheable(cacheNames = "prescription", key = "#prescriptionId + #memberId")
     @Transactional
     @Override
     public Prescription findById(Long prescriptionId, Long memberId) {
@@ -295,6 +301,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @param memberId
      * @return
      */
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId"),
+            @CacheEvict(cacheNames = "prescription", key = "#prescriptionId + #memberId")
+    })
     @Transactional
     @Override
     public Prescription update(Long prescriptionId, PrescriptionDto prescriptionDto, Long memberId) {
@@ -324,6 +334,10 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @param prescriptionId
      * @param memberId
      */
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId"),
+            @CacheEvict(cacheNames = "prescription", key = "#prescriptionId + #memberId")
+    })
     @Transactional
     @Override
     public void delete(Long prescriptionId, Long memberId) {
@@ -348,6 +362,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return prescriptionMedicineRoutineRepository.findByPrescription(prescription);
     }
 
+    @CacheEvict(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId")
     @Transactional
     @Override
     public List<PrescriptionMedicineRoutine> updatePrescriptionMedicineRoutinesById(
