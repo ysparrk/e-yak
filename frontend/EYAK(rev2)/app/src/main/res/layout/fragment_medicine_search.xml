@@ -245,7 +245,7 @@
                 android:layout_height="20dp" />
 
             <TextView
-                android:id="@+id/textView103"
+                android:id="@+id/searchResultTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:fontFamily="@font/tmoney_bold"
@@ -253,14 +253,15 @@
                 android:includeFontPadding="false"
                 android:text="조회 결과"
                 android:textColor="#757863"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="invisible" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
 
             <TextView
-                android:id="@+id/textView104"
+                android:id="@+id/searchMedicineTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:fontFamily="@font/tmoney_bold"
@@ -268,7 +269,8 @@
                 android:includeFontPadding="false"
                 android:text="복약 정보"
                 android:textColor="#757863"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="invisible" />
 
             <Space
                 android:layout_width="match_parent"
@@ -296,7 +298,7 @@
                 android:layout_height="10dp" />
 
             <TextView
-                android:id="@+id/textView105"
+                android:id="@+id/searchConditionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:fontFamily="@font/tmoney_bold"
@@ -304,7 +306,8 @@
                 android:includeFontPadding="false"
                 android:text="컨디션 기록 정보"
                 android:textColor="#757863"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="invisible" />
 
             <Space
                 android:layout_width="match_parent"
@@ -336,7 +339,8 @@
                 android:id="@+id/makePDFBtn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:src="@drawable/baseline_print_24" />
+                android:src="@drawable/baseline_print_24"
+                android:visibility="invisible" />
 
             <Space
                 android:layout_width="match_parent"

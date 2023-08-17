@@ -1,6 +1,8 @@
 package com.a103.eyakrev1
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -221,6 +223,12 @@ class MedicineSearchFragment : Fragment() {
 
                             for(i in 0..prescriptionList.size - 1) {
                                 makePDFChk = true
+
+                                layout.findViewById<TextView>(R.id.searchResultTitleTextView).visibility = View.VISIBLE
+                                layout.findViewById<TextView>(R.id.searchMedicineTitleTextView).visibility = View.VISIBLE
+                                layout.findViewById<TextView>(R.id.searchConditionTextView).visibility = View.VISIBLE
+                                layout.findViewById<ImageView>(R.id.makePDFBtn).visibility = View.VISIBLE
+
                                 val row = TableRow(requireContext())
                                 val layoutParams = TableLayout.LayoutParams(
                                     TableLayout.LayoutParams.MATCH_PARENT,
@@ -367,17 +375,19 @@ class MedicineSearchFragment : Fragment() {
         }
 
         layout.findViewById<ImageView>(R.id.makePDFBtn).setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                startActivityForResult(intent, WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE)
                 } else {
-                    // 권한이 이미 허용되었을 때의 처리
-                    createPDF() // PDF 생성 처리를 별도의 함수로 빼서 호출
+                    createPDF() // PDF 생성 프로세스
                 }
             } else {
-                // Android 6.0 미만 버전에서는 권한 요청 없이 바로 처리
-                createPDF()
+                createPDF() // Android 6.0 미만 버전용
             }
+
         }
 
         layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
@@ -392,6 +402,17 @@ class MedicineSearchFragment : Fragment() {
         }
 
         return layout
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val uri = data?.data
+            if (uri != null) {
+                // 선택한 폴더의 URI를 사용하여 파일을 저장하거나 액세스합니다
+                createPDF()
+            }
+        }
     }
 
     object BitmapImageHelper {
@@ -423,8 +444,9 @@ class MedicineSearchFragment : Fragment() {
         callback.remove()
     }
 
-    private fun createPDF() {
-        val pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
+    private fun createPDF(uri: String = "") {
+
+        var pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
 
         // PDF 생성 시작
         val document = Document()
@@ -493,7 +515,7 @@ class MedicineSearchFragment : Fragment() {
 
         document.close()
 
-        Toast.makeText(requireContext(), "PDF가 [다운로드 폴더]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "PDF가 [문서 폴더]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

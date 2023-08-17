@@ -167,6 +167,8 @@ class AlarmFragment : Fragment() {
 
 
 
+
+
         // 미래에 대한 컨디션 입력은 불가능 하도록
         if(LocalDate.now() < targetDay) {
             binding.conditionLinearLayout.visibility = View.GONE
