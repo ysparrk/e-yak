@@ -50,10 +50,11 @@ class ForeService : Service() {
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
         val notification: Notification = Notification.Builder(this, CHANNEL_ID)
-            .setContentTitle("Foreground Test Title")
-            .setContentText("Foreground Test Content")
+            .setContentTitle("블루투스")
+            .setContentText("통신중")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
+            .setOngoing(true)
             .build()
 
         // 권한 체크
