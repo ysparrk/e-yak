@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static now.eyak.prescription.domain.QPrescription.prescription;
 import static now.eyak.routine.domain.QMedicineRoutineCheck.medicineRoutineCheck;
@@ -193,5 +194,31 @@ public class CustomPrescriptionRepositoryImpl implements CustomPrescriptionRepos
                 .fetch();
 
         return routineQueryList;
+    }
+
+    @Override
+    public Optional<Prescription> findByIdAndMember(Long id, Member member) {
+        Prescription findPrescription = queryFactory
+                .select(prescription)
+                .from(prescription)
+                .join(prescription.prescriptionMedicineRoutines, prescriptionMedicineRoutine)
+                .where(prescription.id.eq(id).and(prescription.member.id.eq(member.getId())))
+                .fetchJoin()
+                .fetchOne();
+
+        return Optional.ofNullable(findPrescription);
+    }
+
+    @Override
+    public List<Prescription> findAllByMember(Member member) {
+        List<Prescription> prescriptions = queryFactory
+                .select(prescription)
+                .from(prescription)
+                .join(prescription.prescriptionMedicineRoutines, prescriptionMedicineRoutine)
+                .where(prescription.member.id.eq(member.getId()))
+                .fetchJoin()
+                .fetch();
+
+        return prescriptions;
     }
 }

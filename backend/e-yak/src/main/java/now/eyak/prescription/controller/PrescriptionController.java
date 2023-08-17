@@ -71,7 +71,7 @@ public class PrescriptionController {
     }
 
 
-    @Operation(summary = "Get All Prescription per Day", description = "사용자의 해당 date에 복용해야하는 약 전체 목록 반환한다.")
+    @Operation(summary = "Get All Prescription per Day", description = "사용자의 복약 정보 하나를 조회한다.")
     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PrescriptionSubResponseDto.class)))
     @GetMapping("/{prescriptionId}")
     public ResponseEntity getById(@PathVariable Long prescriptionId, @AuthenticationPrincipal Long memberId) {

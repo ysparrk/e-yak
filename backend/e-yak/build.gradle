@@ -37,6 +37,9 @@ dependencies {
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.31'
 
+	// redis
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '3.1.2'
+
 	// querydsl
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -45,9 +48,6 @@ dependencies {
 
 	// springdoc
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
-//	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-common', version: '2.1.0'
-
-
 }
 
 tasks.named('test') {

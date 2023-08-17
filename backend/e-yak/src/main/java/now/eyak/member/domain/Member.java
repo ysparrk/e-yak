@@ -1,24 +1,25 @@
 package now.eyak.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import now.eyak.member.domain.enumeration.Role;
-import now.eyak.prescription.domain.Prescription;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class Member {
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+public class Member implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,9 +50,6 @@ public class Member {
     @NotNull
     private LocalTime eatingDuration;
     private Boolean agreement = true;
-
-    @OneToMany(mappedBy = "member")
-    private List<Prescription> prescriptions = new ArrayList<>();
 
     @Builder
     public Member(String providerName, String providerId, String refreshToken, String nickname, Role role, LocalTime wakeTime, LocalTime breakfastTime, LocalTime lunchTime, LocalTime dinnerTime, LocalTime bedTime, LocalTime eatingDuration) {

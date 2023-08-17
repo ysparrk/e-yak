@@ -22,6 +22,7 @@ import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
 import now.eyak.routine.repository.PrescriptionMedicineRoutineRepository;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
@@ -282,7 +283,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @param memberId
      * @return
      */
-    @Cacheable(cacheNames = "prescription", key = "#prescriptionId + #memberId")
+    @Cacheable(cacheNames = "prescription", key = "new String(#prescriptionId).concat('_' + new String(#memberId))")
     @Transactional
     @Override
     public Prescription findById(Long prescriptionId, Long memberId) {
@@ -301,10 +302,14 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      * @param memberId
      * @return
      */
-    @Caching(evict = {
-            @CacheEvict(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId"),
-            @CacheEvict(cacheNames = "prescription", key = "#prescriptionId + #memberId")
-    })
+    @Caching(
+            evict = {
+                    @CacheEvict(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId")
+            },
+            put = {
+                    @CachePut(cacheNames = "prescription", key = "new String(#prescriptionId).concat('_' + new String(#memberId))")
+            }
+    )
     @Transactional
     @Override
     public Prescription update(Long prescriptionId, PrescriptionDto prescriptionDto, Long memberId) {
@@ -336,7 +341,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
      */
     @Caching(evict = {
             @CacheEvict(cacheNames = "findAllPrescriptionByMemberId", key = "#memberId"),
-            @CacheEvict(cacheNames = "prescription", key = "#prescriptionId + #memberId")
+            @CacheEvict(cacheNames = "prescription", key = "new String(#prescriptionId).concat('_' + new String(#memberId))")
     })
     @Transactional
     @Override

@@ -4,11 +4,6 @@ import now.eyak.member.domain.Member;
 import now.eyak.prescription.domain.Prescription;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface PrescriptionRepository extends JpaRepository<Prescription, Long>, CustomPrescriptionRepository{
-    List<Prescription> findAllByMember(Member member);
-    Optional<Prescription> findByIdAndMember(Long id, Member member);
+public interface PrescriptionRepository extends JpaRepository<Prescription, Long>, CustomPrescriptionRepository {
     void deleteByIdAndMember(Long id, Member member);
 }
