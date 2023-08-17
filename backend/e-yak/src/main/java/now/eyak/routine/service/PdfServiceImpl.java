@@ -8,12 +8,9 @@ import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.dto.query.PrescriptionListQueryDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
 import now.eyak.routine.dto.response.PdfResponseDto;
-import now.eyak.survey.dto.query.SurveyContentPdfQueryDto;
-import now.eyak.survey.dto.response.ContentEmotionResultResponseDto;
-import now.eyak.survey.dto.response.ContentStatusResultResponseDto;
-import now.eyak.survey.dto.response.ContentTextResultResponseDto;
 import now.eyak.survey.dto.response.SurveyContentPdfResponseDto;
-import now.eyak.survey.repository.SurveyContentRepository;
+import now.eyak.survey.service.SurveyContentService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +24,7 @@ public class PdfServiceImpl implements PdfService {
 
     private final MemberRepository memberRepository;
     private final PrescriptionRepository prescriptionRepository;
-    private final SurveyContentRepository surveyContentRepository;
+    private final SurveyContentService surveyContentService;
 
     @Transactional
     @Override
@@ -36,32 +33,13 @@ public class PdfServiceImpl implements PdfService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchMemberException("해당하는 회원 정보가 없습니다."));
 
-        List<PrescriptionListQueryDto> prescriptionList = prescriptionRepository.findAllByMemberAndBetweenDates(member,
-                startDateTime, endDateTime);
-        List<SurveyContentPdfQueryDto> surveyContentPdfQueryDtoList = surveyContentRepository.findAllByMemberAndBetweenDates(
-                member.getId(), startDateTime, endDateTime);
-
-        List<SurveyContentPdfResponseDto> surveyContentDtoList = surveyContentPdfQueryDtoList.stream()
-                .map(surveyContentPdfQueryDto ->
-                        SurveyContentPdfResponseDto.builder()
-                                .date(surveyContentPdfQueryDto.getDate())
-                                .contentEmotionResultResponse(ContentEmotionResultResponseDto.of(
-                                        surveyContentPdfQueryDto.getContentEmotionResult()))
-                                .contentStatusResultResponse(ContentStatusResultResponseDto.of(
-                                        surveyContentPdfQueryDto.getContentStatusResult()))
-                                .contentTextResultResponse(ContentTextResultResponseDto.of(
-                                        surveyContentPdfQueryDto.getContentTextResult()))
-                                .build())
-                .toList();
+        List<PrescriptionListQueryDto> prescriptionListQueryDtoList = prescriptionRepository.findAllByMemberAndBetweenDates(member, startDateTime, endDateTime);
+        List<SurveyContentPdfResponseDto> surveyContentDtoList = surveyContentService.findAllByMemberAndBetweenDates(member.getId(), startDateTime, endDateTime);
 
         PdfResponseDto pdfResponseDto = PdfResponseDto.builder()
-                .prescriptionList(prescriptionList)
+                .prescriptionList(prescriptionListQueryDtoList)
                 .surveyContentList(surveyContentDtoList)
                 .build();
-
-        log.debug("[log] prescriptionList: {}", prescriptionList);
-        log.debug("[log] surveyContentPdfQueryDtoList.size(): {}", surveyContentPdfQueryDtoList.size());
-        log.debug("[log] surveyContentDtoList: {}", surveyContentDtoList);
 
         return pdfResponseDto;
     }

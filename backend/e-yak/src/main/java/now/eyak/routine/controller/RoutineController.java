@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -142,7 +141,7 @@ public class RoutineController {
             @AuthenticationPrincipal Long memberId,
             @RequestParam LocalDateTime startDateTime,
             @RequestParam LocalDateTime endDateTime
-            ) throws URISyntaxException {
+            ) {
 
         log.debug("memberId: {}", memberId);
 

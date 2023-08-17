@@ -387,6 +387,4 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 .orElseThrow(() -> new NoSuchMemberException("회원이 존재하지 않습니다."));
         return member;
     }
-
-
 }
