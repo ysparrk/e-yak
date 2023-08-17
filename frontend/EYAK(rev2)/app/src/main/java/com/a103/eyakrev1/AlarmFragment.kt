@@ -596,10 +596,12 @@ class ZerothAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
 
@@ -680,10 +682,12 @@ class FirstAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
 
@@ -764,10 +768,12 @@ class SecondAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
 
@@ -848,10 +854,12 @@ class ThirdAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
 
@@ -932,10 +940,12 @@ class FourthAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
 
@@ -1016,10 +1026,12 @@ class FifthAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
 
@@ -1100,10 +1112,12 @@ class SixthAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
 
@@ -1182,9 +1196,12 @@ class SeventhAlarmReceiver : BroadcastReceiver() {
         codeToSend += if (cell4Data != null && cell4Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
         codeToSend += if (cell5Data != null && cell5Data.id.toString() in thisRoutineMedicineIdList) "1" else "0"
 
-        val intent = Intent(context, ForeService::class.java)
-        intent.putExtra("SEND_KEY", codeToSend)
-        intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
-        context.startForegroundService(intent)
+
+        if ("1" in codeToSend.substring(4)) {
+            val intent = Intent(context, ForeService::class.java)
+            intent.putExtra("SEND_KEY", codeToSend)
+            intent.putExtra("DEVICE_NAME_KEY", deviceNameSaved)
+            context.startForegroundService(intent)
+        }
     }
 }
