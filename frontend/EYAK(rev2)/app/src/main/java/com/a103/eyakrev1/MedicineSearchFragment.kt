@@ -1,6 +1,7 @@
 package com.a103.eyakrev1
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.text.TextUtils.substring
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -387,7 +389,6 @@ class MedicineSearchFragment : Fragment() {
             } else {
                 createPDF() // Android 6.0 미만 버전용
             }
-
         }
 
         layout.findViewById<Button>(R.id.mainBtn).setOnClickListener {
@@ -444,13 +445,26 @@ class MedicineSearchFragment : Fragment() {
         callback.remove()
     }
 
-    private fun createPDF(uri: String = "") {
+    private fun createPDF() {
 
-        var pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
+//        var pdfFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath + "/지금이약_${LocalDate.now()}.pdf"
+
+
+        // PDF 생성 시작
+        val resolver = requireContext().contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, "지금이약_${LocalDate.now()}.pdf")
+            put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+            put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS)
+            // 필요한 기타 컬럼 추가
+        }
+        val uri = resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
+        val outputStream = resolver.openOutputStream(uri!!)
 
         // PDF 생성 시작
         val document = Document()
-        PdfWriter.getInstance(document, FileOutputStream(pdfFilePath))
+//        PdfWriter.getInstance(document, FileOutputStream(pdfFilePath))
+        PdfWriter.getInstance(document, outputStream)
         document.open()
 
         // PDF에 추가할 내용 작성
@@ -514,6 +528,7 @@ class MedicineSearchFragment : Fragment() {
         addTableToDocument(document, tableLayout2, mainActivity, 4)
 
         document.close()
+        outputStream!!.close()
 
         Toast.makeText(requireContext(), "PDF가 [문서 폴더]에 생성되었습니다.", Toast.LENGTH_SHORT).show()
     }

@@ -79,7 +79,7 @@ class AlarmFragment : Fragment() {
     val red: String = "#FF9B9B"
     val green: String = "#E3F2C1"
     val gray: String = "#DDE6ED"
-    val yellow: String = "FFFFEF00"
+    val yellow: String = "#FFEF00"
 
     var medicineRoutines = MedicineRoutines()
 
@@ -164,10 +164,6 @@ class AlarmFragment : Fragment() {
         targetDay = targetDay.plusDays(gap)
         yesterday = targetDay.plusDays(-1)
         tomorrow = targetDay.plusDays(1)
-
-
-
-
 
         // 미래에 대한 컨디션 입력은 불가능 하도록
         if(LocalDate.now() < targetDay) {
