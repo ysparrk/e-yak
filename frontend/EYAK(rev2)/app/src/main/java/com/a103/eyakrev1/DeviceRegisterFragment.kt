@@ -315,14 +315,16 @@ class DeviceRegisterFragment : Fragment() {
                     layout.findViewById<ProgressBar>(R.id.btFindProgressBar).visibility = View.VISIBLE
                     layout.findViewById<CardView>(R.id.btListCard).visibility = View.VISIBLE
                     val device = intent?.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                    if (device?.name != null) { // (추후 약통만 식별하도록 설정)
-                        try {
-                            deviceFindFlag = true
-                            var deviceView = LayoutInflater.from(requireContext()).inflate(R.layout.device_tab_list_view_item, null)
-                            deviceView.findViewById<TextView>(R.id.deviceNameText).text = "${device?.name}"
-                            deviceView.findViewById<Button>(R.id.deviceConnBtn).setOnClickListener { pairDevice(device) }
-                            layout.findViewById<LinearLayout>(R.id.btListLayout).addView(deviceView)
-                        } catch (e: Exception) {}
+                    if (device?.name != null) {
+                        if (device!!.name.substring(0,4) == "EYAK") {
+                            try {
+                                deviceFindFlag = true
+                                var deviceView = LayoutInflater.from(requireContext()).inflate(R.layout.device_tab_list_view_item, null)
+                                deviceView.findViewById<TextView>(R.id.deviceNameText).text = "${device?.name}"
+                                deviceView.findViewById<Button>(R.id.deviceConnBtn).setOnClickListener { pairDevice(device) }
+                                layout.findViewById<LinearLayout>(R.id.btListLayout).addView(deviceView)
+                            } catch (e: Exception) {}
+                        }
                     }
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> { // 근처 기기 탐색 종료

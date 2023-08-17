@@ -50,8 +50,8 @@ class ForeService : Service() {
     var sendString: String? = null
     var recvString: String? = null
     // pref
-    val pref = PreferenceManager.getDefaultSharedPreferences(this)
-    val editor = pref?.edit()
+//    val pref = PreferenceManager.getDefaultSharedPreferences(this)
+//    val editor = pref?.edit()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotificationChannel()
