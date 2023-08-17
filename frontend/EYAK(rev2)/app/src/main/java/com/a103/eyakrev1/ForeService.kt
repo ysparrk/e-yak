@@ -169,6 +169,17 @@ class ForeService : Service() {
                         } catch (e: IOException) {}
                     }.start()
                     Thread {
+                        var tim = 0
+                        while (tim < 90) {
+                            Thread.sleep(1000)
+                            tim++
+                        }
+                        socket!!.close()
+                        fallbackSocket!!.close()
+                        stopForeground(true)
+                        stopSelf()
+                    }.start()
+                    Thread {
                         while (!Thread.currentThread().isInterrupted) {
                             try {
                                 val inBytes = inStream?.available()

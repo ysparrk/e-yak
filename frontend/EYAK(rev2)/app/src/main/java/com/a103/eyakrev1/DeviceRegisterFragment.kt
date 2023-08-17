@@ -162,11 +162,6 @@ class DeviceRegisterFragment : Fragment() {
         layout.findViewById<Button>(R.id.permBtn).setOnClickListener {
             requestPermissionLauncher.launch(PERMISSION)
         }
-        // 사용법 페이지 이동
-        layout.findViewById<ImageView>(R.id.howtoImage).setOnClickListener {
-            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://abrupt-coal-0f7.notion.site/a6122a7f4ac04b2c8012fd2b44a6569a?pvs=4"))
-            startActivity(intent)
-        }
 
         // 블루투스 On/Off view
         bluetoothOnOffUI()
