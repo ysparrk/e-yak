@@ -8,7 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import now.eyak.member.domain.Member;
 import now.eyak.member.domain.OAuthProvider;
 import now.eyak.member.domain.enumeration.Role;
-import now.eyak.member.dto.*;
+import now.eyak.member.dto.request.*;
+import now.eyak.member.dto.response.RefreshResponseDto;
+import now.eyak.member.dto.response.SignInResponseDto;
 import now.eyak.member.exception.AlreadySignUpException;
 import now.eyak.member.exception.InvalidRefreshTokenException;
 import now.eyak.member.exception.NoSuchMemberException;
@@ -134,7 +136,7 @@ public class MemberServiceImpl implements MemberService {
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
                     .build();
-        } catch (ParseException|JOSEException e) {
+        } catch (ParseException | JOSEException e) {
             throw new InvalidRefreshTokenException("유효하지 않은 Refresh Token 입니다. " + e.getMessage());
         }
     }
@@ -158,6 +160,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Long memberId) {
+        // FK 제약 조건 고려
+
+
         memberRepository.deleteById(memberId);
     }
 

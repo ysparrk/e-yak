@@ -1,4 +1,4 @@
-package now.eyak.member.dto;
+package now.eyak.member.dto.request;
 
 import lombok.Getter;
 

@@ -9,6 +9,6 @@ import now.eyak.social.Scope;
 @Setter
 @Builder
 public class FollowRequestAcceptDto {
-    private Scope scope;
+    private Scope followeeScope;
     private String customName;
 }

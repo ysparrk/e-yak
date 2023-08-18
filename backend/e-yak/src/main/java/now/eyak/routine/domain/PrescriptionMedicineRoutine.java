@@ -1,5 +1,7 @@
 package now.eyak.routine.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -7,13 +9,19 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import now.eyak.prescription.domain.Prescription;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.io.Serializable;
 
 @Entity
 @NoArgsConstructor
-public class PrescriptionMedicineRoutine {
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+public class PrescriptionMedicineRoutine implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Prescription prescription;
     @ManyToOne

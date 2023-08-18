@@ -1,54 +1,36 @@
 package now.eyak.prescription.dto;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import now.eyak.member.domain.Member;
-import now.eyak.prescription.domain.Prescription;
-import now.eyak.routine.domain.MedicineRoutine;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.ToString;
+import now.eyak.prescription.dto.query.PrescriptionRoutineQueryDto;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@ToString
 public class PrescriptionResponseDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String customName;
-    private String icd;
-    private String krName;
-    private String engName;
-    // TODO: 커스텀 아이콘 정보 추가
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
-    private Integer iotLocation; // 약통 칸 번호
-    private Integer medicineDose; // 1회 투여 개수
-    private String unit; // 투여 단위
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    // 8개의 루틴에 대해 그 루틴에 따라 복용해야 하는 처방전의 id를 넣는다
+    private List<PrescriptionRoutineQueryDto> bedAfterQueryResponses;
+    private List<PrescriptionRoutineQueryDto> breakfastBeforeQueryResponses;
+    private List<PrescriptionRoutineQueryDto> breakfastAfterQueryResponses;
+    private List<PrescriptionRoutineQueryDto> lunchBeforeQueryResponses;
+    private List<PrescriptionRoutineQueryDto> lunchAfterQueryResponses;
+    private List<PrescriptionRoutineQueryDto> dinnerBeforeQueryResponses;
+    private List<PrescriptionRoutineQueryDto> dinnerAfterQueryResponses;
+    private List<PrescriptionRoutineQueryDto> bedBeforeQueryResponses;
 
-    public static PrescriptionResponseDto from(Prescription prescription) {
-        return PrescriptionResponseDto.builder()
-                .id(prescription.getId())
-                .customName(prescription.getCustomName())
-                .icd(prescription.getIcd())
-                .krName(prescription.getKrName())
-                .engName(prescription.getEngName())
-                .startDateTime(prescription.getStartDateTime())
-                .endDateTime(prescription.getEndDateTime())
-                .iotLocation(prescription.getIotLocation())
-                .medicineDose(prescription.getMedicineDose())
-                .unit(prescription.getUnit())
-                .createdAt(prescription.getCreatedAt())
-                .updatedAt(prescription.getUpdatedAt())
-                .build();
+    @Builder
+    public PrescriptionResponseDto(List<PrescriptionRoutineQueryDto> bedAfterQueryResponses, List<PrescriptionRoutineQueryDto> breakfastBeforeQueryResponses, List<PrescriptionRoutineQueryDto> breakfastAfterQueryResponses, List<PrescriptionRoutineQueryDto> lunchBeforeQueryResponses, List<PrescriptionRoutineQueryDto> lunchAfterQueryResponses, List<PrescriptionRoutineQueryDto> dinnerBeforeQueryResponses, List<PrescriptionRoutineQueryDto> dinnerAfterQueryResponses, List<PrescriptionRoutineQueryDto> bedBeforeQueryResponses) {
+        this.bedAfterQueryResponses = bedAfterQueryResponses;
+        this.breakfastBeforeQueryResponses = breakfastBeforeQueryResponses;
+        this.breakfastAfterQueryResponses = breakfastAfterQueryResponses;
+        this.lunchBeforeQueryResponses = lunchBeforeQueryResponses;
+        this.lunchAfterQueryResponses = lunchAfterQueryResponses;
+        this.dinnerBeforeQueryResponses = dinnerBeforeQueryResponses;
+        this.dinnerAfterQueryResponses = dinnerAfterQueryResponses;
+        this.bedBeforeQueryResponses = bedBeforeQueryResponses;
     }
-
 }

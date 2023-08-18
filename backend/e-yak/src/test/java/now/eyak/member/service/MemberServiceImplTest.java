@@ -1,8 +1,8 @@
 package now.eyak.member.service;
 
 import now.eyak.member.domain.Member;
-import now.eyak.member.dto.MemberUpdateDto;
-import now.eyak.member.dto.SignUpDto;
+import now.eyak.member.dto.request.MemberUpdateDto;
+import now.eyak.member.dto.request.SignUpDto;
 import now.eyak.member.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;

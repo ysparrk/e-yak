@@ -7,6 +7,7 @@ import now.eyak.member.exception.NoSuchMemberException;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.social.domain.Follow;
 import now.eyak.social.dto.FollowUpdateDto;
+import now.eyak.social.dto.FollowerResponseDto;
 import now.eyak.social.repository.FollowRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,41 +18,48 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FollowerServiceImpl implements FollowService {
+public class FollowServiceImpl implements FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
 
     /**
      * 사용자(memberId)의 팔로워들을 전체 조회한다.
+     *
      * @param memberId
      * @return
      */
     @Transactional
     @Override
-    public List<Follow> findFollowers(Long memberId) {
+    public List<FollowerResponseDto> findFollowers(Long memberId) {
         Member member = getMember(memberId);
 
-        // TODO: fetch join 으로 가져오는지 확인
-        return followRepository.findByFollowee(member);
+        return followRepository.findFollowByFollowee(member);
     }
 
     /**
      * 팔로우(followId)를 취소한다.
-     *
+     * <p>
      * A -> B 를 취소한다고 하면
      * A -> B
      * B <- A 두 개의 팔로우 row가 삭제된다.
+     *
      * @param followId
      * @param memberId
      */
     @Transactional
     @Override
     public void deleteFollowBi(Long followId, Long memberId) {
-        Member follower = getMember(memberId);
-        Follow follow = followRepository.findByIdAndFollower(followId, follower).orElseThrow(() -> new NoSuchElementException("해당하는 Follow가 존재하지 않습니다."));
+        log.info("7777followId" + followId);
+        log.info("7777memberId" + memberId);
 
-        Member followee = follow.getFollowee();
-        followRepository.deleteByFolloweeAndFollower(followee, follower);
+        Member followee = getMember(memberId);
+        Follow follow = followRepository.findByIdAndFollowee(followId, followee).orElseThrow(() -> new NoSuchElementException("해당하는 Follow가 존재하지 않습니다."));
+
+        Member follower = follow.getFollower();
+        Follow inverseFollow = followRepository.findByFollowerAndFollowee(followee, follower)
+                .orElseThrow(() -> new NoSuchElementException("해당하는 Follow가 존재하지 않습니다."));
+
+        followRepository.delete(inverseFollow);
         followRepository.delete(follow);
     }
 

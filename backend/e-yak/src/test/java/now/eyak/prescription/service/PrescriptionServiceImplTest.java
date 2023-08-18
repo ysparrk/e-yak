@@ -5,12 +5,16 @@ import now.eyak.member.domain.enumeration.Role;
 import now.eyak.member.repository.MemberRepository;
 import now.eyak.prescription.domain.Prescription;
 import now.eyak.prescription.dto.PrescriptionDto;
+import now.eyak.prescription.dto.PrescriptionFutureResponseDto;
+import now.eyak.prescription.dto.PrescriptionResponseDto;
 import now.eyak.prescription.repository.PrescriptionRepository;
-import now.eyak.routine.domain.MedicineRoutine;
 import now.eyak.routine.domain.PrescriptionMedicineRoutine;
 import now.eyak.routine.enumeration.Routine;
+import now.eyak.routine.repository.MedicineRoutineCheckRepository;
 import now.eyak.routine.repository.MedicineRoutineRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -36,6 +39,8 @@ class PrescriptionServiceImplTest {
     MedicineRoutineRepository medicineRoutineRepository;
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    MedicineRoutineCheckRepository medicineRoutineCheckRepository;
 
     static Member MEMBER;
 
@@ -49,20 +54,17 @@ class PrescriptionServiceImplTest {
                 .refreshToken("refreshToken")
                 .nickname("박길동")
                 .role(Role.USER)
-                .wakeTime(LocalTime.NOON)
-                .breakfastTime(LocalTime.NOON)
-                .lunchTime(LocalTime.NOON)
-                .dinnerTime(LocalTime.NOON)
-                .bedTime(LocalTime.NOON)
-                .eatingDuration(LocalTime.of(2, 0))
+                .wakeTime(LocalTime.of(7, 0))
+                .breakfastTime(LocalTime.of(8, 0))
+                .lunchTime(LocalTime.of(14, 0))
+                .dinnerTime(LocalTime.of(18, 0))
+                .bedTime(LocalTime.of(23, 30))
+                .eatingDuration(LocalTime.of(0, 30))
                 .build();
 
         MEMBER = memberRepository.save(member);
 
-        List<MedicineRoutine> medicineRoutines = Arrays.stream(Routine.values()).map(routine -> MedicineRoutine.builder().routine(routine).build()).toList();
-        medicineRoutineRepository.saveAll(medicineRoutines);
-
-        routines = List.of(Routine.BED_BEFORE, Routine.LUNCH_AFTER, Routine.DINNER_BEFORE);
+        routines = List.of(Routine.BED_AFTER, Routine.LUNCH_AFTER, Routine.BED_BEFORE);
     }
 
     @Transactional
@@ -75,22 +77,22 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now())
+                .startDateTime(LocalDateTime.of(2023, 8, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         //when
         Prescription prescription = prescriptionService.insert(prescriptionDto, MEMBER.getId());
-
         //then
         Prescription expected = prescriptionDto.toEntity();
 
         // TODO: 테스트 코드 작성에 용이하게 구조 변경
         assertThat(prescription.getCustomName()).isEqualTo(expected.getCustomName());
+        // TODO: 복약 체크 관련 Assertions 작성
     }
 
     @Transactional
@@ -101,12 +103,12 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now())
+                .startDateTime(LocalDateTime.of(2023, 8, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         //when
@@ -130,12 +132,12 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now())
+                .startDateTime(LocalDateTime.of(2023, 8, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -156,26 +158,26 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now())
+                .startDateTime(LocalDateTime.of(2023, 8, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
 
         //when
         prescriptionDto.setCustomName("두통약");
-        prescriptionDto.setRoutines(List.of(Routine.BED_BEFORE, Routine.BED_AFTER));
+        prescriptionDto.setMedicineRoutines(List.of(Routine.BED_BEFORE, Routine.BED_AFTER));
         prescriptionService.update(inserted.getId(), prescriptionDto, MEMBER.getId());
 
         Prescription prescription = prescriptionService.findById(inserted.getId(), MEMBER.getId());
 
         //then
         assertThat(prescription.getCustomName()).isEqualTo(prescriptionDto.getCustomName());
-        assertThat(prescription.getPrescriptionMedicineRoutines()).hasSize(prescriptionDto.getRoutines().size());
+        assertThat(prescription.getPrescriptionMedicineRoutines()).hasSize(prescriptionDto.getMedicineRoutines().size());
     }
 
     @Transactional
@@ -187,12 +189,12 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now())
+                .startDateTime(LocalDateTime.of(2023, 8, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -214,12 +216,12 @@ class PrescriptionServiceImplTest {
                 .icd("RS-1203123")
                 .krName("감기바이러스에 의한 고열 및 인후통 증상")
                 .engName("some english")
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now())
+                .startDateTime(LocalDateTime.of(2023, 8, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
                 .iotLocation(4)
-                .medicineDose(1)
+                .medicineDose(1.5f)
                 .unit("정")
-                .routines(routines)
+                .medicineRoutines(routines)
                 .build();
 
         Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
@@ -228,6 +230,126 @@ class PrescriptionServiceImplTest {
         List<PrescriptionMedicineRoutine> prescriptionMedicineRoutines = prescriptionService.findPrescriptionMedicineRoutinesById(inserted.getId(), MEMBER.getId());
 
         //then
-        assertThat(prescriptionMedicineRoutines).hasSize(prescriptionDto.getRoutines().size());
+        assertThat(prescriptionMedicineRoutines).hasSize(prescriptionDto.getMedicineRoutines().size());
+    }
+
+    @DisplayName("Sort with Routine")
+    @Transactional
+    @Test
+    void findAllAndSortWithRoutine() {
+        // given
+        PrescriptionDto prescriptionDto = PrescriptionDto.builder()
+                .customName("감기약")
+                .icd("RS-1203123")
+                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .engName("some english")
+                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 20, 0, 0))
+                .iotLocation(4)
+                .medicineDose(1.5f)
+                .medicineShape(2)
+                .unit("정")
+                .medicineRoutines(routines)
+                .build();
+
+        Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
+
+        // when
+        PrescriptionResponseDto allAndSortWithRoutine = prescriptionService.findAllAndSortWithRoutine(MEMBER.getId(), LocalDateTime.now());
+
+        // then
+        // TODO: Assertions 작성
+        System.out.println("11111allAndSortWithRoutine = " + allAndSortWithRoutine);
+    }
+
+    @DisplayName("Sort with Routine For Future")
+    @Transactional
+    @Test
+    void findAllAndSortWithRoutineFuture() {
+        // given
+        PrescriptionDto prescriptionDto = PrescriptionDto.builder()
+                .customName("감기약")
+                .icd("RS-1203123")
+                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .engName("some english")
+                .startDateTime(LocalDateTime.now().toLocalDate().atStartOfDay())
+                .endDateTime(LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay())
+                .iotLocation(4)
+                .medicineDose(1.5f)
+                .medicineShape(2)
+                .unit("정")
+                .medicineRoutines(routines)
+                .build();
+        routines = List.of(Routine.BED_AFTER, Routine.DINNER_AFTER, Routine.BED_BEFORE);
+
+        PrescriptionDto prescriptionDto2 = PrescriptionDto.builder()
+                .customName("혈압약")
+                .icd("RS-1203123")
+                .krName("혈압약")
+                .engName("some english")
+                .startDateTime(LocalDateTime.now().toLocalDate().atStartOfDay())
+                .endDateTime(LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay())
+                .iotLocation(4)
+                .medicineDose(1.5f)
+                .medicineShape(2)
+                .unit("정")
+                .medicineRoutines(routines)
+                .build();
+
+        Prescription inserted = prescriptionService.insert(prescriptionDto, MEMBER.getId());
+        Prescription inserted2 = prescriptionService.insert(prescriptionDto2, MEMBER.getId());
+
+        // when
+        PrescriptionFutureResponseDto sortFuture = prescriptionService.findAllAndSortWithRoutineFuture(MEMBER.getId(), LocalDateTime.now().plusDays(2).toLocalDate().atStartOfDay());
+
+        // then
+        // TODO: Assertions 작성
+        System.out.println("sortFuture = " + sortFuture);
+
+    }
+
+    @DisplayName("사용자가 복약 정보를 2개 등록후 날짜로 복약정보 목록 조회")
+    @Transactional
+    @Test
+    void findAllByMemberIdBetweenDate() {
+        //given
+        PrescriptionDto prescriptionDto = PrescriptionDto.builder()
+                .customName("피로회복제")
+                .icd("RS-1203123")
+                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .engName("some english")
+                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 12, 0, 0))
+                .iotLocation(4)
+                .medicineDose(1.5f)
+                .medicineShape(2)
+                .unit("정")
+                .medicineRoutines(routines)
+                .build();
+
+        prescriptionService.insert(prescriptionDto, MEMBER.getId());
+
+        PrescriptionDto prescriptionDto2 = PrescriptionDto.builder()
+                .customName("감기약")
+                .icd("RS-1203123")
+                .krName("감기바이러스에 의한 고열 및 인후통 증상")
+                .engName("some english")
+                .startDateTime(LocalDateTime.of(2023, 8, 10, 0, 0))
+                .endDateTime(LocalDateTime.of(2023, 8, 14, 0, 0))
+                .iotLocation(4)
+                .medicineDose(1.5f)
+                .medicineShape(2)
+                .unit("정")
+                .medicineRoutines(routines)
+                .build();
+
+        prescriptionService.insert(prescriptionDto2, MEMBER.getId());
+
+        //when
+        List<Prescription> findPrescriptions = prescriptionService.findAllByMemberIdBetweenDate(MEMBER.getId(), LocalDateTime.of(2023, 8, 14, 0, 0));
+
+        //then
+        // 마지막날짜 걸치는 복약 정보는 포함되지 않아야 함
+        Assertions.assertThat(findPrescriptions).hasSize(1);
     }
 }

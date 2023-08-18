@@ -11,7 +11,7 @@ public class MemberProfile {
     private String providerName;
 
     @Builder
-    public MemberProfile(String providerId, String  providerName) {
+    public MemberProfile(String providerId, String providerName) {
         this.providerId = providerId;
         this.providerName = providerName;
     }

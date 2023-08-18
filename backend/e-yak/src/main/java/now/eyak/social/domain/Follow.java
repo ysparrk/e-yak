@@ -8,6 +8,8 @@ import lombok.Setter;
 import now.eyak.member.domain.Member;
 import now.eyak.social.Scope;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -24,12 +26,14 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member follower;
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member followee;
     private String customName;
     @Enumerated(EnumType.STRING)
-    private Scope followeeScope;
+    private Scope followeeScope; // Followee가 Follower에게 공개할 정보의 범위
     @CreationTimestamp
     private LocalDateTime createdAt = LocalDateTime.now();
     @UpdateTimestamp
