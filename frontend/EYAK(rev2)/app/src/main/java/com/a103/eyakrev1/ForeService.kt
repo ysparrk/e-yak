@@ -96,6 +96,15 @@ class ForeService : Service() {
         }
 
         startForeground(1, notification)
+        Thread {
+            var tim = 0
+            while (tim < 90) {
+                Thread.sleep(1000)
+                tim++
+            }
+            stopForeground(true)
+            stopSelf()
+        }.start()
         return START_NOT_STICKY
     }
 
@@ -174,8 +183,10 @@ class ForeService : Service() {
                             Thread.sleep(1000)
                             tim++
                         }
-                        socket!!.close()
-                        fallbackSocket!!.close()
+                        try {
+                            socket!!.close()
+                            fallbackSocket!!.close()
+                        } catch (e: Exception) {}
                         stopForeground(true)
                         stopSelf()
                     }.start()
