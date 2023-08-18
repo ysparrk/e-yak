@@ -121,6 +121,32 @@ interface EyakService {
         @Path("followRequestId") followRequestId: Int,
     ): Call<Void>
 
+    @GET("/api/v1/medicine-routine-checks/month")
+    fun getMyMonthlyDose(
+        @Header("Authorization") Authorization: String,
+        @Query("yearMonth") yearMonth: String
+    ): Call<ArrayList<Dates>>
+
+    @GET("/api/v1/medicine-routine-checks/month")
+    fun getOthersMonthlyDose(
+        @Header("Authorization") Authorization: String,
+        @Query("yearMonth") yearMonth: String,
+        @Query("requeteeId") requeteeId: Int
+    ): Call<ArrayList<Dates>>
+
+    @GET("/api/v1/medicine-routine-checks/day-detail")
+    fun getMyDailyDetailInCalendar(
+        @Header("Authorization") Authorization: String,
+        @Query("date") date: String
+    ): Call<medicineDetailsInCalendarResponseModel>
+
+    @GET("/api/v1/medicine-routine-checks/day-detail")
+    fun getOthersDailyDetailInCalendar(
+        @Header("Authorization") Authorization: String,
+        @Query("date") date: String,
+        @Query("requeteeId") requeteeId: Int
+    ): Call<medicineDetailsInCalendarResponseModel>
+
     @GET("/api/v1/medicine-routine-checks/day")
     fun todayDoseInfo(
         @Header("Authorization") Authorization: String,
@@ -200,7 +226,12 @@ interface EyakService {
         @Body params: EditContentStatusBodyModel,
     ): Call<Void>
 
-
+    @GET("/api/v1/medicine-routine-checks/pdf")
+    fun medicineSearch(
+        @Header("Authorization") Authorization: String,
+        @Query("startDateTime") startDateTime: String,
+        @Query("endDateTime") endDateTime: String,
+    ): Call<MedicineSearchResponseBodyModel>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "https://i9a103.p.ssafy.io" // BASE 주소

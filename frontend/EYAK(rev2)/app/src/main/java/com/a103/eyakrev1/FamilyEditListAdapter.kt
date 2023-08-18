@@ -70,37 +70,27 @@ class FamilyEditListAdapter(val context: Context, val familyList: ArrayList<Fami
                 api.deleteFollower(memberId=memberId, followId=family.followId, Authorization="Bearer ${serverAccessToken}").enqueue(object:
                     Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        Log.d("log", response.toString())
-                        Log.d("log", response.body().toString())
-
                         if (response.code() == 401) {
-                            Log.d("log", "인증되지 않은 사용자입니다")
+                            Log.d("로그", "팔로우 취소 및 삭제 401 Unauthorized: AccessToken이 유효하지 않은 경우")
                         } else if (response.code() == 400) {
-                            Log.d("log", "해당하는 member나 followRequest가 존재하지 않습니다")
+                            Log.d("로그", "팔로우 취소 및 삭제 400 Bad Request: 해당하는 member나 followRequest가 존재하지 않는 경우")
                         }
                         else if (response.code() == 200) {
-                            Toast.makeText(mainActivity, "삭제되었습니다", Toast.LENGTH_SHORT).show()
+                            Log.d("로그", "팔로우 취소 및 삭제 200 OK")
                             mainActivity!!.gotoFamily()
                         }
                     }
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-
+                        Log.d("로그", "팔로우 취소 및 삭제 onFailure")
                     }
                 })
             }
 
             return view
         }
-
-
-
-
     }
 
-    /**
-     * Extension method to set View's height.
-     */
     fun View.setHeight(value: Int) {
         val lp = layoutParams
         lp?.let {
@@ -109,9 +99,6 @@ class FamilyEditListAdapter(val context: Context, val familyList: ArrayList<Fami
         }
     }
 
-    /**
-     * Extension method to set View's width.
-     */
     fun View.setWidth(value: Int) {
         val lp = layoutParams
         lp?.let {

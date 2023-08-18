@@ -100,7 +100,8 @@
                     android:includeFontPadding="false"
                     android:text="자세히"
                     android:textColor="#757863"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

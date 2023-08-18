@@ -21,15 +21,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
-    
-    // 주요 참고자료
-    // https://www.youtube.com/watch?v=ER0xid0w-_Y
 
     private val binding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
-    val api = EyakService.create()
+    private val api = EyakService.create()
 
     private var oneTapClient: SignInClient? = null
     private var signUpRequest: BeginSignInRequest? = null
@@ -38,16 +35,11 @@ class LoginActivity : AppCompatActivity() {
     private val oneTapResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()){ result ->
         try {
             val credential = oneTapClient?.getSignInCredentialFromIntent(result.data)
-            Log.d("여기 보자", "${credential}")
+
             val idToken = credential?.googleIdToken
             when {
                 idToken != null -> {
-                    // Got an ID token from Google. Use it to authenticate
-                    // with your backend
-                    val msg = "idToken: $idToken"
-//                    Snackbar.make(binding.root, msg, Snackbar.LENGTH_INDEFINITE).show()
-                    Log.d("google one tap", msg)
-                    
+
                     // sharedPreference에 저장
                     val pref = PreferenceManager.getDefaultSharedPreferences(this)
                     val editor = pref.edit()
@@ -56,8 +48,6 @@ class LoginActivity : AppCompatActivity() {
                     tryLoginToServer(idToken, isAutoLogin = false)
                 }
                 else -> {
-                    // shouldn't happen
-                    Log.d("google one tap", "No iD token!")
                     Snackbar.make(binding.root, "No ID token!", Snackbar.LENGTH_INDEFINITE).show()
                 }
             }
@@ -66,12 +56,9 @@ class LoginActivity : AppCompatActivity() {
             when (e.statusCode) {
                 CommonStatusCodes.CANCELED -> {
                     Log.d("google one tap", "One-tap dialog was closed")
-                    // Don't re-prompt the user
-                    // Snackbar.make(binding.root, "One-tap dialog was closed", Snackbar.LENGTH_INDEFINITE).show()
                 }
                 CommonStatusCodes.NETWORK_ERROR -> {
                     Log.d("google one tap", "One-tap encountered a network error")
-                    // Try again or just ignore
                     Snackbar.make(binding.root, "One-tap encountered a network error", Snackbar.LENGTH_INDEFINITE).show()
                 }
                 else -> {
@@ -117,16 +104,9 @@ class LoginActivity : AppCompatActivity() {
         tryLoginToServer(loadedGoogleToken, isAutoLogin = true)
 
         // 구글 토큰이 없다면 로그인 버튼 눌러서 진행하도록
-
         binding.googleLoginLinearLayout.setOnClickListener {
             displaySignIn()
         }
-
-//        binding.tmpBtn.setOnClickListener {
-//            Toast.makeText(applicationContext, "속았지?", Toast.LENGTH_SHORT).show()
-//            val intent = Intent(getApplicationContext(), MainActivity::class.java)
-//            startActivity(intent)
-//        }
     }
 
     private fun tryLoginToServer(loadedGoogleToken: String?, isAutoLogin: Boolean) {
@@ -135,25 +115,25 @@ class LoginActivity : AppCompatActivity() {
             val data = LoginBodyModel("google", loadedGoogleToken)
             api.signIn(data).enqueue(object: Callback<LoginResponseModel> {
                 override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
-//                    Log.d("log", response.toString())
-//                    Log.d("log", response.body().toString())
-
                     if (response.code() == 400) {
+                        Log.d("로그", "로그인 400 Bad Request: 해당하는 이 member가 존재하지 않는 경우, AccessToken이 유효하지 않은 경우")
                         // 회원가입 페이지를 띄워주자
                         if (!isAutoLogin) {
                             val intent = Intent(getApplicationContext(), SignupActivity::class.java)
                             startActivity(intent)
                         }
                     } else if (response.code() == 200) {
-                        // 서버로부터 받은 토큰을 저장하자
+                        Log.d("로그", "로그인 200 OK")
 
-                        Toast.makeText(applicationContext, "${response.body()?.memberDto?.nickname}님 안녕하세요", Toast.LENGTH_SHORT).show()
+                        // 서버로부터 받은 토큰을 저장하자
+                        Toast.makeText(applicationContext, "[ ${response.body()?.memberDto?.nickname} ]님 안녕하세요", Toast.LENGTH_SHORT).show()
 
                         val pref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
                         val editor = pref.edit()
                         editor.putString("SERVER_ACCESS_TOKEN", response.body()?.accessToken)
                             .putString("SERVER_REFRESH_TOKEN", response.body()?.refreshToken)
                             .putInt("SERVER_USER_ID", response.body()?.memberDto!!.id)
+                            .putString("KEY_NICKNAME", response.body()?.memberDto!!.nickname)
                             .putString("wakeTime", response.body()?.memberDto!!.wakeTime)
                             .putString("breakfastTime", response.body()?.memberDto!!.breakfastTime)
                             .putString("lunchTime", response.body()?.memberDto!!.lunchTime)
@@ -171,10 +151,8 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
-                    // 실패
-//                    Log.d("log",t.message.toString())
-//                    Log.d("log","fail")
-                    
+                    Log.d("로그", "로그인 onFailure")
+
                     // 로그인 실패 시 회원가입 페이지로 이동 (토큰은 발급받은 상태)
                     // 거기서 회원가입 정보를 입력 받고 회원가입 진행
                     // 자동 로그인 때는 이 작업을 강제시키지 말자
@@ -189,7 +167,6 @@ class LoginActivity : AppCompatActivity() {
             })
         }
     }
-
 
     private fun displaySignIn() {
         oneTapClient?.beginSignIn(signInRequest!!)

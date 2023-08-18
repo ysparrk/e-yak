@@ -40,12 +40,11 @@ class EditMemberActivity : AppCompatActivity() {
 
                         api.deleteAccount(memberId = memberId, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<Void> {
                             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                                Log.d("log", response.toString())
-//                                Log.d("log", response.body().toString())
 
                                 if (response.code() == 401) {
-                                    Toast.makeText(applicationContext, "인증되지 않은 사용자입니다", Toast.LENGTH_SHORT).show()
+                                    Log.d("로그", "사용자 탈퇴 401")
                                 } else if (response.code() == 200) {
+                                    Log.d("로그", "사용자 탈퇴 200 OK")
                                     Toast.makeText(applicationContext, "지금까지 지금이:약을 이용해주셔서 감사합니다", Toast.LENGTH_LONG).show()
 
                                     // 로그인 페이지를 띄워주자
@@ -55,14 +54,14 @@ class EditMemberActivity : AppCompatActivity() {
                             }
 
                             override fun onFailure(call: Call<Void>, t: Throwable) {
-                                Toast.makeText(applicationContext, "연결이 불안정합니다", Toast.LENGTH_SHORT).show()
+                                Log.d("로그", "사용자 탈퇴 onFailure")
                             }
                         })
                     }
                 })
                 .setNegativeButton("취소하기", object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface, which: Int) {
-                        Log.d("MyTag", "negative")
+                        Log.d("로그", "사용자 탈퇴 취소")
                     }
                 })
                 .create()
@@ -143,11 +142,10 @@ class EditMemberActivity : AppCompatActivity() {
         var lunchTimeMFilled = "10"
         var dinnerTimeHFilled = "19"
         var dinnerTimeMFilled = "20"
-        var bedTimeHFilled = "01"
+        var bedTimeHFilled = "23"
         var bedTimeMFilled = "00"
         var eatingTimeHFilled = "00"
         var eatingTimeMFilled = "20"
-
 
         if (wakeTimeH.length == 2) {
             wakeTimeHFilled = wakeTimeH
@@ -232,15 +230,13 @@ class EditMemberActivity : AppCompatActivity() {
 
         api.changeAccountInfo(memberId = memberId, params = data, Authorization = "Bearer ${serverAccessToken}").enqueue(object: Callback<ChangeAccountInfoResponseModel> {
             override fun onResponse(call: Call<ChangeAccountInfoResponseModel>, response: Response<ChangeAccountInfoResponseModel>) {
-                Log.d("log", response.toString())
-                Log.d("log", response.body().toString())
-
-                if (response.code() == 401) {
-                    Toast.makeText(applicationContext, "인증되지 않은 사용자입니다", Toast.LENGTH_SHORT).show()
-                } else if (response.code() == 400) {
-                    Toast.makeText(applicationContext, "해당 유저는 존재하지 않습니다", Toast.LENGTH_LONG).show()
+                if (response.code() == 400) {
+                    Log.d("로그", "사용자 정보 수정 400 Bad Request: 해당하는 이 member가 존재하지 않는 경우")
+                } else if (response.code() == 401) {
+                    Log.d("로그", "사용자 정보 수정 401 Unauthorized: Access Token이 유효하지 않은 경우")
                 }
                 else if (response.code() == 200) {
+                    Log.d("로그", "사용자 정보 수정 200 OK")
                     Toast.makeText(applicationContext, "성공적으로 변경되었습니다", Toast.LENGTH_LONG).show()
 
                     // 새로운 정보를 우리도 간단하게 저장
@@ -252,7 +248,7 @@ class EditMemberActivity : AppCompatActivity() {
                         .putString("KEY_LUNCH_TIME_M", if(lunchTimeMFilled != "") lunchTimeMFilled else "10")
                         .putString("KEY_DINNER_TIME_H", if(dinnerTimeHFilled != "") dinnerTimeHFilled else "19")
                         .putString("KEY_DINNER_TIME_M", if(dinnerTimeMFilled != "") dinnerTimeMFilled else "20")
-                        .putString("KEY_BED_TIME_H", if(bedTimeHFilled != "") bedTimeHFilled else "01")
+                        .putString("KEY_BED_TIME_H", if(bedTimeHFilled != "") bedTimeHFilled else "23")
                         .putString("KEY_BED_TIME_M", if(bedTimeMFilled != "") bedTimeMFilled else "00")
                         .putString("KEY_EATING_TIME_H", if(eatingTimeHFilled != "") eatingTimeHFilled else "00")
                         .putString("KEY_EATING_TIME_M", if(eatingTimeMFilled != "") eatingTimeMFilled else "20")
@@ -264,20 +260,14 @@ class EditMemberActivity : AppCompatActivity() {
                         .putString("eatingDuration", data.eatingDuration)
                         .apply()
 
-
-
                     // 메인 페이지를 띄워주자
                     val intent = Intent(getApplicationContext(), MainActivity::class.java)
                     startActivity(intent)
                 }
             }
             override fun onFailure(call: Call<ChangeAccountInfoResponseModel>, t: Throwable) {
-                Toast.makeText(applicationContext, "연결이 불안정합니다", Toast.LENGTH_SHORT).show()
+                Log.d("로그", "사용자 정보 수정 Failure")
             }
         })
-
-
-
-
     }
 }

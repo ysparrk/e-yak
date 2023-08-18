@@ -6,7 +6,10 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -20,12 +23,16 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -50,13 +57,14 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    //=== bluetooth 연결용 var
-    var btPermissionFlag: Boolean? = null
-    var btDeviceSaved: BluetoothDevice? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        binding.howtoImageInToolBar.setOnClickListener {
+            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://shelled-challenge-6e0.notion.site/ecdbd3ff7565436dbdb7f49fc22de70f"))
+            startActivity(intent)
+        }
 
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
         val serverAccessToken = pref.getString("SERVER_ACCESS_TOKEN", "")   // 엑세스 토큰
@@ -85,30 +93,7 @@ class MainActivity : AppCompatActivity() {
 //
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, secondAlarmMillis, secondPendingIntent)
 
-        //=== bluetooth 연결
-        // 권한 체크
-        val permissions = arrayOf(
-            android.Manifest.permission.BLUETOOTH,
-            android.Manifest.permission.BLUETOOTH_ADMIN,
-            android.Manifest.permission.BLUETOOTH_CONNECT,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.BLUETOOTH_SCAN,
-        )
-        btPermissionFlag = checkPermissions(permissions)
-        // pref 불러오기
-        var json = pref.getString("DEVICE_ITSELF", "")
-        btDeviceSaved = Gson().fromJson(json, BluetoothDevice::class.java)
-        if (btPermissionFlag == true) {
-            if (btDeviceSaved == null) {
-                Toast.makeText(this, "device does not exist", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "perm ok", Toast.LENGTH_SHORT).show()
-                connectDevice(btDeviceSaved)
-            }
-        } else {
-            Toast.makeText(this, "perm not", Toast.LENGTH_SHORT).show()
-        }
+
 
         initPage()
 
@@ -134,9 +119,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-//        super.onBackPressed()
-    }
+//    override fun onBackPressed() {
+////        super.onBackPressed()
+//    }
 
     private fun initPage() {
         alarmTabClick()
@@ -261,95 +246,10 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    //=== bluetooth 연결 관련 함수들
-    // bluetooth 권한 체크
-    private fun checkPermissions(perms: Array<String>): Boolean {
-        var flag = true
-        for (p in perms) {
-            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
-                flag = false
-                break
-            }
-        }
-        return flag
-    }
-    // connect 용 스레드
-    private fun connectDevice(targetDevice: BluetoothDevice?) {
-        val thread = Thread {
-            var socket: BluetoothSocket? = null
-            var fallbackSocket: BluetoothSocket? = null
-            try {
-                val uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-                socket = targetDevice?.createRfcommSocketToServiceRecord(uuid)
-                var clazz = socket?.remoteDevice?.javaClass
-                var paramTypes = arrayOf<Class<*>>(Integer.TYPE)
-                var m = clazz?.getMethod("createRfcommSocket", *paramTypes)
-                fallbackSocket = m?.invoke(socket?.remoteDevice, Integer.valueOf(1)) as BluetoothSocket?
-                fallbackSocket?.connect()
-            } catch (e: Exception) {
-                try {
-                    socket?.close()
-                    fallbackSocket?.close()
-                } catch (e: IOException) {}
-            }
-        }
-        thread.start()
+    public fun gotoMedicineSearch() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragment, MedicineSearchFragment())
+            .commit()
     }
 }
-
-//class FirstAlarmReceiver : BroadcastReceiver() {
-//    override fun onReceive(context: Context, intent: Intent) {
-//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channel = NotificationChannel(
-//                "alarm_channel",
-//                "Alarm Channel",
-//                NotificationManager.IMPORTANCE_HIGH
-//            )
-//            notificationManager.createNotificationChannel(channel)
-//        }
-//
-//        // 화면 활성화 및 잠금 화면 해제
-//        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-//        val wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "MyApp:MyWakelockTag")
-//        wakeLock.acquire(5000) // 화면을 5초 동안 활성화
-//
-//        val vibrator = context.getSystemService(Vibrator::class.java)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            if (vibrator?.hasVibrator() == true) {
-//                val vibrationEffect = VibrationEffect.createOneShot(3000, VibrationEffect.DEFAULT_AMPLITUDE)
-//                vibrator.vibrate(vibrationEffect)
-//            }
-//        }
-//
-//        //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) // 기본 알림 소리
-//        val soundUri = Uri.parse("android.resource://" + context.packageName + "/" + R.raw.alarmsound)
-//
-//
-//        val notification = NotificationCompat.Builder(context, "alarm_channel")
-//            .setContentTitle("첫 번째 알람")
-//            .setContentText("알람이 울렸습니다.")
-//            .setSmallIcon(R.drawable.eyak_logo) // 알림 아이콘 설정
-//            .setSound(soundUri)
-//            .build()
-//
-//        notificationManager.notify(0, notification) // 알림 표시
-//    }
-//}
-
-//class SecondAlarmReceiver : BroadcastReceiver() {
-//    override fun onReceive(context: Context, intent: Intent) {
-//
-//        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//
-//        val notification = NotificationCompat.Builder(context, "alarm_channel")
-//            .setContentTitle("두 번째 알람")
-//            .setContentText("알람이 울렸습니다.")
-//            .setSmallIcon(R.drawable.baseline_check_box_24) // 알림 아이콘 설정
-//            .build()
-//
-//        notificationManager.notify(1, notification) // 알림 표시
-//    }
-//}
-

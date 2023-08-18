@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -30,9 +31,7 @@ class MedicineAddFragment : Fragment() {
     private var selectIcon: Int = 1
 
     private var timeChk: BooleanArray = booleanArrayOf(false, false, false, false, false, false, false, false)
-
-    val api = EyakService.create()
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,8 +92,6 @@ class MedicineAddFragment : Fragment() {
                 // 날짜 정보 설정
                 val startDateTime = bundle.getString("startDateTime")
                 val endDateTime = bundle.getString("endDateTime")
-                Log.d("log", startDateTime!!)
-                Log.d("log", endDateTime!!)
 
                 layout.findViewById<EditText>(R.id.startYearInput).setText(startDateTime!!.substring(2 until 4))
                 layout.findViewById<EditText>(R.id.startMonthInput).setText(startDateTime!!.substring(5 until 7))
@@ -259,6 +256,16 @@ class MedicineAddFragment : Fragment() {
                 flag = false
             }
             // 종료 날짜 체크 끝
+
+            // 시작 날짜와 종료 날짜의 순서 체크 시작
+            val startDateChk: LocalDate = LocalDate.of(startYearData.toInt(), startMonthData.toInt(), startDayData.toInt())
+            val endDateChk: LocalDate = LocalDate.of(endYearData.toInt(), endMonthData.toInt(), endDayData.toInt())
+
+            if(startDateChk > endDateChk) {
+                Toast.makeText(mainActivity, "시작일이 종료일보다 뒤에 있습니다. 시작일과 종료일을 확인해 주세요", Toast.LENGTH_SHORT).show()
+                flag = false
+            }
+            // 시작 날짜와 종료 날짜의 순서 체크 끝
             
             // 이게 add인지 edit인지 구분하는 비트
             resultBundle.putBoolean("isEdit", isEdit)
@@ -267,11 +274,9 @@ class MedicineAddFragment : Fragment() {
 
             if(flag) {
                 setFragmentResult("medicineAddData", resultBundle)
-
                 mainActivity!!.gotoAddMedicineResult()
             }
         }
-
 
         for(iconIdIterator in 1..35) {
             val iconId: String = "medicineIcon${iconIdIterator}"
@@ -333,9 +338,24 @@ class MedicineAddFragment : Fragment() {
         return layout
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+                mainActivity.gotoMedicine()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }

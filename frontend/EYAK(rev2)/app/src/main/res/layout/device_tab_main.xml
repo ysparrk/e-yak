@@ -18,7 +18,14 @@
                 android:id="@+id/backDeviceEditBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="뒤로" />
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:backgroundTint="#E3F2C1"
+                android:fontFamily="@font/tmoney_regular"
+                android:includeFontPadding="false"
+                android:text="◀ 뒤로 가기"
+                android:textColor="#757863"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/deviceEditTitleText"
@@ -76,21 +83,6 @@
                         android:text="Medicine Name"
                         android:textColor="#757863" />
 
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <Button
-                        android:id="@+id/devicePickedDelBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:backgroundTint="#FF9B9B"
-                        android:fontFamily="@font/tmoney_regular"
-                        android:includeFontPadding="false"
-                        android:text="삭제"
-                        android:textColor="#757863" />
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -121,8 +113,8 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:layout_margin="5dp"
-                                android:background="#AAABAE"
-                                android:backgroundTint="#AAABAE"
+                                android:background="@drawable/device_edit_circle_top"
+                                android:backgroundTint="#D8D8DA"
                                 android:gravity="center"
                                 android:orientation="vertical" />
 
@@ -131,8 +123,8 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:layout_margin="5dp"
-                                android:background="#AAABAE"
-                                android:backgroundTint="#AAABAE"
+                                android:background="@drawable/device_ui_rectangle"
+                                android:backgroundTint="#D8D8DA"
                                 android:gravity="center"
                                 android:orientation="vertical" />
 
@@ -147,8 +139,8 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:layout_margin="5dp"
-                                android:background="#AAABAE"
-                                android:backgroundTint="#AAABAE"
+                                android:background="@drawable/device_edit_circle_bottom"
+                                android:backgroundTint="#D8D8DA"
                                 android:gravity="center"
                                 android:orientation="vertical" />
 
@@ -157,8 +149,8 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:layout_margin="5dp"
-                                android:background="#AAABAE"
-                                android:backgroundTint="#AAABAE"
+                                android:background="@drawable/device_ui_rectangle"
+                                android:backgroundTint="#D8D8DA"
                                 android:gravity="center"
                                 android:orientation="vertical" />
                         </TableRow>
@@ -171,8 +163,8 @@
                         android:layout_height="210dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="20dp"
-                        android:background="#AAABAE"
-                        android:backgroundTint="#AAABAE"
+                        android:background="@drawable/device_edit_circle_right"
+                        android:backgroundTint="#D8D8DA"
                         android:gravity="center"
                         android:orientation="vertical" />
 
@@ -196,13 +188,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="5dp">
+                android:layout_marginVertical="5dp"
+                android:background="#DDE6ED"
+                android:paddingHorizontal="10dp">
 
                 <LinearLayout
                     android:id="@+id/medicineScrollLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -224,27 +217,102 @@
                 android:textColor="#757863"
                 android:textSize="20sp" />
 
-            <Switch
-                android:id="@+id/deviceSoundSwitch"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:text="알림 소리"
-                android:textColor="#757863"
-                android:textSize="16sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <Switch
-                android:id="@+id/deviceBuzzSwitch"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="알림 소리"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="끄기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/deviceSoundSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="10dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:textAllCaps="false"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="켜기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:text="알림 진동"
-                android:textColor="#757863"
-                android:textSize="16sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="알림 진동"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="끄기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/deviceBuzzSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="10dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:textAllCaps="false"
+                    android:textColor="#757863"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:text="켜기"
+                    android:textColor="#757863"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/deviceEditSaveBtn"

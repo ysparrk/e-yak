@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
@@ -44,7 +46,7 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         val medicineDetailButton = view.findViewById<Button>(R.id.medicine_detail_button)
 
         /* ArrayList<MedicineAlarm>의 변수 medicineAlarm의 이미지와 데이터를 ImageView와 TextView에 담는다. */
-        val medicine = medicineList!![position]
+        val medicine = if(position == medicineList!!.size - 1) medicineList!![medicineList.size - 1] else  medicineList!![medicineList.size - position - 2]
 //        Log.d("log", "$medicine")
 
         when(medicine.medicineShape) {
@@ -92,13 +94,27 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
             medicineCardView.setHeight(80)
             medicineCardView.visibility = View.INVISIBLE
             view.setBackgroundColor(Color.parseColor("#F8FCF8"))
-        }
+        } else {
+            medicineCardView.setOnClickListener {
+                val scaleDownAnim = AnimationUtils.loadAnimation(mainActivity, R.anim.scale_down)
+                scaleDownAnim.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {}
 
-        // medicine detail 버튼을 누르면 해당 상세 페이지로 이동하도록
-        // fragment 간에 데이터 전달하기
+                    override fun onAnimationEnd(animation: Animation?) {
+                        // 애니메이션이 완료된 후에 페이지 이동 및 데이터 설정 수행
+                        // medicine 카드 뷰를 누르면 해당 상세 페이지로 이동하도록
+                        // fragment 간에 데이터 전달하기
+                        Thread.sleep(50)
+                        viewModel.setSelectedMedicineId(medicine.id)
 
-        medicineDetailButton.setOnClickListener {
-            viewModel.setSelectedMedicineId(medicine.id)
+                        // TODO: 상세 페이지로 이동하는 코드 추가
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation?) {}
+                })
+
+                medicineCardView.startAnimation(scaleDownAnim)
+            }
         }
 
         return view
@@ -113,9 +129,6 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         }
     }
 
-    /**
-     * Extension method to set View's height.
-     */
     fun View.setHeight(value: Int) {
         val lp = layoutParams
         lp?.let {
@@ -124,9 +137,6 @@ class MedicineListAdapter (val context: Context, val medicineList: ArrayList<Med
         }
     }
 
-    /**
-     * Extension method to set View's width.
-     */
     fun View.setWidth(value: Int) {
         val lp = layoutParams
         lp?.let {

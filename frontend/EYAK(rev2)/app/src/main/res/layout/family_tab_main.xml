@@ -5,65 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/emptyFamilyLinearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:tint="#D3D3D3"
-            app:srcCompat="@drawable/baseline_person_24" />
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:fontFamily="@font/tmoney_regular"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:text="아무것도 없어:약"
-            android:textColor="#757863"
-            android:textSize="26sp" />
-
-        <LinearLayout
+            android:id="@+id/acceptFamilyBtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            app:srcCompat="@drawable/baseline_lightbulb_24" />
 
-            <TextView
-                android:id="@+id/textView30"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/tmoney_regular"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="추가는 저기:약"
-                android:textColor="#757863"
-                android:textSize="13sp" />
+        <TextView
+            android:id="@+id/acceptFamilyCnt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/tmoney_bold"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="1"
+            android:textColor="#757863" />
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="right"
-                android:rotation="90"
-                android:tint="#D3D3D3"
-                app:srcCompat="@drawable/baseline_arrow_outward_24" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/frameLayout2"
@@ -135,30 +101,36 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
+    <LinearLayout
+        android:id="@+id/emptyFamilyLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/acceptFamilyBtn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/baseline_lightbulb_24" />
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/no_family" />
 
         <TextView
-            android:id="@+id/acceptFamilyCnt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/tmoney_bold"
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/tmoney_regular"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:text="1"
-            android:textColor="#757863" />
+            android:text="등록된 가족이 없어:약"
+            android:textColor="#757863"
+            android:textSize="26sp" />
 
-    </FrameLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

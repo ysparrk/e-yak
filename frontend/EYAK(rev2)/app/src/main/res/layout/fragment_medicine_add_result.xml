@@ -6,591 +6,299 @@
     android:layout_height="match_parent"
     tools:context=".MedicineAddResultFragment" >
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/frameLayout4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/medicineAddResultScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/medicineAddResultTitleTextView"
-                android:layout_width="match_parent"
-                android:layout_height="66.6dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="복약 정보 추가 확인"
-                android:textColor="#757863"
-                android:textSize="30sp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <TextView
-                android:id="@+id/textView51"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="투여 약 이름"
-                android:textColor="#757863"
-                android:textSize="20sp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-
-                <TextView
-                    android:id="@+id/medicineNameInputResult"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6"
-                    android:fontFamily="@font/tmoney_regular"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="TextView"
-                    android:textColor="#757863"
-                    android:textSize="18sp" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/textView58"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="질환 명"
-                android:textColor="#757863"
-                android:textSize="20sp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-
-                <TextView
-                    android:id="@+id/diseaseNameInputResult"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6"
-                    android:fontFamily="@font/tmoney_regular"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="TextView"
-                    android:textColor="#757863"
-                    android:textSize="18sp" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/textView59"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="투여 기간"
-                android:textColor="#757863"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="8">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:weightSum="22">
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/startYearInputResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/tmoney_regular"
-                            android:gravity="center"
-                            android:hint="년"
-                            android:includeFontPadding="false"
-                            android:textColor="#757863"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textView61"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="/"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/startMonthInputResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/tmoney_regular"
-                            android:gravity="center"
-                            android:hint="월"
-                            android:includeFontPadding="false"
-                            android:textColor="#757863"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textView60"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="/"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/startDayInputResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/tmoney_regular"
-                            android:gravity="center"
-                            android:hint="일"
-                            android:includeFontPadding="false"
-                            android:textColor="#757863"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textView63"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="4"
-                            android:gravity="center"
-                            android:text="~"
-                            android:textColor="#757863"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/endYearInputResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/tmoney_regular"
-                            android:gravity="center"
-                            android:hint="년"
-                            android:includeFontPadding="false"
-                            android:textColor="#757863"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textView64"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="/"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/endMonthInputResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/tmoney_regular"
-                            android:gravity="center"
-                            android:hint="월"
-                            android:includeFontPadding="false"
-                            android:textColor="#757863"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/textView65"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="/"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/endDayInputResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/tmoney_regular"
-                            android:gravity="center"
-                            android:hint="일"
-                            android:includeFontPadding="false"
-                            android:textColor="#757863"
-                            android:textSize="18sp" />
-
-                        <Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                    </LinearLayout>
-                </FrameLayout>
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/textView66"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="투여 약 이모티콘"
-                android:textColor="#757863"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-
-                <ImageView
-                    android:id="@+id/medicineIconResult"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6"
-                    android:src="@drawable/ic_pill" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/textView67"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="시간 설정"
-                android:textColor="#757863"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:orientation="vertical"
-                    android:weightSum="5">
-
-                    <TextView
-                        android:id="@+id/textView68"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/tmoney_regular"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="일어나는 시간"
-                        android:textColor="#757863" />
-
-                    <TextView
-                        android:id="@+id/textView69"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/tmoney_regular"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="아침식사 시간(전/후)"
-                        android:textColor="#757863" />
-
-                    <TextView
-                        android:id="@+id/textView70"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/tmoney_regular"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="점심식사 시간(전/후)"
-                        android:textColor="#757863" />
-
-                    <TextView
-                        android:id="@+id/textView71"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/tmoney_regular"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="저녁식사 시간(전/후)"
-                        android:textColor="#757863" />
-
-                    <TextView
-                        android:id="@+id/textView72"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/tmoney_regular"
-                        android:gravity="center"
-                        android:includeFontPadding="false"
-                        android:text="잠자는 시간"
-                        android:textColor="#757863" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:orientation="vertical"
-                    android:weightSum="5">
-
-                    <ImageView
-                        android:id="@+id/wakeChkResult"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/baseline_check_box_outline_blank_24" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <ImageView
-                            android:id="@+id/breakfastBeforeChkResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:src="@drawable/baseline_check_box_outline_blank_24" />
-
-                        <ImageView
-                            android:id="@+id/breakfastAfterChkResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:src="@drawable/baseline_check_box_outline_blank_24" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <ImageView
-                            android:id="@+id/lunchBeforeChkResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:src="@drawable/baseline_check_box_outline_blank_24" />
-
-                        <ImageView
-                            android:id="@+id/lunchAfterChkResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:src="@drawable/baseline_check_box_outline_blank_24" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <ImageView
-                            android:id="@+id/dinnerBeforeChkResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:src="@drawable/baseline_check_box_outline_blank_24" />
-
-                        <ImageView
-                            android:id="@+id/dinnerAfterChkResult"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:src="@drawable/baseline_check_box_outline_blank_24" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/bedChkResult"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/baseline_check_box_outline_blank_24" />
-
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/textView74"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:fontFamily="@font/tmoney_bold"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="1회 투여 양"
-                android:textColor="#757863"
-                android:textSize="20sp" />
-
-            <Space
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2" />
+                android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
+                <TextView
+                    android:id="@+id/medicineAddResultTitleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="66.6dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="복약 정보 추가 확인"
+                    android:textColor="#757863"
+                    android:textSize="30sp" />
 
                 <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/textView51"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="투여 약 이름"
+                    android:textColor="#757863"
+                    android:textSize="20sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:orientation="horizontal"
-                    android:weightSum="7">
+                    android:weightSum="10">
 
                     <Space
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="2" />
 
                     <TextView
-                        android:id="@+id/numberOfOneTimeInputResult"
+                        android:id="@+id/medicineNameInputResult"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
-                        android:hint="용량"
-                        android:inputType="number|numberDecimal"
+                        android:includeFontPadding="false"
+                        android:text="TextView"
                         android:textColor="#757863"
                         android:textSize="18sp" />
 
                     <Space
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="2" />
+                </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/unitTypeInputResult"
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:id="@+id/textView58"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="질환 명"
+                    android:textColor="#757863"
+                    android:textSize="20sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <Space
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="2" />
+
+                    <TextView
+                        android:id="@+id/diseaseNameInputResult"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/tmoney_regular"
                         android:gravity="center"
-                        android:hint="단위"
+                        android:includeFontPadding="false"
+                        android:text="TextView"
                         android:textColor="#757863"
                         android:textSize="18sp" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:id="@+id/textView59"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="투여 기간"
+                    android:textColor="#757863"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="8">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="22">
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/startYearInputResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:gravity="center"
+                                android:hint="년"
+                                android:includeFontPadding="false"
+                                android:textColor="#757863"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textView61"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/startMonthInputResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:gravity="center"
+                                android:hint="월"
+                                android:includeFontPadding="false"
+                                android:textColor="#757863"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textView60"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/startDayInputResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:gravity="center"
+                                android:hint="일"
+                                android:includeFontPadding="false"
+                                android:textColor="#757863"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textView63"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4"
+                                android:gravity="center"
+                                android:text="~"
+                                android:textColor="#757863"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/endYearInputResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:gravity="center"
+                                android:hint="년"
+                                android:includeFontPadding="false"
+                                android:textColor="#757863"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textView64"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/endMonthInputResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:gravity="center"
+                                android:hint="월"
+                                android:includeFontPadding="false"
+                                android:textColor="#757863"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textView65"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/endDayInputResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/tmoney_regular"
+                                android:gravity="center"
+                                android:hint="일"
+                                android:includeFontPadding="false"
+                                android:textColor="#757863"
+                                android:textSize="18sp" />
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                        </LinearLayout>
+                    </FrameLayout>
 
                     <Space
                         android:layout_width="0dp"
@@ -599,47 +307,362 @@
                 </LinearLayout>
 
                 <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-            </LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2" />
-
-                <Button
-                    android:id="@+id/chkComplete"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6"
-                    android:backgroundTint="#E3F2C1"
+                <TextView
+                    android:id="@+id/textView66"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
                     android:includeFontPadding="false"
-                    android:text="확인 완료"
-                    android:textColor="#757863" />
+                    android:text="투여 약 이모티콘"
+                    android:textColor="#757863"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+
+                    <ImageView
+                        android:id="@+id/medicineIconResult"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:src="@drawable/ic_pill" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+
+                </LinearLayout>
 
                 <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:id="@+id/textView67"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="시간 설정"
+                    android:textColor="#757863"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:orientation="vertical"
+                        android:weightSum="5">
+
+                        <TextView
+                            android:id="@+id/textView68"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="일어나는 시간"
+                            android:textColor="#757863" />
+
+                        <TextView
+                            android:id="@+id/textView69"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="아침식사 시간(전/후)"
+                            android:textColor="#757863" />
+
+                        <TextView
+                            android:id="@+id/textView70"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="점심식사 시간(전/후)"
+                            android:textColor="#757863" />
+
+                        <TextView
+                            android:id="@+id/textView71"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="저녁식사 시간(전/후)"
+                            android:textColor="#757863" />
+
+                        <TextView
+                            android:id="@+id/textView72"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/tmoney_regular"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="잠자는 시간"
+                            android:textColor="#757863" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:orientation="vertical"
+                        android:weightSum="5">
+
+                        <ImageView
+                            android:id="@+id/wakeChkResult"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:id="@+id/breakfastBeforeChkResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                            <ImageView
+                                android:id="@+id/breakfastAfterChkResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/baseline_check_box_outline_blank_24" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:id="@+id/lunchBeforeChkResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                            <ImageView
+                                android:id="@+id/lunchAfterChkResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/baseline_check_box_outline_blank_24" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:id="@+id/dinnerBeforeChkResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                            <ImageView
+                                android:id="@+id/dinnerAfterChkResult"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:src="@drawable/baseline_check_box_outline_blank_24" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/bedChkResult"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/baseline_check_box_outline_blank_24" />
+
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:id="@+id/textView74"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/tmoney_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="1회 투여 양"
+                    android:textColor="#757863"
+                    android:textSize="20sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:orientation="horizontal"
+                        android:weightSum="7">
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/numberOfOneTimeInputResult"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="용량"
+                            android:inputType="number|numberDecimal"
+                            android:textColor="#757863"
+                            android:textSize="18sp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/unitTypeInputResult"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:hint="단위"
+                            android:textColor="#757863"
+                            android:textSize="18sp" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+
+                    <Button
+                        android:id="@+id/chkComplete"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:backgroundTint="#E3F2C1"
+                        android:fontFamily="@font/tmoney_bold"
+                        android:includeFontPadding="false"
+                        android:text="확인 완료"
+                        android:textColor="#757863" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
             </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
+    <ImageView
+        android:id="@+id/medicineAddResultScrollViewScrollDown"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:rotation="270"
+        android:src="@drawable/baseline_first_page_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-        </LinearLayout>
-    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

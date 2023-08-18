@@ -11,8 +11,8 @@ android {
         applicationId "com.a103.eyakrev1"
         minSdk 26
         targetSdk 33
-        versionCode 2
-        versionName "1.001"
+        versionCode 5
+        versionName "1.004"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -64,4 +64,7 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson:2.6.2'
+
+    // PDF 만들기
+    implementation 'com.itextpdf:itextg:5.5.10'
 }

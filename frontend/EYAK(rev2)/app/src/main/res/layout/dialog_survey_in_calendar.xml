@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/surveyPopUpTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView32"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/tmoney_bold"
+            android:gravity="center"
+            android:text="건강 설문"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#757863"
+            android:textSize="25sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/todayConditionLayoutInCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/surveyPopUpTitleLayout">
+
+        <TextView
+            android:id="@+id/textView98"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/tmoney_regular"
+            android:gravity="right|center_vertical"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="그날의 컨디션"
+            android:textColor="#757863"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/todayConditionEmotionImageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/symptomInCalendarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/todayConditionLayoutInCalendar">
+
+
+        <TextView
+            android:id="@+id/textView99"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/tmoney_regular"
+            android:gravity="right|top"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="보유 증상"
+            android:textColor="#757863"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/todayConditionSymptomTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/tmoney_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:textColor="#757863"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/otherIssueTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/tmoney_regular"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:text="기타 특이사항"
+        android:textColor="#757863"
+        android:textSize="17sp"
+        app:layout_constraintTop_toBottomOf="@id/symptomInCalendarLayout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/otherIssueTitleTextView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/otherIssueTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/tmoney_regular"
+                android:includeFontPadding="false"
+                android:textColor="#757863"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,10 +19,9 @@
 
         <ImageView
             android:id="@+id/emptyAlarmImageView"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:tint="#D3D3D3"
-            app:srcCompat="@drawable/baseline_alarm_on_24" />
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/no_alarm" />
 
         <TextView
             android:id="@+id/emptyAlarmTextView"
@@ -165,7 +164,7 @@
                 android:includeFontPadding="false"
                 android:text="오늘의 컨디션"
                 android:textColor="#757863"
-                android:textSize="32sp" />
+                android:textSize="26sp" />
         </LinearLayout>
     </LinearLayout>
 

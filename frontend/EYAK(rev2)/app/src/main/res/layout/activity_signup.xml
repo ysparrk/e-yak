@@ -448,7 +448,7 @@
                             android:ems="2"
                             android:fontFamily="@font/tmoney_regular"
                             android:gravity="center"
-                            android:hint="01"
+                            android:hint="23"
                             android:includeFontPadding="false"
                             android:inputType="number|numberDecimal"
                             android:textColor="#757863"

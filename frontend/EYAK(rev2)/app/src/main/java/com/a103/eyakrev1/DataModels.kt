@@ -47,6 +47,50 @@ data class ChangeAccountInfoBodyModel(
     var eatingDuration: String,
 )
 
+data class medicineDetailsInCalendarResponseModel(
+    var date: String,
+    var medicineRoutineDateDtos: ArrayList<MedicineDetailInCalendar>,
+    var surveyContentDtos: surveyContentDtos,
+)
+
+data class MedicineDetailInCalendar(
+    var date: String?,
+    var prescriptionId: Int,
+    var customName: String,
+    var routine: String,
+    var took: Boolean,
+)
+
+data class surveyContentDtos(
+    var contentEmotionResultResponse: contentEmotionResultResponse,
+    var contentStatusResultResponse: contentStatusResultResponse,
+    var contentTextResultResponse: contentTextResultResponse,
+)
+
+data class contentEmotionResultResponse(
+    var contentEmotionResultId: Int,
+    var memberId: Int,
+    var choiceEmotion: String,
+    var createdAt: String,
+    var updatedAt: String
+)
+
+data class contentStatusResultResponse(
+    var contentStatusResultId: Int,
+    var memberId: Int,
+    var selectedStatusChoices: ArrayList<String>,
+    var createdAt: String,
+    var updatedAt: String
+)
+
+data class contentTextResultResponse(
+    var contentTextResultId: Int,
+    var memberId: Int,
+    var text: String,
+    var createdAt: String,
+    var updatedAt: String
+)
+
 data class ChangeAccountInfoResponseModel(
     var id: Int,
     var providerName: String,
@@ -77,6 +121,7 @@ data class PrescriptionBodyModel(   // 복약 정보 등록 바디
     var start_date_time: String,
     var end_date_time: String,
     var medicine_routines: MutableList<String>,
+    var iotLocation: Int,
     var medicine_shape: Int,
     var medicine_dose: Float,
     var unit: String,
@@ -98,8 +143,8 @@ data class PrescriptionEditBodyModel(
 
 data class Dates(
     var date: String,
-    var full_dose: Int,
-    var actual_dose: Int,
+    var fullDose: Int,
+    var actualDose: Int,
 )
 
 data class FollowRequestsDataModel(
@@ -149,32 +194,32 @@ data class medicineRoutineCheckBodyModel(
 )
 
 data class DailySurveyResultBodyModel(
-    var contentTextResultResponse: textResultModel,
-    var contentStatusResultResponse: statusResultModel,
-    var contentEmotionResultResponse: emotionResultModel,
+    var contentTextResultResponse: TextResultModel,
+    var contentStatusResultResponse: StatusResultModel,
+    var contentEmotionResultResponse: EmotionResultModel,
 )
 
-data class textResultModel(
+data class TextResultModel(
     var contentTextResultId: Long,
     var memberId: Long,
     var text: String,
     var createdAt: String,
     var updatedAt: String,
 )
-data class statusResultModel(
-    var contentStatusResultId: Long,
-    var memberId: Long,
-    var selectedStatusChoices: ArrayList<String>,
-    var createdAt: String,
-    var updatedAt: String,
+data class StatusResultModel(
+    var contentStatusResultId: Long,    // contentStatusResultId
+    var memberId: Long, // memberId
+    var selectedStatusChoices: ArrayList<String>,   // selectedStatusChoices
+    var createdAt: String,  // createdAt
+    var updatedAt: String,  // updatedAt
 )
 
-data class emotionResultModel(
-    var contentEmotionResultId: Long,
-    var memberId: Long,
-    var choiceEmotion: String,
-    var createdAt: String,
-    var updatedAt: String,
+data class EmotionResultModel(
+    var contentEmotionResultId: Long,   // contentEmotionResultId
+    var memberId: Long, // memberId
+    var choiceEmotion: String,  // choiceEmotion
+    var createdAt: String,  // createdAt
+    var updatedAt: String,  // updatedAt
 )
 
 data class ContentTextResultsBodyModel(
@@ -202,4 +247,32 @@ data class ContentStatusResultsBodyModel(
 data class EditContentStatusBodyModel(
     var contentStatusResultId: Long,
     var selectedStatusChoices: ArrayList<String>,
+)
+
+data class MedicineSearchResponseBodyModel(
+    var prescriptionList: ArrayList<PrescriptionListModel>, // prescriptionList
+    var surveyContentList : ArrayList<SurveyContentListModel>,  // surveyContentList
+)
+
+data class PrescriptionListModel(
+    var customName: String,
+    var icd: String,
+    var krName: String,
+    var engName: String,
+    var startDateTime: String,
+    var endDateTime: String,
+    var iotLocation: Int,
+    var medicineShape: Int,
+    var medicineDose: Float,
+    var unit: String,
+    var medicineRoutines: ArrayList<String>,
+    var fullDose: Int,
+    var actualDose: Int,
+)
+
+data class SurveyContentListModel(
+    var date: String,
+    var contentEmotionResultResponse: EmotionResultModel,   // contentEmotionResultResponse
+    var contentStatusResultResponse: StatusResultModel, // contentStatusResultResponse
+    var contentTextResultResponse: TextResultModel, // contentTextResultResponse
 )

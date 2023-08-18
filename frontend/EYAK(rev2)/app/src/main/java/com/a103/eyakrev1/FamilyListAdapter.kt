@@ -2,15 +2,22 @@ package com.a103.eyakrev1
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.setFragmentResult
 
 class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>): BaseAdapter() {
+
+    var mainActivity: MainActivity = context as MainActivity
     override fun getCount(): Int {
         return familyList.size
     }
@@ -41,6 +48,34 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
             familyCardView.setHeight(80)
             familyCardView.visibility = View.INVISIBLE
             view.setBackgroundColor(Color.parseColor("#F8FCF8"))
+        } else {
+            familyCardView.setOnClickListener {
+                val scaleDownAnim = AnimationUtils.loadAnimation(mainActivity, R.anim.scale_down)
+
+                scaleDownAnim.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {}
+
+                    override fun onAnimationEnd(animation: Animation?) {
+                        // 애니메이션이 완료된 후에 페이지 이동 및 데이터 설정 수행
+                        Thread.sleep(50)
+
+                        val bundle = Bundle()
+
+                        bundle.putInt("requeteeId", family.memberId)
+                        bundle.putString("customName", family.custom_name)
+
+                        (context as FragmentActivity).supportFragmentManager.setFragmentResult("familyMonthlyDose", bundle)
+
+                        mainActivity!!.gotoMyCalendar()
+
+                        // TODO: 상세 페이지로 이동하는 코드 추가
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation?) {}
+                })
+
+                familyCardView.startAnimation(scaleDownAnim)
+            }
         }
 
         familyListNameTextView.text = family.custom_name
@@ -49,9 +84,6 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         return view
     }
 
-    /**
-     * Extension method to set View's height.
-     */
     fun View.setHeight(value: Int) {
         val lp = layoutParams
         lp?.let {
@@ -60,9 +92,6 @@ class FamilyListAdapter (val context: Context, val familyList: ArrayList<Family>
         }
     }
 
-    /**
-     * Extension method to set View's width.
-     */
     fun View.setWidth(value: Int) {
         val lp = layoutParams
         lp?.let {

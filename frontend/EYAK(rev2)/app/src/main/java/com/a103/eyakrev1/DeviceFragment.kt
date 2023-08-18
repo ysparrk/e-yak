@@ -1,12 +1,16 @@
 package com.a103.eyakrev1
 
 import android.app.ActionBar.LayoutParams
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.DragEvent
 import android.view.Gravity
@@ -18,18 +22,27 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DeviceFragment : Fragment() {
 
-    val api = EyakService.create()
+    private var backPressedOnce = false
+    private val doubleClickInterval: Long = 1000 // 1초
+
+    private val api = EyakService.create()
     lateinit var mainActivity: MainActivity
 
     // Preference
@@ -51,6 +64,10 @@ class DeviceFragment : Fragment() {
     private var cell5Data: Medicine? = null
     private var soundData: Boolean? = null
     private var buzzData: Boolean? = null
+    // 약통 설정 처음값, 변경값
+    private var cellInitData = Array<Medicine?>(5) { null }
+    private var cellNowData = Array<Medicine?>(5) { null }
+    private var alaInitData = Array<Boolean?>(2) { null }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,8 +89,11 @@ class DeviceFragment : Fragment() {
         cell4Data = gson.fromJson(json, Medicine::class.java)
         json = pref?.getString("DEVICE_CELL5", "")
         cell5Data = gson.fromJson(json, Medicine::class.java)
+        cellInitData = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
+        cellNowData = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
         soundData = pref?.getBoolean("DEVICE_SOUND", true)
-        buzzData = pref?.getBoolean("DEVICE_BUZZ", true)
+        buzzData = pref?.getBoolean("DEVICE_BUZZ", false)
+        alaInitData = arrayOf(soundData, buzzData)
     }
 
     override fun onCreateView(
@@ -92,21 +112,31 @@ class DeviceFragment : Fragment() {
             saveDeviceEdit()
         }
 
+        // 소리, 진동 설정
+        val soundView = layout.findViewById<Switch>(R.id.deviceSoundSwitch)
+        val buzzView = layout.findViewById<Switch>(R.id.deviceBuzzSwitch)
+        soundView.setChecked(soundData!!)
+        buzzView.setChecked(buzzData!!)
+        soundView.setOnCheckedChangeListener { _, isChecked -> soundData = isChecked }
+        buzzView.setOnCheckedChangeListener { _, isChecked -> buzzData = isChecked }
+
         // 드랍 리스너
+        val view0 = layout.findViewById<LinearLayout>(R.id.medicineScrollLayout)
+        val viewBack = layout.findViewById<HorizontalScrollView>(R.id.medicineScroll)
         val view1 = layout.findViewById<LinearLayout>(R.id.btEditCell1)
         val view2 = layout.findViewById<LinearLayout>(R.id.btEditCell2)
         val view3 = layout.findViewById<LinearLayout>(R.id.btEditCell3)
         val view4 = layout.findViewById<LinearLayout>(R.id.btEditCell4)
         val view5 = layout.findViewById<LinearLayout>(R.id.btEditCell5)
         val cellViews = arrayOf(view1, view2, view3, view4, view5)
-        val cellData = arrayOf(cell1Data, cell2Data, cell3Data, cell4Data, cell5Data)
         for (i in 0..4) {
             cellViews[i].setOnDragListener(dragListener)
         }
+        viewBack.setOnDragListener(dragListener)
 
         // 일단 아이템 존재 전제.
         layout.findViewById<TextView>(R.id.medicineScrollNonText).visibility = View.GONE
-        layout.findViewById<HorizontalScrollView>(R.id.medicineScroll).visibility = View.VISIBLE
+        viewBack.visibility = View.VISIBLE
 
         // 아이템 가져오기
         medicList = arrayListOf<Medicine>()
@@ -117,24 +147,24 @@ class DeviceFragment : Fragment() {
                 } else if (response.code() == 200) {
                     medicList = response.body()
                     medicList?.add(Medicine())
-                    for (i in 0..4) { // 각 cell을 loop
-                        if (cellData[i] != null) {
-                            newMedicItem(cellData[i]!!, i+1)
+                    for (i in 0..4) { // 각 cell을 loop, 배치된 약들 디스플레이.
+                        if (cellNowData[i] != null) {
+                            if (medicList!!.contains(cellNowData[i])) {
+                                newMedicItem(cellNowData[i]!!, i, cellViews, view0)
+                            } else { // 등록된 약이 존재하지 않음.
+                                cellInitData[i] = null
+                                cellNowData[i] = null
+                            }
                         }
                     }
-//                    for (m in medicList!!) { // 각 약을 loop
-//                        if (m.id != -1) {
-//                            when(m.id) {
-//                                cell1Data?.id -> { newMedicItem(m, 1) }
-//                                cell2Data?.id -> { newMedicItem(m, 2) }
-//                                cell3Data?.id -> { newMedicItem(m, 3) }
-//                                cell4Data?.id -> { newMedicItem(m, 4) }
-//                                cell5Data?.id -> { newMedicItem(m, 5) }
-//                                else -> { newMedicItem(m, 0) }
-//                            }
-//                        }
-//                    }
-                    if (medicList?.size == 1) { // 등록 약 없음
+                    for (m in medicList!!) { // 각 약을 loop, 배치되지 않은 약들 디스플레이.
+                        if (m.id != -1) {
+                            if (!cellNowData.contains(m)) {
+                                newMedicItem(m, -1, cellViews, view0)
+                            }
+                        }
+                    }
+                    if (medicList?.size == 1) { // 등록 약 없는 경우.
                         layout.findViewById<TextView>(R.id.medicineScrollNonText).visibility = View.VISIBLE
                         layout.findViewById<HorizontalScrollView>(R.id.medicineScroll).visibility = View.GONE
                     }
@@ -153,39 +183,73 @@ class DeviceFragment : Fragment() {
                 event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
             }
             DragEvent.ACTION_DRAG_ENTERED -> { // shadow가 listener 뷰에 진입
-                view.background.setTint(Color.parseColor("#FF9B9B"))
-                view.invalidate()
+                val viewId = view.resources.getResourceEntryName(view.id)
+                if (viewId != "medicineScroll") {
+                    view.background.setTint(Color.parseColor("#E3F2C1"))
+                    view.invalidate()
+                }
                 true
             }
             DragEvent.ACTION_DRAG_LOCATION -> true // shadow가 listener 뷰에 진입 후 지속.
             DragEvent.ACTION_DRAG_EXITED -> { // shadow가 listener 뷰에서 나감
-                view.background.setTint(Color.parseColor("#AAABAE"))
-                view.invalidate()
+                val viewId = view.resources.getResourceEntryName(view.id)
+                if (viewId != "medicineScroll") {
+                    view.background.setTint(Color.parseColor("#D8D8DA"))
+                    view.invalidate()
+                }
                 true
             }
             DragEvent.ACTION_DROP -> { // shadow가 listener 뷰에 드랍
-                view.background.setTint(Color.parseColor("#AAABAE"))
                 val item = event.clipData.getItemAt(0)
-
-                view.invalidate()
-
+                val itemMedic = Gson().fromJson("${item.text}", Medicine::class.java)
+                val viewId = view.resources.getResourceEntryName(view.id)
                 val v = event.localState as View
-                v.findViewById<TextView>(R.id.deviceMedicText).visibility = View.GONE
-                layout.findViewById<Button>(R.id.devicePickedDelBtn).visibility = View.VISIBLE
                 val owner = v.parent as ViewGroup
-                owner.removeView(v)
-                val destination = view as LinearLayout
-                destination.addView(v)
-
-                // 각 칸에 Medicine 배치
-                when("${view.id}".last()) {
-                    '1' -> { cell1Data = Gson().fromJson("${item.text}", Medicine::class.java) }
-                    '2' -> { cell2Data = Gson().fromJson("${item.text}", Medicine::class.java) }
-                    '3' -> { cell3Data = Gson().fromJson("${item.text}", Medicine::class.java) }
-                    '4' -> { cell4Data = Gson().fromJson("${item.text}", Medicine::class.java) }
-                    '5' -> { cell5Data = Gson().fromJson("${item.text}", Medicine::class.java) }
+                if (viewId == "medicineScroll") { // 약리스트에 드롭 됨
+                    for (i in 0..4) {
+                        if (cellNowData[i] == itemMedic) { // 이전에 있던 칸 정보 가져오기
+                            view.invalidate()
+                            cellNowData[i] = null
+                            v.findViewById<TextView>(R.id.deviceMedicText).visibility = View.VISIBLE
+                            owner.removeView(v)
+                            val destination = view.findViewById<LinearLayout>(R.id.medicineScrollLayout)
+                            destination.addView(v)
+                            break
+                        }
+                    }
+                } else { // 약통 칸에 드롭됨
+                    view.background.setTint(Color.parseColor("#D8D8DA"))
+                    view.invalidate()
+                    val viewIdNo = viewId.last().toString().toInt() // 드롭된 칸 번호
+                    var prevNo = 0// 이전 칸 번호 (0 = 리스트, 1-5 = 칸)
+                    for (i in 0..4) {
+                        if (cellNowData[i] == itemMedic) {
+                            prevNo = i+1
+                        }
+                    }
+                    if (prevNo != viewIdNo) {
+                        if (cellNowData[viewIdNo-1] != null) { // 드롭된 칸에 이미 약이 존재
+                            val destination = view as LinearLayout
+                            val tmpView = destination.findViewById<LinearLayout>(R.id.deviceMedicItem)
+                            tmpView.findViewById<TextView>(R.id.deviceMedicText).visibility = View.VISIBLE
+                            destination.removeView(tmpView)
+                            layout.findViewById<LinearLayout>(R.id.medicineScrollLayout).addView(tmpView)
+                        }
+                        if (prevNo == 0) { // 리스트에서 온 경우
+                            cellNowData[viewIdNo-1] = itemMedic
+                            v.findViewById<TextView>(R.id.deviceMedicText).visibility = View.GONE
+                            owner.removeView(v)
+                            val destination = view as LinearLayout
+                            destination.addView(v)
+                        } else { // 다른 칸에서 온 경우.
+                            cellNowData[prevNo-1] = null
+                            cellNowData[viewIdNo-1] = itemMedic
+                            owner.removeView(v)
+                            val destination = view as LinearLayout
+                            destination.addView(v)
+                        }
+                    }
                 }
-                // v.visibility = View.VISIBLE
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {  // 드래그앤 드롭 종료시 발생. action_drop 후 보장 X.
@@ -197,19 +261,13 @@ class DeviceFragment : Fragment() {
     }
 
     // 드래그 아이템 추가 함수
-    private fun newMedicItem(medic: Medicine, setted: Int) {
+    private fun newMedicItem(medic: Medicine, setted: Int, views: Array<LinearLayout>, view0: LinearLayout) {
         // item 뷰 가져오기, 이외 뷰들
         val medicView = LayoutInflater.from(requireContext()).inflate(R.layout.device_tab_edit_view_item, null)
-        val view0 = layout.findViewById<LinearLayout>(R.id.medicineScrollLayout)
-        val view1 = layout.findViewById<LinearLayout>(R.id.btEditCell1)
-        val view2 = layout.findViewById<LinearLayout>(R.id.btEditCell2)
-        val view3 = layout.findViewById<LinearLayout>(R.id.btEditCell3)
-        val view4 = layout.findViewById<LinearLayout>(R.id.btEditCell4)
-        val view5 = layout.findViewById<LinearLayout>(R.id.btEditCell5)
         // 약 아이템 이름 설정
         val medicNameView = medicView.findViewById<TextView>(R.id.deviceMedicText)
-        if (setted != 0) medicNameView.visibility = View.GONE
-        else medicNameView.text = medic.customName
+        medicNameView.text = medic.customName
+        if (setted != -1) medicNameView.visibility = View.GONE
         // 아이콘 설정
         val medicIconView = medicView.findViewById<ImageView>(R.id.deviceMedicImage)
         iconSetting(medicIconView, medic.medicineShape)
@@ -219,19 +277,6 @@ class DeviceFragment : Fragment() {
             layout.findViewById<HorizontalScrollView>(R.id.devicePickedScroll).visibility = View.VISIBLE
             iconSetting(layout.findViewById<ImageView>(R.id.devicePickedImage), medic.medicineShape)
             layout.findViewById<TextView>(R.id.devicePickedText).text = medic.customName
-            // 삭제 버튼 셋업
-            layout.findViewById<Button>(R.id.devicePickedDelBtn).setOnClickListener {
-                when(medic.id) {
-                    cell1Data?.id -> { view1.removeAllViews(); newMedicItem(medic, 0); cell1Data = null }
-                    cell2Data?.id -> { view2.removeAllViews(); newMedicItem(medic, 0); cell2Data = null }
-                    cell3Data?.id -> { view3.removeAllViews(); newMedicItem(medic, 0); cell3Data = null }
-                    cell4Data?.id -> { view4.removeAllViews(); newMedicItem(medic, 0); cell4Data = null }
-                    cell5Data?.id -> { view5.removeAllViews(); newMedicItem(medic, 0); cell5Data = null }
-                }
-                layout.findViewById<TextView>(R.id.devicePickText).visibility = View.VISIBLE
-                layout.findViewById<HorizontalScrollView>(R.id.devicePickedScroll).visibility = View.GONE
-            }
-//            if (setted == 0) layout.findViewById<Button>(R.id.devicePickedDelBtn).visibility = View.GONE
         }
         // 길게 클릭 셋업
         medicView.setOnLongClickListener {
@@ -242,16 +287,13 @@ class DeviceFragment : Fragment() {
 
             val dragShadowBuilder = View.DragShadowBuilder(it)
             it.startDragAndDrop(data, dragShadowBuilder, it, 0)
-            // it.visibility = View.INVISIBLE
             true
         }
-        when(setted) {
-            0 -> { view0.addView(medicView) }
-            1 -> { view1.addView(medicView) }
-            2 -> { view2.addView(medicView) }
-            3 -> { view3.addView(medicView) }
-            4 -> { view4.addView(medicView) }
-            5 -> { view5.addView(medicView) }
+        // 약 뷰 배치
+        if (setted != -1) {
+            views[setted].addView(medicView)
+        } else {
+            view0.addView(medicView)
         }
     }
 
@@ -296,34 +338,100 @@ class DeviceFragment : Fragment() {
         }
     }
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         // 2. Context를 액티비티로 형변환해서 할당
         mainActivity = context as MainActivity
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Do something
+
+                if (backPressedOnce) {
+                    requireActivity().finishAffinity()
+                    return
+                }
+                backPressedOnce = true
+
+                GlobalScope.launch {
+                    delay(doubleClickInterval)
+                    backPressedOnce = false
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
     // 뒤로가기 버튼 함수
     private fun backDeviceEdit() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFragment, DeviceRegisterFragment())
-            .commit()
+        var changeFlag = false
+        for (i in 0..4) {
+            if (cellInitData[i] != cellNowData[i]) {
+                changeFlag = true
+                break
+            }
+        }
+        if (alaInitData[0] != soundData) changeFlag = true
+        if (alaInitData[1] != buzzData) changeFlag = true
+        if (changeFlag) {
+            AlertDialog.Builder(getContext()).apply {
+                setTitle("약통 설정")
+                setMessage("약통 설정의 변경 사항이 저장되지 않았습니다.\n저장하지 않고 이전으로 돌아가시겠습니까?")
+                setPositiveButton("뒤로 가기") { _, _ ->
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainFragment, DeviceRegisterFragment())
+                        .commit()
+                }
+                setNegativeButton("취소") { _, _ -> }
+            }.show()
+        } else {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragment, DeviceRegisterFragment())
+                .commit()
+        }
     }
 
     // 저장 버튼
     private fun saveDeviceEdit() {
-        var gson = Gson()
-        var json = gson.toJson(cell1Data)
-        editor?.putString("DEVICE_CELL1", json)?.apply()
-        json = gson.toJson(cell2Data)
-        editor?.putString("DEVICE_CELL2", json)?.apply()
-        json = gson.toJson(cell3Data)
-        editor?.putString("DEVICE_CELL3", json)?.apply()
-        json = gson.toJson(cell4Data)
-        editor?.putString("DEVICE_CELL4", json)?.apply()
-        json = gson.toJson(cell5Data)
-        editor?.putString("DEVICE_CELL5", json)?.apply()
-        editor?.putBoolean("DEVICE_SOUND", soundData!!)?.apply()
-        editor?.putBoolean("DEVICE_BUZZ", buzzData!!)?.apply()
+        var changeFlag = false
+        for (i in 0..4) {
+            if (cellInitData[i] != cellNowData[i]) {
+                changeFlag = true
+                break
+            }
+        }
+        if (alaInitData[0] != soundData) changeFlag = true
+        if (alaInitData[1] != buzzData) changeFlag = true
+        if (changeFlag) {
+            AlertDialog.Builder(getContext()).apply {
+                setTitle("약통 설정 저장")
+                setMessage("약통 설정을 저장하시겠습니까?")
+                setPositiveButton("저장") { _, _ ->
+                    for(i in 0..4) {
+                        val json = Gson().toJson(cellNowData[i])
+                        editor?.putString("DEVICE_CELL${i+1}", json)?.apply()
+                    }
+                    editor?.putBoolean("DEVICE_SOUND", soundData!!)?.apply()
+                    editor?.putBoolean("DEVICE_BUZZ", buzzData!!)?.apply()
+                    Toast.makeText(requireActivity(), "약통 설정이 저장되었습니다", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.mainFragment, DeviceRegisterFragment())
+                        .commit()
+                }
+                setNegativeButton("취소") { _, _ -> }
+            }.show()
+        } else {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFragment, DeviceRegisterFragment())
+                .commit()
+        }
     }
 }
