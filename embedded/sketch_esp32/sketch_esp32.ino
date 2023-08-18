@@ -1,16 +1,16 @@
-#include <DHT.h>
+//#include <DHT.h>
 #include "BluetoothSerial.h"
 
 // power & bluetooth LED
 #define POWERLED 19
-#define BTLED 18
+#define BTLED 4
 // alarm related LED & BTN pins
 #define ALARMLED 5
 #define ALARMBTN 17
 #define BUZPIN 12
-#define VIBPIN 14
+#define VIBPIN 26
 // temperature & density pin
-#define DHTPIN 13
+//#define DHTPIN 13
 // hall sensor
 #define HALLPIN 27
 // inner LED pins
@@ -39,7 +39,7 @@ String s_data;
 // TaskHandle_t btnTask;
 
 // bluetooth setups
-String device_name = "ESP32-BT-TEST_2";
+String device_name = "EYAK-01";
 BluetoothSerial SerialBT;
 
 // flags
@@ -53,7 +53,7 @@ int channel = 0;
 int resolution = 8;
 
 // dht
-DHT dht(DHTPIN, DHT11);
+//DHT dht(DHTPIN, DHT11);
 
 
 
@@ -84,13 +84,13 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t* param) {
 
 // task for bluetooth serial in.
 void btTask(void *param) {
-  Serial.print("bt task running...");
-  Serial.println(xPortGetCoreID());
+  //Serial.print("bt task running...");
+  //Serial.println(xPortGetCoreID());
   while(1) {
     if (SerialBT.available()) {
       // bluetooth signal read
       r_data = readSerial();
-      Serial.println(r_data);
+      // Serial.println(r_data);
       if (r_data[0] == '0') { // 0: alarm, 123: LED/sound/buzz
         alarmFlag = true;
       } else if (r_data[0] == '1') { // 1: alarm off.
@@ -102,8 +102,8 @@ void btTask(void *param) {
 
 // task function for button push.
 void btnTask(void *param) {
-  Serial.print("btn task running...");
-  Serial.println(xPortGetCoreID());
+  // Serial.print("btn task running...");
+  // Serial.println(xPortGetCoreID());
   while(1) {
     int state = digitalRead(ALARMBTN);
     if (btConnectFlag == true) {
@@ -121,15 +121,15 @@ void btnTask(void *param) {
 
 // task function for box open
 void boxTask(void *param) {
-  Serial.print("box task running...");
-  Serial.println(xPortGetCoreID());
+  // Serial.print("box task running...");
+  // Serial.println(xPortGetCoreID());
   while(1) {
     // hall sensor read
     int sense = 0;
     sense = analogRead(HALLPIN);
-    if (sense > 1900 || sense < 1800) {
+    //Serial.println(sense);
+    if (sense > 1500 || sense < 1000) {
       deviceClose();
-      //Serial.println(sense);
     } else {
       deviceOpen();
     }
@@ -137,20 +137,20 @@ void boxTask(void *param) {
 }
 
 // task function for dht measure
-void dhtTask(void *param) {
-  Serial.print("dht task running...");
-  Serial.println(xPortGetCoreID());
-  while(1) {
-    int humid = dht.readHumidity();
-    float temp = dht.readTemperature();
-    if (humid >= 0 && humid <= 100) {
-      char s[10];
-      sprintf(s, "%d %.1f", humid, temp);
-      Serial.println(s);
-    }
-    delay(10000);
-  }
-}
+// void dhtTask(void *param) {
+//   Serial.print("dht task running...");
+//   Serial.println(xPortGetCoreID());
+//   while(1) {
+//     int humid = dht.readHumidity();
+//     float temp = dht.readTemperature();
+//     if (humid >= 0 && humid <= 100) {
+//       char s[10];
+//       sprintf(s, "%d %.1f", humid, temp);
+//       Serial.println(s);
+//     }
+//     delay(1000);
+//   }
+// }
 
 
 
@@ -181,7 +181,7 @@ void alarmOn() {
   digitalWrite(ALARMLED, LOW);
   // repeating alarm (LED)
   int tm = 0;
-  while(alarmFlag && tm <= 30) {   // timer set.
+  while(alarmFlag && tm <= 60) {   // timer set.
     if (r_data[0] == '0' && r_data[1] == '1') digitalWrite(ALARMLED, HIGH);
     delay(500);
     digitalWrite(ALARMLED, LOW);
@@ -198,6 +198,10 @@ void alarmOn() {
     digitalWrite(LED3, LOW);
     digitalWrite(LED4, LOW);
     digitalWrite(LED5, LOW);
+    String s = "no";
+    uint8_t buf[3];
+    memcpy(buf, s.c_str(), 3);
+    SerialBT.write(buf, 3);
   }
 }
 // on device open
@@ -234,15 +238,15 @@ void deviceClose() {
 //=== setup
 void setup() {
   // serial setup
-  Serial.begin(115200);
+  //Serial.begin(115200);
 
   // bluetooth setup
   SerialBT.begin(device_name); //Bluetooth device name
   SerialBT.register_callback(callback);
-  Serial.printf("The device with name \"%s\" is started.\nPair it with Bluetooth!\n", device_name.c_str());
+  //Serial.printf("The device with name \"%s\" is started.\nPair it with Bluetooth!\n", device_name.c_str());
   #ifdef USE_PIN
     SerialBT.setPin(pin);
-    Serial.println("Using PIN");
+    //Serial.println("Using PIN");
   #endif
 
   // buzzer & vib setup
@@ -267,7 +271,7 @@ void setup() {
   xTaskCreate(btTask, "btTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
   xTaskCreate(btnTask, "btnTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
   xTaskCreate(boxTask, "boxTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
-  xTaskCreate(dhtTask, "dhtTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
+  //xTaskCreate(dhtTask, "dhtTask", 4096, NULL, tskIDLE_PRIORITY, NULL);
 }
 
 
