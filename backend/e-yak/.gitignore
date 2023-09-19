@@ -38,6 +38,3 @@ out/
 
 ### log files ##
 *.log
-
-# Ignore application.yml
-/application.yml
