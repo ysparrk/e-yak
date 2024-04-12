@@ -41,42 +41,25 @@
 
 #### Server
 
-<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat&logo=SpringBoot&logoColor=white"/>
-<img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Conda-Forge&logoColor=white" />
-<img src="https://img.shields.io/badge/jpa-006600?style=flat&logo=jpa&logoColor=white"> 
-<img src="https://img.shields.io/badge/QueryDSL-0769AD?style=flate&logo=querydsl&logoColor=white"> 
-<img src="https://img.shields.io/badge/gradle-02303A?style=flat&logo=gradle&logoColor=white">
-<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white"/>
-<img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens&logoColor=white"/>
+<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat&logo=SpringBoot&logoColor=white"/> <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Conda-Forge&logoColor=white" /> <img src="https://img.shields.io/badge/jpa-006600?style=flat&logo=jpa&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-0769AD?style=flate&logo=querydsl&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=flat&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white"/> <img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens&logoColor=white"/>
 
 #### Database
 
-<img src="https://img.shields.io/badge/MariaDB-003545?style=flat&logo=MariaDB&logoColor=white">
-<img src="https://img.shields.io/badge/redis-DC382D?style=flat&logo=redis&logoColor=white">
+<img src="https://img.shields.io/badge/MariaDB-003545?style=flat&logo=MariaDB&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=flat&logo=redis&logoColor=white">
 
 #### Infra
 
-<img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=flat&logo=AmazonEC2&logoColor=white"/>
-<img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white"/>
-<img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=Jenkins&logoColor=white"/>
-<img src="https://img.shields.io/badge/Nginx-009639?style=flat&logo=Nginx&logoColor=white"/>
-<img src="https://img.shields.io/badge/linux-FCC624?style=flat&logo=linux&logoColor=black">
+<img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=flat&logo=AmazonEC2&logoColor=white"/> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=Jenkins&logoColor=white"/> <img src="https://img.shields.io/badge/Nginx-009639?style=flat&logo=Nginx&logoColor=white"/> <img src="https://img.shields.io/badge/linux-FCC624?style=flat&logo=linux&logoColor=black">
 
 #### Android
-<img src="https://img.shields.io/badge/Android Studio-3DDC84?style=flat&logo=Android Studio&logoColor=white"/>
-<img src="https://img.shields.io/badge/Kotlin-7F52FF?&style=flat&logo=kotlin&logoColor=white"/>
+<img src="https://img.shields.io/badge/Android Studio-3DDC84?style=flat&logo=Android Studio&logoColor=white"/> <img src="https://img.shields.io/badge/Kotlin-7F52FF?&style=flat&logo=kotlin&logoColor=white"/>
 
 #### Embedded
-<img src="https://img.shields.io/badge/Arduino-00878F?&style=flat&logo=arduino&logoColor=white"/>
-<img src="https://img.shields.io/badge/Bluetooth-0082FC?&style=flat&logo=bluetooth&logoColor=white"/>
+<img src="https://img.shields.io/badge/Arduino-00878F?&style=flat&logo=arduino&logoColor=white"/> <img src="https://img.shields.io/badge/Bluetooth-0082FC?&style=flat&logo=bluetooth&logoColor=white"/>
 
 #### Collaboration
 
-<img src="https://img.shields.io/badge/github-181717?style=flat&logo=github&logoColor=white">
-<img src="https://img.shields.io/badge/jira-0052CC?style=flat&logo=jira&logoColor=white"/>
-<img src="https://img.shields.io/badge/swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/>
-<img src="https://img.shields.io/badge/notion-000000?style=flate&logo=notion&logoColor=white"/>
-<img src="https://img.shields.io/badge/mattermost-0058CC?style=flat&logo=mattermost&logoColor=white"/>
+<img src="https://img.shields.io/badge/github-181717?style=flat&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/jira-0052CC?style=flat&logo=jira&logoColor=white"/> <img src="https://img.shields.io/badge/swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/> <img src="https://img.shields.io/badge/notion-000000?style=flate&logo=notion&logoColor=white"/> <img src="https://img.shields.io/badge/mattermost-0058CC?style=flat&logo=mattermost&logoColor=white"/>
 
 
 </br>
