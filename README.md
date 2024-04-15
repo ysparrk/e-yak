@@ -4,68 +4,96 @@
 
 ### Overview
 
-> 💡 올바른 약 복용은 “처방된 용량대로, 정확한 복용법을 준수하여, 지시된 처방기간을 제대로 지키는 것” 입니다. <u>**_지금이:약_** 은 이를 보조하기 위해 스마트 약통과 어플을 통해 약물 복용 관리를 간편하고 효과적으로 지원하는 서비스입니다.</u> 사용자는 정해진 약 복용 시간에 약물을 복용할 수 있도록 어플 알림 뿐만 아니라 IoT기기에서 알림을 받습니다. 또한 약물 정보, 복용 기록, 건강설문을 통한 종합적인 건강 관리가 가능합니다.
+> 💡 올바른 약 복용은 “처방된 용량대로, 정확한 복용법을 준수하여, 지시된 처방기간을 제대로 지키는 것” 입니다. <ins>**_지금이:약_** 은 이를 보조하기 위해 스마트 약통과 어플을 통해 약물 복용 관리를 간편하고 효과적으로 지원하는 서비스입니다.</ins> 사용자는 정해진 약 복용 시간에 약물을 복용할 수 있도록 어플 알림 뿐만 아니라 IoT기기에서 알림을 받습니다. 또한 약물 정보, 복용 기록, 건강설문을 통한 종합적인 건강 관리가 가능합니다.
+
+
+
+### Project Info
+
+🗓️ 2023. 07. 04 ~ 2023. 08. 18. (총 7주)
+
+👨‍👩‍👧‍👧 BE/Infra (BE 2명 + FE 2명 + HW 2명, 총 6명)
+
+🏆 프로젝트 우수상
 
 ---
-
-### Period
-
-> 🗓️ 2023. 07. 04 ~ 2023. 08. 18. (총 7주)
+</br>
 
 ## ⚙️ 시스템 설계
 
-### System Architecture
-
----
-
+### A. System Architecture
 ![architecture (1).png](<src/architecture_(1).png>)
+</br>
 
-### ER-Diagram
 
----
-
+### B. ER-Diagram
 ![ERD.png](src/ERD.png)
+</br>
 
-### Entity Diagram
----
+### C. Entity Diagram
 
 ![jpa-entity-diagram.png](src/jpa-entity-diagram.png)
 
 
-### 📄 [API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
-
-
-### 🛠️ Skills
-
----
-
-#### Server
-
-<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat&logo=SpringBoot&logoColor=white"/> <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Conda-Forge&logoColor=white" /> <img src="https://img.shields.io/badge/jpa-006600?style=flat&logo=jpa&logoColor=white"> <img src="https://img.shields.io/badge/QueryDSL-0769AD?style=flate&logo=querydsl&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=flat&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white"/> <img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens&logoColor=white"/>
-
-#### Database
-
-<img src="https://img.shields.io/badge/MariaDB-003545?style=flat&logo=MariaDB&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=flat&logo=redis&logoColor=white">
-
-#### Infra
-
-<img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=flat&logo=AmazonEC2&logoColor=white"/> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=Jenkins&logoColor=white"/> <img src="https://img.shields.io/badge/Nginx-009639?style=flat&logo=Nginx&logoColor=white"/> <img src="https://img.shields.io/badge/linux-FCC624?style=flat&logo=linux&logoColor=black">
-
-#### Android
-<img src="https://img.shields.io/badge/Android Studio-3DDC84?style=flat&logo=Android Studio&logoColor=white"/> <img src="https://img.shields.io/badge/Kotlin-7F52FF?&style=flat&logo=kotlin&logoColor=white"/>
-
-#### Embedded
-<img src="https://img.shields.io/badge/Arduino-00878F?&style=flat&logo=arduino&logoColor=white"/> <img src="https://img.shields.io/badge/Bluetooth-0082FC?&style=flat&logo=bluetooth&logoColor=white"/>
-
-#### Collaboration
-
-<img src="https://img.shields.io/badge/github-181717?style=flat&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/jira-0052CC?style=flat&logo=jira&logoColor=white"/> <img src="https://img.shields.io/badge/swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/> <img src="https://img.shields.io/badge/notion-000000?style=flate&logo=notion&logoColor=white"/> <img src="https://img.shields.io/badge/mattermost-0058CC?style=flat&logo=mattermost&logoColor=white"/>
-
+### 📄 [D. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
 
 </br>
 
-### ⭐ Issue
----
+## 🛠️ Skills
+
+#### Server
+
+<p>
+  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat&logo=SpringBoot&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Conda-Forge&logoColor=white" /> 
+  <img src="https://img.shields.io/badge/jpa-006600?style=flat&logo=jpa&logoColor=white"> 
+  <img src="https://img.shields.io/badge/QueryDSL-0769AD?style=flate&logo=querydsl&logoColor=white"> 
+  <img src="https://img.shields.io/badge/gradle-02303A?style=flat&logo=gradle&logoColor=white"> 
+  <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/JWT-000000?style=flat&logo=jsonwebtokens&logoColor=white"/>
+</p>
+
+
+#### Database
+<p>
+  <img src="https://img.shields.io/badge/MariaDB-003545?style=flat&logo=MariaDB&logoColor=white"> 
+  <img src="https://img.shields.io/badge/redis-DC382D?style=flat&logo=redis&logoColor=white">
+</p>
+
+
+#### Infra
+<p>
+  <img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=flat&logo=AmazonEC2&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=Jenkins&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Nginx-009639?style=flat&logo=Nginx&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/linux-FCC624?style=flat&logo=linux&logoColor=black">
+</p>
+
+#### Android
+<p>
+  <img src="https://img.shields.io/badge/Android Studio-3DDC84?style=flat&logo=Android Studio&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?&style=flat&logo=kotlin&logoColor=white"/>
+</p>
+
+#### Embedded
+<p>
+  <img src="https://img.shields.io/badge/Arduino-00878F?&style=flat&logo=arduino&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/Bluetooth-0082FC?&style=flat&logo=bluetooth&logoColor=white"/>
+</p>
+
+#### Collaboration
+<p>
+  <img src="https://img.shields.io/badge/github-181717?style=flat&logo=github&logoColor=white"> 
+  <img src="https://img.shields.io/badge/jira-0052CC?style=flat&logo=jira&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/notion-000000?style=flate&logo=notion&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/mattermost-0058CC?style=flat&logo=mattermost&logoColor=white"/>
+</p>
+</br>
+
+
+## ⭐ Issue
 
 📌 **복용 약 알림 조회 기능 에러 해결**
 
@@ -114,6 +142,7 @@
     2) JUnit 테스트를 통해 빌드 과정에서 예상치 못한 에러를 사전에 발견하여 수정
 
 
+</br>
 
 ### ⭐ Link
 
@@ -121,14 +150,12 @@
 
 📌 [Youtube](https://www.youtube.com/watch?v=f0LNya78P78)
 
-📌 [Google Play](https://play.google.com/store/apps/details?id=com.a103.eyakrev1)
-
 📌 [Presentation](https://www.miricanvas.com/v/12bdetn)
 
 ---
 
 
-## 주요 기능
+## 🎬 주요 기능
 
 ### 1. Member
 
