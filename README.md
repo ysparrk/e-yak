@@ -1,4 +1,4 @@
-## 💊 지금이:약
+b## 💊 지금이:약
 올바른 약 복용을 위해 보호자와 함께 관리하는 안드로이드 어플리케이션 및 스마트 약통 서비스
 
 
@@ -21,21 +21,22 @@
 
 ## ⚙️ 시스템 설계
 
-### A. System Architecture
+### 📄 [A. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
+</br>
+
+### B. System Architecture
 ![architecture (1).png](<src/architecture_(1).png>)
 </br>
 
 
-### B. ER-Diagram
+### C. ER-Diagram
 ![ERD.png](src/ERD.png)
 </br>
 
-### C. Entity Diagram
+### D. Entity Diagram
 
 ![jpa-entity-diagram.png](src/jpa-entity-diagram.png)
 
-
-### 📄 [D. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
 
 </br>
 
