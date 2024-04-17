@@ -4,10 +4,7 @@
 
 올바른 약 복용을 위해 보호자와 함께 관리하는 안드로이드 어플리케이션 및 스마트 약통 서비스
 
-
-
-
-### Overview
+#### Overview
 
 > 💡 올바른 약 복용은 “처방된 용량대로, 정확한 복용법을 준수하여, 지시된 처방기간을 제대로 지키는 것” 입니다. <ins>**_지금이:약_** 은 이를 보조하기 위해 스마트 약통과 어플을 통해 약물 복용 관리를 간편하고 효과적으로 지원하는 서비스입니다.</ins> 사용자는 정해진 약 복용 시간에 약물을 복용할 수 있도록 어플 알림 뿐만 아니라 IoT기기에서 알림을 받습니다. 또한 약물 정보, 복용 기록, 건강설문을 통한 종합적인 건강 관리가 가능합니다.
 
@@ -23,7 +20,7 @@
 
 | [김용우](https://github.com/soybean33) | [조현기](https://github.com/chk7082) | [고범수](https://github.com/rhqjatn2398) | [박영서](https://github.com/ysparrk) | [백서영](https://github.com/rainbow00unicorn) | [손명주](https://github.com/sonmyungju) |
 | :------------------------------------: | :----------------------------------: | :--------------------------------------: | :----------------------------------: | :-------------------------------------------: | :-------------------------------------: |
-|               Front-end                |              Front-end               |                 Back-end                 |            Back-end/Infra            |                   Embedded                    |                Embedded                 |
+|                팀장/FE                 |                  FE                  |                    BE                    |               BE/Infra               |                   EMB                    |                EMB                 |
 
 ---
 
@@ -33,9 +30,9 @@
 
 ### 🤝 [A. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
 
-<p style="display: flex; align-items: flex-start;">
-  <img src="src/api_docs.png" width="40%" height="40%" style="margin-right: 10px;"/>
-  <img src="src/api_docs2.png" width="40%" height="40%"/>
+<p style="display: flex; align-items: flex;">
+  <img src="src/api_docs.png" width="50%" height="50%" style="margin-right: 10px;"/>
+  <img src="src/api_docs2.png" width="50%" height="50%"/>
 </p>
 
 </br>
@@ -204,4 +201,9 @@
 
 </br>
 
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fysparrk%2Fe-yak&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
+<div align=center>
+	
+  [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fysparrk%2Fe-yak)](https://hits.seeyoufarm.com) 
+	
+  </div>
