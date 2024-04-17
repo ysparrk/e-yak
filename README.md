@@ -1,10 +1,11 @@
-<div style="display: flex; align-items: center;">
-  <img src="src/logo.png" alt="앱 로고" style="margin-right: 10px;">
-  <div>
-    <p style="font-weight: bold; font-size: 18px;" > 💊 지금이:약 </p>
-    <p>올바른 약 복용을 위해 보호자와 함께 관리하는 안드로이드 어플리케이션 및 스마트 약통 서비스</p>
-  </div>
-</div>
+<img src="src/logo.png" alt="앱 로고">
+
+### 💊 지금이:약
+
+올바른 약 복용을 위해 보호자와 함께 관리하는 안드로이드 어플리케이션 및 스마트 약통 서비스
+
+
+
 
 ### Overview
 
@@ -22,7 +23,7 @@
 
 | [김용우](https://github.com/soybean33) | [조현기](https://github.com/chk7082) | [고범수](https://github.com/rhqjatn2398) | [박영서](https://github.com/ysparrk) | [백서영](https://github.com/rainbow00unicorn) | [손명주](https://github.com/sonmyungju) |
 | :------------------------------------: | :----------------------------------: | :--------------------------------------: | :----------------------------------: | :-------------------------------------------: | :-------------------------------------: |
-|Front-end|Front-end|Back-end|Back-end/Infra|Embedded|Embedded|
+|               Front-end                |              Front-end               |                 Back-end                 |            Back-end/Infra            |                   Embedded                    |                Embedded                 |
 
 ---
 
@@ -32,10 +33,10 @@
 
 ### 🤝 [A. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
 
-<div style="display: flex; align-items: flex-start;">
-  <img src="src/api_docs.png" width="50%" height="60%" style="margin-right: 10px;"/>
-  <img src="src/api_docs2.png" width="50%" height="50%"/>
-</div>
+<p style="display: flex; align-items: flex-start;">
+  <img src="src/api_docs.png" width="40%" height="40%" style="margin-right: 10px;"/>
+  <img src="src/api_docs2.png" width="40%" height="40%"/>
+</p>
 
 </br>
 
@@ -123,7 +124,6 @@
 
 사용자의 일상 루틴에 따라 약을 복용해야 하는 시간을 자동으로 계산하여 알림을 주게 됩니다.
 
-
 #### 3. Survey
 
 매일 오늘의 컨디션, 보유 증상, 기타 특이사항에 대한 정보를 입력할 수 있습니다.
@@ -175,27 +175,30 @@
 - 문제: Docker 컨테이너 내에서 SpringBoot 애플리케이션이 빌드되지 않는 문제 발생
 - 원인: Docker in Docker(DinD) 방식
 - 해결:
+
   1. Docker Out of Docker (DooD) 방식 사용
 
   2. 젠킨스 도커 이미지 내에 도커를 설치하는 것이 아닌 서버 내 설치되어 있는 도커를 이용해 도커를 실행
+
 - 비고:
+
   1. Nginx에 HTTPS 인증서를 설치하여 보안성 높임
 
   2. JUnit 테스트를 통해 빌드 과정에서 예상치 못한 에러를 사전에 발견하여 수정
 
 </br>
 
-
 ## 💭 회고
 
 #### 프로젝트 경험
+
 > 처음으로 6명을 이룬 팀 프로젝트를 진행하였습니다. SpringBoot를 처음 접하며 어려운 일도 많았지만, 부족함을 극복하기 위해 추가적인 강의를 듣고 공부하는 시간을 가졌습니다. 돌이켜보면 힘든 순간들도 많았지만 각자 맡은 역할을 200% 이상 다하는 팀원들 덕분이라고 생각합니다.
 
 #### 프로젝트 기획
+
 > 약 복용이 많은 만성질환자를 대상으로 하는 프로젝트를 기획하면서, 이전 병원에서 근무하며 많은 환자분들을 만난 경험이 도움이 되었습니다.
 
 📌 [최종 발표 자료](https://www.miricanvas.com/v/12bdetn)
- 
 
 ---
 
