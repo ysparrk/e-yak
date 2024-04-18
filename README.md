@@ -24,8 +24,6 @@
 
 ---
 
-</br>
-
 ## ⚙️ 시스템 설계
 
 ### 🤝 [A. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
@@ -37,7 +35,14 @@
 
 </br>
 
-### 📄 [B. 기능 명세서](https://nice-forsythia-d4f.notion.site/1d15166fe4c44dfda384e8b8e7b4edd7?pvs=4)
+### 📄 [B. 기술 명세서](https://nice-forsythia-d4f.notion.site/208c6126fcbd4d3cae42e521a640499f?pvs=4)
+
+<p style="display: flex; align-items: flex;">
+  <img src="src/기술명세1.png" width="50%" height="50%" style="margin-right: 10px;"/>
+  <img src="src/기술명세2.png" width="50%" height="50%"/>
+</p>
+
+</br>
 
 ### C. System Architecture
 
@@ -204,6 +209,6 @@
 
 <div align=center>
 	
-  [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fysparrk%2Fe-yak)](https://hits.seeyoufarm.com) 
+  [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fysparrk%2Fe-yak&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) 
 	
-  </div>
+</div>
