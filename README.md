@@ -29,8 +29,8 @@
 ### 🤝 [A. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
 
 <p style="display: flex; align-items: flex;">
-  <img src="src/api_docs.png" width="50%" height="50%" style="margin-right: 10px;"/>
-  <img src="src/api_docs2.png" width="50%" height="50%"/>
+  <img src="src/api_docs.png" width="45%" height="45%" style="margin-right: 10px;"/>
+  <img src="src/api_docs2.png" width="45%" height="45%"/>
 </p>
 
 </br>
@@ -38,8 +38,8 @@
 ### 📄 [B. 기술 명세서](https://nice-forsythia-d4f.notion.site/208c6126fcbd4d3cae42e521a640499f?pvs=4)
 
 <p style="display: flex; align-items: flex;">
-  <img src="src/기술명세1.png" width="50%" height="50%" style="margin-right: 10px;"/>
-  <img src="src/기술명세2.png" width="50%" height="50%"/>
+  <img src="src/기술명세1.png" width="45%" height="45%" style="margin-right: 10px;"/>
+  <img src="src/기술명세2.png" width="45%" height="45%"/>
 </p>
 
 </br>
