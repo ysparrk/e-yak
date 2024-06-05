@@ -24,6 +24,8 @@
 
 ---
 
+</br>
+
 ## ⚙️ 시스템 설계
 
 ### 🤝 [A. API Document](https://www.notion.so/API-Document-46f2ea74d51e4434b07b8e1be62182a9?pvs=21)
@@ -52,12 +54,6 @@
 ### D. ER-Diagram
 
 ![ERD.png](src/ERD.png)
-</br>
-
-### E. Entity Diagram
-
-![jpa-entity-diagram.png](src/jpa-entity-diagram.png)
-
 </br>
 
 ## 🛠️ Skills
